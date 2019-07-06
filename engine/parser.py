@@ -2,7 +2,6 @@ import csv
 import datetime
 import sys
 from dataclasses import dataclass
-from enum import Enum, auto
 from typing import List, Optional
 
 from openpyxl import load_workbook
@@ -16,7 +15,7 @@ class TemplateCell:
     sheet_name: str
     cell_ref: str
     value: str
-    cell_type: DatamapLineValueType
+    data_type: DatamapLineValueType
 
 
 def get_cell_data(data: List[TemplateCell], sheet_name: str,

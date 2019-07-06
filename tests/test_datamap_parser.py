@@ -12,6 +12,12 @@ TEXT = DatamapLineValueType.TEXT
 
 
 @pytest.fixture
+def template():
+    here = os.path.abspath(os.curdir)
+    return os.path.join(here, "tests/resources/test_template.xlsx")
+
+
+@pytest.fixture
 def datamap():
     here = os.path.abspath(os.curdir)
     return os.path.join(here, "tests/resources/datamap.csv")
@@ -30,20 +36,15 @@ def test_bad_spacing_in_datamap(datamap):
     assert data[14].key == "Bad Spacing"
     assert data[14].sheet == "Introduction"
     assert data[14].cellref == "C35"
-
-
-@pytest.fixture
-def template():
-    here = os.path.abspath(os.curdir)
-    return os.path.join(here, "tests/resources/test_template.xlsx")
+    assert data[14].data_type == "DATE"
 
 
 def test_template_reader(template):
     data = template_reader(template)
-    assert get_cell_data(data, "Summary", "B2").cell_type == DATE
-    assert get_cell_data(data, "Summary", "B3").cell_type == TEXT
-    assert get_cell_data(data, "Summary", "B4").cell_type == NUMBER
-    assert get_cell_data(data, "Summary", "B5").cell_type == NUMBER
+    assert get_cell_data(data, "Summary", "B2").data_type == DATE
+    assert get_cell_data(data, "Summary", "B3").data_type == TEXT
+    assert get_cell_data(data, "Summary", "B4").data_type == NUMBER
+    assert get_cell_data(data, "Summary", "B5").data_type == NUMBER
 
     assert get_cell_data(data, "Summary",
                          "B2").value == datetime.datetime(2019, 10, 20, 0, 0)
@@ -54,4 +55,4 @@ def test_template_reader(template):
     assert get_cell_data(data, "Summary", "B5").value == 10
 
     assert get_cell_data(data, "Another Sheet", "K25").value == "Float:"
-    assert get_cell_data(data, "Another Sheet", "K25").cell_type == TEXT
+    assert get_cell_data(data, "Another Sheet", "K25").data_type == TEXT
