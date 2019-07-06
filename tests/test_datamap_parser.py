@@ -1,3 +1,6 @@
+import datetime
+import os
+
 import pytest
 
 from engine.parser import (DatamapLineType, datamap_reader, get_cell_data,
@@ -14,20 +17,24 @@ STRING = DatamapLineType.STRING
 
 @pytest.fixture
 def template():
-    return "/home/lemon/Documents/bcompiler/template.xlsx"
+    here = os.path.abspath(os.curdir)
+    return os.path.join(here, "tests/resources/test_template.xlsx")
 
 
 def test_template_reader(template):
     data = template_reader(template)
-    assert get_cell_data(data, "Resource", "C7").value == 0.5
-    assert get_cell_data(data, "Resource", "C7").cell_type == NUMBER
-    assert get_cell_data(data, "Summary", "C15").cell_type == DATE
-    assert get_cell_data(data, "Summary", "C16").cell_type == DATE
-    assert get_cell_data(data, "Summary", "C17").cell_type == DATE
-    assert get_cell_data(data, "Summary", "C18").cell_type == NUMBER
-    assert get_cell_data(data, "Summary", "H12").cell_type == STRING
-    assert (get_cell_data(data, "Approval & Project milestones",
-                          "G9").cell_type == STRING)
-    assert (get_cell_data(
-        data, "Approval & Project milestones",
-        "G9").value == "Please add original baseline and forecast date")
+    assert get_cell_data(data, "Summary", "B2").cell_type == DATE
+    assert get_cell_data(data, "Summary", "B3").cell_type == STRING
+    assert get_cell_data(data, "Summary", "B4").cell_type == NUMBER
+    assert get_cell_data(data, "Summary", "B5").cell_type == NUMBER
+
+    assert get_cell_data(data, "Summary",
+                         "B2").value == datetime.datetime(2019, 10, 20, 0, 0)
+    assert get_cell_data(data, "Summary", "B3").value == "This is a string"
+    assert get_cell_data(data, "Summary", "B4").value == 2.2
+    assert get_cell_data(data, "Summary", "B4").value == 2.20
+    assert get_cell_data(data, "Summary", "B4").value != 2.21
+    assert get_cell_data(data, "Summary", "B5").value == 10
+
+    assert get_cell_data(data, "Another Sheet", "K25").value == "Float:"
+    assert get_cell_data(data, "Another Sheet", "K25").cell_type == STRING
