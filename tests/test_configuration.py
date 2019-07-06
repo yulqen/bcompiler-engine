@@ -4,6 +4,12 @@ from pathlib import Path
 import pytest
 
 from engine.config import Config, init
+"""
+Initialising directories and files for use by the application.
+
+We need a data directory in which to store binary, temp and
+cache files.
+"""
 
 
 @pytest.fixture
