@@ -3,7 +3,7 @@
 from pathlib import Path
 
 
-def init(home_dir: str = False):
+def init(home_dir: str = None):
     """
     If passed no arguments, will create a directory called
     .bcompiler-engine-data in the user's home directory if
