@@ -1,7 +1,7 @@
 import pytest
 
-from bcompilerengine.main import (DatamapLineType, datamap_reader,
-                                  get_cell_data, template_reader)
+from bcompilerengine.parser import (DatamapLineType, datamap_reader,
+                                    get_cell_data, template_reader)
 
 # def test_datamap_reader():
 #    dm_file = "/home/lemon/Documents/bcompiler/datamap.csv"
