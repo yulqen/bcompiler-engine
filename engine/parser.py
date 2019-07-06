@@ -1,6 +1,5 @@
 import csv
 import datetime
-import sys
 from dataclasses import dataclass
 from typing import List, Optional
 
@@ -11,6 +10,10 @@ from engine.datamap import DatamapLine, DatamapLineValueType
 
 @dataclass
 class TemplateCell:
+    """
+    Used for collecting data from a populated spreadsheet.
+    """
+
     file_name: str
     sheet_name: str
     cell_ref: str
@@ -24,12 +27,12 @@ def get_cell_data(data: List[TemplateCell], sheet_name: str,
     Given a list of TemplateCell items, a sheet name and a cell reference,
     return a single TemplateCell object.
     """
-    tc = [
+    data_from_cell = [
         cell for cell in data
         if cell.sheet_name == sheet_name and cell.cell_ref == cell_ref
     ]
-    if tc:
-        return tc[0]
+    if data_from_cell:
+        return data_from_cell[0]
     else:
         raise RuntimeError(
             "There should never be more than one value for that sheet/cell combination"
@@ -69,11 +72,12 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
 
 def template_reader(template_file: str) -> List[TemplateCell]:
     """
-    Given a populated xlsx file, returns all data in a list of TemplateCell objects.
+    Given a populated xlsx file, returns all data in a list of
+    TemplateCell objects.
     """
     data = []
-    wb = load_workbook(template_file, data_only=True)
-    for sheet in wb.worksheets:
+    workbook = load_workbook(template_file, data_only=True)
+    for sheet in workbook.worksheets:
         for row in sheet.rows:
             for cell in row:
                 if cell.value is not None:
