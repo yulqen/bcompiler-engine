@@ -17,3 +17,4 @@ class DatamapLine:
     sheet: str
     cellref: str
     data_type: str
+    filename: str

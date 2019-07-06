@@ -22,6 +22,7 @@ def test_datamap_reader(datamap):
     assert data[0].key == "Project/Programme Name"
     assert data[0].sheet == "Introduction"
     assert data[0].cellref == "C11"
+    assert data[0].filename == datamap
 
 
 @pytest.fixture

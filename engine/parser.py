@@ -51,6 +51,7 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
                     sheet=line["template_sheet"],
                     cellref=line["cell_reference"],
                     data_type=line["type"],
+                    filename=dm_file,
                 ))
     return data
 
