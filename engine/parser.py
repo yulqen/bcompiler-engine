@@ -37,6 +37,18 @@ def get_cell_data(data: List[TemplateCell], sheet_name: str,
         )
 
 
+def clean(target_str: str, is_cell_ref: bool = False):
+    """
+    Rids a string of its most common problems: spacing, capitalisation,etc.
+    """
+    if not isinstance(target_str, str):
+        raise TypeError("Can only clean a string.")
+    output_str = target_str.lstrip().rstrip()
+    if is_cell_ref:
+        output_str = output_str.upper()
+    return output_str
+
+
 def datamap_reader(dm_file: str) -> List[DatamapLine]:
     """
     Given a datamap csv file, returns a list of DatamapLine objects.
@@ -47,10 +59,10 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
         for line in reader:
             data.append(
                 DatamapLine(
-                    key=line["cell_key"],
-                    sheet=line["template_sheet"],
-                    cellref=line["cell_reference"],
-                    data_type=line["type"],
+                    key=clean(line["cell_key"]),
+                    sheet=clean(line["template_sheet"]),
+                    cellref=clean(line["cell_reference"], is_cell_ref=True),
+                    data_type=clean(line["type"]),
                     filename=dm_file,
                 ))
     return data

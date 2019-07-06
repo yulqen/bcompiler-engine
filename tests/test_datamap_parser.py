@@ -25,6 +25,13 @@ def test_datamap_reader(datamap):
     assert data[0].filename == datamap
 
 
+def test_bad_spacing_in_datamap(datamap):
+    data = datamap_reader(datamap)
+    assert data[14].key == "Bad Spacing"
+    assert data[14].sheet == "Introduction"
+    assert data[14].cellref == "C35"
+
+
 @pytest.fixture
 def template():
     here = os.path.abspath(os.curdir)

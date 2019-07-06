@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum, auto
+
+
 """
 The meat of new bcompiler.
 """
