@@ -1,15 +1,15 @@
 import pytest
 
-from bcompilerengine.parser import (DatamapLineType, datamap_reader,
-                                    get_cell_data, template_reader)
-
-# def test_datamap_reader():
-#    dm_file = "/home/lemon/Documents/bcompiler/datamap.csv"
-#    datamap_reader(dm_file)
+from engine.parser import (DatamapLineType, datamap_reader, get_cell_data,
+                           template_reader)
 
 NUMBER = DatamapLineType.NUMBER
 DATE = DatamapLineType.DATE
 STRING = DatamapLineType.STRING
+
+# def test_datamap_reader():
+#    dm_file = "/home/lemon/Documents/bcompiler/datamap.csv"
+#    datamap_reader(dm_file)
 
 
 @pytest.fixture

@@ -35,13 +35,10 @@ def get_cell_data(data: List[TemplateCell], sheet_name: str,
     ]
     if tc:
         return tc[0]
-    elif len(tc) > 1:
+    else:
         raise RuntimeError(
             "There should never be more than one value for that sheet/cell combination"
         )
-        sys.exit(1)
-    else:
-        return None
 
 
 def datamap_reader(dm_file: str):
@@ -51,7 +48,10 @@ def datamap_reader(dm_file: str):
             print(line["key"])
 
 
-def template_reader(template_file: str):
+def template_reader(template_file: str) -> List[TemplateCell]:
+    """
+    Given a populated xlsx file, returns all data in a list of TemplateCell objects.
+    """
     data = []
     wb = load_workbook(template_file, data_only=True)
     for sheet in wb.worksheets:
