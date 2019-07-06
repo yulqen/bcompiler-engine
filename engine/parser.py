@@ -81,11 +81,3 @@ def template_reader(template_file: str) -> List[TemplateCell]:
                                       val, c_type)
                     data.append(tc)
     return data
-
-
-if __name__ == "__main__":
-    TEMPLATE_FILE = "/home/lemon/Documents/bcompiler/template.xlsx"
-    data = template_reader(TEMPLATE_FILE)
-
-    for cell in range(200):
-        print(data[cell])
