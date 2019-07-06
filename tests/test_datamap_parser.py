@@ -8,6 +8,8 @@ from bcompilerengine.main import (DatamapLineType, datamap_reader,
 #    datamap_reader(dm_file)
 
 NUMBER = DatamapLineType.NUMBER
+DATE = DatamapLineType.DATE
+STRING = DatamapLineType.STRING
 
 
 @pytest.fixture
@@ -19,6 +21,11 @@ def test_template_reader(template):
     data = template_reader(template)
     assert get_cell_data(template, data, "Resource", "C7").value == 0.5
     assert get_cell_data(template, data, "Resource", "C7").cell_type == NUMBER
+    assert get_cell_data(template, data, "Summary", "C15").cell_type == DATE
+    assert get_cell_data(template, data, "Summary", "C16").cell_type == DATE
+    assert get_cell_data(template, data, "Summary", "C17").cell_type == DATE
+    assert get_cell_data(template, data, "Summary", "C18").cell_type == NUMBER
+    assert get_cell_data(template, data, "Summary", "H12").cell_type == STRING
 
 
 def test_certain_cell_is_an_integer():
