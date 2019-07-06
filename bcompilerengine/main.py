@@ -1,5 +1,6 @@
 import csv
 import datetime
+import sys
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import List, Optional
@@ -22,14 +23,23 @@ class TemplateCell:
     cell_type: DatamapLineType
 
 
-def get_cell_data(path: str, data: List[TemplateCell], sheet_name: str,
+def get_cell_data(data: List[TemplateCell], sheet_name: str,
                   cell_ref: str) -> Optional[TemplateCell]:
+    """
+    Given a list of TemplateCell items, a sheet name and a cell reference,
+    return a single TemplateCell object.
+    """
     tc = [
         cell for cell in data
         if cell.sheet_name == sheet_name and cell.cell_ref == cell_ref
     ]
-    if len(tc) > 0:
+    if tc:
         return tc[0]
+    elif len(tc) > 1:
+        raise RuntimeError(
+            "There should never be more than one value for that sheet/cell combination"
+        )
+        sys.exit(1)
     else:
         return None
 
