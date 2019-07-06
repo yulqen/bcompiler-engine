@@ -7,11 +7,7 @@ from typing import List, Optional
 
 from openpyxl import load_workbook
 
-
-class DatamapLineType(Enum):
-    NUMBER = auto()
-    STRING = auto()
-    DATE = auto()
+from engine.datamap import DatamapLine, DatamapLineValueType
 
 
 @dataclass
@@ -20,7 +16,7 @@ class TemplateCell:
     sheet_name: str
     cell_ref: str
     value: str
-    cell_type: DatamapLineType
+    cell_type: DatamapLineValueType
 
 
 def get_cell_data(data: List[TemplateCell], sheet_name: str,
@@ -41,11 +37,22 @@ def get_cell_data(data: List[TemplateCell], sheet_name: str,
         )
 
 
-def datamap_reader(dm_file: str):
-    with open(dm_file, encoding="utf-8") as f:
-        reader = csv.DictReader(f)
+def datamap_reader(dm_file: str) -> List[DatamapLine]:
+    """
+    Given a datamap csv file, returns a list of DatamapLine objects.
+    """
+    data = []
+    with open(dm_file, encoding="utf-8") as datamap_file:
+        reader = csv.DictReader(datamap_file)
         for line in reader:
-            print(line["key"])
+            data.append(
+                DatamapLine(
+                    key=line["cell_key"],
+                    sheet=line["template_sheet"],
+                    cellref=line["cell_reference"],
+                    data_type=line["type"],
+                ))
+    return data
 
 
 def template_reader(template_file: str) -> List[TemplateCell]:
@@ -60,15 +67,15 @@ def template_reader(template_file: str) -> List[TemplateCell]:
                 if cell.value is not None:
                     try:
                         val = cell.value.rstrip().lstrip()
-                        c_type = DatamapLineType.STRING
+                        c_type = DatamapLineValueType.TEXT
                     except AttributeError:
                         if isinstance(cell.value, (float, int)):
                             val = cell.value
-                            c_type = DatamapLineType.NUMBER
+                            c_type = DatamapLineValueType.NUMBER
                         elif isinstance(cell.value,
                                         (datetime.date, datetime.datetime)):
                             val = cell.value
-                            c_type = DatamapLineType.DATE
+                            c_type = DatamapLineValueType.DATE
                     cell_ref = f"{cell.column_letter}{cell.row}"
                     tc = TemplateCell(template_file, sheet.title, cell_ref,
                                       val, c_type)

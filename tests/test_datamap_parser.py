@@ -3,16 +3,25 @@ import os
 
 import pytest
 
-from engine.parser import (DatamapLineType, datamap_reader, get_cell_data,
-                           template_reader)
+from engine.datamap import DatamapLineValueType
+from engine.parser import datamap_reader, get_cell_data, template_reader
 
-NUMBER = DatamapLineType.NUMBER
-DATE = DatamapLineType.DATE
-STRING = DatamapLineType.STRING
+NUMBER = DatamapLineValueType.NUMBER
+DATE = DatamapLineValueType.DATE
+TEXT = DatamapLineValueType.TEXT
 
-# def test_datamap_reader():
-#    dm_file = "/home/lemon/Documents/bcompiler/datamap.csv"
-#    datamap_reader(dm_file)
+
+@pytest.fixture
+def datamap():
+    here = os.path.abspath(os.curdir)
+    return os.path.join(here, "tests/resources/datamap.csv")
+
+
+def test_datamap_reader(datamap):
+    data = datamap_reader(datamap)
+    assert data[0].key == "Project/Programme Name"
+    assert data[0].sheet == "Introduction"
+    assert data[0].cellref == "C11"
 
 
 @pytest.fixture
@@ -24,7 +33,7 @@ def template():
 def test_template_reader(template):
     data = template_reader(template)
     assert get_cell_data(data, "Summary", "B2").cell_type == DATE
-    assert get_cell_data(data, "Summary", "B3").cell_type == STRING
+    assert get_cell_data(data, "Summary", "B3").cell_type == TEXT
     assert get_cell_data(data, "Summary", "B4").cell_type == NUMBER
     assert get_cell_data(data, "Summary", "B5").cell_type == NUMBER
 
@@ -37,4 +46,4 @@ def test_template_reader(template):
     assert get_cell_data(data, "Summary", "B5").value == 10
 
     assert get_cell_data(data, "Another Sheet", "K25").value == "Float:"
-    assert get_cell_data(data, "Another Sheet", "K25").cell_type == STRING
+    assert get_cell_data(data, "Another Sheet", "K25").cell_type == TEXT
