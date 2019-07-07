@@ -5,6 +5,7 @@ python:
 before_install:
   - pip install poetry
 install:
+  - poetry update
   - poetry install -v
 script:
-  - make test
+  - make test_cov
