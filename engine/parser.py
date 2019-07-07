@@ -1,6 +1,9 @@
 import csv
 import datetime
+import fnmatch
+import os
 from dataclasses import dataclass
+from pathlib import Path
 from typing import List, Optional
 
 from openpyxl import load_workbook
@@ -97,3 +100,17 @@ def template_reader(template_file: str) -> List[TemplateCell]:
                                       val, c_type)
                     data.append(tc)
     return data
+
+
+def get_xlsx_files(directory: Path) -> List[Path]:
+    """
+    Return a list of Path objects for each xlsx file in directory,
+    or raise an exception.
+    """
+    output = []
+    if not os.path.isabs(directory):
+        raise RuntimeError("Require absolute path here")
+    for file_path in os.listdir(directory):
+        if fnmatch.fnmatch(file_path, "*.xlsx"):
+            output.append(Path(os.path.join(directory, file_path)))
+    return output
