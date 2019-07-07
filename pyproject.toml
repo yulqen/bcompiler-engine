@@ -1,7 +1,14 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+
 [tool.poetry]
 name = "bcompier-engine"
 version = "0.1.0"
 description = "A new, faster, more efficient, more modular back end for datamap tools and  interfaces."
+homepage = "https://github.com/hammerheadlemon/bcompiler-engine"
+repository = "https://github.com/hammerheadlemon/bcompiler-engine"
+license = "MIT"
+readme = "README.md"
 authors = ["Matt Lemon"]
 
 [tool.poetry.dependencies]
@@ -12,6 +19,7 @@ openpyxl = "^2.6.2"
 pytest = "^5.0"
 pytest-cov = "^2.7.1"
 coverage = "^4.5.3"
+tox = "^3.13.2"
 pdbpp = "^0.10.0"
 ptipython = "^1.0.1"
 flake8 = "^3.7.7"
