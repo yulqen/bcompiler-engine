@@ -1,5 +1,7 @@
 ## bcompiler-engine
 
+[![Build Status](https://travis-ci.com/hammerheadlemon/bcompiler-engine.svg?branch=master)](https://travis-ci.com/hammerheadlemon/bcompiler-engine)
+
 A new, faster, more efficient, more modular back end for `bcompiler`, and for
 newer tools and improved interfaces.
 
