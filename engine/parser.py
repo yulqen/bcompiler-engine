@@ -2,6 +2,7 @@ import csv
 import datetime
 import fnmatch
 import os
+from concurrent import futures
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional
@@ -79,6 +80,7 @@ def template_reader(template_file: str) -> List[TemplateCell]:
     TemplateCell objects.
     """
     data = []
+    print(f"EXTRACTING FROM: {template_file}")
     workbook = load_workbook(template_file, data_only=True)
     for sheet in workbook.worksheets:
         for row in sheet.rows:
@@ -111,13 +113,22 @@ def get_xlsx_files(directory: Path) -> List[Path]:
     if not os.path.isabs(directory):
         raise RuntimeError("Require absolute path here")
     for file_path in os.listdir(directory):
-        if fnmatch.fnmatch(file_path, "*.xlsx"):
+        if fnmatch.fnmatch(file_path, "*.xls[xm]"):
             output.append(Path(os.path.join(directory, file_path)))
     return output
 
 
+# here is the version with out multiprocessing
+# def parse_multiple_xlsx_files(xlsx_files: List[Path]) -> set:
+#    data = []
+#    for file in map(template_reader, xlsx_files):
+#        data.append(file)
+#    return data
+
+
 def parse_multiple_xlsx_files(xlsx_files: List[Path]) -> set:
     data = []
-    for f in map(template_reader, xlsx_files):
-        data.append(f)
+    with futures.ProcessPoolExecutor() as pool:
+        for file in pool.map(template_reader, xlsx_files):
+            data.append(file)
     return data
