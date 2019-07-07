@@ -114,3 +114,10 @@ def get_xlsx_files(directory: Path) -> List[Path]:
         if fnmatch.fnmatch(file_path, "*.xlsx"):
             output.append(Path(os.path.join(directory, file_path)))
     return output
+
+
+def parse_multiple_xlsx_files(xlsx_files: List[Path]) -> set:
+    data = []
+    for f in map(template_reader, xlsx_files):
+        data.append(f)
+    return data

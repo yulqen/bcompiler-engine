@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from engine.parser import get_xlsx_files
+from engine.parser import get_xlsx_files, parse_multiple_xlsx_files
 
 
 def test_parse_multiple_templates():
@@ -20,3 +20,31 @@ def test_parse_multiple_templates():
 def test_raise_exception_when_none_abs_path_passed():
     with pytest.raises(RuntimeError):
         list_of_template_paths = get_xlsx_files("tests/resources/")
+
+
+def test_can_parse_multiple_xlsx_files():
+    here = os.path.abspath(os.curdir)
+    resources = Path(os.path.join(here, "tests/resources/"))
+    xlsx_files = get_xlsx_files(resources)
+    dataset = parse_multiple_xlsx_files(xlsx_files)
+    store_filenames = []
+    for x in dataset:
+        store_filenames.append(x[0].file_name.as_posix())
+    for file in xlsx_files:
+        assert file.as_posix() in store_filenames
+    for file in xlsx_files:
+        if file.name == "test_template2.xlsx":
+            test_file = file.as_posix()
+    for file_data in dataset:
+        for cell_lst in file_data:
+            if cell_lst.file_name.as_posix() == test_file:
+                for tc in file_data:
+                    if tc.cell_ref == "C5" and tc.sheet_name == "Summary":
+                        assert tc.value == "MEGA VALUE"
+                        break
+                else:
+                    continue
+                break
+        else:
+            continue
+        break
