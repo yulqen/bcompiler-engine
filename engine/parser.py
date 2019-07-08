@@ -147,3 +147,37 @@ def hash_target_files(list_of_files: List[Path]) -> Dict[str, bytes]:
             hash_obj = hashlib.md5(open(file_name, "rb").read())
             output.update({file_name.name: hash_obj.digest()})
     return output
+
+
+def order_dataset_by_filename(file_list: List[Path],
+                              dataset: List[List[TemplateCell]]) -> Dict:
+    """
+    Given a list of files and a dataset (a list of list of TemplateCell
+    objects - will return a dict of the form:
+
+        dataset = {
+        "test_template.xlsx": {
+        "checksum": "fjfj34jk22l134hl",
+        "data": [TemplateCell(file_name=PosixPath(..),
+                 TemplateCell(file_name=PosixPath(..),
+                 TemplateCell(file_name=PosixPath(..)
+                 ]
+                 }
+        "test_template2.xlsx": {
+        "checksum": "fjfj34jk22l134hl",
+        "data": [TemplateCell(file_name=PosixPath(..),
+                 TemplateCell(file_name=PosixPath(..),
+                 TemplateCell(file_name=PosixPath(..)
+                 ]
+                 }
+        }
+
+    """
+    file_hashes = hash_target_files(file_list)
+    _main_dict = {}
+    for lst in dataset:
+        fn = lst[0].file_name.name
+        _data_dict = {"file_checksum": file_hashes[fn]}
+        _data_dict.update(data=lst)
+        _main_dict.update({fn: _data_dict})
+    return _main_dict
