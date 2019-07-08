@@ -6,12 +6,6 @@ import pytest
 from engine.parser import get_xlsx_files, parse_multiple_xlsx_files
 
 
-@pytest.fixture
-def resources():
-    here = os.path.abspath(os.curdir)
-    return Path(os.path.join(here, "tests/resources/"))
-
-
 def test_parse_multiple_templates(resources):
     list_of_template_paths = get_xlsx_files(resources)
     for template in list_of_template_paths:

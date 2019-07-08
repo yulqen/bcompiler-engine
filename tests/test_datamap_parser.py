@@ -11,18 +11,6 @@ DATE = DatamapLineValueType.DATE
 TEXT = DatamapLineValueType.TEXT
 
 
-@pytest.fixture
-def template():
-    here = os.path.abspath(os.curdir)
-    return os.path.join(here, "tests/resources/test_template.xlsx")
-
-
-@pytest.fixture
-def datamap():
-    here = os.path.abspath(os.curdir)
-    return os.path.join(here, "tests/resources/datamap.csv")
-
-
 def test_datamap_reader(datamap):
     data = datamap_reader(datamap)
     assert data[0].key == "Project/Programme Name"
