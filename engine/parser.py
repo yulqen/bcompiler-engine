@@ -1,11 +1,12 @@
 import csv
 import datetime
 import fnmatch
+import hashlib
 import os
 from concurrent import futures
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from openpyxl import load_workbook
 
@@ -132,3 +133,17 @@ def parse_multiple_xlsx_files(xlsx_files: List[Path]) -> set:
         for file in pool.map(template_reader, xlsx_files):
             data.append(file)
     return data
+
+
+def hash_target_files(list_of_files: List[Path]) -> Dict[str, bytes]:
+    """
+    Hash each file in list_of_files and return a dict
+    containing the file name as keys and md5 hash as value for each
+    file.
+    """
+    output = {}
+    for file_name in list_of_files:
+        if os.path.isfile(file_name):
+            hash_obj = hashlib.md5(open(file_name, "rb").read())
+            output.update({file_name.name: hash_obj.digest()})
+    return output
