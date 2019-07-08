@@ -18,6 +18,7 @@ that coming soon.
 * Brand new code, developed with the benefit of several years and multiple projects
     of hindsight.
 * Extract data using multiple cores to do it faster.
+* Caching
 * Type checking and rule-setting, allowing for greater confidence in integrity of data.
 * Improved, modular design, powering *a brand new interface*, available soon.
 * Designed to be packaged for more general distribution.
