@@ -26,14 +26,16 @@ class TemplateCell:
     data_type: DatamapLineValueType
 
 
-def get_cell_data(data: List[TemplateCell], sheet_name: str,
-                  cell_ref: str) -> Optional[TemplateCell]:
+def get_cell_data(
+    data: List[TemplateCell], sheet_name: str, cell_ref: str
+) -> Optional[TemplateCell]:
     """
     Given a list of TemplateCell items, a sheet name and a cell reference,
     return a single TemplateCell object.
     """
     data_from_cell = [
-        cell for cell in data
+        cell
+        for cell in data
         if cell.sheet_name == sheet_name and cell.cell_ref == cell_ref
     ]
     if data_from_cell:
@@ -71,7 +73,8 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
                     cellref=clean(line["cell_reference"], is_cell_ref=True),
                     data_type=clean(line["type"]),
                     filename=dm_file,
-                ))
+                )
+            )
     return data
 
 
@@ -94,13 +97,11 @@ def template_reader(template_file: str) -> List[TemplateCell]:
                         if isinstance(cell.value, (float, int)):
                             val = cell.value
                             c_type = DatamapLineValueType.NUMBER
-                        elif isinstance(cell.value,
-                                        (datetime.date, datetime.datetime)):
+                        elif isinstance(cell.value, (datetime.date, datetime.datetime)):
                             val = cell.value
                             c_type = DatamapLineValueType.DATE
                     cell_ref = f"{cell.column_letter}{cell.row}"
-                    tc = TemplateCell(template_file, sheet.title, cell_ref,
-                                      val, c_type)
+                    tc = TemplateCell(template_file, sheet.title, cell_ref, val, c_type)
                     data.append(tc)
     return data
 
@@ -127,13 +128,20 @@ def get_xlsx_files(directory: Path) -> List[Path]:
 #    return data
 
 
-def parse_multiple_xlsx_files(xlsx_files: List[Path]
-                              ) -> List[List[TemplateCell]]:
+def parse_multiple_xlsx_files(xlsx_files: List[Path]) -> List[List[TemplateCell]]:
     data = []
     with futures.ProcessPoolExecutor() as pool:
         for file in pool.map(template_reader, xlsx_files):
             data.append(file)
     return data
+
+
+def hash_single_file(filepath: Path) -> bytes:
+    if not filepath.is_file():
+        raise RuntimeError(f"Cannot checksum {filepath}")
+    else:
+        hash_obj = hashlib.md5(open(filepath, "rb").read())
+        return hash_obj.digest()
 
 
 def hash_target_files(list_of_files: List[Path]) -> Dict[str, bytes]:
@@ -150,8 +158,9 @@ def hash_target_files(list_of_files: List[Path]) -> Dict[str, bytes]:
     return output
 
 
-def order_dataset_by_filename(file_list: List[Path],
-                              dataset: List[List[TemplateCell]]) -> Dict:
+def order_dataset_by_filename(
+    file_list: List[Path], dataset: List[List[TemplateCell]]
+) -> Dict:
     """
     Given a list of files and a dataset (a list of list of TemplateCell
     objects - will return a dict of the form:

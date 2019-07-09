@@ -17,9 +17,17 @@ def test_parse_multiple_templates(resources):
 
 def test_raise_exception_when_none_abs_path_passed():
     with pytest.raises(RuntimeError):
-        list_of_template_paths = get_xlsx_files("tests/resources/")
+        list_of_template_paths = get_xlsx_files("tests/resources/")  # noqa
 
 
+def test_extract_data_from_multiple_files_into_correct_structure(resources):
+    xlsx_files = get_xlsx_files(resources)
+    dataset = parse_multiple_xlsx_files(xlsx_files)
+    test_filename = "test_template2.xlsx"
+    assert dataset[test_filename]["Summary"]["B3"] == "This is a string"
+
+
+@pytest.mark.skip("Removed for now - refactoring")
 def test_can_parse_multiple_xlsx_files(resources):
     xlsx_files = get_xlsx_files(resources)
     dataset = parse_multiple_xlsx_files(xlsx_files)

@@ -2,9 +2,19 @@ import hashlib
 
 import pytest
 
-from engine.parser import (get_xlsx_files, hash_target_files,
-                           order_dataset_by_filename,
-                           parse_multiple_xlsx_files, template_reader)
+from engine.parser import (
+    get_xlsx_files,
+    hash_target_files,
+    order_dataset_by_filename,
+    parse_multiple_xlsx_files,
+    template_reader,
+    hash_single_file,
+)
+
+
+def test_hash_of_single_file(resources):
+    hash_obj = hashlib.md5(open(resources / "test_template.xlsx", "rb").read())
+    assert hash_obj.digest() == hash_single_file(resources / "test_template.xlsx")
 
 
 def test_hash_of_target_files(resources):
@@ -43,8 +53,7 @@ def test_group_data_by_source_file(resources):
     digest_of_test_file = hashlib.md5(open(test_file, "rb").read()).digest()
     initial_dataset = parse_multiple_xlsx_files(excel_files)
     dataset_by_file = order_dataset_by_filename(excel_files, initial_dataset)
-    assert dataset_by_file["test_template.xlsx"][
-        "file_checksum"] == digest_of_test_file
+    assert dataset_by_file["test_template.xlsx"]["file_checksum"] == digest_of_test_file
 
 
 @pytest.mark.skip("Not ready for this yet")
