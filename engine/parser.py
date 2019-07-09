@@ -127,7 +127,8 @@ def get_xlsx_files(directory: Path) -> List[Path]:
 #    return data
 
 
-def parse_multiple_xlsx_files(xlsx_files: List[Path]) -> set:
+def parse_multiple_xlsx_files(xlsx_files: List[Path]
+                              ) -> List[List[TemplateCell]]:
     data = []
     with futures.ProcessPoolExecutor() as pool:
         for file in pool.map(template_reader, xlsx_files):
@@ -136,10 +137,10 @@ def parse_multiple_xlsx_files(xlsx_files: List[Path]) -> set:
 
 
 def hash_target_files(list_of_files: List[Path]) -> Dict[str, bytes]:
-    """
-    Hash each file in list_of_files and return a dict
-    containing the file name as keys and md5 hash as value for each
-    file.
+    """Hash each file in list_of_files.
+
+    Given a list of files, return a dict containing the file name as
+    keys and md5 hash as value for each file.
     """
     output = {}
     for file_name in list_of_files:
