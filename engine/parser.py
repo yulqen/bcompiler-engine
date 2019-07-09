@@ -84,13 +84,17 @@ def template_reader(template_file: str) -> Dict:
     Given a populated xlsx file, returns all data in a list of
     TemplateCell objects.
     """
-    inner_dict = {}
+    inner_dict = {"data": {}}
     data = []
     f_path = Path(template_file)
     print(f"EXTRACTING FROM: {template_file}")
     workbook = load_workbook(template_file, data_only=True)
     checksum = hash_single_file(f_path)
+    holding = []
     for sheet in workbook.worksheets:
+        data_dict = {}
+        sheet_data = []
+        sheet_dict = {}
         for row in sheet.rows:
             for cell in row:
                 if cell.value is not None:
@@ -106,10 +110,14 @@ def template_reader(template_file: str) -> Dict:
                             c_type = DatamapLineValueType.DATE
                     cell_ref = f"{cell.column_letter}{cell.row}"
                     tc = TemplateCell(template_file, sheet.title, cell_ref, val, c_type)
-                    data.append(tc)
+                    sheet_data.append(tc)
+        sheet_dict.update({sheet.title: _extract_keys(sheet_data)})
+        holding.append(sheet_dict)
+    for sd in holding:
+        inner_dict["data"].update(sd)
     inner_dict.update({"checksum": checksum})
-    inner_dict.update({"data": data})
-    return inner_dict
+    shell_dict = {f_path.name: inner_dict}
+    return shell_dict
 
 
 def get_xlsx_files(directory: Path) -> List[Path]:
@@ -134,11 +142,19 @@ def get_xlsx_files(directory: Path) -> List[Path]:
 #    return data
 
 
+def _extract_sheets(lst_of_tcs: List[TemplateCell]) -> Dict[str, List[TemplateCell]]:
+    output: Dict[str, List[TemplateCell]] = {}
+    data = sorted(lst_of_tcs, key=lambda x: x.sheet_name)
+    for k, g in groupby(data, key=lambda x: x.sheet_name):
+        output.update({k: list(g)})
+    return output
+
+
 def _extract_keys(lst_of_tcs: List[TemplateCell]) -> Dict[str, List[TemplateCell]]:
     output: Dict[str, List[TemplateCell]] = {}
     data = sorted(lst_of_tcs, key=lambda x: x.cell_ref)
     for k, g in groupby(data, key=lambda x: x.cell_ref):
-        output.update({k: g})
+        output.update({k: list(g)})
     return output
 
 
@@ -183,20 +199,31 @@ def order_dataset_by_filename(
         dataset = {
         "test_template.xlsx": {
         "checksum": "fjfj34jk22l134hl",
-        "data": [TemplateCell(file_name=PosixPath(..),
-                 TemplateCell(file_name=PosixPath(..),
-                 TemplateCell(file_name=PosixPath(..)
-                 ]
-                 }
+        "data": {
+            "Summary": {
+                "A1": TemplateCell(file_name=PosixPath(..),
+                "A2": TemplateCell(file_name=PosixPath(..),
+                "A2": TemplateCell(file_name=PosixPath(..),
+            },
+            "Finances": {
+                "A1": TemplateCell(file_name=PosixPath(..),
+                "A4": TemplateCell(file_name=PosixPath(..),
+                "A10": TemplateCell(file_name=PosixPath(..),
+            }
         "test_template2.xlsx": {
-        "checksum": "fjfj34jk22l134hl",
-        "data": [TemplateCell(file_name=PosixPath(..),
-                 TemplateCell(file_name=PosixPath(..),
-                 TemplateCell(file_name=PosixPath(..)
-                 ]
-                 }
+        "checksum": "AFfjdddfa4jk134hl",
+        "data": {
+            "Summary": {
+                "A1": TemplateCell(file_name=PosixPath(..),
+                "A2": TemplateCell(file_name=PosixPath(..),
+                "A2": TemplateCell(file_name=PosixPath(..),
+            },
+            "Finances": {
+                "A1": TemplateCell(file_name=PosixPath(..),
+                "A4": TemplateCell(file_name=PosixPath(..),
+                "A10": TemplateCell(file_name=PosixPath(..),
+            }
         }
-
     """
     file_hashes = hash_target_files(file_list)
     _main_dict = {}
