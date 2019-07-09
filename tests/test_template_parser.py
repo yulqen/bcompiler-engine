@@ -3,7 +3,13 @@ from pathlib import Path
 
 import pytest
 
-from engine.parser import get_xlsx_files, parse_multiple_xlsx_files
+from engine.parser import (
+    get_xlsx_files,
+    parse_multiple_xlsx_files,
+    _extract_keys,
+    TemplateCell,
+)
+from engine.datamap import DatamapLineValueType
 
 
 def test_parse_multiple_templates(resources):
@@ -20,11 +26,34 @@ def test_raise_exception_when_none_abs_path_passed():
         list_of_template_paths = get_xlsx_files("tests/resources/")  # noqa
 
 
+def test_func_to_get_cellrefs_as_keys_from_list_of_tcs():
+    tc1 = TemplateCell(
+        "test_file", "Shee1", "A1", "test_value1", DatamapLineValueType.TEXT
+    )
+    tc2 = TemplateCell(
+        "test_file", "Shee1", "A2", "test_value2", DatamapLineValueType.TEXT
+    )
+    tc3 = TemplateCell(
+        "test_file", "Shee1", "A3", "test_value3", DatamapLineValueType.TEXT
+    )
+    tc3_dup = TemplateCell(
+        "test_file", "Shee1", "A3", "test_value3", DatamapLineValueType.TEXT
+    )
+    xs = [tc3, tc2, tc3_dup, tc1]  # noqa
+    assert "A1" in _extract_keys(xs).keys()
+    assert "A2" in _extract_keys(xs).keys()
+    assert "A3" in _extract_keys(xs).keys()
+    assert len(_extract_keys(xs).keys()) == 3
+
+
 def test_extract_data_from_multiple_files_into_correct_structure(resources):
     xlsx_files = get_xlsx_files(resources)
     dataset = parse_multiple_xlsx_files(xlsx_files)
     test_filename = "test_template2.xlsx"
-    assert dataset[test_filename]["Summary"]["B3"] == "This is a string"
+    assert dataset[test_filename]["data"][0].file_name.name == "test_template2.xlsx"
+
+
+#   assert dataset[test_filename]["Summary"]["B3"] == "This is a string"
 
 
 @pytest.mark.skip("Removed for now - refactoring")

@@ -6,7 +6,8 @@ import os
 from concurrent import futures
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
+from itertools import groupby
 
 from openpyxl import load_workbook
 
@@ -78,14 +79,17 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
     return data
 
 
-def template_reader(template_file: str) -> List[TemplateCell]:
+def template_reader(template_file: str) -> Dict:
     """
     Given a populated xlsx file, returns all data in a list of
     TemplateCell objects.
     """
+    inner_dict = {}
     data = []
+    f_path = Path(template_file)
     print(f"EXTRACTING FROM: {template_file}")
     workbook = load_workbook(template_file, data_only=True)
+    checksum = hash_single_file(f_path)
     for sheet in workbook.worksheets:
         for row in sheet.rows:
             for cell in row:
@@ -103,7 +107,9 @@ def template_reader(template_file: str) -> List[TemplateCell]:
                     cell_ref = f"{cell.column_letter}{cell.row}"
                     tc = TemplateCell(template_file, sheet.title, cell_ref, val, c_type)
                     data.append(tc)
-    return data
+    inner_dict.update({"checksum": checksum})
+    inner_dict.update({"data": data})
+    return inner_dict
 
 
 def get_xlsx_files(directory: Path) -> List[Path]:
@@ -128,11 +134,20 @@ def get_xlsx_files(directory: Path) -> List[Path]:
 #    return data
 
 
-def parse_multiple_xlsx_files(xlsx_files: List[Path]) -> List[List[TemplateCell]]:
-    data = []
+def _extract_keys(lst_of_tcs: List[TemplateCell]) -> Dict[str, List[TemplateCell]]:
+    output: Dict[str, List[TemplateCell]] = {}
+    data = sorted(lst_of_tcs, key=lambda x: x.cell_ref)
+    for k, g in groupby(data, key=lambda x: x.cell_ref):
+        output.update({k: g})
+    return output
+
+
+def parse_multiple_xlsx_files(xlsx_files: List[Path]) -> Dict[Any, Any]:
+    data: Dict[Any, Any] = {}
     with futures.ProcessPoolExecutor() as pool:
         for file in pool.map(template_reader, xlsx_files):
-            data.append(file)
+            f_name = file["data"][0].file_name.name
+            data.update({f_name: file})
     return data
 
 
