@@ -29,18 +29,18 @@ def test_bad_spacing_in_datamap(datamap):
 
 def test_template_reader(template):
     data = template_reader(template)
-    assert get_cell_data(data, "Summary", "B2").data_type == DATE
-    assert get_cell_data(data, "Summary", "B3").data_type == TEXT
-    assert get_cell_data(data, "Summary", "B4").data_type == NUMBER
-    assert get_cell_data(data, "Summary", "B5").data_type == NUMBER
+    assert get_cell_data(template, data, "Summary", "B2").data_type == DATE
+    assert get_cell_data(template, data, "Summary", "B3").data_type == TEXT
+    assert get_cell_data(template, data, "Summary", "B4").data_type == NUMBER
+    assert get_cell_data(template, data, "Summary", "B5").data_type == NUMBER
+    assert get_cell_data(template, data, "Summary", "B2").value == datetime.datetime(
+        2019, 10, 20, 0, 0
+    )
+    assert get_cell_data(template, data, "Summary", "B3").value == "This is a string"
+    assert get_cell_data(template, data, "Summary", "B4").value == 2.2
+    assert get_cell_data(template, data, "Summary", "B4").value == 2.20
+    assert get_cell_data(template, data, "Summary", "B4").value != 2.21
+    assert get_cell_data(template, data, "Summary", "B5").value == 10
 
-    assert get_cell_data(data, "Summary",
-                         "B2").value == datetime.datetime(2019, 10, 20, 0, 0)
-    assert get_cell_data(data, "Summary", "B3").value == "This is a string"
-    assert get_cell_data(data, "Summary", "B4").value == 2.2
-    assert get_cell_data(data, "Summary", "B4").value == 2.20
-    assert get_cell_data(data, "Summary", "B4").value != 2.21
-    assert get_cell_data(data, "Summary", "B5").value == 10
-
-    assert get_cell_data(data, "Another Sheet", "K25").value == "Float:"
-    assert get_cell_data(data, "Another Sheet", "K25").data_type == TEXT
+    assert get_cell_data(template, data, "Another Sheet", "K25").value == "Float:"
+    assert get_cell_data(template, data, "Another Sheet", "K25").data_type == TEXT

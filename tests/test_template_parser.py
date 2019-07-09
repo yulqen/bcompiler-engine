@@ -81,38 +81,10 @@ def test_extract_data_from_multiple_files_into_correct_structure(resources):
     xlsx_files = get_xlsx_files(resources)
     dataset = parse_multiple_xlsx_files(xlsx_files)
     test_filename = "test_template2.xlsx"
-    assert dataset[test_filename]["data"][0].file_name.name == "test_template2.xlsx"
-    assert dataset[test_filename]["Summary"]["B3"] == "This is a string"
-
-
-@pytest.mark.skip("Removed for now - refactoring")
-def test_can_parse_multiple_xlsx_files(resources):
-    xlsx_files = get_xlsx_files(resources)
-    dataset = parse_multiple_xlsx_files(xlsx_files)
-    store_filenames = []
-    for x in dataset:
-        # we want to store the file names at this stage
-        store_filenames.append(x[0].file_name.as_posix())
-    for file in xlsx_files:
-        # test that we are getting the file names that we expect
-        assert file.as_posix() in store_filenames
-    for file in xlsx_files:
-        if file.name == "test_template2.xlsx":
-            test_file = file.as_posix()
-    # we want to go through the set of parsed data, for each file
-    # and first find the one we want (test_template2.xlsx)...
-    for file_data in dataset:
-        for cell_lst in file_data:
-            if cell_lst.file_name.as_posix() == test_file:
-                # then go through the data for that file
-                # to find the cell values we want to test
-                for tc in file_data:
-                    if tc.cell_ref == "C5" and tc.sheet_name == "Summary":
-                        assert tc.value == "MEGA VALUE"
-                        break
-                else:
-                    continue
-                break
-        else:
-            continue
-        break
+    assert (
+        dataset[test_filename]["data"]["Summary"]["B3"][0].file_name.name
+        == "test_template2.xlsx"
+    )
+    assert (
+        dataset[test_filename]["data"]["Summary"]["B3"][0].value == "This is a string"
+    )

@@ -16,7 +16,7 @@ def resources():
 @pytest.fixture
 def template():
     here = os.path.abspath(os.curdir)
-    return os.path.join(here, "tests/resources/test_template.xlsx")
+    return Path(os.path.join(here, "tests/resources/test_template.xlsx"))
 
 
 @pytest.fixture

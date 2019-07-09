@@ -1,3 +1,38 @@
+"""
+Mostly, this module is about organising the main data structure.
+
+Given a list of files and a dataset (a list of list of TemplateCell
+objects - will return a dict of the form:
+
+    dataset = {
+    "test_template.xlsx": {
+    "checksum": "fjfj34jk22l134hl",
+    "data": {
+        "Summary": {
+            "A1": TemplateCell(file_name=PosixPath(..),
+            "A2": TemplateCell(file_name=PosixPath(..),
+            "A2": TemplateCell(file_name=PosixPath(..),
+        },
+        "Finances": {
+            "A1": TemplateCell(file_name=PosixPath(..),
+            "A4": TemplateCell(file_name=PosixPath(..),
+            "A10": TemplateCell(file_name=PosixPath(..),
+        }
+    "test_template2.xlsx": {
+    "checksum": "AFfjdddfa4jk134hl",
+    "data": {
+        "Summary": {
+            "A1": TemplateCell(file_name=PosixPath(..),
+            "A2": TemplateCell(file_name=PosixPath(..),
+            "A2": TemplateCell(file_name=PosixPath(..),
+        },
+        "Finances": {
+            "A1": TemplateCell(file_name=PosixPath(..),
+            "A4": TemplateCell(file_name=PosixPath(..),
+            "A10": TemplateCell(file_name=PosixPath(..),
+        }
+    }
+"""
 import csv
 import datetime
 import fnmatch
@@ -28,23 +63,14 @@ class TemplateCell:
 
 
 def get_cell_data(
-    data: List[TemplateCell], sheet_name: str, cell_ref: str
+    filepath: Path, data: List[TemplateCell], sheet_name: str, cell_ref: str
 ) -> Optional[TemplateCell]:
     """
     Given a list of TemplateCell items, a sheet name and a cell reference,
     return a single TemplateCell object.
     """
-    data_from_cell = [
-        cell
-        for cell in data
-        if cell.sheet_name == sheet_name and cell.cell_ref == cell_ref
-    ]
-    if data_from_cell:
-        return data_from_cell[0]
-    else:
-        raise RuntimeError(
-            "There should never be more than one value for that sheet/cell combination"
-        )
+    _file_data = data[filepath.name]["data"]
+    return _file_data[sheet_name][cell_ref][0]
 
 
 def clean(target_str: str, is_cell_ref: bool = False):
@@ -162,8 +188,7 @@ def parse_multiple_xlsx_files(xlsx_files: List[Path]) -> Dict[Any, Any]:
     data: Dict[Any, Any] = {}
     with futures.ProcessPoolExecutor() as pool:
         for file in pool.map(template_reader, xlsx_files):
-            f_name = file["data"][0].file_name.name
-            data.update({f_name: file})
+            data.update(file)
     return data
 
 
@@ -187,49 +212,3 @@ def hash_target_files(list_of_files: List[Path]) -> Dict[str, bytes]:
             hash_obj = hashlib.md5(open(file_name, "rb").read())
             output.update({file_name.name: hash_obj.digest()})
     return output
-
-
-def order_dataset_by_filename(
-    file_list: List[Path], dataset: List[List[TemplateCell]]
-) -> Dict:
-    """
-    Given a list of files and a dataset (a list of list of TemplateCell
-    objects - will return a dict of the form:
-
-        dataset = {
-        "test_template.xlsx": {
-        "checksum": "fjfj34jk22l134hl",
-        "data": {
-            "Summary": {
-                "A1": TemplateCell(file_name=PosixPath(..),
-                "A2": TemplateCell(file_name=PosixPath(..),
-                "A2": TemplateCell(file_name=PosixPath(..),
-            },
-            "Finances": {
-                "A1": TemplateCell(file_name=PosixPath(..),
-                "A4": TemplateCell(file_name=PosixPath(..),
-                "A10": TemplateCell(file_name=PosixPath(..),
-            }
-        "test_template2.xlsx": {
-        "checksum": "AFfjdddfa4jk134hl",
-        "data": {
-            "Summary": {
-                "A1": TemplateCell(file_name=PosixPath(..),
-                "A2": TemplateCell(file_name=PosixPath(..),
-                "A2": TemplateCell(file_name=PosixPath(..),
-            },
-            "Finances": {
-                "A1": TemplateCell(file_name=PosixPath(..),
-                "A4": TemplateCell(file_name=PosixPath(..),
-                "A10": TemplateCell(file_name=PosixPath(..),
-            }
-        }
-    """
-    file_hashes = hash_target_files(file_list)
-    _main_dict = {}
-    for lst in dataset:
-        fn = lst[0].file_name.name
-        _data_dict = {"file_checksum": file_hashes[fn]}
-        _data_dict.update(data=lst)
-        _main_dict.update({fn: _data_dict})
-    return _main_dict
