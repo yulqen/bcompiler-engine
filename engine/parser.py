@@ -70,7 +70,7 @@ def get_cell_data(
     return a single TemplateCell object.
     """
     _file_data = data[filepath.name]["data"]
-    return _file_data[sheet_name][cell_ref][0]
+    return _file_data[sheet_name][cell_ref]
 
 
 def clean(target_str: str, is_cell_ref: bool = False):
@@ -137,7 +137,7 @@ def template_reader(template_file: str) -> Dict:
                     cell_ref = f"{cell.column_letter}{cell.row}"
                     tc = TemplateCell(template_file, sheet.title, cell_ref, val, c_type)
                     sheet_data.append(tc)
-        sheet_dict.update({sheet.title: _extract_keys(sheet_data)})
+        sheet_dict.update({sheet.title: _extract_cellrefs(sheet_data)})
         holding.append(sheet_dict)
     for sd in holding:
         inner_dict["data"].update(sd)
@@ -176,11 +176,38 @@ def _extract_sheets(lst_of_tcs: List[TemplateCell]) -> Dict[str, List[TemplateCe
     return output
 
 
-def _extract_keys(lst_of_tcs: List[TemplateCell]) -> Dict[str, List[TemplateCell]]:
-    output: Dict[str, List[TemplateCell]] = {}
+def _extract_cellrefs(lst_of_tcs: List[TemplateCell]) -> Dict[str, TemplateCell]:
+    """Extract value from TemplateCell.cell_ref for each TemplateCell in a list to group them.
+
+    When given a list of TemplateCell objects, this function extracts each TemplateCell
+    by it's cell_ref value and groups them according. In the curent implementation, this is
+    only called on a list of TemplateCell objects which have the same sheet_name value, and
+    therefore expects to find only a single cell_ref value each time, meaning that the list
+    produced by groupby() can be removed and the single value return. Returns an exception
+    if this list has more than one object.
+
+    Args:
+        lst_of_tcs: List of TemplateCell objects.
+
+    Raises:
+        RuntimeError: if more than one cell_ref value is found in the list.
+
+    Returns:
+        Dictionary whose key is the cell_ref and value is the TemplateCell that contains it.
+
+    """
+
+    output: Dict[str, TemplateCell] = {}
     data = sorted(lst_of_tcs, key=lambda x: x.cell_ref)
     for k, g in groupby(data, key=lambda x: x.cell_ref):
-        output.update({k: list(g)})
+        result = list(g)
+        if len(result) > 1:
+            raise RuntimeError(
+                f"Found duplicate sheet/cell_ref item when extracting keys."
+            )
+        else:
+            result = result[0]
+            output.update({k: result})
     return output
 
 

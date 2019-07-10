@@ -7,7 +7,7 @@ from engine.parser import (
     get_xlsx_files,
     template_reader,
     parse_multiple_xlsx_files,
-    _extract_keys,
+    _extract_cellrefs,
     _extract_sheets,
     TemplateCell,
 )
@@ -56,23 +56,20 @@ def test_func_to_get_cellrefs_as_keys_from_list_of_tcs():
     tc2 = TemplateCell(
         "test_file", "Shee1", "A2", "test_value2", DatamapLineValueType.TEXT
     )
-    tc3 = TemplateCell(
-        "test_file", "Shee1", "A3", "test_value3", DatamapLineValueType.TEXT
+    tc4 = TemplateCell(
+        "test_file", "Shee1", "A4", "test_value3", DatamapLineValueType.TEXT
     )
-    tc3_dup = TemplateCell(
-        "test_file", "Shee1", "A3", "test_value3", DatamapLineValueType.TEXT
-    )
-    xs = [tc3, tc2, tc3_dup, tc1]  # noqa
-    assert "A1" in _extract_keys(xs).keys()
-    assert "A2" in _extract_keys(xs).keys()
-    assert "A3" in _extract_keys(xs).keys()
-    assert len(_extract_keys(xs).keys()) == 3
+    xs = [tc4, tc2, tc1]  # noqa
+    assert "A1" in _extract_cellrefs(xs).keys()
+    assert "A2" in _extract_cellrefs(xs).keys()
+    assert "A4" in _extract_cellrefs(xs).keys()
+    assert len(_extract_cellrefs(xs).keys()) == 3
 
 
 def test_template_reader(template):
     dataset = template_reader(template)
     assert (
-        dataset["test_template.xlsx"]["data"]["Summary"]["B3"][0].value
+        dataset["test_template.xlsx"]["data"]["Summary"]["B3"].value
         == "This is a string"
     )
 
@@ -82,9 +79,7 @@ def test_extract_data_from_multiple_files_into_correct_structure(resources):
     dataset = parse_multiple_xlsx_files(xlsx_files)
     test_filename = "test_template2.xlsx"
     assert (
-        dataset[test_filename]["data"]["Summary"]["B3"][0].file_name.name
+        dataset[test_filename]["data"]["Summary"]["B3"].file_name.name
         == "test_template2.xlsx"
     )
-    assert (
-        dataset[test_filename]["data"]["Summary"]["B3"][0].value == "This is a string"
-    )
+    assert dataset[test_filename]["data"]["Summary"]["B3"].value == "This is a string"
