@@ -40,9 +40,9 @@ import hashlib
 import os
 from concurrent import futures
 from dataclasses import dataclass
-from pathlib import Path
-from typing import Dict, List, Optional, Any
 from itertools import groupby
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 from openpyxl import load_workbook
 
@@ -62,9 +62,8 @@ class TemplateCell:
     data_type: DatamapLineValueType
 
 
-def get_cell_data(
-    filepath: Path, data: List[TemplateCell], sheet_name: str, cell_ref: str
-) -> Optional[TemplateCell]:
+def get_cell_data(filepath: Path, data: List[TemplateCell], sheet_name: str,
+                  cell_ref: str) -> Optional[TemplateCell]:
     """
     Given a list of TemplateCell items, a sheet name and a cell reference,
     return a single TemplateCell object.
@@ -100,8 +99,7 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
                     cellref=clean(line["cell_reference"], is_cell_ref=True),
                     data_type=clean(line["type"]),
                     filename=dm_file,
-                )
-            )
+                ))
     return data
 
 
@@ -131,11 +129,13 @@ def template_reader(template_file: str) -> Dict:
                         if isinstance(cell.value, (float, int)):
                             val = cell.value
                             c_type = DatamapLineValueType.NUMBER
-                        elif isinstance(cell.value, (datetime.date, datetime.datetime)):
+                        elif isinstance(cell.value,
+                                        (datetime.date, datetime.datetime)):
                             val = cell.value
                             c_type = DatamapLineValueType.DATE
                     cell_ref = f"{cell.column_letter}{cell.row}"
-                    tc = TemplateCell(template_file, sheet.title, cell_ref, val, c_type)
+                    tc = TemplateCell(template_file, sheet.title, cell_ref,
+                                      val, c_type)
                     sheet_data.append(tc)
         sheet_dict.update({sheet.title: _extract_cellrefs(sheet_data)})
         holding.append(sheet_dict)
@@ -168,7 +168,8 @@ def get_xlsx_files(directory: Path) -> List[Path]:
 #    return data
 
 
-def _extract_sheets(lst_of_tcs: List[TemplateCell]) -> Dict[str, List[TemplateCell]]:
+def _extract_sheets(lst_of_tcs: List[TemplateCell]
+                    ) -> Dict[str, List[TemplateCell]]:
     output: Dict[str, List[TemplateCell]] = {}
     data = sorted(lst_of_tcs, key=lambda x: x.sheet_name)
     for k, g in groupby(data, key=lambda x: x.sheet_name):
@@ -176,7 +177,8 @@ def _extract_sheets(lst_of_tcs: List[TemplateCell]) -> Dict[str, List[TemplateCe
     return output
 
 
-def _extract_cellrefs(lst_of_tcs: List[TemplateCell]) -> Dict[str, TemplateCell]:
+def _extract_cellrefs(lst_of_tcs: List[TemplateCell]
+                      ) -> Dict[str, TemplateCell]:
     """Extract value from TemplateCell.cell_ref for each TemplateCell in a list to group them.
 
     When given a list of TemplateCell objects, this function extracts each TemplateCell
@@ -203,8 +205,7 @@ def _extract_cellrefs(lst_of_tcs: List[TemplateCell]) -> Dict[str, TemplateCell]
         result = list(g)
         if len(result) > 1:
             raise RuntimeError(
-                f"Found duplicate sheet/cell_ref item when extracting keys."
-            )
+                f"Found duplicate sheet/cell_ref item when extracting keys.")
         else:
             result = result[0]
             output.update({k: result})
