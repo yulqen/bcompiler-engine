@@ -39,27 +39,14 @@ import fnmatch
 import hashlib
 import os
 from concurrent import futures
-from dataclasses import dataclass
 from itertools import groupby
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from openpyxl import load_workbook
 
-from engine.datamap import DatamapLine, DatamapLineValueType
-
-
-@dataclass
-class TemplateCell:
-    """
-    Used for collecting data from a populated spreadsheet.
-    """
-
-    file_name: str
-    sheet_name: str
-    cell_ref: str
-    value: str
-    data_type: DatamapLineValueType
+from .domain.datamap import DatamapLine, DatamapLineValueType
+from .domain.template import TemplateCell
 
 
 def get_cell_data(filepath: Path, data: List[TemplateCell], sheet_name: str,

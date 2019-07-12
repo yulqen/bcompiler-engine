@@ -3,7 +3,7 @@ import os
 
 import pytest
 
-from engine.datamap import DatamapLineValueType
+from engine.domain.datamap import DatamapLineValueType
 from engine.parser import datamap_reader, get_cell_data, template_reader
 
 NUMBER = DatamapLineValueType.NUMBER
@@ -33,14 +33,16 @@ def test_template_reader(template):
     assert get_cell_data(template, data, "Summary", "B3").data_type == TEXT
     assert get_cell_data(template, data, "Summary", "B4").data_type == NUMBER
     assert get_cell_data(template, data, "Summary", "B5").data_type == NUMBER
-    assert get_cell_data(template, data, "Summary", "B2").value == datetime.datetime(
-        2019, 10, 20, 0, 0
-    )
-    assert get_cell_data(template, data, "Summary", "B3").value == "This is a string"
+    assert get_cell_data(template, data, "Summary",
+                         "B2").value == datetime.datetime(2019, 10, 20, 0, 0)
+    assert get_cell_data(template, data, "Summary",
+                         "B3").value == "This is a string"
     assert get_cell_data(template, data, "Summary", "B4").value == 2.2
     assert get_cell_data(template, data, "Summary", "B4").value == 2.20
     assert get_cell_data(template, data, "Summary", "B4").value != 2.21
     assert get_cell_data(template, data, "Summary", "B5").value == 10
 
-    assert get_cell_data(template, data, "Another Sheet", "K25").value == "Float:"
-    assert get_cell_data(template, data, "Another Sheet", "K25").data_type == TEXT
+    assert get_cell_data(template, data, "Another Sheet",
+                         "K25").value == "Float:"
+    assert get_cell_data(template, data, "Another Sheet",
+                         "K25").data_type == TEXT
