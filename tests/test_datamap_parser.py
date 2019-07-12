@@ -4,8 +4,8 @@ import os
 import pytest
 
 from engine.domain.datamap import DatamapLineValueType
-from engine.use_cases.parsing import (datamap_reader, get_cell_data,
-                                      template_reader)
+from engine.use_cases.parsing import datamap_reader, template_reader
+from engine.utils.extraction import get_cell_data
 
 NUMBER = DatamapLineValueType.NUMBER
 DATE = DatamapLineValueType.DATE
