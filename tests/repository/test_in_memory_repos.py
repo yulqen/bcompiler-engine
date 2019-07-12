@@ -6,7 +6,6 @@ from engine.domain.datamap import DatamapLine
 from engine.repository.datamap import InMemorySingleDatamapRepository
 
 
-@pytest.mark.skip("Do after the serializer test")
 def test_datamapline_repository_single_file_repo(datamap,
                                                  datamapline_list_objects):
     repo = InMemorySingleDatamapRepository(datamap)
