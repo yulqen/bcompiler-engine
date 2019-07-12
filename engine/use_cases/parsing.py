@@ -55,6 +55,12 @@ class ParseDatamapUseCase:
 
 
 class DatamapFile:
+    """A context manager that represents the datamap file.
+
+    Having a context manager means we can more elegantly capture the
+    exception with the file isn't found.
+    """
+
     def __init__(self, filepath):
         "Creates the context manager"
         self.filepath = filepath

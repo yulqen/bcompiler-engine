@@ -2,7 +2,6 @@ import json
 
 import pytest
 
-from engine.domain.datamap import DatamapLine
 from engine.repository.datamap import InMemorySingleDatamapRepository
 
 
@@ -15,7 +14,7 @@ def test_datamapline_repository_single_file_repo(datamap,
         repo.list_as_json())[0]["key"] == "Project/Programme Name"
 
 
-def test_datamapline_repository_non_existant_file():
+def test_datamapline_repository_non_existant_file(datamapline_list_objects):
     with pytest.raises(FileNotFoundError):
         repo = InMemorySingleDatamapRepository("non-file.txt")  # noqua
         repo.list_as_objs()[0].key == datamapline_list_objects[0].key

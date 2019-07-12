@@ -1,13 +1,7 @@
 import datetime
-import os
-from unittest import mock
-
-import pytest
 
 from engine.domain.datamap import DatamapLineValueType
-from engine.repository.datamap import InMemorySingleDatamapRepository
-from engine.use_cases.parsing import (ParseDatamapUseCase, datamap_reader,
-                                      template_reader)
+from engine.use_cases.parsing import datamap_reader, template_reader
 from engine.utils.extraction import get_cell_data
 
 NUMBER = DatamapLineValueType.NUMBER

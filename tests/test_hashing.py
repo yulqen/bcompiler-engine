@@ -1,7 +1,5 @@
 import hashlib
 
-import pytest
-
 from engine.use_cases.parsing import parse_multiple_xlsx_files
 from engine.utils.extraction import (get_xlsx_files, hash_single_file,
                                      hash_target_files)

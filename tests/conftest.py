@@ -7,6 +7,8 @@ import pytest
 from engine.config import Config, init
 from engine.domain.datamap import DatamapLine
 
+# flake8: noqa
+
 
 @pytest.fixture
 def datamapline_list_objects():
@@ -16,7 +18,7 @@ def datamapline_list_objects():
         cellref="C11",
         data_type="TEXT",
         filename=
-        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",
+        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",  # noqa
     )
     dml2 = DatamapLine(
         key="Department",
@@ -24,7 +26,7 @@ def datamapline_list_objects():
         cellref="C9",
         data_type="TEXT",
         filename=
-        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",
+        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",  # noqa  # noqa
     )
     dml3 = DatamapLine(
         key="Delivery Body",
@@ -32,7 +34,7 @@ def datamapline_list_objects():
         cellref="C10",
         data_type="TEXT",
         filename=
-        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",
+        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",  # noqa
     )
     dml4 = DatamapLine(
         key="GMPP - IPA ID Number",
@@ -40,7 +42,7 @@ def datamapline_list_objects():
         cellref="C12",
         data_type="TEXT",
         filename=
-        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",
+        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",  # noqa
     )
     return [dml1, dml2, dml3, dml4]
 
