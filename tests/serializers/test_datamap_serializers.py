@@ -1,7 +1,7 @@
 import json
 
 from engine.domain.datamap import DatamapLine
-from engine.serializers.datamap import datamap_json_serializer
+from engine.serializers.datamap import DatamapEncoder
 
 
 def test_datamapline_obj_to_dict():
@@ -27,5 +27,5 @@ def test_datamap_json_serializer():
     expected_json = """
         [{"key": "Test 1", "sheet": "Summary", "cellref": "A10", "data_type": "TEXT", "filename": "test.csv"}]
     """
-    datamap_in_json = json.loads(datamap_json_serializer(lst))
-    assert datamap_in_json == json.loads(expected_json)
+    datamap_in_json = json.dumps(lst, cls=DatamapEncoder)
+    assert json.loads(datamap_in_json) == json.loads(expected_json)
