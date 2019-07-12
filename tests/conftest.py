@@ -5,6 +5,44 @@ from pathlib import Path
 import pytest
 
 from engine.config import Config, init
+from engine.domain.datamap import DatamapLine
+
+
+@pytest.fixture
+def datamapline_list_objects():
+    dml1 = DatamapLine(
+        key="Project/Programme Name",
+        sheet="Introduction",
+        cellref="C11",
+        data_type="TEXT",
+        filename=
+        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",
+    )
+    dml2 = DatamapLine(
+        key="Department",
+        sheet="Introduction",
+        cellref="C9",
+        data_type="TEXT",
+        filename=
+        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",
+    )
+    dml3 = DatamapLine(
+        key="Delivery Body",
+        sheet="Introduction",
+        cellref="C10",
+        data_type="TEXT",
+        filename=
+        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",
+    )
+    dml4 = DatamapLine(
+        key="GMPP - IPA ID Number",
+        sheet="Introduction",
+        cellref="C12",
+        data_type="TEXT",
+        filename=
+        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",
+    )
+    return [dml1, dml2, dml3, dml4]
 
 
 @pytest.fixture

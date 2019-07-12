@@ -1,15 +1,28 @@
 import datetime
 import os
+from unittest import mock
 
 import pytest
 
 from engine.domain.datamap import DatamapLineValueType
-from engine.use_cases.parsing import datamap_reader, template_reader
+from engine.repository.datamap import InMemorySingleDatamapRepository
+from engine.use_cases.parsing import (ParseDatamapUseCase, datamap_reader,
+                                      template_reader)
 from engine.utils.extraction import get_cell_data
 
 NUMBER = DatamapLineValueType.NUMBER
 DATE = DatamapLineValueType.DATE
 TEXT = DatamapLineValueType.TEXT
+
+
+def test_parse_datamap_to_in_memory_use_case(datamap,
+                                             datamapline_list_objects):
+    # repo is a InMemorySingleDatamapRepository here
+    repo = InMemorySingleDatamapRepository(datamap)
+    parse_datamap_use_case = ParseDatamapUseCase(repo)
+    result = parse_datamap_use_case.execute()
+
+    assert result[0].key == datamapline_list_objects[0].key
 
 
 def test_datamap_reader(datamap):

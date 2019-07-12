@@ -46,6 +46,14 @@ from ..domain.template import TemplateCell
 from ..utils.extraction import _extract_cellrefs, clean, hash_single_file
 
 
+class ParseDatamapUseCase:
+    def __init__(self, repo):
+        self.repo = repo
+
+    def execute(self):
+        return self.repo.list_as_objs()
+
+
 def datamap_reader(dm_file: str) -> List[DatamapLine]:
     """
     Given a datamap csv file, returns a list of DatamapLine objects.
