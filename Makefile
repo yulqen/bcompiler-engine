@@ -1,5 +1,8 @@
 test:
-	pytest -vv --disable-warnings
+	pytest --disable-warnings
+
+test_verbose:
+	pytest -vv  --disable-warnings
 
 test_cov:
 	pytest -vv --disable-warnings --cov .
