@@ -30,10 +30,3 @@ def test_group_data_by_source_file(resources):
     digest_of_test_file = hashlib.md5(open(test_file, "rb").read()).digest()
     dataset = parse_multiple_xlsx_files(excel_files)
     assert dataset["test_template.xlsx"]["checksum"] == digest_of_test_file
-
-
-@pytest.mark.skip("Not ready for this yet")
-def test_pickle_data_from_multiple_files(resources):
-    xlsx_files = get_xlsx_files(resources)
-    dataset = parse_multiple_xlsx_files(xlsx_files)
-    file_hashes = hash_target_files(xlsx_files)
