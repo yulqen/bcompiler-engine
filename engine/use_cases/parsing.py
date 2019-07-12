@@ -51,7 +51,7 @@ class ParseDatamapUseCase:
         self.repo = repo
 
     def execute(self):
-        return self.repo.list_as_objs()
+        return self.repo.list_as_json()
 
 
 def datamap_reader(dm_file: str) -> List[DatamapLine]:
