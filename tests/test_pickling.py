@@ -2,10 +2,10 @@ import hashlib
 
 import pytest
 
-from engine.use_cases.parser import (get_xlsx_files, hash_single_file,
-                                     hash_target_files,
-                                     parse_multiple_xlsx_files,
-                                     template_reader)
+from engine.use_cases.parsing import (get_xlsx_files, hash_single_file,
+                                      hash_target_files,
+                                      parse_multiple_xlsx_files,
+                                      template_reader)
 
 
 def test_hash_of_single_file(resources):
