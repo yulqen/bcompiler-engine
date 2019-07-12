@@ -9,3 +9,6 @@ class InMemorySingleDatamapRepository:
 
     def list_as_objs(self):
         return datamap_reader(self.filepath)
+
+    def list_as_json(self):
+        return
