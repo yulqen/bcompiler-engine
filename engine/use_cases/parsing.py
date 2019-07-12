@@ -54,12 +54,28 @@ class ParseDatamapUseCase:
         return self.repo.list_as_json()
 
 
+class DatamapFile:
+    def __init__(self, filepath):
+        "Creates the context manager"
+        self.filepath = filepath
+
+    def __enter__(self):
+        try:
+            self.f_obj = open(self.filepath, "r", encoding="utf-8")
+            return self.f_obj
+        except FileNotFoundError:
+            raise
+
+    def __exit__(self, type, value, traceback):
+        self.f_obj.close()
+
+
 def datamap_reader(dm_file: str) -> List[DatamapLine]:
     """
     Given a datamap csv file, returns a list of DatamapLine objects.
     """
     data = []
-    with open(dm_file, encoding="utf-8") as datamap_file:
+    with DatamapFile(dm_file) as datamap_file:
         reader = csv.DictReader(datamap_file)
         for line in reader:
             data.append(
