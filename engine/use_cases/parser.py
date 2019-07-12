@@ -45,8 +45,8 @@ from typing import Any, Dict, List, Optional
 
 from openpyxl import load_workbook
 
-from .domain.datamap import DatamapLine, DatamapLineValueType
-from .domain.template import TemplateCell
+from ..domain.datamap import DatamapLine, DatamapLineValueType
+from ..domain.template import TemplateCell
 
 
 def get_cell_data(filepath: Path, data: List[TemplateCell], sheet_name: str,

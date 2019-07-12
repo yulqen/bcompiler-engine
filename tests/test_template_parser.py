@@ -4,9 +4,10 @@ from pathlib import Path
 import pytest
 
 from engine.domain.datamap import DatamapLineValueType
-from engine.parser import (TemplateCell, _extract_cellrefs, _extract_sheets,
-                           get_xlsx_files, parse_multiple_xlsx_files,
-                           template_reader)
+from engine.use_cases.parser import (TemplateCell, _extract_cellrefs,
+                                     _extract_sheets, get_xlsx_files,
+                                     parse_multiple_xlsx_files,
+                                     template_reader)
 
 
 def test_parse_multiple_templates(resources):

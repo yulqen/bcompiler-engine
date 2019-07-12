@@ -2,18 +2,16 @@ import hashlib
 
 import pytest
 
-from engine.parser import (
-    get_xlsx_files,
-    hash_target_files,
-    parse_multiple_xlsx_files,
-    template_reader,
-    hash_single_file,
-)
+from engine.use_cases.parser import (get_xlsx_files, hash_single_file,
+                                     hash_target_files,
+                                     parse_multiple_xlsx_files,
+                                     template_reader)
 
 
 def test_hash_of_single_file(resources):
     hash_obj = hashlib.md5(open(resources / "test_template.xlsx", "rb").read())
-    assert hash_obj.digest() == hash_single_file(resources / "test_template.xlsx")
+    assert hash_obj.digest() == hash_single_file(resources /
+                                                 "test_template.xlsx")
 
 
 def test_hash_of_target_files(resources):
