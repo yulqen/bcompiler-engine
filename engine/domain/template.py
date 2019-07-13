@@ -2,19 +2,31 @@
 The domain object representing a populated "template", or a spreadsheet
 containing data that we wish to extract.
 """
-from dataclasses import dataclass
-
 from .datamap import DatamapLineValueType  # noqa
 
 
-@dataclass
 class TemplateCell:
-    """
-    Used for collecting data from a populated spreadsheet.
-    """
+    "Used for collecting data from a populated spreadsheet."
 
-    file_name: str
-    sheet_name: str
-    cell_ref: str
-    value: str
-    data_type: DatamapLineValueType
+    def __init__(
+            self,
+            file_name: str,
+            sheet_name: str,
+            cell_ref: str,
+            value: str,
+            data_type: DatamapLineValueType,
+    ):
+        self.file_name = file_name
+        self.sheet_name = sheet_name
+        self.cell_ref = cell_ref
+        self.value = value
+        self.data_type = data_type
+
+    def to_dict(self):
+        return {
+            "file_name": self.file_name,
+            "sheet_name": self.sheet_name,
+            "cell_ref": self.cell_ref,
+            "value": self.value,
+            "data_type": self.data_type.name,
+        }

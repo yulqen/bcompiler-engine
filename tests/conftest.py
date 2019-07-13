@@ -6,8 +6,18 @@ import pytest
 
 from engine.config import Config, init
 from engine.domain.datamap import DatamapLine
+from engine.use_cases.parsing import DatamapLineValueType, TemplateCell
 
-# flake8: noqa
+
+@pytest.fixture
+def template_cell_obj():
+    return TemplateCell(
+        file_name="test.xlsx",
+        sheet_name="Test Sheet 1",
+        cell_ref="A10",
+        value="Test Value",
+        data_type=DatamapLineValueType.TEXT,
+    )
 
 
 @pytest.fixture

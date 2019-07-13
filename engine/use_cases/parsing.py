@@ -46,6 +46,14 @@ from ..domain.template import TemplateCell
 from ..utils.extraction import _extract_cellrefs, clean, hash_single_file
 
 
+class ParsePopulatedTemplatesUseCase:
+    def __init__(self, repo):
+        self.repo = repo
+
+    def execute(self):
+        return self.repo.list_as_json()
+
+
 class ParseDatamapUseCase:
     def __init__(self, repo):
         self.repo = repo
