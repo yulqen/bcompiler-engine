@@ -53,8 +53,7 @@ def _extract_sheets(lst_of_tcs: List[TemplateCell]
     return output
 
 
-def _extract_cellrefs(lst_of_tcs: List[TemplateCell]
-                      ) -> Dict[str, TemplateCell]:
+def _extract_cellrefs(lst_of_tcs) -> Dict[str, TemplateCell]:
     """Extract value from TemplateCell.cell_ref for each TemplateCell in a list to group them.
 
     When given a list of TemplateCell objects, this function extracts each TemplateCell
@@ -75,9 +74,9 @@ def _extract_cellrefs(lst_of_tcs: List[TemplateCell]
 
     """
 
-    output: Dict[str, TemplateCell] = {}
-    data = sorted(lst_of_tcs, key=lambda x: x.cell_ref)
-    for k, g in groupby(data, key=lambda x: x.cell_ref):
+    output: Dict[str, dict] = {}
+    data = sorted(lst_of_tcs, key=lambda x: x["cell_ref"])
+    for k, g in groupby(data, key=lambda x: x["cell_ref"]):
         result = list(g)
         if len(result) > 1:
             raise RuntimeError(

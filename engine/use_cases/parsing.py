@@ -103,7 +103,7 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
     return data
 
 
-def template_reader(template_file: str) -> Dict:
+def template_reader(template_file: Path) -> Dict:
     """
     Given a populated xlsx file, returns all data in a list of
     TemplateCell objects.
@@ -134,8 +134,13 @@ def template_reader(template_file: str) -> Dict:
                             val = cell.value
                             c_type = DatamapLineValueType.DATE
                     cell_ref = f"{cell.column_letter}{cell.row}"
-                    tc = TemplateCell(template_file, sheet.title, cell_ref,
-                                      val, c_type)
+                    if isinstance(template_file, Path):
+                        tc = TemplateCell(template_file.as_posix(),
+                                          sheet.title, cell_ref, val,
+                                          c_type).to_dict()
+                    else:
+                        tc = TemplateCell(template_file, sheet.title, cell_ref,
+                                          val, c_type).to_dict()
                     sheet_data.append(tc)
         sheet_dict.update({sheet.title: _extract_cellrefs(sheet_data)})
         holding.append(sheet_dict)
@@ -155,6 +160,7 @@ def template_reader(template_file: str) -> Dict:
 
 
 def parse_multiple_xlsx_files(xlsx_files: List[Path]) -> Dict[Any, Any]:
+    # TODO template_reader() is getting passed a path
     data: Dict[Any, Any] = {}
     with futures.ProcessPoolExecutor() as pool:
         for file in pool.map(template_reader, xlsx_files):

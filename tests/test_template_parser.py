@@ -48,7 +48,7 @@ def test_func_to_get_cellrefs_as_keys_from_list_of_tcs():
                        DatamapLineValueType.TEXT)
     tc4 = TemplateCell("test_file", "Shee1", "A4", "test_value3",
                        DatamapLineValueType.TEXT)
-    xs = [tc4, tc2, tc1]  # noqa
+    xs = [tc4.to_dict(), tc2.to_dict(), tc1.to_dict()]  # noqa
     assert "A1" in _extract_cellrefs(xs).keys()
     assert "A2" in _extract_cellrefs(xs).keys()
     assert "A4" in _extract_cellrefs(xs).keys()
@@ -57,7 +57,7 @@ def test_func_to_get_cellrefs_as_keys_from_list_of_tcs():
 
 def test_template_reader(template):
     dataset = template_reader(template)
-    assert (dataset["test_template.xlsx"]["data"]["Summary"]["B3"].value ==
+    assert (dataset["test_template.xlsx"]["data"]["Summary"]["B3"]["value"] ==
             "This is a string")
 
 
@@ -65,7 +65,7 @@ def test_extract_data_from_multiple_files_into_correct_structure(resources):
     xlsx_files = get_xlsx_files(resources)
     dataset = parse_multiple_xlsx_files(xlsx_files)
     test_filename = "test_template2.xlsx"
-    assert (dataset[test_filename]["data"]["Summary"]["B3"].file_name.name ==
-            "test_template2.xlsx")
-    assert dataset[test_filename]["data"]["Summary"][
-        "B3"].value == "This is a string"
+    assert (dataset[test_filename]["data"]["Summary"]["B3"]["file_name"].split(
+        "/")[-1] == "test_template2.xlsx")
+    assert (dataset[test_filename]["data"]["Summary"]["B3"]["value"] ==
+            "This is a string")
