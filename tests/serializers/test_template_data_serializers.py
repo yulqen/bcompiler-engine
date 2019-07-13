@@ -11,6 +11,5 @@ def test_template_cell_to_dict(template_cell_obj):
 
 
 def test_template_cell_serializer(template_cell_obj):
-    # TODO - test the ParsedTemplatesSerializer which is the multiple one
     json_output = json.dumps(template_cell_obj, cls=TemplateCellSerializer)
     assert json.loads(json_output)["sheet_name"] == "Test Sheet 1"
