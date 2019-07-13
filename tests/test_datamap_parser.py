@@ -35,9 +35,8 @@ def test_template_reader(template):
                          "B4")["data_type"] == "NUMBER"
     assert get_cell_data(template, data, "Summary",
                          "B5")["data_type"] == "NUMBER"
-    assert get_cell_data(template, data, "Summary",
-                         "B2")["value"] == datetime.datetime(
-                             2019, 10, 20, 0, 0)
+    assert (get_cell_data(template, data, "Summary",
+                          "B2")["value"] == "2019-10-20T00:00:00")
     assert get_cell_data(template, data, "Summary",
                          "B3")["value"] == "This is a string"
     assert get_cell_data(template, data, "Summary", "B4")["value"] == 2.2

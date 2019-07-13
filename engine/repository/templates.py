@@ -14,5 +14,4 @@ class InMemoryPopulatedTemplatesRepository:
         "Return data from a directory of populated templates as json."
         excel_files = get_xlsx_files(self.directory_path)
         data = parse_multiple_xlsx_files(excel_files)
-        # TODO we have to render the TemplateCell as a dict here
         return json.dumps(data)

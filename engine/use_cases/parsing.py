@@ -131,7 +131,7 @@ def template_reader(template_file: Path) -> Dict:
                             c_type = DatamapLineValueType.NUMBER
                         elif isinstance(cell.value,
                                         (datetime.date, datetime.datetime)):
-                            val = cell.value
+                            val = cell.value.isoformat()
                             c_type = DatamapLineValueType.DATE
                     cell_ref = f"{cell.column_letter}{cell.row}"
                     if isinstance(template_file, Path):
@@ -146,7 +146,7 @@ def template_reader(template_file: Path) -> Dict:
         holding.append(sheet_dict)
     for sd in holding:
         inner_dict["data"].update(sd)
-    inner_dict.update({"checksum": checksum})
+    inner_dict.update({"checksum": checksum.hex()})
     shell_dict = {f_path.name: inner_dict}
     return shell_dict
 
