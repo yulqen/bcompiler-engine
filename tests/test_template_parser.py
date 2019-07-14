@@ -65,7 +65,7 @@ def test_extract_data_from_multiple_files_into_correct_structure(resources):
     xlsx_files = get_xlsx_files(resources)
     dataset = parse_multiple_xlsx_files(xlsx_files)
     test_filename = "test_template2.xlsx"
-    assert (dataset[test_filename]["data"]["Summary"]["B3"]["file_name"].split(
-        "/")[-1] == "test_template2.xlsx")
+    assert (Path(dataset[test_filename]["data"]["Summary"]["B3"]
+                 ["file_name"]).name == "test_template2.xlsx")
     assert (dataset[test_filename]["data"]["Summary"]["B3"]["value"] ==
             "This is a string")
