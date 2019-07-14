@@ -9,27 +9,27 @@ objects - will return a dict of the form:
     "checksum": "fjfj34jk22l134hl",
     "data": {
         "Summary": {
-            "A1": TemplateCell(file_name=PosixPath(..),
-            "A2": TemplateCell(file_name=PosixPath(..),
-            "A2": TemplateCell(file_name=PosixPath(..),
+            "A1": {"file_name": "test_file.xslx", "sheet": "Sheet 1"...,
+            "A2": {"file_name": "test_file.xslx", "sheet": "Sheet 1"...,
+            "A2": {"file_name": "test_file.xslx", "sheet": "Sheet 1"...,
         },
         "Finances": {
-            "A1": TemplateCell(file_name=PosixPath(..),
-            "A4": TemplateCell(file_name=PosixPath(..),
-            "A10": TemplateCell(file_name=PosixPath(..),
+            "A1": {"file_name": "test_file.xslx", "sheet": "Sheet 1"...,
+            "A4": {"file_name": "test_file.xslx", "sheet": "Sheet 1"...,
+            "A10": {"file_name": "test_file.xslx", "sheet": "Sheet 1"...,
         }
     "test_template2.xlsx": {
     "checksum": "AFfjdddfa4jk134hl",
     "data": {
         "Summary": {
-            "A1": TemplateCell(file_name=PosixPath(..),
-            "A2": TemplateCell(file_name=PosixPath(..),
-            "A2": TemplateCell(file_name=PosixPath(..),
+            "A1": {"file_name": "test_file.xslx", "sheet": "Sheet 1"...,
+            "A2": {"file_name": "test_file.xslx", "sheet": "Sheet 1"...,
+            "A2": {"file_name": "test_file.xslx", "sheet": "Sheet 1"...,
         },
         "Finances": {
-            "A1": TemplateCell(file_name=PosixPath(..),
-            "A4": TemplateCell(file_name=PosixPath(..),
-            "A10": TemplateCell(file_name=PosixPath(..),
+            "A1": {"file_name": "test_file.xslx", "sheet": "Sheet 1"...,
+            "A4": {"file_name": "test_file.xslx", "sheet": "Sheet 1"...,
+            "A10": {"file_name": "test_file.xslx", "sheet": "Sheet 1"...,
         }
     }
 """
