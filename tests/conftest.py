@@ -14,7 +14,7 @@ def template_cell_obj():
     return TemplateCell(
         file_name="test.xlsx",
         sheet_name="Test Sheet 1",
-        cell_ref="A10",
+        cellref="A10",
         value="Test Value",
         data_type=DatamapLineValueType.TEXT,
     )

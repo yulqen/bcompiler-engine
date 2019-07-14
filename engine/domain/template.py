@@ -12,13 +12,13 @@ class TemplateCell:
             self,
             file_name: str,
             sheet_name: str,
-            cell_ref: str,
+            cellref: str,
             value: str,
             data_type: DatamapLineValueType,
     ):
         self.file_name = file_name
         self.sheet_name = sheet_name
-        self.cell_ref = cell_ref
+        self.cellref = cellref
         self.value = value
         self.data_type = data_type
 
@@ -26,7 +26,7 @@ class TemplateCell:
         return {
             "file_name": self.file_name,
             "sheet_name": self.sheet_name,
-            "cell_ref": self.cell_ref,
+            "cellref": self.cellref,
             "value": self.value,
             "data_type": self.data_type.name,
         }

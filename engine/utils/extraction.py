@@ -23,23 +23,23 @@ def get_xlsx_files(directory: Path) -> List[Path]:
 
 
 def get_cell_data(filepath: Path, data: List[TemplateCell], sheet_name: str,
-                  cell_ref: str) -> Optional[TemplateCell]:
+                  cellref: str) -> Optional[TemplateCell]:
     """
     Given a list of TemplateCell items, a sheet name and a cell reference,
     return a single TemplateCell object.
     """
     _file_data = data[filepath.name]["data"]
-    return _file_data[sheet_name][cell_ref]
+    return _file_data[sheet_name][cellref]
 
 
-def clean(target_str: str, is_cell_ref: bool = False):
+def clean(target_str: str, is_cellref: bool = False):
     """
     Rids a string of its most common problems: spacing, capitalisation,etc.
     """
     if not isinstance(target_str, str):
         raise TypeError("Can only clean a string.")
     output_str = target_str.lstrip().rstrip()
-    if is_cell_ref:
+    if is_cellref:
         output_str = output_str.upper()
     return output_str
 
@@ -53,13 +53,13 @@ def _extract_sheets(lst_of_tcs: List[TemplateCell]
     return output
 
 
-def _extract_cellrefs(lst_of_tcs) -> Dict[str, TemplateCell]:
-    """Extract value from TemplateCell.cell_ref for each TemplateCell in a list to group them.
+def _extract_cellrefs(lst_of_tcs) -> Dict[str, dict]:
+    """Extract value from TemplateCell.cellref for each TemplateCell in a list to group them.
 
     When given a list of TemplateCell objects, this function extracts each TemplateCell
-    by it's cell_ref value and groups them according. In the curent implementation, this is
+    by it's cellref value and groups them according. In the curent implementation, this is
     only called on a list of TemplateCell objects which have the same sheet_name value, and
-    therefore expects to find only a single cell_ref value each time, meaning that the list
+    therefore expects to find only a single cellref value each time, meaning that the list
     produced by groupby() can be removed and the single value return. Returns an exception
     if this list has more than one object.
 
@@ -67,20 +67,20 @@ def _extract_cellrefs(lst_of_tcs) -> Dict[str, TemplateCell]:
         lst_of_tcs: List of TemplateCell objects.
 
     Raises:
-        RuntimeError: if more than one cell_ref value is found in the list.
+        RuntimeError: if more than one cellref value is found in the list.
 
     Returns:
-        Dictionary whose key is the cell_ref and value is the TemplateCell that contains it.
+        Dictionary whose key is the cellref and value is the TemplateCell that contains it.
 
     """
 
     output: Dict[str, dict] = {}
-    data = sorted(lst_of_tcs, key=lambda x: x["cell_ref"])
-    for k, g in groupby(data, key=lambda x: x["cell_ref"]):
+    data = sorted(lst_of_tcs, key=lambda x: x["cellref"])
+    for k, g in groupby(data, key=lambda x: x["cellref"]):
         result = list(g)
         if len(result) > 1:
             raise RuntimeError(
-                f"Found duplicate sheet/cell_ref item when extracting keys.")
+                f"Found duplicate sheet/cellref item when extracting keys.")
         else:
             result = result[0]
             output.update({k: result})

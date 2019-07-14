@@ -1,4 +1,4 @@
-cell_key,template_sheet,cell_reference,type
+cell_key,template_sheet,cellreference,type
 Project/Programme Name,Introduction,C11,TEXT
 Department ,Introduction,C9,TEXT
 Delivery Body ,Introduction,C10,TEXT

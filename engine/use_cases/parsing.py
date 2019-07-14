@@ -96,7 +96,7 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
                 DatamapLine(
                     key=clean(line["cell_key"]),
                     sheet=clean(line["template_sheet"]),
-                    cellref=clean(line["cell_reference"], is_cell_ref=True),
+                    cellref=clean(line["cellreference"], is_cellref=True),
                     data_type=clean(line["type"]),
                     filename=dm_file,
                 ))
@@ -133,13 +133,13 @@ def template_reader(template_file: Path) -> Dict:
                                         (datetime.date, datetime.datetime)):
                             val = cell.value.isoformat()
                             c_type = DatamapLineValueType.DATE
-                    cell_ref = f"{cell.column_letter}{cell.row}"
+                    cellref = f"{cell.column_letter}{cell.row}"
                     if isinstance(template_file, Path):
                         tc = TemplateCell(template_file.as_posix(),
-                                          sheet.title, cell_ref, val,
+                                          sheet.title, cellref, val,
                                           c_type).to_dict()
                     else:
-                        tc = TemplateCell(template_file, sheet.title, cell_ref,
+                        tc = TemplateCell(template_file, sheet.title, cellref,
                                           val, c_type).to_dict()
                     sheet_data.append(tc)
         sheet_dict.update({sheet.title: _extract_cellrefs(sheet_data)})

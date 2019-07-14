@@ -9,7 +9,7 @@ class TemplateCellSerializer(json.JSONEncoder):
             to_serialize = {
                 "file_name": o.file_name,
                 "sheet_name": o.sheet_name,
-                "cellref": o.cell_ref,
+                "cellref": o.cellref,
                 "data_type": o.data_type.name,
             }
             return to_serialize
