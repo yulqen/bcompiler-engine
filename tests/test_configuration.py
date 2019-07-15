@@ -1,9 +1,10 @@
+import platform
 import tempfile
 from pathlib import Path
+from unittest.mock import patch
 
+import appdirs
 import pytest
-
-from engine.config import Config, init
 """
 Initialising directories and files for use by the application.
 
@@ -12,13 +13,33 @@ cache files.
 """
 
 
-def test_set_up_directory(mock_config):
-    mock_home = mock_config[0]
-    assert Path.exists(Path(mock_home) / ".bcompiler-engine-data")
+def test_basic_config_variables(mock_config):
+    if platform.system() == "Linux":
+        assert mock_config.BCOMPILER_LIBRARY_DATA_DIR == Path(
+            Path.home() / ".local/share/bcompiler-data")
+        assert mock_config.BCOMPILER_LIBRARY_CONFIG_DIR == Path(
+            Path.home() / ".config/bcompiler")
+        assert mock_config.BCOMPILER_LIBRARY_CONFIG_FILE == Path(
+            Path.home() / ".config/bcompiler/config.ini")
+    ## TODO write tests for Windows and Mac here
+
+    # Test first that none of these paths exist
+    assert not Path(mock_config.BCOMPILER_LIBRARY_DATA_DIR).exists()
+    assert not Path(mock_config.BCOMPILER_LIBRARY_CONFIG).exists()
+    assert not Path(mock_config.BCOMPILER_CONFIG_FILE).exists()
 
 
-def test_data_directory_exists(mock_config):
-    mock_home = mock_config[0]
-    assert mock_config[1].home_dir == Path(mock_home)
-    assert mock_config[1].data_dir == Path(
-        mock_home) / ".bcompiler-engine-data"
+def test_required_config_dirs_exist(mock_config):
+    # Create the required directories and files upon initialisation
+    tmp_dir = tempfile.gettempdir()
+
+    if platform.system() == "Linux":
+        mock_config.BCOMPILER_LIBRARY_DATA_DIR = Path(
+            Path(tmp_dir) / "bcompiler-test-data-dir")
+        mock_config.BCOMPILER_LIBRARY_CONFIG_DIR = Path(
+            Path(tmp_dir) / "bcompiler-test-config-dir")
+
+        # we call Config.initialise() to set everything up
+        mock_config.initialise()
+        assert mock_config.BCOMPILER_LIBRARY_DATA_DIR.exists()
+        assert mock_config.BCOMPILER_LIBRARY_CONFIG_DIR.exists()

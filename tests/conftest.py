@@ -1,11 +1,12 @@
 import os
 import shutil
 import tempfile
+from configparser import ConfigParser
 from pathlib import Path
 
+import appdirs
 import pytest
 
-from engine.config import Config, init
 from engine.domain.datamap import DatamapLine
 from engine.use_cases.parsing import DatamapLineValueType, TemplateCell
 
@@ -84,14 +85,41 @@ def datamap():
 
 @pytest.fixture
 def mock_config():
-    imitation_home = tempfile.gettempdir()
-    # we want to call init() here with our mock home directory for testing
-    init(imitation_home)
-    # likewise, we initialise Config() with our mock home directory
-    config = Config(imitation_home)
-    yield (imitation_home, config)
-    # clean up - including any files
-    shutil.rmtree(Path(imitation_home) / ".bcompiler-engine-data")
+    class Config:
+        "This is created in the application and passed to the library"
 
+        USER_NAME = os.getlogin()
+        USER_HOME = Path.home()
+
+        config_parser = ConfigParser()
+
+        BCOMPILER_LIBRARY_DATA_DIR = Path(
+            appdirs.user_data_dir("bcompiler-data", USER_NAME))
+        BCOMPILER_LIBRARY_CONFIG_DIR = Path(
+            appdirs.user_config_dir("bcompiler"))
+        BCOMPILER_LIBRARY_CONFIG_FILE = Path(BCOMPILER_LIBRARY_CONFIG_DIR /
+                                             "config.ini")
+
+        @classmethod
+        def initialise(cls):
+            if not Path(cls.BCOMPILER_LIBRARY_DATA_DIR).exists():
+                Path.mkdir(cls.BCOMPILER_LIBRARY_DATA_DIR)
+            if not Path(cls.BCOMPILER_LIBRARY_CONFIG_DIR).exists():
+                Path.mkdir(cls.BCOMPILER_LIBRARY_CONFIG_DIR)
+
+    yield Config
+    shutil.rmtree(Config.BCOMPILER_LIBRARY_DATA_DIR)
+    shutil.rmtree(Config.BCOMPILER_LIBRARY_CONFIG_DIR)
+
+
+#    # The configuration is passed into the library by the front end application
+#    imitation_home = tempfile.gettempdir()
+#    # we want to call init() here with our mock home directory for testing
+#    init(imitation_home)
+#    # likewise, we initialise Config() with our mock home directory
+#    config = Config(imitation_home)
+#    yield (imitation_home, config)
+#    # clean up - including any files
+#    shutil.rmtree(Path(imitation_home) / ".bcompiler-engine-data")
 
 #   Path.rmdir(Path(imitation_home) / ".bcompiler-engine-data")
