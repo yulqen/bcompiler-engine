@@ -1,4 +1,5 @@
 import platform
+import shutil
 import tempfile
 from pathlib import Path
 from unittest.mock import patch
@@ -25,8 +26,8 @@ def test_basic_config_variables(mock_config):
 
     # Test first that none of these paths exist
     assert not Path(mock_config.BCOMPILER_LIBRARY_DATA_DIR).exists()
-    assert not Path(mock_config.BCOMPILER_LIBRARY_CONFIG).exists()
-    assert not Path(mock_config.BCOMPILER_CONFIG_FILE).exists()
+    assert not Path(mock_config.BCOMPILER_LIBRARY_CONFIG_DIR).exists()
+    assert not Path(mock_config.BCOMPILER_LIBRARY_CONFIG_FILE).exists()
 
 
 def test_required_config_dirs_exist(mock_config):
@@ -35,11 +36,20 @@ def test_required_config_dirs_exist(mock_config):
 
     if platform.system() == "Linux":
         mock_config.BCOMPILER_LIBRARY_DATA_DIR = Path(
-            Path(tmp_dir) / "bcompiler-test-data-dir")
+            Path(tmp_dir) / "bcompiler-data")
         mock_config.BCOMPILER_LIBRARY_CONFIG_DIR = Path(
-            Path(tmp_dir) / "bcompiler-test-config-dir")
+            Path(tmp_dir) / "bcompiler")
+        mock_config.BCOMPILER_LIBRARY_CONFIG_FILE = (
+            Path(tmp_dir) / mock_config.BCOMPILER_LIBRARY_CONFIG_DIR /
+            "config.ini")
 
         # we call Config.initialise() to set everything up
         mock_config.initialise()
+
         assert mock_config.BCOMPILER_LIBRARY_DATA_DIR.exists()
         assert mock_config.BCOMPILER_LIBRARY_CONFIG_DIR.exists()
+        assert mock_config.BCOMPILER_LIBRARY_CONFIG_FILE.exists()
+
+        # not doing this after yield in confest as we've patch config
+        shutil.rmtree(mock_config.BCOMPILER_LIBRARY_DATA_DIR)
+        shutil.rmtree(mock_config.BCOMPILER_LIBRARY_CONFIG_DIR)

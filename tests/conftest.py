@@ -1,6 +1,4 @@
 import os
-import shutil
-import tempfile
 from configparser import ConfigParser
 from pathlib import Path
 
@@ -106,10 +104,12 @@ def mock_config():
                 Path.mkdir(cls.BCOMPILER_LIBRARY_DATA_DIR)
             if not Path(cls.BCOMPILER_LIBRARY_CONFIG_DIR).exists():
                 Path.mkdir(cls.BCOMPILER_LIBRARY_CONFIG_DIR)
+            if not Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).exists():
+                with open(cls.BCOMPILER_LIBRARY_CONFIG_FILE, "w") as f:
+                    f.write("[BASE]\n")
+                    f.write("version=0.1.0\n")
 
-    yield Config
-    shutil.rmtree(Config.BCOMPILER_LIBRARY_DATA_DIR)
-    shutil.rmtree(Config.BCOMPILER_LIBRARY_CONFIG_DIR)
+    return Config
 
 
 #    # The configuration is passed into the library by the front end application
