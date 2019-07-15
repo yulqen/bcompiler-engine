@@ -1,4 +1,5 @@
 import os
+import shutil
 import tempfile
 from pathlib import Path
 
@@ -58,6 +59,12 @@ def datamapline_list_objects():
 
 
 @pytest.fixture
+def dat_file():
+    here = os.path.abspath(os.curdir)
+    return Path(os.path.join(here, "tests/resources/extracted_data.dat"))
+
+
+@pytest.fixture
 def resources():
     here = os.path.abspath(os.curdir)
     return Path(os.path.join(here, "tests/resources/"))
@@ -83,5 +90,8 @@ def mock_config():
     # likewise, we initialise Config() with our mock home directory
     config = Config(imitation_home)
     yield (imitation_home, config)
-    # clean up
-    Path.rmdir(Path(imitation_home) / ".bcompiler-engine-data")
+    # clean up - including any files
+    shutil.rmtree(Path(imitation_home) / ".bcompiler-engine-data")
+
+
+#   Path.rmdir(Path(imitation_home) / ".bcompiler-engine-data")
