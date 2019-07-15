@@ -49,13 +49,12 @@ class Config:
 
     USER_NAME = os.getlogin()
 
-    config_parser = ConfigParser()
-
     BCOMPILER_LIBRARY_DATA_DIR = Path(
         appdirs.user_data_dir("bcompiler-data", USER_NAME))
     BCOMPILER_LIBRARY_CONFIG_DIR = Path(appdirs.user_config_dir("bcompiler"))
     BCOMPILER_LIBRARY_CONFIG_FILE = Path(BCOMPILER_LIBRARY_CONFIG_DIR /
                                          "config.ini")
+    config_parser = ConfigParser()
 
     @classmethod
     def initialise(cls):
@@ -65,5 +64,8 @@ class Config:
             Path.mkdir(cls.BCOMPILER_LIBRARY_CONFIG_DIR)
         if not Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).exists():
             with open(cls.BCOMPILER_LIBRARY_CONFIG_FILE, "w") as f:
-                f.write("[BASE]\n")
-                f.write("version=0.1.0\n")
+                f.write("[PATHS]\n")
+                f.write(
+                    "import directory = /home/lemon/Documents/bcompiler/import\n"
+                )
+        cls.config_parser.read(cls.BCOMPILER_LIBRARY_CONFIG_FILE)

@@ -1,4 +1,5 @@
 import os
+import shutil
 import tempfile
 from configparser import ConfigParser
 from pathlib import Path
@@ -86,6 +87,11 @@ def datamap():
 @pytest.fixture
 def mock_config():
     yield Config
+    try:
+        shutil.rmtree(Config.BCOMPILER_LIBRARY_DATA_DIR)
+        shutil.rmtree(Config.BCOMPILER_LIBRARY_CONFIG_DIR)
+    except FileNotFoundError:
+        pass
 
 
 @pytest.fixture

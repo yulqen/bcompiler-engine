@@ -1,11 +1,6 @@
 import platform
 import shutil
-import tempfile
 from pathlib import Path
-
-import pytest
-
-from engine.exceptions import MissingConfigurationException
 """
 Initialising directories and files for use by the application.
 
