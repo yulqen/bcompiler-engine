@@ -14,6 +14,7 @@ authors = ["Matt Lemon"]
 [tool.poetry.dependencies]
 python = "^3.6.0"
 openpyxl = "^2.6.2"
+appdirs = "^1.4.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.0"
