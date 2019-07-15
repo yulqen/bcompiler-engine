@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+from ..config import Config
 from ..serializers.template import ParsedTemplatesSerializer
 from ..use_cases.parsing import parse_multiple_xlsx_files
 from ..utils.extraction import get_xlsx_files
@@ -16,7 +17,8 @@ class FSPopulatedTemplatesRepo:
     def list_as_json(self):
         "Try to open the data file containing populated data as json."
         try:
-            with open(self.directory_path / "extracted_data.dat") as f:
+            with open(Config.BCOMPILER_LIBRARY_DATA_DIR /
+                      "extracted_data.dat") as f:
                 return json.load(f)
         except FileNotFoundError:
             raise

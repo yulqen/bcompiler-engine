@@ -36,26 +36,18 @@ document drop directory:    AS PER CONFIG.INI
 """
 
 import os
+import shutil
 import sys
 from configparser import ConfigParser
 from pathlib import Path
 
 import appdirs
 
-from .exceptions import MissingConfigurationException
-
-# this gets replaced once the application registers its config class
-USER_CONFIG = None
-
 
 class Config:
-    """This is created in the application and passed to the library.
-
-    To be subclassed by the application.
-    """
+    "This is created in the application and passed to the library."
 
     USER_NAME = os.getlogin()
-    USER_HOME = Path.home()
 
     config_parser = ConfigParser()
 
@@ -75,10 +67,3 @@ class Config:
             with open(cls.BCOMPILER_LIBRARY_CONFIG_FILE, "w") as f:
                 f.write("[BASE]\n")
                 f.write("version=0.1.0\n")
-
-
-def register_config(config_class):
-    if not issubclass(config_class, Config):
-        raise MissingConfigurationException(
-            "Your config class must inherit from engine.config.Config")
-    setattr(sys.modules[__name__], "USER_CONFIG", config_class)

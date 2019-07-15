@@ -85,7 +85,8 @@ def datamap():
 
 @pytest.fixture
 def mock_config():
-    return Config
+    yield Config
+
 
 @pytest.fixture
 def mock_config_subclassed():
@@ -93,4 +94,5 @@ def mock_config_subclassed():
         "This is created in the application and passed to the library"
         prove = "TestApplicationConfig set"
 
-    return TestApplicationConfig
+    yield TestApplicationConfig
+    TestApplicationConfig._remove_dirs()
