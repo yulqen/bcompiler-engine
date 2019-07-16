@@ -34,7 +34,3 @@ def test_required_config_dirs_exist(mock_config):
     assert Path(mock_config.BCOMPILER_LIBRARY_DATA_DIR).exists()
     assert Path(mock_config.BCOMPILER_LIBRARY_CONFIG_DIR).exists()
     assert Path(mock_config.BCOMPILER_LIBRARY_CONFIG_FILE).exists()
-
-    # not doing this after yield in confest as we've patch config
-    shutil.rmtree(mock_config.BCOMPILER_LIBRARY_DATA_DIR)
-    shutil.rmtree(mock_config.BCOMPILER_LIBRARY_CONFIG_DIR)
