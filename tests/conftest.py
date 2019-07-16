@@ -1,10 +1,7 @@
 import os
 import shutil
-import tempfile
-from configparser import ConfigParser
 from pathlib import Path
 
-import appdirs
 import pytest
 
 from engine.config import Config
@@ -101,4 +98,3 @@ def mock_config_subclassed():
         prove = "TestApplicationConfig set"
 
     yield TestApplicationConfig
-    TestApplicationConfig._remove_dirs()

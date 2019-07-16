@@ -11,12 +11,12 @@ cache files.
 
 def test_basic_config_variables(mock_config):
     if platform.system() == "Linux":
-        assert mock_config.BCOMPILER_LIBRARY_DATA_DIR == Path(
+        assert Path(mock_config.BCOMPILER_LIBRARY_DATA_DIR) == Path(
             Path.home() / ".local/share/bcompiler-data")
-        assert mock_config.BCOMPILER_LIBRARY_CONFIG_DIR == Path(
-            Path.home() / ".config/bcompiler")
-        assert mock_config.BCOMPILER_LIBRARY_CONFIG_FILE == Path(
-            Path.home() / ".config/bcompiler/config.ini")
+        assert Path(mock_config.BCOMPILER_LIBRARY_CONFIG_DIR) == Path(
+            Path.home() / ".config/bcompiler-data")
+        assert Path(mock_config.BCOMPILER_LIBRARY_CONFIG_FILE) == Path(
+            Path.home() / ".config/bcompiler-data/config.ini")
     ## TODO write tests for Windows and Mac here
 
     # Test first that none of these paths exist
@@ -28,23 +28,13 @@ def test_basic_config_variables(mock_config):
 def test_required_config_dirs_exist(mock_config):
     # Create the required directories and files upon initialisation
 
-    if platform.system() == "Linux":
-        mock_config.BCOMPILER_LIBRARY_DATA_DIR = Path(Path.home() /
-                                                      "bcompiler-data")
-        mock_config.BCOMPILER_LIBRARY_CONFIG_DIR = Path(Path.home() /
-                                                        "bcompiler")
-        mock_config.BCOMPILER_LIBRARY_CONFIG_FILE = (
-            Path(mock_config.BCOMPILER_LIBRARY_CONFIG_DIR) / "config.ini")
+    # we call mock_config.initialise() to set everything up
+    mock_config.initialise()
 
-        ## TODO write tests for Windows and Mac here
+    assert Path(mock_config.BCOMPILER_LIBRARY_DATA_DIR).exists()
+    assert Path(mock_config.BCOMPILER_LIBRARY_CONFIG_DIR).exists()
+    assert Path(mock_config.BCOMPILER_LIBRARY_CONFIG_FILE).exists()
 
-        # we call Config.initialise() to set everything up
-        mock_config.initialise()
-
-        assert mock_config.BCOMPILER_LIBRARY_DATA_DIR.exists()
-        assert mock_config.BCOMPILER_LIBRARY_CONFIG_DIR.exists()
-        assert mock_config.BCOMPILER_LIBRARY_CONFIG_FILE.exists()
-
-        # not doing this after yield in confest as we've patch config
-        shutil.rmtree(mock_config.BCOMPILER_LIBRARY_DATA_DIR)
-        shutil.rmtree(mock_config.BCOMPILER_LIBRARY_CONFIG_DIR)
+    # not doing this after yield in confest as we've patch config
+    shutil.rmtree(mock_config.BCOMPILER_LIBRARY_DATA_DIR)
+    shutil.rmtree(mock_config.BCOMPILER_LIBRARY_CONFIG_DIR)

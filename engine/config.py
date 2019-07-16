@@ -49,19 +49,20 @@ class Config:
 
     USER_NAME = os.getlogin()
 
-    BCOMPILER_LIBRARY_DATA_DIR = Path(
-        appdirs.user_data_dir("bcompiler-data", USER_NAME))
-    BCOMPILER_LIBRARY_CONFIG_DIR = Path(appdirs.user_config_dir("bcompiler"))
-    BCOMPILER_LIBRARY_CONFIG_FILE = Path(BCOMPILER_LIBRARY_CONFIG_DIR /
-                                         "config.ini")
+    BCOMPILER_LIBRARY_DATA_DIR = appdirs.user_data_dir("bcompiler-data",
+                                                       USER_NAME)
+    BCOMPILER_LIBRARY_CONFIG_DIR = appdirs.user_config_dir(
+        "bcompiler-data", USER_NAME)
+    BCOMPILER_LIBRARY_CONFIG_FILE = os.path.join(BCOMPILER_LIBRARY_CONFIG_DIR,
+                                                 "config.ini")
     config_parser = ConfigParser()
 
     @classmethod
     def initialise(cls):
         if not Path(cls.BCOMPILER_LIBRARY_DATA_DIR).exists():
-            Path.mkdir(cls.BCOMPILER_LIBRARY_DATA_DIR)
+            Path(cls.BCOMPILER_LIBRARY_DATA_DIR).mkdir()
         if not Path(cls.BCOMPILER_LIBRARY_CONFIG_DIR).exists():
-            Path.mkdir(cls.BCOMPILER_LIBRARY_CONFIG_DIR)
+            Path(cls.BCOMPILER_LIBRARY_CONFIG_DIR).mkdir()
         if not Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).exists():
             with open(cls.BCOMPILER_LIBRARY_CONFIG_FILE, "w") as f:
                 f.write("[PATHS]\n")
