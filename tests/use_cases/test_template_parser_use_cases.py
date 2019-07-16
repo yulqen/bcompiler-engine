@@ -1,7 +1,8 @@
 import json
-import os
 import shutil
 from pathlib import Path
+
+import pytest
 
 from engine.repository.templates import (FSPopulatedTemplatesRepo,
                                          InMemoryPopulatedTemplatesRepository)
@@ -23,9 +24,13 @@ def test_can_get_config_value(mock_config):
             "/home/lemon/Documents/bcompiler/import")
 
 
-def test_query_data_from_data_file(mock_config, dat_file):
+@pytest.mark.skip("Wait until we have BCOMPILER_IO_LIBRARY in config file")
+def test_query_data_from_data_file(mock_config, dat_file,
+                                   spreadsheet_same_data_as_dat_file):
     mock_config.initialise()
     shutil.copy2(dat_file, mock_config.BCOMPILER_LIBRARY_DATA_DIR)
+    shutil.copy2(spreadsheet_same_data_as_dat_file,
+                 mock_config.BCOMPILER_IO_LIBRARY)
     repo = FSPopulatedTemplatesRepo(Path.home() / "Desktop")
     parse_populated_templates_use_case = ParsePopulatedTemplatesUseCase(repo)
     result = parse_populated_templates_use_case.execute()

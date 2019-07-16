@@ -38,6 +38,7 @@ document drop directory:    AS PER CONFIG.INI
 import os
 import shutil
 import sys
+import textwrap
 from configparser import ConfigParser
 from pathlib import Path
 
@@ -57,6 +58,11 @@ class Config:
                                                  "config.ini")
     config_parser = ConfigParser()
 
+    base_config = textwrap.dedent("""\
+    [PATHS]
+    import directory = /home/lemon/Documents/bcompiler/import
+    """)
+
     @classmethod
     def initialise(cls):
         if not Path(cls.BCOMPILER_LIBRARY_DATA_DIR).exists():
@@ -64,9 +70,5 @@ class Config:
         if not Path(cls.BCOMPILER_LIBRARY_CONFIG_DIR).exists():
             Path(cls.BCOMPILER_LIBRARY_CONFIG_DIR).mkdir()
         if not Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).exists():
-            with open(cls.BCOMPILER_LIBRARY_CONFIG_FILE, "w") as f:
-                f.write("[PATHS]\n")
-                f.write(
-                    "import directory = /home/lemon/Documents/bcompiler/import\n"
-                )
-        cls.config_parser.read(cls.BCOMPILER_LIBRARY_CONFIG_FILE)
+            Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
+            cls.config_parser.read(cls.BCOMPILER_LIBRARY_CONFIG_FILE)

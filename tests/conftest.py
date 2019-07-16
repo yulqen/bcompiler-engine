@@ -64,6 +64,11 @@ def dat_file():
 
 
 @pytest.fixture
+def spreadsheet_same_data_as_dat_file():
+    return Path(Path.cwd() / "tests/resources/test_dat_file_use_case.xlsx")
+
+
+@pytest.fixture
 def resources():
     here = os.path.abspath(os.curdir)
     return Path(os.path.join(here, "tests/resources/"))

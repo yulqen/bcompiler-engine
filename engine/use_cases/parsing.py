@@ -160,7 +160,6 @@ def template_reader(template_file: Path) -> Dict:
 
 
 def parse_multiple_xlsx_files(xlsx_files: List[Path]) -> Dict[Any, Any]:
-    # TODO template_reader() is getting passed a path
     data: Dict[Any, Any] = {}
     with futures.ProcessPoolExecutor() as pool:
         for file in pool.map(template_reader, xlsx_files):
