@@ -1,9 +1,6 @@
 import json
 
-from engine.domain.template import TemplateCell
-from engine.serializers.template import (ParsedTemplatesSerializer,
-                                         TemplateCellSerializer)
-from engine.use_cases.parsing import DatamapLineValueType
+from engine.serializers.template import TemplateCellSerializer
 
 
 def test_template_cell_to_dict(template_cell_obj):

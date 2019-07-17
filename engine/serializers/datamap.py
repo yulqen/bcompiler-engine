@@ -1,11 +1,9 @@
 import json
-from typing import List
-
-from engine.domain.datamap import DatamapLine
+from typing import Dict
 
 
 class DatamapEncoder(json.JSONEncoder):
-    def default(self, o):
+    def default(self, o) -> Dict[str, str]:
         try:
             to_serialize = {
                 "key": o.key,

@@ -2,7 +2,7 @@ import datetime
 
 from engine.domain.datamap import DatamapLineValueType
 from engine.use_cases.parsing import datamap_reader, template_reader
-from engine.utils.extraction import get_cell_data
+from engine.utils.extraction import _get_cell_data
 
 NUMBER = DatamapLineValueType.NUMBER
 DATE = DatamapLineValueType.DATE
@@ -25,26 +25,26 @@ def test_bad_spacing_in_datamap(datamap):
     assert data[14].data_type == "DATE"
 
 
-def test_template_reader(template):
+def test_template_reader(template) -> None:
     data = template_reader(template)
-    assert get_cell_data(template, data, "Summary",
+    assert _get_cell_data(template, data, "Summary",
                          "B2")["data_type"] == "DATE"
-    assert get_cell_data(template, data, "Summary",
+    assert _get_cell_data(template, data, "Summary",
                          "B3")["data_type"] == "TEXT"
-    assert get_cell_data(template, data, "Summary",
+    assert _get_cell_data(template, data, "Summary",
                          "B4")["data_type"] == "NUMBER"
-    assert get_cell_data(template, data, "Summary",
+    assert _get_cell_data(template, data, "Summary",
                          "B5")["data_type"] == "NUMBER"
-    assert (get_cell_data(template, data, "Summary",
+    assert (_get_cell_data(template, data, "Summary",
                           "B2")["value"] == "2019-10-20T00:00:00")
-    assert get_cell_data(template, data, "Summary",
+    assert _get_cell_data(template, data, "Summary",
                          "B3")["value"] == "This is a string"
-    assert get_cell_data(template, data, "Summary", "B4")["value"] == 2.2
-    assert get_cell_data(template, data, "Summary", "B4")["value"] == 2.20
-    assert get_cell_data(template, data, "Summary", "B4")["value"] != 2.21
-    assert get_cell_data(template, data, "Summary", "B5")["value"] == 10
+    assert _get_cell_data(template, data, "Summary", "B4")["value"] == 2.2
+    assert _get_cell_data(template, data, "Summary", "B4")["value"] == 2.20
+    assert _get_cell_data(template, data, "Summary", "B4")["value"] != 2.21
+    assert _get_cell_data(template, data, "Summary", "B5")["value"] == 10
 
-    assert get_cell_data(template, data, "Another Sheet",
+    assert _get_cell_data(template, data, "Another Sheet",
                          "K25")["value"] == "Float:"
-    assert get_cell_data(template, data, "Another Sheet",
+    assert _get_cell_data(template, data, "Another Sheet",
                          "K25")["data_type"] == "TEXT"

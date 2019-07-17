@@ -5,18 +5,7 @@ from pathlib import Path
 from ..config import Config
 from ..use_cases.parsing import parse_multiple_xlsx_files
 from ..utils.extraction import get_xlsx_files
-
-# TODO - parse_multiple_xlsx_files should not be in use_cases?
-
-
-class Repo:
-    "Super class for repository objects."
-
-    def __init__(self, directory_path: Path):
-        self.directory_path = directory_path
-
-    def list_as_json(self) -> str:
-        raise NotImplementedError("This should be subclassed")
+from . import Repo
 
 
 class FSPopulatedTemplatesRepo(Repo):

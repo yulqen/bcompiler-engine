@@ -3,7 +3,7 @@ import hashlib
 import os
 from itertools import groupby
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List
 
 from engine.domain.template import TemplateCell
 
@@ -22,20 +22,19 @@ def get_xlsx_files(directory: Path) -> List[Path]:
     return output
 
 
-def get_cell_data(filepath: Path, data: List[TemplateCell], sheet_name: str,
-                  cellref: str) -> Optional[TemplateCell]:
-    """
-    Given a list of TemplateCell items, a sheet name and a cell reference,
-    return a single TemplateCell object.
+def _get_cell_data(filepath: Path, data: Dict[Any, Any], sheet_name: str,
+                   cellref: str) -> Dict[str, str]:
+    """Given a Path and a dict of data - and a sheet name, AND a cellref..
+
+    Return:
+        - a dict representing the TemplateCell in string format
     """
     _file_data = data[filepath.name]["data"]
     return _file_data[sheet_name][cellref]
 
 
-def clean(target_str: str, is_cellref: bool = False):
-    """
-    Rids a string of its most common problems: spacing, capitalisation,etc.
-    """
+def _clean(target_str: str, is_cellref: bool = False) -> str:
+    "Rids a string of its most common problems: spacing, capitalisation,etc."
     if not isinstance(target_str, str):
         raise TypeError("Can only clean a string.")
     output_str = target_str.lstrip().rstrip()
@@ -46,6 +45,7 @@ def clean(target_str: str, is_cellref: bool = False):
 
 def _extract_sheets(lst_of_tcs: List[TemplateCell]
                     ) -> Dict[str, List[TemplateCell]]:
+    "Given a list of TemplateCell objects, returns the list but as a dict sorted by its sheet_name"
     output: Dict[str, List[TemplateCell]] = {}
     data = sorted(lst_of_tcs, key=lambda x: x.sheet_name)
     for k, g in groupby(data, key=lambda x: x.sheet_name):
@@ -87,15 +87,16 @@ def _extract_cellrefs(lst_of_tcs) -> Dict[str, dict]:
     return output
 
 
-def hash_single_file(filepath: Path) -> bytes:
+def _hash_single_file(filepath: Path) -> str:
+    "Returns a checksum for a given file at Path"
     if not filepath.is_file():
         raise RuntimeError(f"Cannot checksum {filepath}")
     else:
         hash_obj = hashlib.md5(open(filepath, "rb").read())
-        return hash_obj.digest()
+        return hash_obj.digest().hex()
 
 
-def hash_target_files(list_of_files: List[Path]) -> Dict[str, bytes]:
+def hash_target_files(list_of_files: List[Path]) -> Dict[str, str]:
     """Hash each file in list_of_files.
 
     Given a list of files, return a dict containing the file name as
@@ -105,5 +106,5 @@ def hash_target_files(list_of_files: List[Path]) -> Dict[str, bytes]:
     for file_name in list_of_files:
         if os.path.isfile(file_name):
             hash_obj = hashlib.md5(open(file_name, "rb").read())
-            output.update({file_name.name: hash_obj.digest()})
+            output.update({file_name.name: hash_obj.digest().hex()})
     return output

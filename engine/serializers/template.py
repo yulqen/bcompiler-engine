@@ -1,8 +1,9 @@
 import json
+from typing import Dict
 
 
 class TemplateCellSerializer(json.JSONEncoder):
-    def default(self, o):
+    def default(self, o) -> Dict[str, str]:
         try:
             to_serialize = {
                 "file_name": o.file_name,
@@ -13,7 +14,3 @@ class TemplateCellSerializer(json.JSONEncoder):
             return to_serialize
         except AttributeError:
             return super().default(o)
-
-
-class ParsedTemplatesSerializer(json.JSONEncoder):
-    pass

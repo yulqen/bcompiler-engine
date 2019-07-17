@@ -1,8 +1,8 @@
 """
 Entities relating to the datamap.
 """
-from dataclasses import dataclass
 from enum import Enum, auto
+from typing import Dict
 
 
 class DatamapLineValueType(Enum):
@@ -31,7 +31,7 @@ class DatamapLine:
         self.data_type = data_type
         self.filename = filename
 
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, str]:
         return {
             "key": self.key,
             "sheet": self.sheet,

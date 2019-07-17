@@ -37,17 +37,20 @@ import csv
 import datetime
 from concurrent import futures
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import TYPE_CHECKING, Any, Dict, List
 
 from openpyxl import load_workbook
 
 from ..domain.datamap import DatamapLine, DatamapLineValueType
 from ..domain.template import TemplateCell
-from ..utils.extraction import _extract_cellrefs, clean, hash_single_file
+from ..utils.extraction import _clean, _extract_cellrefs, _hash_single_file
+
+if TYPE_CHECKING:
+    from ..repository.templates import Repo
 
 
 class ParsePopulatedTemplatesUseCase:
-    def __init__(self, repo):
+    def __init__(self, repo: "Repo"):
         self.repo = repo
 
     def execute(self) -> str:
@@ -55,7 +58,7 @@ class ParsePopulatedTemplatesUseCase:
 
 
 class ParseDatamapUseCase:
-    def __init__(self, repo):
+    def __init__(self, repo: "Repo"):
         self.repo = repo
 
     def execute(self) -> str:
@@ -84,7 +87,7 @@ class DatamapFile:
         self.f_obj.close()
 
 
-def datamap_reader(dm_file: str) -> List[DatamapLine]:
+def datamap_reader(dm_file: Path) -> List[DatamapLine]:
     """
     Given a datamap csv file, returns a list of DatamapLine objects.
     """
@@ -94,16 +97,17 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
         for line in reader:
             data.append(
                 DatamapLine(
-                    key=clean(line["cell_key"]),
-                    sheet=clean(line["template_sheet"]),
-                    cellref=clean(line["cellreference"], is_cellref=True),
-                    data_type=clean(line["type"]),
+                    key=_clean(line["cell_key"]),
+                    sheet=_clean(line["template_sheet"]),
+                    cellref=_clean(line["cellreference"], is_cellref=True),
+                    data_type=_clean(line["type"]),
                     filename=dm_file,
                 ))
     return data
 
 
-def template_reader(template_file: Path) -> Dict:
+def template_reader(template_file: Path
+                    ) -> Dict[str, Dict[str, Dict[str, str]]]:
     """
     Given a populated xlsx file, returns all data in a list of
     TemplateCell objects.
@@ -112,7 +116,7 @@ def template_reader(template_file: Path) -> Dict:
     f_path = Path(template_file)
     print(f"EXTRACTING FROM: {template_file}")
     workbook = load_workbook(template_file, data_only=True)
-    checksum = hash_single_file(f_path)
+    checksum = _hash_single_file(f_path)
     holding = []
     for sheet in workbook.worksheets:
         sheet_data = []
@@ -144,7 +148,7 @@ def template_reader(template_file: Path) -> Dict:
         holding.append(sheet_dict)
     for sd in holding:
         inner_dict["data"].update(sd)
-    inner_dict.update({"checksum": checksum.hex()})
+    inner_dict.update({"checksum": checksum})
     shell_dict = {f_path.name: inner_dict}
     return shell_dict
 
