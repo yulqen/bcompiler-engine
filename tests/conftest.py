@@ -1,5 +1,6 @@
 import os
 import shutil
+import tempfile
 from pathlib import Path
 
 import pytest
@@ -72,6 +73,13 @@ def spreadsheet_same_data_as_dat_file():
 def resources():
     here = os.path.abspath(os.curdir)
     return Path(os.path.join(here, "tests/resources/"))
+
+
+@pytest.fixture
+def doc_directory():
+    pth = Path(tempfile.gettempdir()) / "Documents" / "bcompiler"
+    yield pth
+    shutil.rmtree(pth)
 
 
 @pytest.fixture

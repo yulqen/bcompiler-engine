@@ -46,11 +46,11 @@ import appdirs
 
 def _platform_docs_dir() -> Path:
     if platform.system() == "Linux":
-        return Path.home() / "Documents/bcompiler"
+        return Path.home() / "Documents" / "bcompiler"
     if platform.system() == "Darwin":
-        return Path.home() / "Documents/bcompiler"
+        return Path.home() / "Documents" / "bcompiler"
     if platform.system() == "Windows":
-        return Path.home() / "MyDocuments/bcompiler"
+        return Path.home() / "MyDocuments" / "bcompiler"
     else:
         raise RuntimeError("Cannot detect operating system")
 
@@ -83,3 +83,11 @@ class Config:
         if not Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).exists():
             Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
             cls.config_parser.read(cls.BCOMPILER_LIBRARY_CONFIG_FILE)
+
+        # then we need to create the docs directory if it doesn't exist
+        input_dir = Path(cls.config_parser["PATHS"]["input directory"])
+        output_dir = Path(cls.config_parser["PATHS"]["output directory"])
+        if not input_dir.exists():
+            input_dir.mkdir()
+        if not output_dir.exists():
+            output_dir.mkdir()

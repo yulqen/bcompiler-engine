@@ -38,10 +38,14 @@ def test_required_config_dirs_exist(mock_config):
 
 def test_config_values(mock_config):
     mock_config.initialise()
-    assert (mock_config.config_parser["PATHS"]["input directory"] ==
-            "/home/lemon/Documents/bcompiler/input")
-    assert (mock_config.config_parser["PATHS"]["output directory"] ==
-            "/home/lemon/Documents/bcompiler/output")
+    USER_NAME = mock_config.USER_NAME
+    assert mock_config.config_parser["PATHS"][
+        "input directory"] == "/home/{0}/Documents/bcompiler/input".format(
+            USER_NAME)
+    assert mock_config.config_parser["PATHS"][
+        "output directory"] == "/home/{0}/Documents/bcompiler/output".format(
+            USER_NAME)
     if platform.system() == "Linux":
-        assert (mock_config.config_parser["PATHS"]["document directory"] ==
-                "/home/lemon/Documents/bcompiler")
+        assert mock_config.config_parser["PATHS"][
+            "document directory"] == "/home/{0}/Documents/bcompiler".format(
+                USER_NAME)
