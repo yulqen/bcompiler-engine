@@ -77,9 +77,9 @@ class Config:
     @classmethod
     def initialise(cls):
         if not Path(cls.BCOMPILER_LIBRARY_DATA_DIR).exists():
-            Path(cls.BCOMPILER_LIBRARY_DATA_DIR).mkdir()
+            Path(cls.BCOMPILER_LIBRARY_DATA_DIR).mkdir(parents=True)
         if not Path(cls.BCOMPILER_LIBRARY_CONFIG_DIR).exists():
-            Path(cls.BCOMPILER_LIBRARY_CONFIG_DIR).mkdir()
+            Path(cls.BCOMPILER_LIBRARY_CONFIG_DIR).mkdir(parents=True)
         if not Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).exists():
             Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
             cls.config_parser.read(cls.BCOMPILER_LIBRARY_CONFIG_FILE)
