@@ -20,8 +20,8 @@ def test_template_parser_use_case(resources):
 def test_can_get_config_value(mock_config):
     mock_config.initialise()
     config = mock_config.config_parser
-    assert (config["PATHS"]["import directory"] ==
-            "/home/lemon/Documents/bcompiler/import")
+    assert (config["PATHS"]["input directory"] ==
+            "/home/lemon/Documents/bcompiler/input")
 
 
 @pytest.mark.skip("Wait until we have BCOMPILER_IO_LIBRARY in config file")

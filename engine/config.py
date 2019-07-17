@@ -36,8 +36,7 @@ document drop directory:    AS PER CONFIG.INI
 """
 
 import os
-import shutil
-import sys
+import platform
 import textwrap
 from configparser import ConfigParser
 from pathlib import Path
@@ -45,23 +44,35 @@ from pathlib import Path
 import appdirs
 
 
+def _platform_docs_dir() -> Path:
+    if platform.system() == "Linux":
+        return Path.home() / "Documents/bcompiler"
+    if platform.system() == "Darwin":
+        return Path.home() / "Documents/bcompiler"
+    if platform.system() == "Windows":
+        return Path.home() / "MyDocuments/bcompiler"
+    else:
+        raise RuntimeError("Cannot detect operating system")
+
+
 class Config:
     "This is created in the application and passed to the library."
 
     USER_NAME = os.getlogin()
-
     BCOMPILER_LIBRARY_DATA_DIR = appdirs.user_data_dir("bcompiler-data",
                                                        USER_NAME)
     BCOMPILER_LIBRARY_CONFIG_DIR = appdirs.user_config_dir(
         "bcompiler-data", USER_NAME)
     BCOMPILER_LIBRARY_CONFIG_FILE = os.path.join(BCOMPILER_LIBRARY_CONFIG_DIR,
                                                  "config.ini")
+    PLATFORM_DOCS_DIR = _platform_docs_dir()
     config_parser = ConfigParser()
-
     base_config = textwrap.dedent("""\
     [PATHS]
-    import directory = /home/lemon/Documents/bcompiler/import
-    """)
+    document directory = {0}
+    input directory = %(document directory)s/input
+    output directory =%(document directory)s/output
+    """).format(PLATFORM_DOCS_DIR)
 
     @classmethod
     def initialise(cls):

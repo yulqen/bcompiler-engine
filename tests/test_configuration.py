@@ -34,3 +34,14 @@ def test_required_config_dirs_exist(mock_config):
     assert Path(mock_config.BCOMPILER_LIBRARY_DATA_DIR).exists()
     assert Path(mock_config.BCOMPILER_LIBRARY_CONFIG_DIR).exists()
     assert Path(mock_config.BCOMPILER_LIBRARY_CONFIG_FILE).exists()
+
+
+def test_config_values(mock_config):
+    mock_config.initialise()
+    assert (mock_config.config_parser["PATHS"]["input directory"] ==
+            "/home/lemon/Documents/bcompiler/input")
+    assert (mock_config.config_parser["PATHS"]["output directory"] ==
+            "/home/lemon/Documents/bcompiler/output")
+    if platform.system() == "Linux":
+        assert (mock_config.config_parser["PATHS"]["document directory"] ==
+                "/home/lemon/Documents/bcompiler")
