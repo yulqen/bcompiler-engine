@@ -19,13 +19,3 @@ class TemplateCellSerializer(json.JSONEncoder):
 
 class ParsedTemplatesSerializer(json.JSONEncoder):
     pass
-
-
-#    # TODO write this so that it encodes the data format currently
-#    # produced by parse_multiple_xlsx_files()
-#
-#    def default(self, o):
-#        try:
-#            to_serialize = {[]}
-#        except AttributeError:
-#            return super().default(o)
