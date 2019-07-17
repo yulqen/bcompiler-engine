@@ -3,19 +3,30 @@ import os
 from pathlib import Path
 
 from ..config import Config
-from ..serializers.template import ParsedTemplatesSerializer
 from ..use_cases.parsing import parse_multiple_xlsx_files
 from ..utils.extraction import get_xlsx_files
 
+# TODO - parse_multiple_xlsx_files should not be in use_cases?
 
-class FSPopulatedTemplatesRepo:
-    """A repo that is based on a single data file in the .bcompiler-engine directory.
-    """
+
+class Repo:
+    "Super class for repository objects."
 
     def __init__(self, directory_path: Path):
         self.directory_path = directory_path
 
-    def list_as_json(self):
+    def list_as_json(self) -> str:
+        raise NotImplementedError("This should be subclassed")
+
+
+class FSPopulatedTemplatesRepo(Repo):
+    """A repo that is based on a single data file in the .bcompiler-engine directory.
+    """
+
+    def __init__(self, directory_path: Path):
+        super().__init__(directory_path)
+
+    def list_as_json(self) -> str:
         "Try to open the data file containing populated data as json."
         try:
             with open(
@@ -26,14 +37,14 @@ class FSPopulatedTemplatesRepo:
             raise
 
 
-class InMemoryPopulatedTemplatesRepository:
+class InMemoryPopulatedTemplatesRepository(Repo):
     """A repo that does no data file reading or writing - just parsing from excel files.
     """
 
     def __init__(self, directory_path: Path):
-        self.directory_path = directory_path
+        super().__init__(directory_path)
 
-    def list_as_json(self):
+    def list_as_json(self) -> str:
         "Return data from a directory of populated templates as json."
         excel_files = get_xlsx_files(self.directory_path)
         data = parse_multiple_xlsx_files(excel_files)

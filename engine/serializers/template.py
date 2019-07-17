@@ -1,7 +1,5 @@
 import json
 
-from engine.domain.template import TemplateCell
-
 
 class TemplateCellSerializer(json.JSONEncoder):
     def default(self, o):

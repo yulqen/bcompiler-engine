@@ -50,7 +50,7 @@ class ParsePopulatedTemplatesUseCase:
     def __init__(self, repo):
         self.repo = repo
 
-    def execute(self):
+    def execute(self) -> str:
         return self.repo.list_as_json()
 
 
@@ -58,7 +58,7 @@ class ParseDatamapUseCase:
     def __init__(self, repo):
         self.repo = repo
 
-    def execute(self):
+    def execute(self) -> str:
         return self.repo.list_as_json()
 
 
@@ -108,15 +108,13 @@ def template_reader(template_file: Path) -> Dict:
     Given a populated xlsx file, returns all data in a list of
     TemplateCell objects.
     """
-    inner_dict = {"data": {}}
-    data = []
+    inner_dict: dict = {"data": {}}
     f_path = Path(template_file)
     print(f"EXTRACTING FROM: {template_file}")
     workbook = load_workbook(template_file, data_only=True)
     checksum = hash_single_file(f_path)
     holding = []
     for sheet in workbook.worksheets:
-        data_dict = {}
         sheet_data = []
         sheet_dict = {}
         for row in sheet.rows:
