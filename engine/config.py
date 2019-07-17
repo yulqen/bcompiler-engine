@@ -85,9 +85,9 @@ class Config:
             cls.config_parser.read(cls.BCOMPILER_LIBRARY_CONFIG_FILE)
 
         # then we need to create the docs directory if it doesn't exist
-        input_dir = Path(cls.config_parser["PATHS"]["input directory"])
-        output_dir = Path(cls.config_parser["PATHS"]["output directory"])
+        input_dir = Path(cls.PLATFORM_DOCS_DIR / "input")
+        output_dir = Path(cls.PLATFORM_DOCS_DIR / "output")
         if not input_dir.exists():
-            input_dir.mkdir()
+            input_dir.mkdir(parents=True)
         if not output_dir.exists():
-            output_dir.mkdir()
+            output_dir.mkdir(parents=True)

@@ -1,6 +1,7 @@
 import json
 import shutil
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 
@@ -17,13 +18,12 @@ def test_template_parser_use_case(resources):
             ["value"] == "This is a string")
 
 
-@pytest.mark.skip()
 def test_query_data_from_data_file(mock_config, dat_file,
-                                   spreadsheet_same_data_as_dat_file,
-                                   doc_directory):
+                                   spreadsheet_same_data_as_dat_file):
     mock_config.initialise()
     shutil.copy2(dat_file, mock_config.BCOMPILER_LIBRARY_DATA_DIR)
-    shutil.copy2(spreadsheet_same_data_as_dat_file, doc_directory)
+    shutil.copy2(spreadsheet_same_data_as_dat_file,
+                 mock_config.PLATFORM_DOCS_DIR)
     repo = FSPopulatedTemplatesRepo(Path.home() / "Desktop")
     parse_populated_templates_use_case = ParsePopulatedTemplatesUseCase(repo)
     result = parse_populated_templates_use_case.execute()
