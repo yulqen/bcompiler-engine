@@ -17,13 +17,6 @@ def test_template_parser_use_case(resources):
             ["value"] == "This is a string")
 
 
-def test_can_get_config_value(mock_config):
-    mock_config.initialise()
-    config = mock_config.config_parser
-    assert (config["PATHS"]["input directory"] ==
-            "/home/lemon/Documents/bcompiler/input")
-
-
 @pytest.mark.skip("Wait until we have BCOMPILER_IO_LIBRARY in config file")
 def test_query_data_from_data_file(mock_config, dat_file,
                                    spreadsheet_same_data_as_dat_file):
