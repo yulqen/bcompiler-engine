@@ -1,7 +1,11 @@
+# type: ignore
+
 import os
 import shutil
 import tempfile
 from pathlib import Path
+
+from typing import List, Generator
 
 import pytest
 
@@ -11,7 +15,7 @@ from engine.use_cases.parsing import DatamapLineValueType, TemplateCell
 
 
 @pytest.fixture
-def template_cell_obj():
+def template_cell_obj() -> TemplateCell:
     return TemplateCell(
         file_name="test.xlsx",
         sheet_name="Test Sheet 1",
@@ -22,7 +26,7 @@ def template_cell_obj():
 
 
 @pytest.fixture
-def datamapline_list_objects():
+def datamapline_list_objects() -> List[DatamapLine]:
     dml1 = DatamapLine(
         key="Project/Programme Name",
         sheet="Introduction",
@@ -59,7 +63,7 @@ def datamapline_list_objects():
 
 
 @pytest.fixture
-def dat_file():
+def dat_file() -> Path:
     here = os.path.abspath(os.curdir)
     return Path(os.path.join(here, "tests/resources/extracted_data.dat"))
 
@@ -70,26 +74,26 @@ def spreadsheet_same_data_as_dat_file():
 
 
 @pytest.fixture
-def resources():
+def resources() -> Path:
     here = os.path.abspath(os.curdir)
     return Path(os.path.join(here, "tests/resources/"))
 
 
 @pytest.fixture
-def doc_directory():
+def doc_directory() -> Generator:
     pth = Path(tempfile.gettempdir()) / "Documents" / "bcompiler"
     yield pth
     shutil.rmtree(pth)
 
 
 @pytest.fixture
-def template():
+def template() -> Path:
     here = os.path.abspath(os.curdir)
     return Path(os.path.join(here, "tests/resources/test_template.xlsx"))
 
 
 @pytest.fixture
-def datamap():
+def datamap() -> str:
     here = os.path.abspath(os.curdir)
     return os.path.join(here, "tests/resources/datamap.csv")
 

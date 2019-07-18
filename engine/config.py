@@ -39,20 +39,20 @@ import os
 import platform
 import textwrap
 from configparser import ConfigParser
+from typing import Optional
 from pathlib import Path
 
 import appdirs
 
 
-def _platform_docs_dir() -> Path:
+def _platform_docs_dir() -> Optional[Path]:
     if platform.system() == "Linux":
         return Path.home() / "Documents" / "bcompiler"
     if platform.system() == "Darwin":
         return Path.home() / "Documents" / "bcompiler"
     if platform.system() == "Windows":
         return Path.home() / "MyDocuments" / "bcompiler"
-    else:
-        raise RuntimeError("Cannot detect operating system")
+    return None
 
 
 class Config:
@@ -75,7 +75,7 @@ class Config:
     """).format(PLATFORM_DOCS_DIR)
 
     @classmethod
-    def initialise(cls):
+    def initialise(cls) -> None:
         if not Path(cls.BCOMPILER_LIBRARY_DATA_DIR).exists():
             Path(cls.BCOMPILER_LIBRARY_DATA_DIR).mkdir(parents=True)
         if not Path(cls.BCOMPILER_LIBRARY_CONFIG_DIR).exists():
@@ -85,8 +85,14 @@ class Config:
             cls.config_parser.read(cls.BCOMPILER_LIBRARY_CONFIG_FILE)
 
         # then we need to create the docs directory if it doesn't exist
-        input_dir = Path(cls.PLATFORM_DOCS_DIR / "input")
-        output_dir = Path(cls.PLATFORM_DOCS_DIR / "output")
+        try:
+            input_dir = Path(cls.PLATFORM_DOCS_DIR / "input") # type: ignore
+        except TypeError:
+            raise TypeError("Unable to detect operating system")
+        try:
+            output_dir = Path(cls.PLATFORM_DOCS_DIR / "output") # type: ignore
+        except TypeError:
+            raise TypeError("Unable to detect operating system")
         if not input_dir.exists():
             input_dir.mkdir(parents=True)
         if not output_dir.exists():

@@ -1,9 +1,9 @@
 import json
-from typing import Dict
+from typing import Any
 
 
 class DatamapEncoder(json.JSONEncoder):
-    def default(self, o) -> Dict[str, str]:
+    def default(self, o: Any) -> Any: # type: ignore
         try:
             to_serialize = {
                 "key": o.key,

@@ -8,8 +8,7 @@ from . import Repo
 
 
 class FSPopulatedTemplatesRepo(Repo):
-    """A repo that is based on a single data file in the .bcompiler-engine directory.
-    """
+    "A repo that is based on a single data file in the .bcompiler-engine directory."
 
     def list_as_json(self) -> str:
         "Try to open the data file containing populated data as json."
@@ -23,8 +22,7 @@ class FSPopulatedTemplatesRepo(Repo):
 
 
 class InMemoryPopulatedTemplatesRepository(Repo):
-    """A repo that does no data file reading or writing - just parsing from excel files.
-    """
+    "A repo that does no data file reading or writing - just parsing from excel files."
 
     def list_as_json(self) -> str:
         "Return data from a directory of populated templates as json."

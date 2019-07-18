@@ -4,6 +4,8 @@ import shutil
 from engine.repository.templates import (FSPopulatedTemplatesRepo,
                                          InMemoryPopulatedTemplatesRepository)
 from engine.use_cases.parsing import ParsePopulatedTemplatesUseCase
+from engine.use_cases.parsing import ApplyDatamapToExtraction
+from engine.use_cases.parsing import DatamapFile
 
 
 def test_template_parser_use_case(resources):
@@ -25,3 +27,10 @@ def test_query_data_from_data_file(mock_config, dat_file,
     result = parse_populated_templates_use_case.execute()
     assert (json.loads(result)["test.xlsx"]["data"]["new sheet"]["A1"]["value"]
             == "Project/Programme Name")
+
+
+def test_datamap_applied_to_extracted_data_returns_a_generator(mock_config, datamap):
+    mock_config.initialise()
+    repo = FSPopulatedTemplatesRepo(mock_config.PLATFORM_DOCS_DIR)
+    datamap_file = DatamapFile(datamap)
+    apply_datamap_uc = ApplyDatamapToExtraction(repo, datamap_file)

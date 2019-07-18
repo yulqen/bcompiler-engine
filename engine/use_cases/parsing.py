@@ -37,13 +37,18 @@ import csv
 import datetime
 from concurrent import futures
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Dict, List
+from typing import IO, TYPE_CHECKING, Any, Dict, List
 
 from openpyxl import load_workbook
 
 from ..domain.datamap import DatamapLine, DatamapLineValueType
 from ..domain.template import TemplateCell
 from ..utils.extraction import _clean, _extract_cellrefs, _hash_single_file
+
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel("INFO")
 
 if TYPE_CHECKING:
     from ..repository.templates import Repo
@@ -53,7 +58,7 @@ class ParsePopulatedTemplatesUseCase:
     def __init__(self, repo: "Repo"):
         self.repo = repo
 
-    def execute(self) -> str:
+    def execute(self) -> str: # type: ignore
         return self.repo.list_as_json()
 
 
@@ -72,19 +77,28 @@ class DatamapFile:
     exception with the file isn't found.
     """
 
-    def __init__(self, filepath):
+    def __init__(self, filepath: Path) -> None:
         "Creates the context manager"
         self.filepath = filepath
 
-    def __enter__(self):
+    def __enter__(self) -> IO[str]:
         try:
             self.f_obj = open(self.filepath, "r", encoding="utf-8")
             return self.f_obj
         except FileNotFoundError:
-            raise
+            raise FileNotFoundError("Cannot find {}".format(self.filepath))
 
-    def __exit__(self, mytype, value, traceback):
+    def __exit__(self, mytype, value, traceback): # type: ignore
         self.f_obj.close()
+
+
+class ApplyDatamapToExtraction:
+
+    "Extract data from a bunch of spreadsheets, but filter based on a datamap"
+
+    def __init__(self, repository: "Repo", datamap: DatamapFile):
+        self.repository = repository
+        self.datamap = datamap
 
 
 def datamap_reader(dm_file: Path) -> List[DatamapLine]:
@@ -102,23 +116,27 @@ def datamap_reader(dm_file: Path) -> List[DatamapLine]:
                     cellref=_clean(line["cellreference"], is_cellref=True),
                     data_type=_clean(line["type"]),
                     filename=dm_file,
-                ))
+                )
+            )
     return data
 
 
-def template_reader(template_file: Path
-                    ) -> Dict[str, Dict[str, Dict[str, str]]]:
+ExtractedDataType = Dict[str, Dict[str, Dict[str, str]]]
+
+
+def template_reader(template_file: Path) -> ExtractedDataType:
     """
     Given a populated xlsx file, returns all data in a list of
     TemplateCell objects.
     """
     inner_dict: dict = {"data": {}}
     f_path = Path(template_file)
-    print(f"EXTRACTING FROM: {template_file}")
+    logger.info("Extracting from: {}".format(f_path.name))
     workbook = load_workbook(template_file, data_only=True)
     checksum = _hash_single_file(f_path)
     holding = []
     for sheet in workbook.worksheets:
+        logger.info("Processing sheet {} | {}".format(f_path.name, sheet.title))
         sheet_data = []
         sheet_dict = {}
         for row in sheet.rows:
@@ -131,23 +149,23 @@ def template_reader(template_file: Path
                         if isinstance(cell.value, (float, int)):
                             val = cell.value
                             c_type = DatamapLineValueType.NUMBER
-                        elif isinstance(cell.value,
-                                        (datetime.date, datetime.datetime)):
+                        elif isinstance(cell.value, (datetime.date, datetime.datetime)):
                             val = cell.value.isoformat()
                             c_type = DatamapLineValueType.DATE
                     cellref = f"{cell.column_letter}{cell.row}"
                     if isinstance(template_file, Path):
-                        t_cell = TemplateCell(template_file.as_posix(),
-                                              sheet.title, cellref, val,
-                                              c_type).to_dict()
+                        t_cell = TemplateCell(
+                            template_file.as_posix(), sheet.title, cellref, val, c_type
+                        ).to_dict()
                     else:
-                        t_cell = TemplateCell(template_file, sheet.title,
-                                              cellref, val, c_type).to_dict()
+                        t_cell = TemplateCell(
+                            template_file, sheet.title, cellref, val, c_type
+                        ).to_dict()
                     sheet_data.append(t_cell)
         sheet_dict.update({sheet.title: _extract_cellrefs(sheet_data)})
         holding.append(sheet_dict)
-    for sheet_data in holding:
-        inner_dict["data"].update(sheet_data)
+    for sd in holding:
+        inner_dict["data"].update(sd)
     inner_dict.update({"checksum": checksum})
     shell_dict = {f_path.name: inner_dict}
     return shell_dict
