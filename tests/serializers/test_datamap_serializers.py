@@ -1,3 +1,7 @@
+"""
+Tests for serializers.
+"""
+
 import json
 
 from engine.domain.datamap import DatamapLine

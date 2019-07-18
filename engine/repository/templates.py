@@ -19,8 +19,8 @@ class FSPopulatedTemplatesRepo(Repo):
         "Try to open the data file containing populated data as json."
         try:
             with open(
-                    os.path.join(Config.BCOMPILER_LIBRARY_DATA_DIR,
-                                 "extracted_data.dat")) as f:
+                os.path.join(Config.BCOMPILER_LIBRARY_DATA_DIR, "extracted_data.dat")
+            ) as f:
                 return f.read()
         except FileNotFoundError:
             raise

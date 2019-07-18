@@ -4,6 +4,8 @@ Entities relating to the datamap.
 from enum import Enum, auto
 from typing import Dict
 
+# pylint: disable=R0903,R0913;
+
 
 class DatamapLineValueType(Enum):
     """A representation of a data type for us in validating data from the spreadsheet.
@@ -32,6 +34,7 @@ class DatamapLine:
         self.filename = filename
 
     def to_dict(self) -> Dict[str, str]:
+        "Returns the attributes as a dictionary."
         return {
             "key": self.key,
             "sheet": self.sheet,
