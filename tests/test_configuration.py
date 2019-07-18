@@ -1,5 +1,4 @@
 import platform
-import shutil
 from pathlib import Path
 """
 Initialising directories and files for use by the application.
