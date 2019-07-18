@@ -1,8 +1,8 @@
 import hashlib
 
-from engine.use_cases.parsing import parse_multiple_xlsx_files
-from engine.utils.extraction import (_hash_single_file, get_xlsx_files,
-                                     hash_target_files)
+from engine.use_cases.parsing import extract_from_multiple_xlsx_files
+from engine.utils.extraction import (_hash_single_file, _hash_target_files,
+                                     get_xlsx_files)
 
 
 def test_hash_of_single_file(resources):
@@ -17,7 +17,7 @@ def test_hash_of_target_files(resources):
     test_file = [x for x in excel_files if x.name == test_file_name][0]
     digest_of_test_file = hashlib.md5(open(test_file,
                                            "rb").read()).digest().hex()
-    get_hashes = hash_target_files(excel_files)
+    get_hashes = _hash_target_files(excel_files)
     computed_hash = get_hashes[test_file_name]
     assert digest_of_test_file == computed_hash
 
@@ -28,5 +28,5 @@ def test_group_data_by_source_file(resources):
     test_file = [x for x in excel_files if x.name == test_file_name][0]
     digest_of_test_file = hashlib.md5(open(test_file,
                                            "rb").read()).digest().hex()
-    dataset = parse_multiple_xlsx_files(excel_files)
+    dataset = extract_from_multiple_xlsx_files(excel_files)
     assert dataset["test_template.xlsx"]["checksum"] == digest_of_test_file

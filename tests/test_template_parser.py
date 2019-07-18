@@ -5,7 +5,8 @@ import pytest
 
 from engine.domain.datamap import DatamapLineValueType
 from engine.domain.template import TemplateCell
-from engine.use_cases.parsing import parse_multiple_xlsx_files, template_reader
+from engine.use_cases.parsing import (extract_from_multiple_xlsx_files,
+                                      template_reader)
 from engine.utils.extraction import (_extract_cellrefs, _extract_sheets,
                                      get_xlsx_files)
 
@@ -13,10 +14,8 @@ from engine.utils.extraction import (_extract_cellrefs, _extract_sheets,
 def test_parse_multiple_templates(resources):
     list_of_template_paths = get_xlsx_files(resources)
     for template in list_of_template_paths:
-        if Path(os.path.join(resources, "test_template.xlsx")) == template:
-            return True
-        else:
-            return False
+        return bool(
+            Path(os.path.join(resources, "test_template.xlsx")) == template)
 
 
 def test_raise_exception_when_none_abs_path_passed():
@@ -63,7 +62,7 @@ def test_template_reader(template):
 
 def test_extract_data_from_multiple_files_into_correct_structure(resources):
     xlsx_files = get_xlsx_files(resources)
-    dataset = parse_multiple_xlsx_files(xlsx_files)
+    dataset = extract_from_multiple_xlsx_files(xlsx_files)
     test_filename = "test_template2.xlsx"
     assert (Path(dataset[test_filename]["data"]["Summary"]["B3"]
                  ["file_name"]).name == "test_template2.xlsx")

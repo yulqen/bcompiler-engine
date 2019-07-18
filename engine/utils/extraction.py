@@ -48,8 +48,8 @@ def _extract_sheets(lst_of_tcs: List[TemplateCell]
     "Given a list of TemplateCell objects, returns the list but as a dict sorted by its sheet_name"
     output: Dict[str, List[TemplateCell]] = {}
     data = sorted(lst_of_tcs, key=lambda x: x.sheet_name)
-    for k, g in groupby(data, key=lambda x: x.sheet_name):
-        output.update({k: list(g)})
+    for k, group in groupby(data, key=lambda x: x.sheet_name):
+        output.update({k: list(group)})
     return output
 
 
@@ -76,14 +76,13 @@ def _extract_cellrefs(lst_of_tcs) -> Dict[str, dict]:
 
     output: Dict[str, dict] = {}
     data = sorted(lst_of_tcs, key=lambda x: x["cellref"])
-    for k, g in groupby(data, key=lambda x: x["cellref"]):
-        result = list(g)
+    for k, group in groupby(data, key=lambda x: x["cellref"]):
+        result = list(group)
         if len(result) > 1:
             raise RuntimeError(
                 f"Found duplicate sheet/cellref item when extracting keys.")
-        else:
-            result = result[0]
-            output.update({k: result})
+        result = result[0]
+        output.update({k: result})
     return output
 
 
@@ -91,12 +90,11 @@ def _hash_single_file(filepath: Path) -> str:
     "Returns a checksum for a given file at Path"
     if not filepath.is_file():
         raise RuntimeError(f"Cannot checksum {filepath}")
-    else:
-        hash_obj = hashlib.md5(open(filepath, "rb").read())
-        return hash_obj.digest().hex()
+    hash_obj = hashlib.md5(open(filepath, "rb").read())
+    return hash_obj.digest().hex()
 
 
-def hash_target_files(list_of_files: List[Path]) -> Dict[str, str]:
+def _hash_target_files(list_of_files: List[Path]) -> Dict[str, str]:
     """Hash each file in list_of_files.
 
     Given a list of files, return a dict containing the file name as

@@ -146,8 +146,8 @@ def template_reader(template_file: Path
                     sheet_data.append(t_cell)
         sheet_dict.update({sheet.title: _extract_cellrefs(sheet_data)})
         holding.append(sheet_dict)
-    for sd in holding:
-        inner_dict["data"].update(sd)
+    for sheet_data in holding:
+        inner_dict["data"].update(sheet_data)
     inner_dict.update({"checksum": checksum})
     shell_dict = {f_path.name: inner_dict}
     return shell_dict
@@ -161,7 +161,8 @@ def template_reader(template_file: Path
 #    return data
 
 
-def parse_multiple_xlsx_files(xlsx_files: List[Path]) -> Dict[Any, Any]:
+def extract_from_multiple_xlsx_files(xlsx_files: List[Path]) -> Dict[Any, Any]:
+    "Extract raw data from list of paths to excel files. Return as complex dictionary."
     data: Dict[Any, Any] = {}
     with futures.ProcessPoolExecutor() as pool:
         for file in pool.map(template_reader, xlsx_files):

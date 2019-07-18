@@ -25,6 +25,7 @@ class TemplateCell:
         self.data_type = data_type
 
     def to_dict(self) -> Dict[str, str]:
+        "Returns attributes of object as a dictionary."
         return {
             "file_name": self.file_name,
             "sheet_name": self.sheet_name,
