@@ -4,7 +4,7 @@ from pathlib import Path
 
 from ..config import Config
 from ..use_cases.parsing import extract_from_multiple_xlsx_files
-from ..utils.extraction import get_xlsx_files
+from ..utils.extraction import _get_xlsx_files
 from . import Repo
 
 
@@ -35,6 +35,6 @@ class InMemoryPopulatedTemplatesRepository(Repo):
 
     def list_as_json(self) -> str:
         "Return data from a directory of populated templates as json."
-        excel_files = get_xlsx_files(self.directory_path)
+        excel_files = _get_xlsx_files(self.directory_path)
         data = extract_from_multiple_xlsx_files(excel_files)
         return json.dumps(data)

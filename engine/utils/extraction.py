@@ -8,7 +8,7 @@ from typing import Any, Dict, List
 from engine.domain.template import TemplateCell
 
 
-def get_xlsx_files(directory: Path) -> List[Path]:
+def _get_xlsx_files(directory: Path) -> List[Path]:
     """
     Return a list of Path objects for each xlsx file in directory,
     or raise an exception.

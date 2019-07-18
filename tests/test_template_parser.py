@@ -8,11 +8,11 @@ from engine.domain.template import TemplateCell
 from engine.use_cases.parsing import (extract_from_multiple_xlsx_files,
                                       template_reader)
 from engine.utils.extraction import (_extract_cellrefs, _extract_sheets,
-                                     get_xlsx_files)
+                                     _get_xlsx_files)
 
 
 def test_parse_multiple_templates(resources):
-    list_of_template_paths = get_xlsx_files(resources)
+    list_of_template_paths = _get_xlsx_files(resources)
     for template in list_of_template_paths:
         return bool(
             Path(os.path.join(resources, "test_template.xlsx")) == template)
@@ -20,7 +20,7 @@ def test_parse_multiple_templates(resources):
 
 def test_raise_exception_when_none_abs_path_passed():
     with pytest.raises(RuntimeError):
-        list_of_template_paths = get_xlsx_files("tests/resources/")  # noqa
+        list_of_template_paths = _get_xlsx_files("tests/resources/")  # noqa
 
 
 def test_func_to_get_sheetnames_as_keys_from_list_of_tcs():
@@ -61,7 +61,7 @@ def test_template_reader(template):
 
 
 def test_extract_data_from_multiple_files_into_correct_structure(resources):
-    xlsx_files = get_xlsx_files(resources)
+    xlsx_files = _get_xlsx_files(resources)
     dataset = extract_from_multiple_xlsx_files(xlsx_files)
     test_filename = "test_template2.xlsx"
     assert (Path(dataset[test_filename]["data"]["Summary"]["B3"]
