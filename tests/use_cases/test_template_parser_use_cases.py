@@ -1,9 +1,5 @@
 import json
 import shutil
-from pathlib import Path
-from unittest.mock import patch
-
-import pytest
 
 from engine.repository.templates import (FSPopulatedTemplatesRepo,
                                          InMemoryPopulatedTemplatesRepository)

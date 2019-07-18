@@ -83,7 +83,7 @@ class DatamapFile:
         except FileNotFoundError:
             raise
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, mytype, value, traceback):
         self.f_obj.close()
 
 
@@ -137,13 +137,13 @@ def template_reader(template_file: Path
                             c_type = DatamapLineValueType.DATE
                     cellref = f"{cell.column_letter}{cell.row}"
                     if isinstance(template_file, Path):
-                        tc = TemplateCell(template_file.as_posix(),
-                                          sheet.title, cellref, val,
-                                          c_type).to_dict()
+                        t_cell = TemplateCell(template_file.as_posix(),
+                                              sheet.title, cellref, val,
+                                              c_type).to_dict()
                     else:
-                        tc = TemplateCell(template_file, sheet.title, cellref,
-                                          val, c_type).to_dict()
-                    sheet_data.append(tc)
+                        t_cell = TemplateCell(template_file, sheet.title,
+                                              cellref, val, c_type).to_dict()
+                    sheet_data.append(t_cell)
         sheet_dict.update({sheet.title: _extract_cellrefs(sheet_data)})
         holding.append(sheet_dict)
     for sd in holding:
