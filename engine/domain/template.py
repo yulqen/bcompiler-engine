@@ -1,7 +1,4 @@
-"""
-The domain object representing a populated "template", or a spreadsheet
-containing data that we wish to extract.
-"""
+"The domain object representing a populated template"
 from typing import Dict
 
 from .datamap import DatamapLineValueType  # noqa
@@ -25,7 +22,7 @@ class TemplateCell:
         self.data_type = data_type
 
     def to_dict(self) -> Dict[str, str]:
-        "Returns attributes of object as a dictionary."
+        "Return attributes of object as a dictionary."
         return {
             "file_name": self.file_name,
             "sheet_name": self.sheet_name,

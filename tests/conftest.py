@@ -4,8 +4,7 @@ import os
 import shutil
 import tempfile
 from pathlib import Path
-
-from typing import List, Generator
+from typing import Generator, List
 
 import pytest
 
@@ -41,7 +40,7 @@ def datamapline_list_objects() -> List[DatamapLine]:
         cellref="C9",
         data_type="TEXT",
         filename=
-        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",  # noqa  # noqa
+        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",  # noqa
     )
     dml3 = DatamapLine(
         key="Delivery Body",
@@ -113,7 +112,8 @@ def mock_config(monkeypatch):
 @pytest.fixture
 def mock_config_subclassed():
     class TestApplicationConfig(Config):
-        "This is created in the application and passed to the library"
+        """This is created in the application and passed to the library."""
+
         prove = "TestApplicationConfig set"
 
     yield TestApplicationConfig

@@ -9,10 +9,7 @@ from engine.domain.template import TemplateCell
 
 
 def _get_xlsx_files(directory: str) -> List[Path]:
-    """
-    Return a list of Path objects for each xlsx file in directory,
-    or raise an exception.
-    """
+    "Return a list of Path objects for each xlsx file in directory, or raise an exception."
     output = []
     if not os.path.isabs(directory):
         raise RuntimeError("Require absolute path here")
@@ -73,7 +70,6 @@ def _extract_cellrefs(lst_of_tcs) -> Dict[str, dict]:
         Dictionary whose key is the cellref and value is the TemplateCell that contains it.
 
     """
-
     output: Dict[str, dict] = {}
     data = sorted(lst_of_tcs, key=lambda x: x["cellref"])
     for k, group in groupby(data, key=lambda x: x["cellref"]):
@@ -87,7 +83,7 @@ def _extract_cellrefs(lst_of_tcs) -> Dict[str, dict]:
 
 
 def _hash_single_file(filepath: Path) -> str:
-    "Returns a checksum for a given file at Path"
+    "Return a checksum for a given file at Path"
     if not filepath.is_file():
         raise RuntimeError(f"Cannot checksum {filepath}")
     hash_obj = hashlib.md5(open(filepath, "rb").read())

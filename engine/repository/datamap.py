@@ -1,5 +1,4 @@
 import json
-from pathlib import Path
 from typing import List
 
 from ..domain.datamap import DatamapLine

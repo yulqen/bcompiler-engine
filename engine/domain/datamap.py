@@ -1,6 +1,4 @@
-"""
-Entities relating to the datamap.
-"""
+"Entities relating to the datamap."
 from enum import Enum, auto
 from typing import Dict
 
@@ -25,9 +23,8 @@ class DatamapLine:
     Data structure representing all cell data extracted from templates/spreadsheets.
     """
 
-    def __init__(
-        self, key: str, sheet: str, cellref: str, data_type: str, filename: str
-    ) -> None:
+    def __init__(self, key: str, sheet: str, cellref: str, data_type: str,
+                 filename: str) -> None:
 
         self.key = key
         self.sheet = sheet
@@ -36,7 +33,7 @@ class DatamapLine:
         self.filename = filename
 
     def to_dict(self) -> Dict[str, str]:
-        "Returns the attributes as a dictionary."
+        "Return the attributes as a dictionary."
         return {
             "key": self.key,
             "sheet": self.sheet,
