@@ -1,6 +1,4 @@
-"""
-Tests for serializers.
-"""
+"Tests for serializers."
 
 import json
 

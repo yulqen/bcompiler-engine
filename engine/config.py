@@ -1,9 +1,6 @@
 # config.py
-"""
-######################################################
-#CONFIG MUST BE PROVIDED BY THE FRONT-END APPLICATION#
-######################################################
 
+"""
 Configuration and application file system locations:
 
 This should all be in the CLI application - not the library.
@@ -39,8 +36,8 @@ import os
 import platform
 import textwrap
 from configparser import ConfigParser
-from typing import Optional
 from pathlib import Path
+from typing import Optional
 
 import appdirs
 
@@ -59,20 +56,21 @@ class Config:
     "This is created in the application and passed to the library."
 
     USER_NAME = os.getlogin()
-    BCOMPILER_LIBRARY_DATA_DIR = appdirs.user_data_dir("bcompiler-data",
-                                                       USER_NAME)
-    BCOMPILER_LIBRARY_CONFIG_DIR = appdirs.user_config_dir(
-        "bcompiler-data", USER_NAME)
-    BCOMPILER_LIBRARY_CONFIG_FILE = os.path.join(BCOMPILER_LIBRARY_CONFIG_DIR,
-                                                 "config.ini")
+    BCOMPILER_LIBRARY_DATA_DIR = appdirs.user_data_dir("bcompiler-data", USER_NAME)
+    BCOMPILER_LIBRARY_CONFIG_DIR = appdirs.user_config_dir("bcompiler-data", USER_NAME)
+    BCOMPILER_LIBRARY_CONFIG_FILE = os.path.join(
+        BCOMPILER_LIBRARY_CONFIG_DIR, "config.ini"
+    )
     PLATFORM_DOCS_DIR = _platform_docs_dir()
     config_parser = ConfigParser()
-    base_config = textwrap.dedent("""\
+    base_config = textwrap.dedent(
+        """\
     [PATHS]
     document directory = {0}
     input directory = %(document directory)s/input
     output directory =%(document directory)s/output
-    """).format(PLATFORM_DOCS_DIR)
+    """
+    ).format(PLATFORM_DOCS_DIR)
 
     @classmethod
     def initialise(cls) -> None:
@@ -86,11 +84,11 @@ class Config:
 
         # then we need to create the docs directory if it doesn't exist
         try:
-            input_dir = Path(cls.PLATFORM_DOCS_DIR / "input") # type: ignore
+            input_dir = Path(cls.PLATFORM_DOCS_DIR / "input")  # type: ignore
         except TypeError:
             raise TypeError("Unable to detect operating system")
         try:
-            output_dir = Path(cls.PLATFORM_DOCS_DIR / "output") # type: ignore
+            output_dir = Path(cls.PLATFORM_DOCS_DIR / "output")  # type: ignore
         except TypeError:
             raise TypeError("Unable to detect operating system")
         if not input_dir.exists():
