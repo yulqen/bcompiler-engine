@@ -31,32 +31,28 @@ def datamapline_list_objects() -> List[DatamapLine]:
         sheet="Introduction",
         cellref="C11",
         data_type="TEXT",
-        filename=
-        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",  # noqa
+        filename="/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",
     )
     dml2 = DatamapLine(
         key="Department",
         sheet="Introduction",
         cellref="C9",
         data_type="TEXT",
-        filename=
-        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",  # noqa
+        filename="/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",
     )
     dml3 = DatamapLine(
         key="Delivery Body",
         sheet="Introduction",
         cellref="C10",
         data_type="TEXT",
-        filename=
-        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",  # noqa
+        filename="/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",
     )
     dml4 = DatamapLine(
         key="GMPP - IPA ID Number",
         sheet="Introduction",
         cellref="C12",
         data_type="TEXT",
-        filename=
-        "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",  # noqa
+        filename="/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",
     )
     return [dml1, dml2, dml3, dml4]
 
@@ -99,8 +95,7 @@ def datamap() -> str:
 
 @pytest.fixture
 def mock_config(monkeypatch):
-    monkeypatch.setattr(Config, "PLATFORM_DOCS_DIR",
-                        Path("/tmp/Documents/bcompiler"))
+    monkeypatch.setattr(Config, "PLATFORM_DOCS_DIR", Path("/tmp/Documents/bcompiler"))
     yield Config
     try:
         shutil.rmtree(Config.BCOMPILER_LIBRARY_DATA_DIR)
