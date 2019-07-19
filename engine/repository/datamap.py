@@ -9,7 +9,7 @@ from . import Repo
 
 
 class InMemorySingleDatamapRepository(Repo):
-    def __init__(self, directory_path: Path):
+    def __init__(self, directory_path: str):
         super().__init__(directory_path)
 
     def list_as_json(self) -> str:

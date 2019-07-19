@@ -77,7 +77,7 @@ class DatamapFile:
     exception with the file isn't found.
     """
 
-    def __init__(self, filepath: Path) -> None:
+    def __init__(self, filepath: str) -> None:
         "Creates the context manager"
         self.filepath = filepath
 
@@ -101,7 +101,7 @@ class ApplyDatamapToExtraction:
         self.datamap = datamap
 
 
-def datamap_reader(dm_file: Path) -> List[DatamapLine]:
+def datamap_reader(dm_file: str) -> List[DatamapLine]:
     """
     Given a datamap csv file, returns a list of DatamapLine objects.
     """
