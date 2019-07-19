@@ -101,6 +101,9 @@ class ApplyDatamapToExtraction:
         self.repository = repository
         self.datamap = datamap
 
+    def execute(self):
+        pass
+
 
 def datamap_reader(dm_file: str) -> List[DatamapLine]:
     "Given a datamap csv file, returns a list of DatamapLine objects."
@@ -115,7 +118,8 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
                     cellref=_clean(line["cellreference"], is_cellref=True),
                     data_type=_clean(line["type"]),
                     filename=dm_file,
-                ))
+                )
+            )
     return data
 
 
@@ -131,8 +135,7 @@ def template_reader(template_file: Path) -> ExtractedDataType:
     checksum = _hash_single_file(f_path)
     holding = []
     for sheet in workbook.worksheets:
-        logger.info("Processing sheet {} | {}".format(f_path.name,
-                                                      sheet.title))
+        logger.info("Processing sheet {} | {}".format(f_path.name, sheet.title))
         sheet_data = []
         sheet_dict = {}
         for row in sheet.rows:
@@ -145,18 +148,18 @@ def template_reader(template_file: Path) -> ExtractedDataType:
                         if isinstance(cell.value, (float, int)):
                             val = cell.value
                             c_type = DatamapLineValueType.NUMBER
-                        elif isinstance(cell.value,
-                                        (datetime.date, datetime.datetime)):
+                        elif isinstance(cell.value, (datetime.date, datetime.datetime)):
                             val = cell.value.isoformat()
                             c_type = DatamapLineValueType.DATE
                     cellref = f"{cell.column_letter}{cell.row}"
                     if isinstance(template_file, Path):
-                        t_cell = TemplateCell(template_file.as_posix(),
-                                              sheet.title, cellref, val,
-                                              c_type).to_dict()
+                        t_cell = TemplateCell(
+                            template_file.as_posix(), sheet.title, cellref, val, c_type
+                        ).to_dict()
                     else:
-                        t_cell = TemplateCell(template_file, sheet.title,
-                                              cellref, val, c_type).to_dict()
+                        t_cell = TemplateCell(
+                            template_file, sheet.title, cellref, val, c_type
+                        ).to_dict()
                     sheet_data.append(t_cell)
         sheet_dict.update({sheet.title: _extract_cellrefs(sheet_data)})
         holding.append(sheet_dict)

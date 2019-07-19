@@ -88,6 +88,13 @@ def template() -> Path:
 
 
 @pytest.fixture
+def pop_template() -> Path:
+    pth = Path(tempfile.gettempdir()) / "Documents" / "bcompiler"
+    yield pth
+    shutil.rmtree(pth)
+
+
+@pytest.fixture
 def datamap() -> str:
     here = os.path.abspath(os.curdir)
     return os.path.join(here, "tests/resources/datamap.csv")

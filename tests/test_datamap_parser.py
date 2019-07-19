@@ -20,7 +20,7 @@ def test_bad_spacing_in_datamap(datamap):
     assert data[14].key == "Bad Spacing"
     assert data[14].sheet == "Introduction"
     assert data[14].cellref == "C35"
-    assert data[14].data_type == "DATE"
+    assert data[14].data_type == "TEXT"
 
 
 def test_template_reader(template) -> None:
