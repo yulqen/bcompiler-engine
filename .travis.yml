@@ -1,10 +1,12 @@
-dist: xenial
 language: python
-python:
-  - "3.6"
-  - "3.7"
-install:
+matrix:
+  include:
+    - name: "Python 3.6"
+      python: 3.6
+    - name: "Python 3.7"
+      python: 3.7
+      dist: xenial
+before_install:
   - pip install pipenv pytest tox
 script:
-  - tox -e py36
-  - tox -e py37
+  - tox 
