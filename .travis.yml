@@ -8,12 +8,18 @@ matrix:
     - python: 3.6
       env: TOXENV=py36
     - python: 3.6
-      env: TOXENV=flake8
+      env: TOXENV=lint
     - python: 3.6
-      env: TOXENV=mypy
+      env: TOXENV=type
     - python: 3.7
-      env: TOXENV=py37
       dist: xenial
+      env: TOXENV=py37
+    - python: 3.7
+      dist: xenial
+      env: TOXENV=lint
+    - python: 3.7
+      dist: xenial
+      env: TOXENV=type
 install:
   - pip install pipenv pytest tox mypy flake8
 script:
