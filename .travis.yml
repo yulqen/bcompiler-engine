@@ -17,4 +17,4 @@ matrix:
 install:
   - pip install pipenv pytest tox mypy flake8
 script:
-  - ./.travis/run tox 
+  - tox 
