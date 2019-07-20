@@ -1,5 +1,5 @@
 "Entities relating to the datamap."
-from enum import Enum, auto
+from enum import Enum
 from typing import Dict
 
 # pylint: disable=R0903,R0913;
@@ -12,9 +12,9 @@ class DatamapLineValueType(Enum):
     type of data being extracted.
     """
 
-    NUMBER = auto()
-    TEXT = auto()
-    DATE = auto()
+    NUMBER = 1
+    TEXT = 2
+    DATE = 3
 
 
 class DatamapLine:

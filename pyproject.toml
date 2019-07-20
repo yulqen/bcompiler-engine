@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 
 [tool.poetry]
 name = "bcompier-engine"
-version = "0.1.0"
+version = "0.1.1"
 description = "A new, faster, more efficient, more modular back end for datamap tools and  interfaces."
 homepage = "https://github.com/hammerheadlemon/bcompiler-engine"
 repository = "https://github.com/hammerheadlemon/bcompiler-engine"
@@ -26,6 +26,5 @@ pdbpp = "^0.10.0"
 ptipython = "^1.0.1"
 flake8 = "^3.7.7"
 flake8-comprehensions = "^2.1.0"
-flake8-mypy = "^17.3.4"
 black = "^19.3.b0"
 mypy = "^0.711"

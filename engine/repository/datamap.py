@@ -4,12 +4,11 @@ from typing import List
 from ..domain.datamap import DatamapLine
 from ..serializers.datamap import DatamapEncoder
 from ..use_cases.parsing import datamap_reader
-from . import Repo
 
 
-class InMemorySingleDatamapRepository(Repo):
+class InMemorySingleDatamapRepository:
     def __init__(self, directory_path: str):
-        super().__init__(directory_path)
+        self.directory_path = directory_path
 
     def list_as_json(self) -> str:
         "Return list of DatamapLine objects parsed from filepath as json."

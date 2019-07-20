@@ -2,10 +2,13 @@ import json
 import shutil
 from pathlib import Path
 
+import pytest
+
 from engine.config import Config
 from engine.repository.templates import (FSPopulatedTemplatesRepo,
                                          InMemoryPopulatedTemplatesRepository)
-from engine.use_cases.parsing import (ApplyDatamapToExtraction, DatamapFile,
+from engine.use_cases.parsing import (ApplyDatamapToExtractionUseCase,
+                                      DatamapFile,
                                       ParsePopulatedTemplatesUseCase)
 
 
@@ -34,15 +37,17 @@ def test_query_data_from_data_file(
     )
 
 
+@pytest.mark.skip("Not ready")
 def test_datamap_applied_to_extracted_data_returns_a_generator(
     mock_config, datamap, pop_template
-):
+) -> None:
     mock_config.initialise()
     shutil.copy2(
         Path.cwd() / "tests/resources/pop_template_for_datamap_test.xlsm",
         Config.PLATFORM_DOCS_DIR / "input",
     )
-    repo = FSPopulatedTemplatesRepo(mock_config.PLATFORM_DOCS_DIR)
+    repo = FSPopulatedTemplatesRepo(mock_config.PLATFORM_DOCS_DIR / "input")
     datamap_file = DatamapFile(datamap)
-    apply_datamap_uc = ApplyDatamapToExtraction(repo, datamap_file)
-    result = apply_datamap_uc.execute()
+    apply_datamap_uc = ApplyDatamapToExtractionUseCase(repo, datamap_file)
+    result = apply_datamap_uc.return_iterator()
+    assert next(result["pop_template_for_datamap_test.xlsm"]["Information"]) == "Lighting Department"

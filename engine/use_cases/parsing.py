@@ -38,7 +38,7 @@ import datetime
 import logging
 from concurrent import futures
 from pathlib import Path
-from typing import IO, TYPE_CHECKING, Any, Dict, List
+from typing import IO, TYPE_CHECKING, Any, Dict, Iterator, List
 
 from openpyxl import load_workbook
 
@@ -47,20 +47,34 @@ from engine.domain.template import TemplateCell
 from engine.utils.extraction import (_clean, _extract_cellrefs,
                                      _hash_single_file)
 
+#if TYPE_CHECKING:
+#    from engine.repository.templates import (FSPopulatedTemplatesRepo,
+#                                            InMemoryPopulatedTemplatesRepository)
+
 # pylint: disable=R0903,R0913;
 
 logger = logging.getLogger(__name__)
 logger.setLevel("INFO")
 
-if TYPE_CHECKING:
-    from engine.repository.templates import Repo
+#Repo = Union[FSPopulatedTemplatesRepo, InMemoryPopulatedTemplatesRepository]
+
+
+class ApplyDatamapToExtractionUseCase:
+    "Extract data from a bunch of spreadsheets, but filter based on a datamap."
+
+    def __init__(self, repository, datamap: "DatamapFile") -> None:
+        self.repo = repository
+        self.datamap = datamap
+
+    def return_iterator(self, filename: str, sheetname: str) -> Iterator[Dict[str, Any]]:
+        return self.repo.return_iterator(filename, sheetname)
 
 
 class ParsePopulatedTemplatesUseCase:
     def __init__(self, repo: "Repo"):
         self.repo = repo
 
-    def execute(self) -> str:  # type: ignore
+    def execute(self) -> str:
         return self.repo.list_as_json()
 
 
@@ -94,17 +108,6 @@ class DatamapFile:
         self.f_obj.close()
 
 
-class ApplyDatamapToExtraction:
-    "Extract data from a bunch of spreadsheets, but filter based on a datamap."
-
-    def __init__(self, repository: "Repo", datamap: DatamapFile):
-        self.repository = repository
-        self.datamap = datamap
-
-    def execute(self):
-        pass
-
-
 def datamap_reader(dm_file: str) -> List[DatamapLine]:
     "Given a datamap csv file, returns a list of DatamapLine objects."
     data = []
@@ -128,7 +131,7 @@ ExtractedDataType = Dict[str, Dict[str, Dict[str, str]]]
 
 def template_reader(template_file: Path) -> ExtractedDataType:
     "Given a populated xlsx file, returns all data in a list of TemplateCell objects."
-    inner_dict: dict = {"data": {}}
+    inner_dict = {"data": {}} # type: dict
     f_path = Path(template_file)
     logger.info("Extracting from: {}".format(f_path.name))
     workbook = load_workbook(template_file, data_only=True)
@@ -151,7 +154,7 @@ def template_reader(template_file: Path) -> ExtractedDataType:
                         elif isinstance(cell.value, (datetime.date, datetime.datetime)):
                             val = cell.value.isoformat()
                             c_type = DatamapLineValueType.DATE
-                    cellref = f"{cell.column_letter}{cell.row}"
+                    cellref = "{}{}".format(cell.column_letter, cell.row)
                     if isinstance(template_file, Path):
                         t_cell = TemplateCell(
                             template_file.as_posix(), sheet.title, cellref, val, c_type
