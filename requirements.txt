@@ -1,2 +1,0 @@
-appdirs==1.4.3
-openpyxl==2.6.2
