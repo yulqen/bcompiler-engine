@@ -3,7 +3,7 @@ import hashlib
 import os
 from itertools import groupby
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Dict, List
 
 from engine.domain.template import TemplateCell
 
@@ -19,8 +19,8 @@ def _get_xlsx_files(directory: str) -> List[Path]:
     return output
 
 
-def _get_cell_data(filepath: Path, data: Dict[Any, Any], sheet_name: str,
-                   cellref: str) -> Dict[str, str]:
+def _get_cell_data(filepath: Path, data, sheet_name: str,
+                   cellref: str):
     """Given a Path and a dict of data - and a sheet name, AND a cellref..
 
     Return:
@@ -50,7 +50,7 @@ def _extract_sheets(lst_of_tcs: List[TemplateCell]
     return output
 
 
-def _extract_cellrefs(lst_of_tcs) -> Dict[str, dict]:
+def _extract_cellrefs(lst_of_tcs):
     """Extract value from TemplateCell.cellref for each TemplateCell in a list to group them.
 
     When given a list of TemplateCell objects, this function extracts each TemplateCell
@@ -70,7 +70,7 @@ def _extract_cellrefs(lst_of_tcs) -> Dict[str, dict]:
         Dictionary whose key is the cellref and value is the TemplateCell that contains it.
 
     """
-    output: Dict[str, dict] = {}
+    output = {}
     data = sorted(lst_of_tcs, key=lambda x: x["cellref"])
     for k, group in groupby(data, key=lambda x: x["cellref"]):
         result = list(group)

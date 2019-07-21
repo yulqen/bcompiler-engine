@@ -38,7 +38,7 @@ import datetime
 import logging
 from concurrent import futures
 from pathlib import Path
-from typing import IO, TYPE_CHECKING, Any, Dict, Iterator, List
+from typing import IO, List
 
 from openpyxl import load_workbook
 
@@ -47,16 +47,10 @@ from engine.domain.template import TemplateCell
 from engine.utils.extraction import (_clean, _extract_cellrefs,
                                      _hash_single_file)
 
-#if TYPE_CHECKING:
-#    from engine.repository.templates import (FSPopulatedTemplatesRepo,
-#                                            InMemoryPopulatedTemplatesRepository)
-
 # pylint: disable=R0903,R0913;
 
 logger = logging.getLogger(__name__)
 logger.setLevel("INFO")
-
-#Repo = Union[FSPopulatedTemplatesRepo, InMemoryPopulatedTemplatesRepository]
 
 
 class ApplyDatamapToExtractionUseCase:
@@ -66,23 +60,20 @@ class ApplyDatamapToExtractionUseCase:
         self.repo = repository
         self.datamap = datamap
 
-    def return_iterator(self, filename: str, sheetname: str) -> Iterator[Dict[str, Any]]:
-        return self.repo.return_iterator(filename, sheetname)
-
 
 class ParsePopulatedTemplatesUseCase:
-    def __init__(self, repo: "Repo"):
+    def __init__(self, repo):
         self.repo = repo
 
-    def execute(self) -> str:
+    def execute(self):
         return self.repo.list_as_json()
 
 
 class ParseDatamapUseCase:
-    def __init__(self, repo: "Repo"):
+    def __init__(self, repo):
         self.repo = repo
 
-    def execute(self) -> str:
+    def execute(self):
         return self.repo.list_as_json()
 
 
@@ -126,12 +117,11 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
     return data
 
 
-ExtractedDataType = Dict[str, Dict[str, Dict[str, str]]]
 
 
-def template_reader(template_file: Path) -> ExtractedDataType:
+def template_reader(template_file):
     "Given a populated xlsx file, returns all data in a list of TemplateCell objects."
-    inner_dict = {"data": {}} # type: dict
+    inner_dict = {"data": {}}
     f_path = Path(template_file)
     logger.info("Extracting from: {}".format(f_path.name))
     workbook = load_workbook(template_file, data_only=True)
@@ -181,9 +171,9 @@ def template_reader(template_file: Path) -> ExtractedDataType:
 #    return data
 
 
-def extract_from_multiple_xlsx_files(xlsx_files: List[Path]) -> Dict[Any, Any]:
+def extract_from_multiple_xlsx_files(xlsx_files):
     "Extract raw data from list of paths to excel files. Return as complex dictionary."
-    data: Dict[Any, Any] = {}
+    data = {}
     with futures.ProcessPoolExecutor() as pool:
         for file in pool.map(template_reader, xlsx_files):
             data.update(file)

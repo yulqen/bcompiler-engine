@@ -1,6 +1,5 @@
 import json
 import os
-from typing import TYPE_CHECKING, Any, Dict, Iterator
 
 from engine.use_cases.parsing import \
     extract_from_multiple_xlsx_files as extract
@@ -8,20 +7,17 @@ from engine.utils.extraction import _get_xlsx_files
 
 from ..config import Config
 
-if TYPE_CHECKING:
-    from engine.use_cases.parsing import DatamapFile
-
 
 class FSPopulatedTemplatesRepo:
     "A repo that is based on a single data file in the .bcompiler-engine directory."
 
-    def __init__(self, directory_path: str, datamap: "DatamapFile" = None) -> None:
+    def __init__(self, directory_path: str):
         self.directory_path = directory_path
 
-    def return_iterator(self, filename: str, sheetname: str) -> Iterator[Dict[str, Any]]:
+    def return_iterator(self, filename: str, sheetname: str):
         pass
 
-    def apply_datamap(self, datamap: "DatamapFile" = None) -> str:
+    def apply_datamap(self, datamap):
         "Use a datamap to filter the output from data extracted from a repo."
         try:
             return self.list_as_json()
@@ -44,7 +40,7 @@ class FSPopulatedTemplatesRepo:
 class InMemoryPopulatedTemplatesRepository:
     "A repo that does no data file reading or writing - just parsing from excel files."
 
-    def __init__(self, directory_path: str, datamap: "DatamapFile" = None) -> None:
+    def __init__(self, directory_path: str) -> None:
         self.directory_path = directory_path
 
     def list_as_json(self) -> str:
