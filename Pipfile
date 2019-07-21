@@ -4,10 +4,12 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pytest = "==5.0.1"
-flake8 = "==3.7.8"
-mypy = "==0.711"
+pytest = "*"
+flake8 = "*"
+mypy = "*"
 tox = "*"
+pdbpp = "*"
+ptipython = "*"
 
 [packages]
 appdirs = "*"
