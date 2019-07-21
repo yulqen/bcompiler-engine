@@ -14,17 +14,6 @@ class FSPopulatedTemplatesRepo:
     def __init__(self, directory_path: str):
         self.directory_path = directory_path
 
-    def return_iterator(self, filename: str, sheetname: str):
-        pass
-
-    def apply_datamap(self, datamap):
-        "Use a datamap to filter the output from data extracted from a repo."
-        try:
-            return self.list_as_json()
-        except FileNotFoundError:
-            excel_files = _get_xlsx_files(self.directory_path)
-            data = extract(excel_files)
-            return data
 
     def list_as_json(self) -> str:
         "Try to open the data file containing populated data as json."
