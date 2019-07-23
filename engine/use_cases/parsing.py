@@ -49,6 +49,7 @@ from engine.utils.extraction import (_clean, _extract_cellrefs,
 
 # pylint: disable=R0903,R0913;
 
+
 logger = logging.getLogger(__name__)
 logger.setLevel("INFO")
 
@@ -115,8 +116,6 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
                 )
             )
     return data
-
-
 
 
 def template_reader(template_file):

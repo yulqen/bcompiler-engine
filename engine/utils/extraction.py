@@ -10,7 +10,7 @@ from engine.domain.template import TemplateCell
 
 FILE_DATA = Dict[str, Union[str, Dict[str, Dict[str, str]]]]
 DAT_DATA = Dict[str, FILE_DATA]
-SHEET_DATA = List[Dict[str, str]]
+SHEET_DATA_IN_LST = List[Dict[str, str]]
 
 
 def _check_file_in_datafile(spreadsheet_file: Path, data_file: Path) -> bool:
@@ -81,7 +81,7 @@ def _extract_sheets(lst_of_tcs: List[TemplateCell]) -> Dict[str, List[TemplateCe
     return output
 
 
-def _extract_cellrefs(lst_of_tcs: SHEET_DATA):
+def _extract_cellrefs(lst_of_tcs: SHEET_DATA_IN_LST):
     """Extract value from TemplateCell.cellref for each TemplateCell in a list to group them.
 
     When given a list of TemplateCell objects, this function extracts each TemplateCell
