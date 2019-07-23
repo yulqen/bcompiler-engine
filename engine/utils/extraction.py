@@ -10,10 +10,22 @@ from engine.domain.template import TemplateCell
 
 
 def check_file_in_datafile(spreadsheet_file, data_file):
+    """Given a spreadsheet file, checks whether its data is already contained in a data file.
+
+    Raises KeyError if file not found.
+    """
     f_checksum = _hash_single_file(spreadsheet_file)
     with open(data_file, encoding="utf-8") as f:
-        data = json.load(f)[spreadsheet_file.name]
-        return data["checksum"] == f_checksum
+        data = json.load(f)
+        try:
+            f_data = data[spreadsheet_file.name]
+            return f_data["checksum"] == f_checksum
+        except KeyError:
+            raise KeyError(
+                "Data from {} is not contained in {}".format(
+                    spreadsheet_file.name, data_file.name
+                )
+            )
 
 
 def _get_xlsx_files(directory: str) -> List[Path]:
@@ -27,8 +39,7 @@ def _get_xlsx_files(directory: str) -> List[Path]:
     return output
 
 
-def _get_cell_data(filepath: Path, data, sheet_name: str,
-                   cellref: str):
+def _get_cell_data(filepath: Path, data, sheet_name: str, cellref: str):
     """Given a Path and a dict of data - and a sheet name, AND a cellref..
 
     Return:
@@ -48,8 +59,7 @@ def _clean(target_str: str, is_cellref: bool = False) -> str:
     return output_str
 
 
-def _extract_sheets(lst_of_tcs: List[TemplateCell]
-                    ) -> Dict[str, List[TemplateCell]]:
+def _extract_sheets(lst_of_tcs: List[TemplateCell]) -> Dict[str, List[TemplateCell]]:
     "Given a list of TemplateCell objects, returns the list but as a dict sorted by its sheet_name"
     output: Dict[str, List[TemplateCell]] = {}
     data = sorted(lst_of_tcs, key=lambda x: x.sheet_name)
@@ -58,7 +68,7 @@ def _extract_sheets(lst_of_tcs: List[TemplateCell]
     return output
 
 
-def _extract_cellrefs(lst_of_tcs: List[TemplateCell]):
+def _extract_cellrefs(lst_of_tcs):
     """Extract value from TemplateCell.cellref for each TemplateCell in a list to group them.
 
     When given a list of TemplateCell objects, this function extracts each TemplateCell
@@ -84,7 +94,8 @@ def _extract_cellrefs(lst_of_tcs: List[TemplateCell]):
         result = list(group)
         if len(result) > 1:
             raise RuntimeError(
-                f"Found duplicate sheet/cellref item when extracting keys.")
+                f"Found duplicate sheet/cellref item when extracting keys."
+            )
         result = result[0]
         output.update({k: result})
     return output

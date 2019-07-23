@@ -57,13 +57,24 @@ def datamapline_list_objects() -> List[DatamapLine]:
 
 @pytest.fixture
 def dat_file() -> Path:
+    """A data file containing data from a single spreadsheet.
+
+    Uses the data from spreadsheet_same_data_as_dat_file() below
+    """
     here = os.path.abspath(os.curdir)
     return Path(os.path.join(here, "tests/resources/extracted_data.dat"))
 
 
 @pytest.fixture
 def spreadsheet_same_data_as_dat_file():
+    "A spreadsheet file containing data that is mirrored in dat_file() above"
     return Path(Path.cwd() / "tests/resources/test_dat_file_use_case.xlsx")
+
+
+@pytest.fixture
+def spreadsheet_one_cell_different_data_than_dat_file():
+    "Same as spreadsheet_same_data_as_dat_file() but with cellref newsheet/B5 different"
+    return Path(Path.cwd() / "tests/resources/test_data_file_use_case_diff_data_from_dat_file.xlsx")
 
 
 @pytest.fixture

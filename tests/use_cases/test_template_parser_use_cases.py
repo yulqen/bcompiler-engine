@@ -1,6 +1,8 @@
 import json
 import shutil
 
+import pytest
+
 from engine.repository.templates import (FSPopulatedTemplatesRepo,
                                          InMemoryPopulatedTemplatesRepository)
 from engine.use_cases.parsing import ParsePopulatedTemplatesUseCase
@@ -62,7 +64,19 @@ def ensure_data_and_populate_file(config, dat_file, spreadsheet_file) -> None:
 def test_file_data_is_in_dat_file(mock_config, dat_file, spreadsheet_same_data_as_dat_file):
     """Before we do any data extraction from files, we need to check out dat file.
     """
-
     mock_config.initialise()
     ensure_data_and_populate_file(mock_config, dat_file, spreadsheet_same_data_as_dat_file)
     assert check_file_in_datafile(spreadsheet_same_data_as_dat_file, dat_file)
+
+
+def test_file_data_not_in_data_returns_exception(mock_config, dat_file, spreadsheet_one_cell_different_data_than_dat_file):
+    """Before we do any data extraction from files, we need to check out dat file.
+
+    If file data is not contained in the dat file, we need to know about it by getting a False return.
+    """
+    mock_config.initialise()
+    ensure_data_and_populate_file(mock_config, dat_file, spreadsheet_one_cell_different_data_than_dat_file)
+    with pytest.raises(KeyError) as excinfo:
+        check_file_in_datafile(spreadsheet_one_cell_different_data_than_dat_file, dat_file)
+    exception_msg = excinfo.value.args[0]
+    assert exception_msg == "Data from test_data_file_use_case_diff_data_from_dat_file.xlsx is not contained in extracted_data.dat"
