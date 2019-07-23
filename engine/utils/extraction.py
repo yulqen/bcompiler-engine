@@ -16,7 +16,9 @@ SHEET_DATA = List[Dict[str, str]]
 def _check_file_in_datafile(spreadsheet_file: Path, data_file: Path) -> bool:
     """Given a spreadsheet file, checks whether its data is already contained in a data file.
 
-    Raises KeyError if file not found in data file.
+    - Raises KeyError if file not found in data file.
+
+    - Raises FileNotFoundError if either the spreadsheet_file or data_file files cannot be found.
     """
     # expect the params to be Paths, so we convert
     spreadsheet_file = Path(spreadsheet_file)
