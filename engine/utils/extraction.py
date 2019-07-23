@@ -13,12 +13,22 @@ DAT_DATA = Dict[str, FILE_DATA]
 SHEET_DATA = List[Dict[str, str]]
 
 
-def check_file_in_datafile(spreadsheet_file, data_file) -> bool:
+def _check_file_in_datafile(spreadsheet_file: Path, data_file: Path) -> bool:
     """Given a spreadsheet file, checks whether its data is already contained in a data file.
 
-    Raises KeyError if file not found.
+    Raises KeyError if file not found in data file.
     """
-    f_checksum = _hash_single_file(spreadsheet_file)
+    # expect the params to be Paths, so we convert
+    spreadsheet_file = Path(spreadsheet_file)
+    data_file = Path(data_file)
+    if not spreadsheet_file.is_file():
+        raise FileNotFoundError("Cannot find {}".format(str(spreadsheet_file)))
+    if not data_file.is_file():
+        raise FileNotFoundError("Cannot find {}".format(str(data_file)))
+    try:
+        f_checksum = _hash_single_file(spreadsheet_file)
+    except FileNotFoundError:
+        raise
     with open(data_file, encoding="utf-8") as f:
         data: DAT_DATA = json.load(f)
         try:
@@ -106,9 +116,20 @@ def _extract_cellrefs(lst_of_tcs: SHEET_DATA):
 
 
 def _hash_single_file(filepath: Path) -> str:
-    "Return a checksum for a given file at Path"
-    if not filepath.is_file():
-        raise RuntimeError(f"Cannot checksum {filepath}")
+    """Return a checksum for a given file at Path.
+
+    Returns checksum string.
+
+    Raises FileNotFoundError if cannot find filepath.
+    """
+    # if we're given a str, we convert
+    filepath = Path(filepath)
+    try:
+        filepath.is_file()
+    except FileNotFoundError:
+        raise FileNotFoundError(
+            "Cannot find {} in order to calculate checksum".format(filepath)
+        )
     hash_obj = hashlib.md5(open(filepath, "rb").read())
     return hash_obj.digest().hex()
 

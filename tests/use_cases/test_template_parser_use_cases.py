@@ -6,7 +6,7 @@ import pytest
 from engine.repository.templates import (FSPopulatedTemplatesRepo,
                                          InMemoryPopulatedTemplatesRepository)
 from engine.use_cases.parsing import ParsePopulatedTemplatesUseCase
-from engine.utils.extraction import check_file_in_datafile
+from engine.utils.extraction import _check_file_in_datafile
 
 
 def test_template_parser_use_case(resources):
@@ -66,7 +66,28 @@ def test_file_data_is_in_dat_file(mock_config, dat_file, spreadsheet_same_data_a
     """
     mock_config.initialise()
     ensure_data_and_populate_file(mock_config, dat_file, spreadsheet_same_data_as_dat_file)
-    assert check_file_in_datafile(spreadsheet_same_data_as_dat_file, dat_file)
+    assert _check_file_in_datafile(spreadsheet_same_data_as_dat_file, dat_file)
+
+
+def test_file_data_is_in_dat_file_works_with_str_params(mock_config, dat_file, spreadsheet_same_data_as_dat_file):
+    """Before we do any data extraction from files, we need to check out dat file.
+    """
+    mock_config.initialise()
+    ensure_data_and_populate_file(mock_config, dat_file, spreadsheet_same_data_as_dat_file)
+    assert _check_file_in_datafile(str(spreadsheet_same_data_as_dat_file), str(dat_file))
+
+
+def test_if_data_file_and_spreadsheet_file_dont_exist():
+    with pytest.raises(FileNotFoundError) as exinfo:
+        _check_file_in_datafile("no_spreadsheet_file.xlsx", "no_dat_file.xlsx")
+    msg = exinfo.value.args[0]
+    assert "Cannot find" in msg
+
+
+def test_file_data_is_in_data_file__but_spreadsheet_file_doesnt_exist(mock_config, dat_file):
+    mock_config.initialise()
+    with pytest.raises(FileNotFoundError):
+        _check_file_in_datafile("/home/non-existant-file.txt", dat_file)
 
 
 def test_file_data_not_in_data_returns_exception(mock_config, dat_file, spreadsheet_one_cell_different_data_than_dat_file):
@@ -77,6 +98,6 @@ def test_file_data_not_in_data_returns_exception(mock_config, dat_file, spreadsh
     mock_config.initialise()
     ensure_data_and_populate_file(mock_config, dat_file, spreadsheet_one_cell_different_data_than_dat_file)
     with pytest.raises(KeyError) as excinfo:
-        check_file_in_datafile(spreadsheet_one_cell_different_data_than_dat_file, dat_file)
+        _check_file_in_datafile(spreadsheet_one_cell_different_data_than_dat_file, dat_file)
     exception_msg = excinfo.value.args[0]
     assert exception_msg == "Data from test_data_file_use_case_diff_data_from_dat_file.xlsx is not contained in extracted_data.dat"
