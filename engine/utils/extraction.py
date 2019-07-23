@@ -4,21 +4,25 @@ import json
 import os
 from itertools import groupby
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from engine.domain.template import TemplateCell
 
+FILE_DATA = Dict[str, Union[str, Dict[str, Dict[str, str]]]]
+DAT_DATA = Dict[str, FILE_DATA]
+SHEET_DATA = List[Dict[str, str]]
 
-def check_file_in_datafile(spreadsheet_file, data_file):
+
+def check_file_in_datafile(spreadsheet_file, data_file) -> bool:
     """Given a spreadsheet file, checks whether its data is already contained in a data file.
 
     Raises KeyError if file not found.
     """
     f_checksum = _hash_single_file(spreadsheet_file)
     with open(data_file, encoding="utf-8") as f:
-        data = json.load(f)
+        data: DAT_DATA = json.load(f)
         try:
-            f_data = data[spreadsheet_file.name]
+            f_data: FILE_DATA = data[spreadsheet_file.name]
             return f_data["checksum"] == f_checksum
         except KeyError:
             raise KeyError(
@@ -68,7 +72,7 @@ def _extract_sheets(lst_of_tcs: List[TemplateCell]) -> Dict[str, List[TemplateCe
     return output
 
 
-def _extract_cellrefs(lst_of_tcs):
+def _extract_cellrefs(lst_of_tcs: SHEET_DATA):
     """Extract value from TemplateCell.cellref for each TemplateCell in a list to group them.
 
     When given a list of TemplateCell objects, this function extracts each TemplateCell
@@ -91,13 +95,13 @@ def _extract_cellrefs(lst_of_tcs):
     output = {}
     data = sorted(lst_of_tcs, key=lambda x: x["cellref"])
     for k, group in groupby(data, key=lambda x: x["cellref"]):
-        result = list(group)
-        if len(result) > 1:
+        result_lst = list(group)
+        if len(result_lst) > 1:
             raise RuntimeError(
                 f"Found duplicate sheet/cellref item when extracting keys."
             )
-        result = result[0]
-        output.update({k: result})
+        result_item = result_lst[0]
+        output.update({k: result_item})
     return output
 
 
