@@ -1,5 +1,6 @@
 import fnmatch
 import hashlib
+import json
 import os
 from itertools import groupby
 from pathlib import Path
@@ -9,7 +10,10 @@ from engine.domain.template import TemplateCell
 
 
 def check_file_in_datafile(spreadsheet_file, data_file):
-    pass
+    f_checksum = _hash_single_file(spreadsheet_file)
+    with open(data_file, encoding="utf-8") as f:
+        data = json.load(f)[spreadsheet_file.name]
+        return data["checksum"] == f_checksum
 
 
 def _get_xlsx_files(directory: str) -> List[Path]:

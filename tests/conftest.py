@@ -1,5 +1,3 @@
-# type: ignore
-
 import os
 import shutil
 import tempfile
@@ -109,13 +107,3 @@ def mock_config(monkeypatch):
         shutil.rmtree(Config.BCOMPILER_LIBRARY_CONFIG_DIR)
     except FileNotFoundError:
         pass
-
-
-@pytest.fixture
-def mock_config_subclassed():
-    class TestApplicationConfig(Config):
-        """This is created in the application and passed to the library."""
-
-        prove = "TestApplicationConfig set"
-
-    yield TestApplicationConfig
