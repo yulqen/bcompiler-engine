@@ -1,5 +1,7 @@
 import platform
 from pathlib import Path
+
+
 """
 Initialising directories and files for use by the application.
 
@@ -16,7 +18,6 @@ def test_basic_config_variables(mock_config):
             Path.home() / ".config/bcompiler-data")
         assert Path(mock_config.BCOMPILER_LIBRARY_CONFIG_FILE) == Path(
             Path.home() / ".config/bcompiler-data/config.ini")
-    ## TODO write tests for Windows and Mac here
 
     # Test first that none of these paths exist
     assert not Path(mock_config.BCOMPILER_LIBRARY_DATA_DIR).exists()

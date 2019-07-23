@@ -1,3 +1,5 @@
 *.~lock*
 .vscode/*
 .pytest_cache/
+htmlcov/*
+pip-wheel-metadata/*

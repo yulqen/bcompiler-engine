@@ -8,6 +8,10 @@ from typing import Dict, List
 from engine.domain.template import TemplateCell
 
 
+def check_file_in_datafile(spreadsheet_file, data_file):
+    pass
+
+
 def _get_xlsx_files(directory: str) -> List[Path]:
     "Return a list of Path objects for each xlsx file in directory, or raise an exception."
     output = []
@@ -50,7 +54,7 @@ def _extract_sheets(lst_of_tcs: List[TemplateCell]
     return output
 
 
-def _extract_cellrefs(lst_of_tcs):
+def _extract_cellrefs(lst_of_tcs: List[TemplateCell]):
     """Extract value from TemplateCell.cellref for each TemplateCell in a list to group them.
 
     When given a list of TemplateCell objects, this function extracts each TemplateCell

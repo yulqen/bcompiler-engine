@@ -12,7 +12,11 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/hammerheadlemon/bcompiler-engine",
-    packages=setuptools.find_packages(),
+    packages=["engine"],
+    install_requires=[
+        "openpyxl",
+        "appdirs"
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "Environment :: Console",
