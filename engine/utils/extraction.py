@@ -25,10 +25,7 @@ def _check_file_in_datafile(spreadsheet_file: Path, data_file: Path) -> bool:
         raise FileNotFoundError("Cannot find {}".format(str(spreadsheet_file)))
     if not data_file.is_file():
         raise FileNotFoundError("Cannot find {}".format(str(data_file)))
-    try:
-        f_checksum = _hash_single_file(spreadsheet_file)
-    except FileNotFoundError:
-        raise
+    f_checksum = _hash_single_file(spreadsheet_file)
     with open(data_file, encoding="utf-8") as f:
         data: DAT_DATA = json.load(f)
         try:
