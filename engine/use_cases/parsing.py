@@ -44,8 +44,8 @@ from openpyxl import load_workbook
 
 from engine.domain.datamap import DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
-from engine.utils.extraction import (_clean, _extract_cellrefs,
-                                     _hash_single_file)
+from engine.utils.extraction import (_clean, _comb_with_datamap,
+                                     _extract_cellrefs, _hash_single_file)
 
 # pylint: disable=R0903,R0913;
 
@@ -54,20 +54,30 @@ logger = logging.getLogger(__name__)
 logger.setLevel("INFO")
 
 
-class ApplyDatamapToExtractionUseCase:
-    "Extract data from a bunch of spreadsheets, but filter based on a datamap."
-
-    def __init__(self, repository, datamap: "DatamapFile") -> None:
-        self.repo = repository
-        self.datamap = datamap
-
-
 class ParsePopulatedTemplatesUseCase:
     def __init__(self, repo):
         self.repo = repo
 
     def execute(self):
         return self.repo.list_as_json()
+
+
+class ApplyDatamapToExtractionUseCase:
+    "Extract data from a bunch of spreadsheets, but filter based on a datamap."
+
+    def __init__(self, datamap_repo, template_repo) -> None:
+        self.datamap_repo = datamap_repo
+        self.template_repo = template_repo
+
+
+    def query_key(self, filename, key, sheet):
+        t_uc = ParsePopulatedTemplatesUseCase(self.template_repo)
+        d_uc = ParseDatamapUseCase(self.datamap_repo)
+        template_data = t_uc.execute()
+        datamap_data = d_uc.execute()
+        return _comb_with_datamap(filename, template_data, datamap_data, key, sheet)
+
+
 
 
 class ParseDatamapUseCase:

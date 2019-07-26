@@ -84,7 +84,7 @@ def resources() -> Path:
 
 
 @pytest.fixture
-def doc_directory() -> Generator:
+def doc_directory():
     pth = Path(tempfile.gettempdir()) / "Documents" / "bcompiler"
     yield pth
     shutil.rmtree(pth)

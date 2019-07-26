@@ -1,11 +1,14 @@
 import json
 import shutil
+from pathlib import Path
 
 import pytest
 
+from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.templates import (FSPopulatedTemplatesRepo,
                                          InMemoryPopulatedTemplatesRepository)
-from engine.use_cases.parsing import ParsePopulatedTemplatesUseCase
+from engine.use_cases.parsing import (ApplyDatamapToExtractionUseCase,
+                                      ParsePopulatedTemplatesUseCase)
 from engine.utils.extraction import _check_file_in_datafile
 
 
@@ -34,7 +37,18 @@ def test_query_data_from_data_file(
     )
 
 
-def test_datamap_applied_to_extracted_data_returns_a_generator():
+def test_in_memory_datamap_application_to_extracted_data(mock_config, doc_directory, datamap, template):
+    mock_config.initialise()
+    shutil.copy2(template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    tmpl_repo = InMemoryPopulatedTemplatesRepository(mock_config.PLATFORM_DOCS_DIR / "input")
+    dm_repo = InMemorySingleDatamapRepository(datamap)
+    uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
+    query_result = uc.query_key("test_template.xlsx", "String Key", "Summary")
+    assert query_result == "This is a string"
+
+
+@pytest.mark.skip("This is for FS process - we want to do in mem first")
+def test_datamap_applied_to_extracted_data_returns_expected_value(mock_config, datamap, resources):
     """The use case needs to apply the datamap to the data returned from a repo.
 
     The repository is on the access layer of this library. The UI application
