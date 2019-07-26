@@ -56,7 +56,6 @@ logger.setLevel("INFO")
 
 
 class ParsePopulatedTemplatesUseCase:
-
     def __init__(self, repo):
         self.repo = repo
 
@@ -68,8 +67,10 @@ class ApplyDatamapToExtractionUseCase:
     "Extract data from a bunch of spreadsheets, but filter based on a datamap."
 
     def __init__(self, datamap_repo, template_repo) -> None:
-        self.datamap_repo = datamap_repo
-        self.template_repo = template_repo
+        self._datamap_repo = datamap_repo
+        self._template_repo = template_repo
+        self._template_data = {}  # type: ignore
+        self._datamap_data = []  # type: ignore
 
     def _comb_with_datamap(self, filename, template_data, datamap_data, key, sheet):
         """Given a filename, a template_data json str, a datamap_data dict, key and sheet, returns
@@ -77,29 +78,48 @@ class ApplyDatamapToExtractionUseCase:
         """
         _data_lst = json.loads(datamap_data)
         if key not in [x["key"] for x in _data_lst]:
-            raise KeyError("No key \"{}\" in datamap".format(key))
+            raise KeyError('No key "{}" in datamap'.format(key))
         if sheet not in [x["sheet"] for x in _data_lst]:
-            raise KeyError("No sheet \"{}\" in datamap".format(sheet))
-        _target_cellref = [x["cellref"] for x in _data_lst if x["key"] == key and x["sheet"] == sheet]
+            raise KeyError('No sheet "{}" in datamap'.format(sheet))
+        _target_cellref = [
+            x["cellref"] for x in _data_lst if x["key"] == key and x["sheet"] == sheet
+        ]
         _cellref = _target_cellref[0]
         return json.loads(template_data)[filename]["data"][sheet][_cellref]["value"]
 
+    def _get_datamap_and_template_data(self) -> None:
+        "Does the work of creating the template_data and datamap_data attributes"
+        t_uc = ParsePopulatedTemplatesUseCase(self._template_repo)
+        d_uc = ParseDatamapUseCase(self._datamap_repo)
+        self._template_data = t_uc.execute()
+        self._datamap_data = d_uc.execute()
+
+    def _take_value(self):
+        pass
+
+    def get_values(self, as_obj=False):
+        if self._template_data is not True and self._datamap_data is not True:
+            self._get_datamap_and_template_data()
+        for _file_name in json.loads(self._template_data):
+            for _dml in json.loads(self._datamap_data):
+                val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
+                yield {
+                    (_file_name, _dml["sheet"], _dml["cellref"]): val
+                }
 
     def query_key(self, filename, key, sheet):
         """Given a filename, key and sheet, raises the value in the spreadsheet.
 
         Raises KeyError if any of filename, key and sheet are not in the datamap.
         """
-        t_uc = ParsePopulatedTemplatesUseCase(self.template_repo)
-        d_uc = ParseDatamapUseCase(self.datamap_repo)
-        template_data = t_uc.execute()
-        datamap_data = d_uc.execute()
+        if self._template_data is not True and self._datamap_data is not True:
+            self._get_datamap_and_template_data()
         try:
-            return self._comb_with_datamap(filename, template_data, datamap_data, key, sheet)
+            return self._comb_with_datamap(
+                filename, self._template_data, self._datamap_data, key, sheet
+            )
         except KeyError:
             raise
-
-
 
 
 class ParseDatamapUseCase:

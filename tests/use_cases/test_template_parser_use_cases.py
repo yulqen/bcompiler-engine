@@ -1,3 +1,4 @@
+import datetime
 import json
 import shutil
 from pathlib import Path
@@ -60,6 +61,21 @@ def test_in_memory_datamap_application_to_extracted_data_raises_exception(mock_c
     with pytest.raises(KeyError):
         # note the extra space in the sheet name
         uc.query_key("test_template.xlsx", "Funny Date", "Another Sheet ")
+
+
+def test_in_memory_datamap_generator(mock_config, doc_directory, datamap_match_test_template, template):
+    "Doesn't really need a generator because its already in memory, but whatever..."
+    mock_config.initialise()
+    shutil.copy2(template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    tmpl_repo = InMemoryPopulatedTemplatesRepository(mock_config.PLATFORM_DOCS_DIR / "input")
+    dm_repo = InMemorySingleDatamapRepository(datamap_match_test_template)
+    uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
+#   assert next(uc.get_values(as_obj=True)) == {("test_template.xlsx", "Summary", "B2"): datetime.date(2019, 10, 19)}
+    gen = uc.get_values()
+    assert next(gen) == {("test_template.xlsx", "Summary", "B2"): "2019-10-20T00:00:00"}
+    assert next(gen) == {("test_template.xlsx", "Summary", "B3"): "This is a string"}
+    assert next(gen) == {("test_template.xlsx", "Another Sheet", "F17"): 7.2}
+
 
 
 @pytest.mark.skip("This is for FS process - we want to do in mem first")

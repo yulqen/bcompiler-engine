@@ -110,6 +110,12 @@ def datamap() -> str:
 
 
 @pytest.fixture
+def datamap_match_test_template():
+    here = os.path.abspath(os.curdir)
+    return os.path.join(here, "tests/resources/datamap_match_test_template.csv")
+
+
+@pytest.fixture
 def mock_config(monkeypatch):
     monkeypatch.setattr(Config, "PLATFORM_DOCS_DIR", Path("/tmp/Documents/bcompiler"))
     yield Config
