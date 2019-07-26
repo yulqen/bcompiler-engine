@@ -31,9 +31,13 @@ class InMemoryPopulatedTemplatesRepository:
 
     def __init__(self, directory_path: str) -> None:
         self.directory_path = directory_path
+        self.state = {} # type: ignore
 
     def list_as_json(self) -> str:
         "Return data from a directory of populated templates as json."
         excel_files = _get_xlsx_files(self.directory_path)
-        data = extract(excel_files)
-        return json.dumps(data)
+        if not self.state:
+            self.state = extract(excel_files)
+            return json.dumps(self.state)
+        else:
+            return json.dumps(self.state)

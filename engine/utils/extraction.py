@@ -13,14 +13,6 @@ DAT_DATA = Dict[str, FILE_DATA]
 SHEET_DATA_IN_LST = List[Dict[str, str]]
 
 
-
-def _comb_with_datamap(filename, template_data, datamap_data, key, sheet):
-    _dict = json.loads(datamap_data)
-    _target_cellref = [x["cellref"] for x in _dict if x["key"] == key and x["sheet"] == sheet][0]
-    return json.loads(template_data)[filename]["data"][sheet][_target_cellref]["value"]
-
-
-
 def _check_file_in_datafile(spreadsheet_file: Path, data_file: Path) -> bool:
     """Given a spreadsheet file, checks whether its data is already contained in a data file.
 

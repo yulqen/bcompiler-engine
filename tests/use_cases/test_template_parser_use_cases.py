@@ -43,8 +43,23 @@ def test_in_memory_datamap_application_to_extracted_data(mock_config, doc_direct
     tmpl_repo = InMemoryPopulatedTemplatesRepository(mock_config.PLATFORM_DOCS_DIR / "input")
     dm_repo = InMemorySingleDatamapRepository(datamap)
     uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
-    query_result = uc.query_key("test_template.xlsx", "String Key", "Summary")
-    assert query_result == "This is a string"
+    assert uc.query_key("test_template.xlsx", "String Key", "Summary") == "This is a string"
+    assert uc.query_key("test_template.xlsx", "Big Float", "Another Sheet") == 7.2
+
+
+def test_in_memory_datamap_application_to_extracted_data_raises_exception(mock_config, doc_directory, datamap, template):
+    "Raise exception when the key provided is not in the datamap"
+    mock_config.initialise()
+    shutil.copy2(template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    tmpl_repo = InMemoryPopulatedTemplatesRepository(mock_config.PLATFORM_DOCS_DIR / "input")
+    dm_repo = InMemorySingleDatamapRepository(datamap)
+    uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
+    with pytest.raises(KeyError):
+        # note the extra space in the key name
+        uc.query_key("test_template.xlsx", "Funny Date ", "Another Sheet")
+    with pytest.raises(KeyError):
+        # note the extra space in the sheet name
+        uc.query_key("test_template.xlsx", "Funny Date", "Another Sheet ")
 
 
 @pytest.mark.skip("This is for FS process - we want to do in mem first")

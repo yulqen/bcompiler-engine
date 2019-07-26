@@ -35,6 +35,7 @@ objects - will return a dict of the form:
 """
 import csv
 import datetime
+import json
 import logging
 from concurrent import futures
 from pathlib import Path
@@ -44,8 +45,8 @@ from openpyxl import load_workbook
 
 from engine.domain.datamap import DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
-from engine.utils.extraction import (_clean, _comb_with_datamap,
-                                     _extract_cellrefs, _hash_single_file)
+from engine.utils.extraction import (_clean, _extract_cellrefs,
+                                     _hash_single_file)
 
 # pylint: disable=R0903,R0913;
 
@@ -55,6 +56,7 @@ logger.setLevel("INFO")
 
 
 class ParsePopulatedTemplatesUseCase:
+
     def __init__(self, repo):
         self.repo = repo
 
@@ -69,13 +71,33 @@ class ApplyDatamapToExtractionUseCase:
         self.datamap_repo = datamap_repo
         self.template_repo = template_repo
 
+    def _comb_with_datamap(self, filename, template_data, datamap_data, key, sheet):
+        """Given a filename, a template_data json str, a datamap_data dict, key and sheet, returns
+        the value in the spreadsheet at given datamap key.
+        """
+        _data_lst = json.loads(datamap_data)
+        if key not in [x["key"] for x in _data_lst]:
+            raise KeyError("No key \"{}\" in datamap".format(key))
+        if sheet not in [x["sheet"] for x in _data_lst]:
+            raise KeyError("No sheet \"{}\" in datamap".format(sheet))
+        _target_cellref = [x["cellref"] for x in _data_lst if x["key"] == key and x["sheet"] == sheet]
+        _cellref = _target_cellref[0]
+        return json.loads(template_data)[filename]["data"][sheet][_cellref]["value"]
+
 
     def query_key(self, filename, key, sheet):
+        """Given a filename, key and sheet, raises the value in the spreadsheet.
+
+        Raises KeyError if any of filename, key and sheet are not in the datamap.
+        """
         t_uc = ParsePopulatedTemplatesUseCase(self.template_repo)
         d_uc = ParseDatamapUseCase(self.datamap_repo)
         template_data = t_uc.execute()
         datamap_data = d_uc.execute()
-        return _comb_with_datamap(filename, template_data, datamap_data, key, sheet)
+        try:
+            return self._comb_with_datamap(filename, template_data, datamap_data, key, sheet)
+        except KeyError:
+            raise
 
 
 
