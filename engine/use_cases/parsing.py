@@ -75,6 +75,8 @@ class ApplyDatamapToExtractionUseCase:
     def _comb_with_datamap(self, filename, template_data, datamap_data, key, sheet):
         """Given a filename, a template_data json str, a datamap_data dict, key and sheet, returns
         the value in the spreadsheet at given datamap key.
+
+        Throws KeyError if the datamap refers to a sheet/cellref combo in the target file that does not exist.
         """
         _data_lst = json.loads(datamap_data)
         if key not in [x["key"] for x in _data_lst]:
@@ -85,7 +87,22 @@ class ApplyDatamapToExtractionUseCase:
             x["cellref"] for x in _data_lst if x["key"] == key and x["sheet"] == sheet
         ]
         _cellref = _target_cellref[0]
-        return json.loads(template_data)[filename]["data"][sheet][_cellref]["value"]
+        try:
+            output = json.loads(template_data)[filename]["data"][sheet][_cellref][
+                "value"
+            ]
+            return output
+        except KeyError:
+            logger.critical(
+                "Unable to handle value {} or {} when processing {} with datamap.".format(
+                    sheet, _cellref, filename
+                )
+            )
+            raise KeyError(
+                "Unable to handle value {} or {} when processing {} with datamap.".format(
+                    sheet, _cellref, filename
+                )
+            )
 
     def _get_datamap_and_template_data(self) -> None:
         "Does the work of creating the template_data and datamap_data attributes"
@@ -94,19 +111,15 @@ class ApplyDatamapToExtractionUseCase:
         self._template_data = t_uc.execute()
         self._datamap_data = d_uc.execute()
 
-    def _take_value(self):
-        pass
-
-    def get_values(self, as_obj=False):
-        if self._template_data is not True and self._datamap_data is not True:
-            self._get_datamap_and_template_data()
+    def get_values(self):
         for _file_name in json.loads(self._template_data):
-            logger.info("Processing {}".format(_file_name))
             for _dml in json.loads(self._datamap_data):
                 val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
-                yield {
-                    (_file_name, _dml["sheet"], _dml["cellref"]): val
-                }
+                yield {(_file_name, _dml["sheet"], _dml["cellref"]): val}
+
+    def execute(self, as_obj=False):
+        if self._template_data is not True and self._datamap_data is not True:
+            self._get_datamap_and_template_data()
 
     def query_key(self, filename, key, sheet):
         """Given a filename, key and sheet, raises the value in the spreadsheet.
@@ -119,8 +132,11 @@ class ApplyDatamapToExtractionUseCase:
             return self._comb_with_datamap(
                 filename, self._template_data, self._datamap_data, key, sheet
             )
-        except KeyError:
-            raise
+        except KeyError as e:
+            logger.critical(
+                "Unable to process datamapline due to problem with sheet/cellref referred to by datamap"
+            )
+            raise KeyError(e.args[0])
 
 
 class ParseDatamapUseCase:
