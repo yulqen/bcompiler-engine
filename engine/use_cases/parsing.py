@@ -202,7 +202,8 @@ def template_reader(template_file):
         workbook = load_workbook(template_file, data_only=True)
     except TypeError:
         msg = ("Unable to open {}. Potential corruption of file. Try resaving "
-               "in Excel or removing conditionally formatting. Quitting.".format(f_path))
+               "in Excel or removing conditionally formatting. See issue at "
+               "https://github.com/hammerheadlemon/bcompiler-engine/issues/3 for update. Quitting.".format(f_path))
         logger.critical(msg)
         sys.stderr.write(msg)
         raise
