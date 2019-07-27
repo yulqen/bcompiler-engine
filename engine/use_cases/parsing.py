@@ -101,6 +101,7 @@ class ApplyDatamapToExtractionUseCase:
         if self._template_data is not True and self._datamap_data is not True:
             self._get_datamap_and_template_data()
         for _file_name in json.loads(self._template_data):
+            logger.info("Processing {}".format(_file_name))
             for _dml in json.loads(self._datamap_data):
                 val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
                 yield {
@@ -144,9 +145,14 @@ class DatamapFile:
     def __enter__(self) -> IO[str]:
         try:
             self.f_obj = open(self.filepath, "r", encoding="utf-8")
+            self.f_obj.read()
+            self.f_obj.seek(0)
             return self.f_obj
         except FileNotFoundError:
             raise FileNotFoundError("Cannot find {}".format(self.filepath))
+        except UnicodeDecodeError:
+            self.f_obj = open(self.filepath, "r", encoding="latin1")
+            return self.f_obj
 
     def __exit__(self, mytype, value, traceback):  # type: ignore
         self.f_obj.close()
