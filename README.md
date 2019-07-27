@@ -5,13 +5,12 @@
 A new, faster, more efficient, more modular back end for `bcompiler`, and for
 newer tools and improved interfaces.
 
-A library that essentially wraps `openpyxl` to allow for controlled extraction
-and insertion of data to and from spreadsheets used for collecting data. Part
-of a more modular overall design, `bcompiler-engine` focuses on speed,
-simplicity and data validation. It forms the primary back-end to the upcoming
-**Datamaps** software, and will eventually have a suitable API making it easy
-for anyone designing an application to use the datamaps philosophy - more on
-that coming soon.
+A library that allows for controlled extraction and insertion of data to and
+from spreadsheets used for collecting data. Part of a more modular overall
+design, `bcompiler-engine` focuses on speed, simplicity and data validation. It
+forms the primary back-end to the upcoming **Datamaps** software, and will
+eventually have a suitable API making it easy for anyone designing an
+application to use the datamaps philosophy - more on that coming soon.
 
 ### Highlights
 
@@ -22,3 +21,10 @@ that coming soon.
 * Type checking and rule-setting, allowing for greater confidence in integrity of data.
 * Improved, modular design, powering *a brand new interface*, available soon.
 * Designed to be packaged for more general distribution.
+
+### Current issues during development
+
+* Spreadsheets created or saved in LibreOffice may suffer from an issue whereby
+    incorrent conditional formatting rules are apparent, prevent the file from
+    being loaded by `openpyxl`. See
+    [issue](https://github.com/hammerheadlemon/bcompiler-engine/issues/3).

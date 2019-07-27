@@ -101,6 +101,7 @@ def bad_sheet_template() -> Path:
     here = os.path.abspath(os.curdir)
     return Path(os.path.join(here, "tests/resources/bad_sheet_template.xlsm"))
 
+
 @pytest.fixture
 def pop_template() -> Path:
     pth = Path(tempfile.gettempdir()) / "Documents" / "bcompiler"

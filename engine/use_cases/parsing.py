@@ -37,6 +37,7 @@ import csv
 import datetime
 import json
 import logging
+import sys
 from concurrent import futures
 from pathlib import Path
 from typing import IO, List
@@ -197,7 +198,14 @@ def template_reader(template_file):
     inner_dict = {"data": {}}
     f_path = Path(template_file)
     logger.info("Extracting from: {}".format(f_path.name))
-    workbook = load_workbook(template_file, data_only=True)
+    try:
+        workbook = load_workbook(template_file, data_only=True)
+    except TypeError:
+        msg = ("Unable to open {}. Potential corruption of file. Try resaving "
+               "in Excel or removing conditionally formatting. Quitting.".format(f_path))
+        logger.critical(msg)
+        sys.stderr.write(msg)
+        raise
     checksum = _hash_single_file(f_path)
     holding = []
     for sheet in workbook.worksheets:

@@ -1,8 +1,8 @@
 import hashlib
 
 from engine.use_cases.parsing import extract_from_multiple_xlsx_files
-from engine.utils.extraction import (_hash_single_file, _hash_target_files,
-                                     _get_xlsx_files)
+from engine.utils.extraction import (_get_xlsx_files, _hash_single_file,
+                                     _hash_target_files)
 
 
 def test_hash_of_single_file(resources):
