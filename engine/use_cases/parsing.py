@@ -73,7 +73,9 @@ class ApplyDatamapToExtractionUseCase:
         self._template_data = {}  # type: ignore
         self._datamap_data = []  # type: ignore
 
-    def _comb_with_datamap(self, filename, template_data, datamap_data, key, sheet):
+    def _get_value_of_cell_referred_by_key(
+        self, filename, template_data, datamap_data, key, sheet
+    ):
         """Given a filename, a template_data json str, a datamap_data dict, key and sheet, returns
         the value in the spreadsheet at given datamap key.
 
@@ -85,7 +87,9 @@ class ApplyDatamapToExtractionUseCase:
         if sheet not in [x["sheet"] for x in _datamap_lst]:
             raise KeyError('No sheet "{}" in datamap'.format(sheet))
         _target_cellref = [
-            x["cellref"] for x in _datamap_lst if x["key"] == key and x["sheet"] == sheet
+            x["cellref"]
+            for x in _datamap_lst
+            if x["key"] == key and x["sheet"] == sheet
         ]
         _cellref = _target_cellref[0]
         try:
@@ -95,8 +99,16 @@ class ApplyDatamapToExtractionUseCase:
             return output
         except KeyError as e:
             if e.args[0] == sheet:
-                logger.critical("No sheet named {} in {}. Unable to process.".format(sheet, filename))
-                raise KeyError("No sheet named {} in {}. Unable to process.".format(sheet, filename))
+                logger.critical(
+                    "No sheet named {} in {}. Unable to process.".format(
+                        sheet, filename
+                    )
+                )
+                raise KeyError(
+                    "No sheet named {} in {}. Unable to process.".format(
+                        sheet, filename
+                    )
+                )
 
     def _get_datamap_and_template_data(self) -> None:
         "Does the work of creating the template_data and datamap_data attributes"
@@ -123,7 +135,7 @@ class ApplyDatamapToExtractionUseCase:
         if self._template_data is not True and self._datamap_data is not True:
             self._get_datamap_and_template_data()
         try:
-            return self._comb_with_datamap(
+            return self._get_value_of_cell_referred_by_key(
                 filename, self._template_data, self._datamap_data, key, sheet
             )
         except KeyError:
@@ -194,9 +206,13 @@ def template_reader(template_file):
     try:
         workbook = load_workbook(template_file, data_only=True)
     except TypeError:
-        msg = ("Unable to open {}. Potential corruption of file. Try resaving "
-               "in Excel or removing conditionally formatting. See issue at "
-               "https://github.com/hammerheadlemon/bcompiler-engine/issues/3 for update. Quitting.".format(f_path))
+        msg = (
+            "Unable to open {}. Potential corruption of file. Try resaving "
+            "in Excel or removing conditionally formatting. See issue at "
+            "https://github.com/hammerheadlemon/bcompiler-engine/issues/3 for update. Quitting.".format(
+                f_path
+            )
+        )
         logger.critical(msg)
         sys.stderr.write(msg)
         raise
