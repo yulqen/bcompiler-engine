@@ -145,6 +145,19 @@ class ApplyDatamapToExtractionUseCase:
             raise
 
 
+class CreateMasterUseCase:
+
+    def __init__(self, datamap_repo, template_repo, output_adapter):
+        self.datamap_repo = datamap_repo
+        self.template_repo = template_repo
+        self.output_adapter = output_adapter
+
+
+    def execute(self, output_file_name):
+        pass
+
+
+
 class ParseDatamapUseCase:
     def __init__(self, repo):
         self.repo = repo
