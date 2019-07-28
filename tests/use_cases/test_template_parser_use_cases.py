@@ -6,6 +6,7 @@ import pytest
 from openpyxl import load_workbook
 
 from engine.repository.datamap import InMemorySingleDatamapRepository
+from engine.repository.master import MasterOutputRepository
 from engine.repository.templates import (FSPopulatedTemplatesRepo,
                                          InMemoryPopulatedTemplatesRepository)
 from engine.use_cases.parsing import (ApplyDatamapToExtractionUseCase,
@@ -120,20 +121,20 @@ def test_in_memory_datamap_generator(
     }
 
 
-@pytest.mark.skip("Commence after MasterOutputRepository tested")
-def test_create_master_spreadsheet(mock_config, datamap, doc_directory, template):
+def test_create_master_spreadsheet(mock_config, datamap_match_test_template, doc_directory, template):
     mock_config.initialise()
     shutil.copy2(template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
     tmpl_repo = InMemoryPopulatedTemplatesRepository(
         mock_config.PLATFORM_DOCS_DIR / "input"
     )
-    dm_repo = InMemorySingleDatamapRepository(datamap)
-    uc = CreateMasterUseCase(dm_repo, tmpl_repo)
+    dm_repo = InMemorySingleDatamapRepository(datamap_match_test_template)
+    output_repo = MasterOutputRepository
+    uc = CreateMasterUseCase(dm_repo, tmpl_repo, output_repo)
     uc.execute("master.xlsx")
     wb = load_workbook(Path(mock_config.PLATFORM_DOCS_DIR) / "output" / "master.xlsx")
     ws = wb.active
-    assert ws["A1"] == "file name"
-    assert ws["B1"] == "test_template"
+    assert ws["A1"].value == "file name"
+    assert ws["B1"].value == "test_template"
 
 
 @pytest.mark.skip("This is for FS process - we want to do in mem first")
