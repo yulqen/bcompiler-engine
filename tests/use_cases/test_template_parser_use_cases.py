@@ -106,10 +106,10 @@ def test_in_memory_datamap_generator(
     data = uc.get_values()
     #   assert next(uc.get_values(as_obj=True)) == {("test_template.xlsx", "Summary", "B2"): datetime.date(2019, 10, 19)}
     assert next(data) == {
-        ("test_template.xlsx", "Summary", "B2"): "2019-10-20T00:00:00"
+        ("test_template.xlsx", "Date Key", "Summary", "B2"): "2019-10-20T00:00:00"
     }
-    assert next(data) == {("test_template.xlsx", "Summary", "B3"): "This is a string"}
-    assert next(data) == {("test_template.xlsx", "Another Sheet", "F17"): 7.2}
+    assert next(data) == {("test_template.xlsx", "String Key", "Summary", "B3"): "This is a string"}
+    assert next(data) == {("test_template.xlsx", "Big Float", "Another Sheet", "F17"): 7.2}
 
 
 @pytest.mark.skip("This is for FS process - we want to do in mem first")

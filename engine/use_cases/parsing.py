@@ -109,7 +109,7 @@ class ApplyDatamapToExtractionUseCase:
         for _file_name in json.loads(self._template_data):
             for _dml in json.loads(self._datamap_data):
                 val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
-                yield {(_file_name, _dml["sheet"], _dml["cellref"]): val}
+                yield {(_file_name, _dml["key"], _dml["sheet"], _dml["cellref"]): val}
 
     def execute(self, as_obj=False):
         if self._template_data is not True and self._datamap_data is not True:
