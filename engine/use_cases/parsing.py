@@ -79,13 +79,13 @@ class ApplyDatamapToExtractionUseCase:
 
         Throws KeyError if the datamap refers to a sheet/cellref combo in the target file that does not exist.
         """
-        _data_lst = json.loads(datamap_data)
-        if key not in [x["key"] for x in _data_lst]:
+        _datamap_lst = json.loads(datamap_data)
+        if key not in [x["key"] for x in _datamap_lst]:
             raise KeyError('No key "{}" in datamap'.format(key))
-        if sheet not in [x["sheet"] for x in _data_lst]:
+        if sheet not in [x["sheet"] for x in _datamap_lst]:
             raise KeyError('No sheet "{}" in datamap'.format(sheet))
         _target_cellref = [
-            x["cellref"] for x in _data_lst if x["key"] == key and x["sheet"] == sheet
+            x["cellref"] for x in _datamap_lst if x["key"] == key and x["sheet"] == sheet
         ]
         _cellref = _target_cellref[0]
         try:
@@ -93,17 +93,10 @@ class ApplyDatamapToExtractionUseCase:
                 "value"
             ]
             return output
-        except KeyError:
-            logger.critical(
-                "Unable to handle value {} or {} when processing {} with datamap.".format(
-                    sheet, _cellref, filename
-                )
-            )
-            raise KeyError(
-                "Unable to handle value {} or {} when processing {} with datamap.".format(
-                    sheet, _cellref, filename
-                )
-            )
+        except KeyError as e:
+            if e.args[0] == sheet:
+                logger.critical("No sheet named {} in {}. Unable to process.".format(sheet, filename))
+                raise KeyError("No sheet named {} in {}. Unable to process.".format(sheet, filename))
 
     def _get_datamap_and_template_data(self) -> None:
         "Does the work of creating the template_data and datamap_data attributes"
@@ -133,11 +126,11 @@ class ApplyDatamapToExtractionUseCase:
             return self._comb_with_datamap(
                 filename, self._template_data, self._datamap_data, key, sheet
             )
-        except KeyError as e:
+        except KeyError:
             logger.critical(
                 "Unable to process datamapline due to problem with sheet/cellref referred to by datamap"
             )
-            raise KeyError(e.args[0])
+            raise
 
 
 class ParseDatamapUseCase:
