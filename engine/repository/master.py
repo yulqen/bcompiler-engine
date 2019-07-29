@@ -13,13 +13,14 @@ class MasterOutputRepository:
 
     def save(self):
         # TODO - this is hard-coding the first two cols, where we need to keys as Col 1
+        _master_return_reference = Config.config_parser["DEFAULT"]["return reference name"]
         output_path = Path(Config.PLATFORM_DOCS_DIR) / "output"
         wb = Workbook()
         ws = wb.active
         ws.title = "Master"
         _get_first = self.data[0]
         _file_name = list(_get_first.keys())[0][0].split(".")[0]
-        ws.cell(column=1, row=1, value="file name")
+        ws.cell(column=1, row=1, value=_master_return_reference)
         ws.cell(column=2, row=1, value=_file_name)
         for idx, row_data in enumerate(self.data, start=2):
             key = list(row_data.keys())[0][1]

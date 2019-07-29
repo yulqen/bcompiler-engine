@@ -65,10 +65,16 @@ class Config:
     config_parser = ConfigParser()
     base_config = textwrap.dedent(
         """\
+    [DEFAULT]
+    # This is the value that appears in cell A1 in a master
+    # Might be more relevant to rename it to project name, for example
+    return reference name = file name
+
     [PATHS]
     document directory = {0}
     input directory = %(document directory)s/input
     output directory =%(document directory)s/output
+
     """
     ).format(PLATFORM_DOCS_DIR)
 
