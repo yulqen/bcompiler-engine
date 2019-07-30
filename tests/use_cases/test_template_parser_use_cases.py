@@ -135,7 +135,8 @@ def test_create_master_spreadsheet(mock_config, datamap_match_test_template, doc
     uc.execute("master.xlsx")
     wb = load_workbook(Path(mock_config.PLATFORM_DOCS_DIR) / "output" / "master.xlsx")
     ws = wb.active
-#   assert ws["A1"].value == "file name"
+    assert ws["A1"].value == "file name"
+    assert ws["B1"].value == "test_template"
     assert ws["B2"].value == "2019-10-20T00:00:00"
     assert ws["B3"].value == "This is a string"
 

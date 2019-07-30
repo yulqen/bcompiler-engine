@@ -11,6 +11,8 @@ tox = "*"
 pdbpp = "*"
 ptipython = "*"
 pytest-cov = "*"
+pytest-profiling = "*"
+snakeviz = "*"
 
 [packages]
 appdirs = "*"
