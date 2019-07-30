@@ -18,13 +18,8 @@ class MasterOutputRepository:
         wb = Workbook()
         ws = wb.active
         ws.title = "Master"
-        _get_first = self.data[0]
-        _file_name = list(_get_first.keys())[0][0].split(".")[0]
-        ws.cell(column=1, row=1, value=_master_return_reference)
-        ws.cell(column=2, row=1, value=_file_name)
-        for idx, row_data in enumerate(self.data, start=2):
-            key = list(row_data.keys())[0][1]
-            val = row_data[list(row_data.keys())[0]]
-            ws.cell(column=1, row=idx, value=key)
-            ws.cell(column=2, row=idx, value=val)
+        for counter, file_data in enumerate(self.data, start=2):
+            _key_value_lst = list(file_data.values())[0]
+            for idx, tup in enumerate(_key_value_lst, start=2):
+                ws.cell(column=counter, row=idx, value=tup[1])
         wb.save(output_path / self.output_filename)

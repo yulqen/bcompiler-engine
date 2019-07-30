@@ -11,8 +11,9 @@ from engine.repository.templates import (FSPopulatedTemplatesRepo,
                                          InMemoryPopulatedTemplatesRepository)
 from engine.use_cases.parsing import (ApplyDatamapToExtractionUseCase,
                                       CreateMasterUseCase,
-                                      ParsePopulatedTemplatesUseCase)
-from engine.utils.extraction import _check_file_in_datafile
+                                      ParsePopulatedTemplatesUseCase,
+                                      extract_from_multiple_xlsx_files)
+from engine.utils.extraction import _check_file_in_datafile, _get_xlsx_files
 
 
 def test_template_parser_use_case(resources):
@@ -121,6 +122,7 @@ def test_in_memory_datamap_generator(
     }
 
 
+
 def test_create_master_spreadsheet(mock_config, datamap_match_test_template, doc_directory, template):
     mock_config.initialise()
     shutil.copy2(template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
@@ -133,8 +135,9 @@ def test_create_master_spreadsheet(mock_config, datamap_match_test_template, doc
     uc.execute("master.xlsx")
     wb = load_workbook(Path(mock_config.PLATFORM_DOCS_DIR) / "output" / "master.xlsx")
     ws = wb.active
-    assert ws["A1"].value == "file name"
-    assert ws["B1"].value == "test_template"
+#   assert ws["A1"].value == "file name"
+    assert ws["B2"].value == "2019-10-20T00:00:00"
+    assert ws["B3"].value == "This is a string"
 
 
 @pytest.mark.skip("This is for FS process - we want to do in mem first")

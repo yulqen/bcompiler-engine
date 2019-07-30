@@ -72,6 +72,7 @@ class ApplyDatamapToExtractionUseCase:
         self._template_repo = template_repo
         self._template_data = {}  # type: ignore
         self._datamap_data = []  # type: ignore
+        self.data_for_master = []  # type: ignore
 
     def _get_value_of_cell_referred_by_key(
         self, filename, template_data, datamap_data, key, sheet
@@ -123,9 +124,11 @@ class ApplyDatamapToExtractionUseCase:
                 val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
                 yield {(_file_name, _dml["key"], _dml["sheet"], _dml["cellref"]): val}
 
-    def execute(self, as_obj=False):
+    def execute(self, as_obj=False, for_master=False):
         if self._template_data is not True and self._datamap_data is not True:
             self._get_datamap_and_template_data()
+        if for_master:
+            self._format_data_for_master()
 
     def query_key(self, filename, key, sheet):
         """Given a filename, key and sheet, raises the value in the spreadsheet.
@@ -144,6 +147,16 @@ class ApplyDatamapToExtractionUseCase:
             )
             raise
 
+    def _format_data_for_master(self):
+        output = [{fname: []} for fname in json.loads(self._template_data)]
+        for _file_name in json.loads(self._template_data):
+            for _dml in json.loads(self._datamap_data):
+                val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
+                _col_dict = [d for d in output if list(d.keys())[0] == _file_name][0]
+                _col_dict[_file_name].append((_dml["key"], val))
+        self.data_for_master = output
+
+
 
 class CreateMasterUseCase:
 
@@ -155,12 +168,9 @@ class CreateMasterUseCase:
 
     def execute(self, output_file_name):
         uc = ApplyDatamapToExtractionUseCase(self.datamap_repo, self.template_repo)
-        uc.execute()
-        data = uc.get_values()
-        data = list(data)
-        output_repo = self.output_repository(data, output_file_name)
+        uc.execute(for_master=True)
+        output_repo = self.output_repository(uc.data_for_master, output_file_name)
         output_repo.save()
-
 
 
 class ParseDatamapUseCase:
