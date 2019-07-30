@@ -74,29 +74,25 @@ class ApplyDatamapToExtractionUseCase:
         self._datamap_data = []  # type: ignore
         self.data_for_master = []  # type: ignore
 
-    def _get_value_of_cell_referred_by_key(
-        self, filename, template_data, datamap_data, key, sheet
-    ):
+    def _get_value_of_cell_referred_by_key(self, filename, key, sheet):
         """Given a filename, a template_data json str, a datamap_data dict, key and sheet, returns
         the value in the spreadsheet at given datamap key.
 
         Throws KeyError if the datamap refers to a sheet/cellref combo in the target file that does not exist.
         """
-        _datamap_lst = json.loads(datamap_data)
-        if key not in [x["key"] for x in _datamap_lst]:
+        #       _datamap_lst = json.loads(datamap_data)
+        if key not in [x["key"] for x in self._datamap_data]:
             raise KeyError('No key "{}" in datamap'.format(key))
-        if sheet not in [x["sheet"] for x in _datamap_lst]:
+        if sheet not in [x["sheet"] for x in self._datamap_data]:
             raise KeyError('No sheet "{}" in datamap'.format(sheet))
         _target_cellref = [
             x["cellref"]
-            for x in _datamap_lst
+            for x in self._datamap_data
             if x["key"] == key and x["sheet"] == sheet
         ]
         _cellref = _target_cellref[0]
         try:
-            output = json.loads(template_data)[filename]["data"][sheet][_cellref][
-                "value"
-            ]
+            output = self._template_data[filename]["data"][sheet][_cellref]["value"]
             return output
         except KeyError as e:
             if e.args[0] == sheet:
@@ -119,14 +115,16 @@ class ApplyDatamapToExtractionUseCase:
         self._datamap_data = d_uc.execute()
 
     def get_values(self):
-        for _file_name in json.loads(self._template_data):
-            for _dml in json.loads(self._datamap_data):
+        for _file_name in self._template_data:
+            for _dml in self._datamap_data:
                 val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
                 yield {(_file_name, _dml["key"], _dml["sheet"], _dml["cellref"]): val}
 
     def execute(self, as_obj=False, for_master=False):
         if self._template_data is not True and self._datamap_data is not True:
             self._get_datamap_and_template_data()
+        self._datamap_data = json.loads(self._datamap_data)
+        self._template_data = json.loads(self._template_data)
         if for_master:
             self._format_data_for_master()
 
@@ -135,12 +133,10 @@ class ApplyDatamapToExtractionUseCase:
 
         Raises KeyError if any of filename, key and sheet are not in the datamap.
         """
-        if self._template_data is not True and self._datamap_data is not True:
+        if not bool(self._template_data) and bool(self._datamap_data):
             self._get_datamap_and_template_data()
         try:
-            return self._get_value_of_cell_referred_by_key(
-                filename, self._template_data, self._datamap_data, key, sheet
-            )
+            return self._get_value_of_cell_referred_by_key(filename, key, sheet)
         except KeyError:
             logger.critical(
                 "Unable to process datamapline due to problem with sheet/cellref referred to by datamap"
@@ -148,23 +144,24 @@ class ApplyDatamapToExtractionUseCase:
             raise
 
     def _format_data_for_master(self):
-        output = [{fname: []} for fname in json.loads(self._template_data)]
-        for _file_name in json.loads(self._template_data):
-            for _dml in json.loads(self._datamap_data):
+        output = [{fname: []} for fname in self._template_data]
+        # FIXME - this is where crash is happening
+        # see test test_master_from_org_templates/test_create_master_spreadsheet
+        f_data = self._template_data
+        dm_data = self._datamap_data
+        for _file_name in f_data:
+            for _dml in dm_data:
                 val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
                 _col_dict = [d for d in output if list(d.keys())[0] == _file_name][0]
                 _col_dict[_file_name].append((_dml["key"], val))
         self.data_for_master = output
 
 
-
 class CreateMasterUseCase:
-
     def __init__(self, datamap_repo, template_repo, output_repository):
         self.datamap_repo = datamap_repo
         self.template_repo = template_repo
         self.output_repository = output_repository
-
 
     def execute(self, output_file_name):
         uc = ApplyDatamapToExtractionUseCase(self.datamap_repo, self.template_repo)

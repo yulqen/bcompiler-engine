@@ -130,3 +130,8 @@ def mock_config(monkeypatch):
         shutil.rmtree(Config.BCOMPILER_LIBRARY_CONFIG_DIR)
     except FileNotFoundError:
         pass
+
+
+@pytest.fixture
+def org_test_files_dir():
+    return Path.cwd() / "tests" / "resources" / "org_templates"

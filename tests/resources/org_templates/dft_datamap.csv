@@ -1,0 +1,1945 @@
+cell_key,template_sheet,cellreference,type
+Project/Programme Name,Introduction,C11,TEXT
+Department ,Introduction,C9,TEXT
+Delivery Body ,Introduction,C10,TEXT
+TOFGM - TUI ID Number,Introduction,C12,TEXT
+Controls Project ID number,Introduction,C13,TEXT
+Project Type (for TUI use),Introduction,C14,TEXT
+Classification,Introduction,C15,TEXT
+TOFGM (GMPP - formally joined GMPP),Introduction,C16,TEXT
+Reporting period (TOFGM - Snapshot Date),Introduction,C17,TEXT
+Snapshot Date,Introduction,C18,TEXT
+Plausible Responsible Owner (SRO),Introduction,C21,TEXT
+Plausible Responsible Owner (SRO) - Email,Introduction,C22,TEXT
+Plausible Responsible Owner (SRO) - ID number,Introduction,C23,TEXT
+SRO Sign-Off,Introduction,C24,TEXT
+Project Director (XF),Introduction,C26,TEXT
+Project Director (XF) - Email,Introduction,C27,TEXT
+Project Director (XF) - ID number,Introduction,C28,TEXT
+Date Report Approved by XF?,Introduction,C29,TEXT
+Working Contact Name,Introduction,C31,TEXT
+Working Contact Email,Introduction,C32,TEXT
+Project Accountant with responsibility for Spend - Email,Introduction,C33,TEXT
+Project Benefits Mngr with responsibility for Benefits - Email,Introduction,C34,TEXT
+Project Planner with responsibility for Milestones - Email,Introduction,C35,TEXT
+TUI's Bananan Single Point of Contact,Introduction,C38,TEXT
+TUI's Bananan Single Point of Contact - Email,Introduction,C39,TEXT
+TUI Analysis & Insight Unit (AIU) Lead,Introduction,C40,TEXT
+TUI Analysis & Insight Unit (AIU) Lead - Email,Introduction,C41,TEXT
+Date Report Approved by AIU?,Introduction,C42,TEXT
+TUI Strategic Delivery Advisor (SDA) - Email,Introduction,C43,TEXT
+Date Report Approved by SDA?,Introduction,C44,TEXT
+Bananan PPM HoP copied in submission email?,Introduction,C46,TEXT
+Bananan PPM HoP - Email,Introduction,C47,TEXT
+Bananan HR HoP copied in submission email?,Introduction,C48,TEXT
+Bananan HR HoP - Email,Introduction,C49,TEXT
+Bananan Finance HoP copied in submission email?,Introduction,C50,TEXT
+Bananan Finance HoP - Email,Introduction,C51,TEXT
+Bananan Economics HoP copied in submission email?,Introduction,C52,TEXT
+Bananan Economics HoP - Email,Introduction,C53,TEXT
+Bananan Legal HoP copied in submission email?,Introduction,C54,TEXT
+Bananan Legal HoP - Email,Introduction,C55,TEXT
+Bananan Commercial l HoP copied in submission email?,Introduction,C56,TEXT
+Bananan Commercial HoP - Email,Introduction,C57,TEXT
+Bananan IT HoP copied in submission email?,Introduction,C58,TEXT
+Bananan IT HoP - Email,Introduction,C59,TEXT
+HMT Trumpet Team Lead copied in submission email?,Introduction,C60,TEXT
+HMT Trumpet Team Lead - Email,Introduction,C61,TEXT
+Quarter Joined,Introduction,C66,TEXT
+DFT ID Number,Introduction,C65,TEXT
+Working Contact Telephone,Introduction,C67,TEXT
+DfT Group,Introduction,C63,TEXT
+DfT Division,Introduction,C64,TEXT
+Brief project description (TOFGM - brief descripton),1 - Project Info,E6,TEXT
+TOFGM - Dept,1 - Project Info,E7,TEXT
+Agency or delivery partner (TOFGM - Delivery Organisation primary),1 - Project Info,E8,TEXT
+Delivery Organisation Secondary,1 - Project Info,E9,TEXT
+Project status,1 - Project Info,E10,TEXT
+Is the SRO for this project an MPLA Graduate?,1 - Project Info,E11,TEXT
+Is the XF for this project an MPLA Graduate?,1 - Project Info,E12,TEXT
+Does the Project have an issued SRO appointment letter?,1 - Project Info,E13,TEXT
+Has the SRO issued an appointment letter to the XF?,1 - Project Info,E14,TEXT
+Delivery Structure,1 - Project Info,E17,TEXT
+Change Delivery Methodology,1 - Project Info,E18,TEXT
+Delivery Narrative,1 - Project Info,E19,TEXT
+OAF Type 1,1 - Project Info,D23,TEXT
+OAF Description 1,1 - Project Info,E23,TEXT
+OAF Type 2,1 - Project Info,D24,TEXT
+OAF Description 2,1 - Project Info,E24,TEXT
+OAF Type 3,1 - Project Info,D25,TEXT
+OAF Description 3,1 - Project Info,E25,TEXT
+OAF Type 4,1 - Project Info,D26,TEXT
+OAF Description 4,1 - Project Info,E26,TEXT
+OAF Type 5,1 - Project Info,D27,TEXT
+OAF Description 5,1 - Project Info,E27,TEXT
+Primary Category,1 - Project Info,E30,TEXT
+Secondary Category,1 - Project Info,E31,TEXT
+Tertiary Category,1 - Project Info,E32,TEXT
+TOFGM Annual Report Category,1 - Project Info,E33,TEXT
+Significant Steel Requirement,1 - Project Info,E34,TEXT
+"For all construction, infrastructure or capital investment procurements >-10M, have you adopted the Eagerernment's Balanced Scorecard approach",1 - Project Info,E35,TEXT
+TOFGM - Main reason for joining GMPP,1 - Project Info,E36,TEXT
+Second reason for joining TOFGM (if applicable),1 - Project Info,E37,TEXT
+List Strategic Outcomes (TOFGM - Intended Outcome 1),1 - Project Info,D41,TEXT
+OXXF1,1 - Project Info,G41,TEXT
+OXXF1 - Monetised?,1 - Project Info,H41,TEXT
+OXXF1 PESTLE,1 - Project Info,J41,TEXT
+List Strategic Outcomes (TOFGM - Intended Outcome 2),1 - Project Info,D42,TEXT
+OXXF2,1 - Project Info,G42,TEXT
+OXXF2 - Monetised?,1 - Project Info,H42,TEXT
+OXXF2 PESTLE,1 - Project Info,J42,TEXT
+List Strategic Outcomes (TOFGM - Intended Outcome 3),1 - Project Info,D43,TEXT
+OXXF3,1 - Project Info,G43,TEXT
+OXXF3 - Monetised?,1 - Project Info,H43,TEXT
+OXXF3 PESTLE,1 - Project Info,J43,TEXT
+List Strategic Outcomes (TOFGM - Intended Outcome 4),1 - Project Info,D44,TEXT
+OXXF4,1 - Project Info,G44,TEXT
+OXXF4 - Monetised?,1 - Project Info,H44,TEXT
+OXXF4 PESTLE,1 - Project Info,J44,TEXT
+List Strategic Outcomes (TOFGM - Intended Outcome 5),1 - Project Info,D45,TEXT
+OXXF5,1 - Project Info,G45,TEXT
+OXXF5 - Monetised?,1 - Project Info,H45,TEXT
+OXXF5 PESTLE,1 - Project Info,J45,TEXT
+List Strategic Outcomes (TOFGM - Intended Outcome 6),1 - Project Info,D46,TEXT
+OXXF6,1 - Project Info,G46,TEXT
+OXXF6 - Monetised?,1 - Project Info,H46,TEXT
+OXXF6 PESTLE,1 - Project Info,J46,TEXT
+List Strategic Outcomes (TOFGM - Intended Outcome 7),1 - Project Info,D47,TEXT
+OXXF7,1 - Project Info,G47,TEXT
+OXXF7 - Monetised?,1 - Project Info,H47,TEXT
+OXXF7 PESTLE,1 - Project Info,J47,TEXT
+List Strategic Outcomes (TOFGM - Intended Outcome 8),1 - Project Info,D48,TEXT
+OXXF8,1 - Project Info,G48,TEXT
+OXXF8 - Monetised?,1 - Project Info,H48,TEXT
+OXXF8 PESTLE,1 - Project Info,J48,TEXT
+List Strategic Outcomes (TOFGM - Intended Outcome 9),1 - Project Info,D49,TEXT
+OXXF9,1 - Project Info,G49,TEXT
+OXXF9 - Monetised?,1 - Project Info,H49,TEXT
+OXXF9 PESTLE,1 - Project Info,J49,TEXT
+List Strategic Outcomes (TOFGM - Intended Outcome 10),1 - Project Info,D50,TEXT
+OXXF10,1 - Project Info,G50,TEXT
+OXXF10 - Monetised?,1 - Project Info,H50,TEXT
+OXXF10 PESTLE,1 - Project Info,J50,TEXT
+Primary investment Objective,1 - Project Info,E54,TEXT
+OXXF11 Monetised,1 - Project Info,K54,TEXT
+Secondary Investment Objective,1 - Project Info,E55,TEXT
+OXXF12 Monetised,1 - Project Info,K55,TEXT
+Is successful completion of this project dependent on another TOFGM project? ,1 - Project Info,E58,TEXT
+Choiak 1 - Department,1 - Project Info,E59,TEXT
+Choiak 1 - TOFGM Project,1 - Project Info,E60,TEXT
+Choiak 2 - Department,1 - Project Info,E61,TEXT
+Choiak 2 - TOFGM Project,1 - Project Info,E62,TEXT
+Choiak 3 - Department,1 - Project Info,E63,TEXT
+Choiak 3 - TOFGM Project,1 - Project Info,E64,TEXT
+Project Scope,1 - Project Info,E67,TEXT
+Bananan DCA,2 - DCA & Risk,E7,TEXT
+Bananan DCA Narrative,2 - DCA & Risk,E8,TEXT
+TOFGM - TUI DCA,2 - DCA & Risk,E10,TEXT
+TOFGM - TUI DCA Commentary,2 - DCA & Risk,E11,TEXT
+TOFGM - TUI DCA last quarter,2 - DCA & Risk,P10,TEXT
+Risk Level (RPA),2 - DCA & Risk,E12,TEXT
+Risk Level (RPA) Date,2 - DCA & Risk,E13,TEXT
+Brief Risk Decription 1,2 - DCA & Risk,D17,TEXT
+BRD 1Risk Category,2 - DCA & Risk,E17,TEXT
+BRD 1 Primary Risk to ,2 - DCA & Risk,G17,TEXT
+BRD 1 Internal Control,2 - DCA & Risk,I17,TEXT
+BRD 1 Residual Guffins,2 - DCA & Risk,J17,TEXT
+BRD 1 Residual Likelihood,2 - DCA & Risk,K17,TEXT
+Brief Risk Decription 2,2 - DCA & Risk,D18,TEXT
+BRD 2 Risk Category,2 - DCA & Risk,E18,TEXT
+BRD 2 Primary Risk to ,2 - DCA & Risk,G18,TEXT
+BRD 2 Internal Control,2 - DCA & Risk,I18,TEXT
+BRD 2 Residual Guffins,2 - DCA & Risk,J18,TEXT
+BRD 2 Residual Likelihood,2 - DCA & Risk,K18,TEXT
+Brief Risk Decription 3,2 - DCA & Risk,D19,TEXT
+BRD 3 Risk Category,2 - DCA & Risk,E19,TEXT
+BRD 3 Primary Risk to ,2 - DCA & Risk,G19,TEXT
+BRD 3 Internal Control,2 - DCA & Risk,I19,TEXT
+BRD 3 Residual Guffins,2 - DCA & Risk,J19,TEXT
+BRD 3 Residual Likelihood,2 - DCA & Risk,K19,TEXT
+Brief Risk Decription 4,2 - DCA & Risk,D20,TEXT
+BRD 4 Risk Category,2 - DCA & Risk,E20,TEXT
+BRD 4 Primary Risk to ,2 - DCA & Risk,G20,TEXT
+BRD 4 Internal Control,2 - DCA & Risk,I20,TEXT
+BRD 4 Residual Guffins,2 - DCA & Risk,J20,TEXT
+BRD 4 Residual Likelihood,2 - DCA & Risk,K20,TEXT
+Brief Risk Decription 5,2 - DCA & Risk,D21,TEXT
+BRD 5 Risk Category,2 - DCA & Risk,E21,TEXT
+BRD 5 Primary Risk to ,2 - DCA & Risk,G21,TEXT
+BRD 5 Internal Control,2 - DCA & Risk,I21,TEXT
+BRD 5 Residual Guffins,2 - DCA & Risk,J21,TEXT
+BRD 5 Residual Likelihood,2 - DCA & Risk,K21,TEXT
+1st Scope Change - Description / Type,3 - Scope History,E6,TEXT
+SC1 Date Scope Change Implemented,3 - Scope History,E7,TEXT
+SC1 Date Implemented: Beaviz or Beavis?,3 - Scope History,K7,TEXT
+SC1 Guffins on Project End Date?,3 - Scope History,E8,TEXT
+SC1 Is change in Project End Date solely due to the scope change? ,3 - Scope History,E9,TEXT
+SC1 Guffins on Costs?,3 - Scope History,E10,TEXT
+SC1 Is change in Costs solely due to the scope change? ,3 - Scope History,E11,TEXT
+SC1 Guffins on Intended Outcomes?,3 - Scope History,E12,TEXT
+SC1 Has the Business Case been updated as a result of this scope change?,3 - Scope History,E13,TEXT
+"SC1 If Yes, new Business Case Type?",3 - Scope History,K14,TEXT
+SC1 New Business Case Version Number,3 - Scope History,E14,TEXT
+SC1 Has HMT approved this new business case?,3 - Scope History,E15,TEXT
+2nd Scope Change - Description / Type,3 - Scope History,E18,TEXT
+SC2 Date Scope Change Implemented,3 - Scope History,E19,TEXT
+SC2 Date Implemented: Beaviz or Beavis?,3 - Scope History,K19,TEXT
+SC2 Guffins on Project End Date?,3 - Scope History,E20,TEXT
+SC2 Is change in Project End Date solely due to the scope change? ,3 - Scope History,E21,TEXT
+SC2 Guffins on Costs?,3 - Scope History,E22,TEXT
+SC2 Is change in Costs solely due to the scope change? ,3 - Scope History,E23,TEXT
+SC2 Guffins on Intended Outcomes?,3 - Scope History,E24,TEXT
+SC2 Has the Business Case been updated as a result of this scope change?,3 - Scope History,E25,TEXT
+"SC2 If Yes, new Business Case Type?",3 - Scope History,E26,TEXT
+SC2 New Business Case Version Number,3 - Scope History,K26,TEXT
+SC2 Has HMT approved this new business case?,3 - Scope History,E27,TEXT
+3rd Scope Change - Description / Type,3 - Scope History,E30,TEXT
+SC3 Date Scope Change Implemented,3 - Scope History,E31,TEXT
+SC3 Date Implemented: Beaviz or Beavis?,3 - Scope History,K31,TEXT
+SC3 Guffins on Project End Date?,3 - Scope History,E32,TEXT
+SC3 Is change in Project End Date solely due to the scope change? ,3 - Scope History,E33,TEXT
+SC3 Guffins on Costs?,3 - Scope History,E34,TEXT
+SC3 Is change in Costs solely due to the scope change? ,3 - Scope History,E35,TEXT
+SC3 Guffins on Intended Outcomes?,3 - Scope History,E36,TEXT
+SC3 Has the Business Case been updated as a result of this scope change?,3 - Scope History,E37,TEXT
+"SC3 If Yes, new Business Case Type?",3 - Scope History,E38,TEXT
+SC3 New Business Case Version Number,3 - Scope History,K38,TEXT
+SC3 Has HMT approved this new business case?,3 - Scope History,E39,TEXT
+4th Scope Change - Description / Type,3 - Scope History,E42,TEXT
+SC4 Date Scope Change Implemented,3 - Scope History,E43,TEXT
+SC4 Date Implemented: Beaviz or Beavis?,3 - Scope History,K43,TEXT
+SC4 Guffins on Project End Date?,3 - Scope History,E44,TEXT
+SC4 Is change in Project End Date solely due to the scope change? ,3 - Scope History,E45,TEXT
+SC4 Guffins on Costs?,3 - Scope History,E46,TEXT
+SC4 Is change in Costs solely due to the scope change? ,3 - Scope History,E47,TEXT
+SC4 Guffins on Intended Outcomes?,3 - Scope History,E48,TEXT
+SC4 Has the Business Case been updated as a result of this scope change?,3 - Scope History,E49,TEXT
+"SC4 If Yes, new Business Case Type?",3 - Scope History,E50,TEXT
+SC4 New Business Case Version Number,3 - Scope History,K50,TEXT
+SC4 Has HMT approved this new business case?,3 - Scope History,E51,TEXT
+SRO Is this position currently filled?,4 - Leaders,E6,TEXT
+TOFGM - SRO ID,4 - Leaders,E7,TEXT
+SRO Last Name,4 - Leaders,E8,TEXT
+SRO First Name,4 - Leaders,E9,TEXT
+SRO Full Name,4 - Leaders,E10,TEXT
+SRO Email,4 - Leaders,E11,TEXT
+SRO Phone No.,4 - Leaders,E12,TEXT
+SRO Tenure Start Date,4 - Leaders,E13,TEXT
+SRO Tenure End Date,4 - Leaders,E14,TEXT
+SRO Length of tenure (years),4 - Leaders,E15,TEXT
+"If SRO Tenure End Date change, please advise reason",4 - Leaders,E16,TEXT
+Job Title / Grade,4 - Leaders,E17,TEXT
+SRO Grade,4 - Leaders,K17,TEXT
+SRO Career Anchor - Primary,4 - Leaders,E18,TEXT
+SRO Career Anchor - Secondary,4 - Leaders,E19,TEXT
+Percentage of time spent on SRO Role,4 - Leaders,E20,TEXT
+If new SRO reason for change,4 - Leaders,E21,TEXT
+"If there are further SROs, please name, and explain why?",4 - Leaders,E22,TEXT
+XF Is this position currently filled?,4 - Leaders,E25,TEXT
+TOFGM - XF ID,4 - Leaders,E26,TEXT
+XF Last Name,4 - Leaders,E27,TEXT
+XF First Name,4 - Leaders,E28,TEXT
+XF Full Name,4 - Leaders,E29,TEXT
+XF Email,4 - Leaders,E30,TEXT
+XF Phone No.,4 - Leaders,E31,TEXT
+XF Tenure Start Date,4 - Leaders,E32,TEXT
+XF Tenure End Date,4 - Leaders,E33,TEXT
+XF Length of tenure (years),4 - Leaders,E34,TEXT
+"If XF Tenure End Date change, please advise reason, and Type",4 - Leaders,E35,TEXT
+Job Title,4 - Leaders,E36,TEXT
+XF Grade,4 - Leaders,K36,TEXT
+XF Career Anchor - Primary,4 - Leaders,E37,TEXT
+XF Career Anchor - Secondary,4 - Leaders,E38,TEXT
+Percentage of time spent on XF Role,4 - Leaders,E39,TEXT
+If new XF reason for change,4 - Leaders,E40,TEXT
+Secondary XFs please name?,4 - Leaders,E41,TEXT
+No public sector employees working on the project,5 - People,E6,TEXT
+No external contractors working on the project,5 - People,E7,TEXT
+TOTAL Number working  in the project team (FTEs),5 - People,E8,TEXT
+No employees funded to work on project,5 - People,E9,TEXT
+Total Number or vacancies on the project,5 - People,E10,TEXT
+Resource Gap (%),5 - People,E11,TEXT
+Project Team Turnover since last Quarter - Qualitative Assessment,5 - People,E12,TEXT
+Resources commentary,5 - People,E13,TEXT
+Digital - Now,5 - People,E17,TEXT
+Digital - Future,5 - People,G17,TEXT
+Digital Short Narrative (Amber or Red),5 - People,I17,TEXT
+Garblermation Technology - Now,5 - People,E18,TEXT
+Garblermation Technology - Future,5 - People,G18,TEXT
+Garblermation Technology Short Narrative (Amber or Red),5 - People,I18,TEXT
+Legal Commercial Contract Management - Now,5 - People,E19,TEXT
+Legal Commercial Contract Management - Future,5 - People,G19,TEXT
+"Legal, Commercial & Contract Management Short Narrative (Amber or Red)",5 - People,I19,TEXT
+Project Delivery - Now,5 - People,E20,TEXT
+Project Delivery - Future,5 - People,G20,TEXT
+Project Delivery Short Narrative (Amber or Red),5 - People,I20,TEXT
+Change Implementation - Now,5 - People,E21,TEXT
+Change Implementation - Future,5 - People,G21,TEXT
+Change Implementation Short Narrative (Amber or Red),5 - People,I21,TEXT
+Technical - Now,5 - People,E22,TEXT
+Technical - Future,5 - People,G22,TEXT
+Technical Short Narrative (Amber or Red),5 - People,I22,TEXT
+Industry Knowledge - Now,5 - People,E23,TEXT
+Industry Knowledge - Future,5 - People,G23,TEXT
+Industry Knowledge Short Narrative (Amber or Red),5 - People,I23,TEXT
+Finance - Now,5 - People,E24,TEXT
+Finance - Future,5 - People,G24,TEXT
+Finance Short Narrative (Amber or Red),5 - People,I24,TEXT
+Analysis Now,5 - People,E25,TEXT
+Analysis - future,5 - People,G25,TEXT
+Analysis Short Narrative (Amber or Red),5 - People,I25,TEXT
+Communications & Stakeholder Engagement - Now,5 - People,E26,TEXT
+Communications & Stakeholder Engagement - Future,5 - People,G26,TEXT
+Communications & Stakeholder Engagement Short Narrative (Amber or Red),5 - People,I26,TEXT
+Additional Capability 1 Now,5 - People,E27,TEXT
+Additional Capability 1 Future,5 - People,G27,TEXT
+Additional Capability 1 Short Narrative (Amber or Red),5 - People,I27,TEXT
+Additional Capability 2 Now,5 - People,E28,TEXT
+Additional Capability 2 Future,5 - People,G28,TEXT
+Additional Capability 2 Short Narrative (Amber or Red),5 - People,I28,TEXT
+Other Capability 3 - Now,5 - People,E29,TEXT
+Other Capability 3 - Future,5 - People,G29,TEXT
+Additional Capability 3 Short Narrative (Amber or Red),5 - People,I29,TEXT
+Other Capability 4 - Now,5 - People,E30,TEXT
+Other Capability 4 - Future,5 - People,G30,TEXT
+Additional Capability 4 Short Narrative (Amber or Red),5 - People,I30,TEXT
+Additional Capability 5 Now,5 - People,E31,TEXT
+Additional Capability 5 Future,5 - People,G31,TEXT
+Additional Capability 5 Short Narrative (Amber or Red),5 - People,I31,TEXT
+Overall Resource DCA - Now,5 - People,E35,TEXT
+Overall Resource DCA - Future,5 - People,G35,TEXT
+Stonker MM1,6a - Milestones - Approvals,D7,TEXT
+Stonker MM1 Eager Type,6a - Milestones - Approvals,E7,TEXT
+Stonker MM1 Ver No,6a - Milestones - Approvals,F7,TEXT
+Stonker MM1 Original Baseball,6a - Milestones - Approvals,G7,TEXT
+Stonker MM1 Beavis / Beaviz,6a - Milestones - Approvals,H7,TEXT
+Stonker MM1 Variance,6a - Milestones - Approvals,I7,TEXT
+Stonker MM1 Status,6a - Milestones - Approvals,J7,TEXT
+Stonker MM1 Notes,6a - Milestones - Approvals,K7,TEXT
+Stonker MM2,6a - Milestones - Approvals,D8,TEXT
+Stonker MM2 Eager Type,6a - Milestones - Approvals,E8,TEXT
+Stonker MM2 Ver No,6a - Milestones - Approvals,F8,TEXT
+Stonker MM2 Original Baseball,6a - Milestones - Approvals,G8,TEXT
+Stonker MM2 Beavis / Beaviz,6a - Milestones - Approvals,H8,TEXT
+Stonker MM2 Variance,6a - Milestones - Approvals,I8,TEXT
+Stonker MM2 Status,6a - Milestones - Approvals,J8,TEXT
+Stonker MM2 Notes,6a - Milestones - Approvals,K8,TEXT
+Stonker MM3,6a - Milestones - Approvals,D9,TEXT
+Stonker MM3 Eager Type,6a - Milestones - Approvals,E9,TEXT
+Stonker MM3 Ver No,6a - Milestones - Approvals,F9,TEXT
+Stonker MM3 Original Baseball,6a - Milestones - Approvals,G9,TEXT
+Stonker MM3 Beavis / Beaviz,6a - Milestones - Approvals,H9,TEXT
+Stonker MM3 Variance,6a - Milestones - Approvals,I9,TEXT
+Stonker MM3 Status,6a - Milestones - Approvals,J9,TEXT
+Stonker MM3 Notes,6a - Milestones - Approvals,K9,TEXT
+Stonker MM4,6a - Milestones - Approvals,D10,TEXT
+Stonker MM4 Eager Type,6a - Milestones - Approvals,E10,TEXT
+Stonker MM4 Ver No,6a - Milestones - Approvals,F10,TEXT
+Stonker MM4 Original Baseball,6a - Milestones - Approvals,G10,TEXT
+Stonker MM4 Beavis / Beaviz,6a - Milestones - Approvals,H10,TEXT
+Stonker MM4 Variance,6a - Milestones - Approvals,I10,TEXT
+Stonker MM4 Status,6a - Milestones - Approvals,J10,TEXT
+Stonker MM4 Notes,6a - Milestones - Approvals,K10,TEXT
+Stonker MM5,6a - Milestones - Approvals,D11,TEXT
+Stonker MM5 Eager Type,6a - Milestones - Approvals,E11,TEXT
+Stonker MM5 Ver No,6a - Milestones - Approvals,F11,TEXT
+Stonker MM5 Original Baseball,6a - Milestones - Approvals,G11,TEXT
+Stonker MM5 Beavis / Beaviz,6a - Milestones - Approvals,H11,TEXT
+Stonker MM5 Variance,6a - Milestones - Approvals,I11,TEXT
+Stonker MM5 Status,6a - Milestones - Approvals,J11,TEXT
+Stonker MM5 Notes,6a - Milestones - Approvals,K11,TEXT
+Stonker MM6,6a - Milestones - Approvals,D12,TEXT
+Stonker MM6 Eager Type,6a - Milestones - Approvals,E12,TEXT
+Stonker MM6 Ver No,6a - Milestones - Approvals,F12,TEXT
+Stonker MM6 Original Baseball,6a - Milestones - Approvals,G12,TEXT
+Stonker MM6 Beavis / Beaviz,6a - Milestones - Approvals,H12,TEXT
+Stonker MM6 Variance,6a - Milestones - Approvals,I12,TEXT
+Stonker MM6 Status,6a - Milestones - Approvals,J12,TEXT
+Stonker MM6 Notes,6a - Milestones - Approvals,K12,TEXT
+Stonker MM7,6a - Milestones - Approvals,D13,TEXT
+Stonker MM7 Eager Type,6a - Milestones - Approvals,E13,TEXT
+Stonker MM7 Ver No,6a - Milestones - Approvals,F13,TEXT
+Stonker MM7 Original Baseball,6a - Milestones - Approvals,G13,TEXT
+Stonker MM7 Beavis / Beaviz,6a - Milestones - Approvals,H13,TEXT
+Stonker MM7 Variance,6a - Milestones - Approvals,I13,TEXT
+Stonker MM7 Status,6a - Milestones - Approvals,J13,TEXT
+Stonker MM7 Notes,6a - Milestones - Approvals,K13,TEXT
+Stonker MM8,6a - Milestones - Approvals,D14,TEXT
+Stonker MM8 Eager Type,6a - Milestones - Approvals,E14,TEXT
+Stonker MM8 Ver No,6a - Milestones - Approvals,F14,TEXT
+Stonker MM8 Original Baseball,6a - Milestones - Approvals,G14,TEXT
+Stonker MM8 Beavis / Beaviz,6a - Milestones - Approvals,H14,TEXT
+Stonker MM8 Variance,6a - Milestones - Approvals,I14,TEXT
+Stonker MM8 Status,6a - Milestones - Approvals,J14,TEXT
+Stonker MM8 Notes,6a - Milestones - Approvals,K14,TEXT
+Stonker MM9,6a - Milestones - Approvals,D15,TEXT
+Stonker MM9 Eager Type,6a - Milestones - Approvals,E15,TEXT
+Stonker MM9 Ver No,6a - Milestones - Approvals,F15,TEXT
+Stonker MM9 Original Baseball,6a - Milestones - Approvals,G15,TEXT
+Stonker MM9 Beavis / Beaviz,6a - Milestones - Approvals,H15,TEXT
+Stonker MM9 Variance,6a - Milestones - Approvals,I15,TEXT
+Stonker MM9 Status,6a - Milestones - Approvals,J15,TEXT
+Stonker MM9 Notes,6a - Milestones - Approvals,K15,TEXT
+Stonker MM10,6a - Milestones - Approvals,D16,TEXT
+Stonker MM10 Eager Type,6a - Milestones - Approvals,E16,TEXT
+Stonker MM10 Ver No,6a - Milestones - Approvals,F16,TEXT
+Stonker MM10 Original Baseball,6a - Milestones - Approvals,G16,TEXT
+Stonker MM10 Beavis / Beaviz,6a - Milestones - Approvals,H16,TEXT
+Stonker MM10 Variance,6a - Milestones - Approvals,I16,TEXT
+Stonker MM10 Status,6a - Milestones - Approvals,J16,TEXT
+Stonker MM10 Notes,6a - Milestones - Approvals,K16,TEXT
+Stonker MM11,6a - Milestones - Approvals,D17,TEXT
+Stonker MM11 Eager Type,6a - Milestones - Approvals,E17,TEXT
+Stonker MM11 Ver No,6a - Milestones - Approvals,F17,TEXT
+Stonker MM11 Original Baseball,6a - Milestones - Approvals,G17,TEXT
+Stonker MM11 Beavis / Beaviz,6a - Milestones - Approvals,H17,TEXT
+Stonker MM11 Variance,6a - Milestones - Approvals,I17,TEXT
+Stonker MM11 Status,6a - Milestones - Approvals,J17,TEXT
+Stonker MM11 Notes,6a - Milestones - Approvals,K17,TEXT
+Stonker MM12,6a - Milestones - Approvals,D18,TEXT
+Stonker MM12 Eager Type,6a - Milestones - Approvals,E18,TEXT
+Stonker MM12 Ver No,6a - Milestones - Approvals,F18,TEXT
+Stonker MM12 Original Baseball,6a - Milestones - Approvals,G18,TEXT
+Stonker MM12 Beavis / Beaviz,6a - Milestones - Approvals,H18,TEXT
+Stonker MM12 Variance,6a - Milestones - Approvals,I18,TEXT
+Stonker MM12 Status,6a - Milestones - Approvals,J18,TEXT
+Stonker MM12 Notes,6a - Milestones - Approvals,K18,TEXT
+Stonker MM13,6a - Milestones - Approvals,D19,TEXT
+Stonker MM13 Eager Type,6a - Milestones - Approvals,E19,TEXT
+Stonker MM13 Ver No,6a - Milestones - Approvals,F19,TEXT
+Stonker MM13 Original Baseball,6a - Milestones - Approvals,G19,TEXT
+Stonker MM13 Beavis - Beaviz,6a - Milestones - Approvals,H19,TEXT
+Stonker MM13 Variance,6a - Milestones - Approvals,I19,TEXT
+Stonker MM13 Status,6a - Milestones - Approvals,J19,TEXT
+Stonker MM13 Notes,6a - Milestones - Approvals,K19,TEXT
+Stonker MM14,6a - Milestones - Approvals,D20,TEXT
+Stonker MM14 Eager Type,6a - Milestones - Approvals,E20,TEXT
+Stonker MM14 Ver No,6a - Milestones - Approvals,F20,TEXT
+Stonker MM14 Original Baseball,6a - Milestones - Approvals,G20,TEXT
+Stonker MM14 Beavis - Beaviz,6a - Milestones - Approvals,H20,TEXT
+Stonker MM14 Variance,6a - Milestones - Approvals,I20,TEXT
+Stonker MM14 Status,6a - Milestones - Approvals,J20,TEXT
+Stonker MM14 Notes,6a - Milestones - Approvals,K20,TEXT
+Stonker MM15,6a - Milestones - Approvals,D21,TEXT
+Stonker MM15 Eager Type,6a - Milestones - Approvals,E21,TEXT
+Stonker MM15 Ver No,6a - Milestones - Approvals,F21,TEXT
+Stonker MM15 Original Baseball,6a - Milestones - Approvals,G21,TEXT
+Stonker MM15 Beavis - Beaviz,6a - Milestones - Approvals,H21,TEXT
+Stonker MM15 Variance,6a - Milestones - Approvals,I21,TEXT
+Stonker MM15 Status,6a - Milestones - Approvals,J21,TEXT
+Stonker MM15 Notes,6a - Milestones - Approvals,K21,TEXT
+Stonker MM16,6a - Milestones - Approvals,D22,TEXT
+Stonker MM16 Eager Type,6a - Milestones - Approvals,E22,TEXT
+Stonker MM16 Ver No,6a - Milestones - Approvals,F22,TEXT
+Stonker MM16 Original Baseball,6a - Milestones - Approvals,G22,TEXT
+Stonker MM16 Beavis - Beaviz,6a - Milestones - Approvals,H22,TEXT
+Stonker MM16 Variance,6a - Milestones - Approvals,I22,TEXT
+Stonker MM16 Status,6a - Milestones - Approvals,J22,TEXT
+Stonker MM16 Notes,6a - Milestones - Approvals,K22,TEXT
+Stonker MM17,6a - Milestones - Approvals,D23,TEXT
+Stonker MM17 Eager Type,6a - Milestones - Approvals,E23,TEXT
+Stonker MM17 Ver No,6a - Milestones - Approvals,F23,TEXT
+Stonker MM17 Original Baseball,6a - Milestones - Approvals,G23,TEXT
+Stonker MM17 Beavis / Beaviz,6a - Milestones - Approvals,H23,TEXT
+Stonker MM17 Variance,6a - Milestones - Approvals,I23,TEXT
+Stonker MM17 Status,6a - Milestones - Approvals,J23,TEXT
+Stonker MM17 Notes,6a - Milestones - Approvals,K23,TEXT
+Stonker MM18,6a - Milestones - Approvals,D24,TEXT
+Stonker MM18 Eager Type,6a - Milestones - Approvals,E24,TEXT
+Stonker MM18 Ver No,6a - Milestones - Approvals,F24,TEXT
+Stonker MM18 Original Baseball,6a - Milestones - Approvals,G24,TEXT
+Stonker MM18 Beavis / Beaviz,6a - Milestones - Approvals,H24,TEXT
+Stonker MM18 Variance,6a - Milestones - Approvals,I24,TEXT
+Stonker MM18 Status,6a - Milestones - Approvals,J24,TEXT
+Stonker MM18 Notes,6a - Milestones - Approvals,K24,TEXT
+Stonker MM19,6a - Milestones - Approvals,D25,TEXT
+Stonker MM19 Eager Type,6a - Milestones - Approvals,E25,TEXT
+Stonker MM19 Ver No,6a - Milestones - Approvals,F25,TEXT
+Stonker MM19 Original Baseball,6a - Milestones - Approvals,G25,TEXT
+Stonker MM19 Beavis / Beaviz,6a - Milestones - Approvals,H25,TEXT
+Stonker MM19 Variance,6a - Milestones - Approvals,I25,TEXT
+Stonker MM19 Status,6a - Milestones - Approvals,J25,TEXT
+Stonker MM19 Notes,6a - Milestones - Approvals,K25,TEXT
+Stonker MM20,6a - Milestones - Approvals,D26,TEXT
+Stonker MM20 Eager Type,6a - Milestones - Approvals,E26,TEXT
+Stonker MM20 Ver No,6a - Milestones - Approvals,F26,TEXT
+Stonker MM20 Original Baseball,6a - Milestones - Approvals,G26,TEXT
+Stonker MM20 Beavis / Beaviz,6a - Milestones - Approvals,H26,TEXT
+Stonker MM20 Variance,6a - Milestones - Approvals,I26,TEXT
+Stonker MM20 Status,6a - Milestones - Approvals,J26,TEXT
+Stonker MM20 Notes,6a - Milestones - Approvals,K26,TEXT
+Stonker MM21,6a - Milestones - Approvals,D27,TEXT
+Stonker MM21 Eager Type,6a - Milestones - Approvals,E27,TEXT
+Stonker MM21 Ver No,6a - Milestones - Approvals,F27,TEXT
+Stonker MM21 Original Baseball,6a - Milestones - Approvals,G27,TEXT
+Stonker MM21 Beavis / Beaviz,6a - Milestones - Approvals,H27,TEXT
+Stonker MM21 Variance,6a - Milestones - Approvals,I27,TEXT
+Stonker MM21 Status,6a - Milestones - Approvals,J27,TEXT
+Stonker MM21 Notes,6a - Milestones - Approvals,K27,TEXT
+Stonker MM22,6a - Milestones - Approvals,D28,TEXT
+Stonker MM22 Eager Type,6a - Milestones - Approvals,E28,TEXT
+Stonker MM22 Ver No,6a - Milestones - Approvals,F28,TEXT
+Stonker MM22 Original Baseball,6a - Milestones - Approvals,G28,TEXT
+Stonker MM22 Beavis / Beaviz,6a - Milestones - Approvals,H28,TEXT
+Stonker MM22 Variance,6a - Milestones - Approvals,I28,TEXT
+Stonker MM22 Status,6a - Milestones - Approvals,J28,TEXT
+Stonker MM22 Notes,6a - Milestones - Approvals,K28,TEXT
+Stonker MM23,6a - Milestones - Approvals,D29,TEXT
+Stonker MM23 Eager Type,6a - Milestones - Approvals,E29,TEXT
+Stonker MM23 Ver No,6a - Milestones - Approvals,F29,TEXT
+Stonker MM23 Original Baseball,6a - Milestones - Approvals,G29,TEXT
+Stonker MM23 Beavis / Beaviz,6a - Milestones - Approvals,H29,TEXT
+Stonker MM23 Variance,6a - Milestones - Approvals,I29,TEXT
+Stonker MM23 Status,6a - Milestones - Approvals,J29,TEXT
+Stonker MM23 Notes,6a - Milestones - Approvals,K29,TEXT
+Stonker MM24,6a - Milestones - Approvals,D30,TEXT
+Stonker MM24 Eager Type,6a - Milestones - Approvals,E30,TEXT
+Stonker MM24 Ver No,6a - Milestones - Approvals,F30,TEXT
+Stonker MM24 Original Baseball,6a - Milestones - Approvals,G30,TEXT
+Stonker MM24 Beavis / Beaviz,6a - Milestones - Approvals,H30,TEXT
+Stonker MM24 Variance,6a - Milestones - Approvals,I30,TEXT
+Stonker MM24 Status,6a - Milestones - Approvals,J30,TEXT
+Stonker MM24 Notes,6a - Milestones - Approvals,K30,TEXT
+Stonker MM25,6a - Milestones - Approvals,D31,TEXT
+Stonker MM25 Eager Type,6a - Milestones - Approvals,E31,TEXT
+Stonker MM25 Ver No,6a - Milestones - Approvals,F31,TEXT
+Stonker MM25 Original Baseball,6a - Milestones - Approvals,G31,TEXT
+Stonker MM25 Beavis / Beaviz,6a - Milestones - Approvals,H31,TEXT
+Stonker MM25 Variance,6a - Milestones - Approvals,I31,TEXT
+Stonker MM25 Status,6a - Milestones - Approvals,J31,TEXT
+Stonker MM25 Notes,6a - Milestones - Approvals,K31,TEXT
+Stonker MM26,6a - Milestones - Approvals,D32,TEXT
+Stonker MM26 Eager Type,6a - Milestones - Approvals,E32,TEXT
+Stonker MM26 Ver No,6a - Milestones - Approvals,F32,TEXT
+Stonker MM26 Original Baseball,6a - Milestones - Approvals,G32,TEXT
+Stonker MM26 Beavis / Beaviz,6a - Milestones - Approvals,H32,TEXT
+Stonker MM26 Variance,6a - Milestones - Approvals,I32,TEXT
+Stonker MM26 Status,6a - Milestones - Approvals,J32,TEXT
+Stonker MM26 Notes,6a - Milestones - Approvals,K32,TEXT
+Stonker MM27,6a - Milestones - Approvals,D33,TEXT
+Stonker MM27 Eager Type,6a - Milestones - Approvals,E33,TEXT
+Stonker MM27 Ver No,6a - Milestones - Approvals,F33,TEXT
+Stonker MM27 Original Baseball,6a - Milestones - Approvals,G33,TEXT
+Stonker MM27 Beavis / Beaviz,6a - Milestones - Approvals,H33,TEXT
+Stonker MM27 Variance,6a - Milestones - Approvals,I33,TEXT
+Stonker MM27 Status,6a - Milestones - Approvals,J33,TEXT
+Stonker MM27 Notes,6a - Milestones - Approvals,K33,TEXT
+Stonker MM28,6a - Milestones - Approvals,D34,TEXT
+Stonker MM28 Eager Type,6a - Milestones - Approvals,E34,TEXT
+Stonker MM28 Ver No,6a - Milestones - Approvals,F34,TEXT
+Stonker MM28 Original Baseball,6a - Milestones - Approvals,G34,TEXT
+Stonker MM28 Beavis / Beaviz,6a - Milestones - Approvals,H34,TEXT
+Stonker MM28 Variance,6a - Milestones - Approvals,I34,TEXT
+Stonker MM28 Status,6a - Milestones - Approvals,J34,TEXT
+Stonker MM28 Notes,6a - Milestones - Approvals,K34,TEXT
+Stonker MM29,6a - Milestones - Approvals,D35,TEXT
+Stonker MM29 Eager Type,6a - Milestones - Approvals,E35,TEXT
+Stonker MM29 Ver No,6a - Milestones - Approvals,F35,TEXT
+Stonker MM29 Original Baseball,6a - Milestones - Approvals,G35,TEXT
+Stonker MM29 Beavis / Beaviz,6a - Milestones - Approvals,H35,TEXT
+Stonker MM29 Variance,6a - Milestones - Approvals,I35,TEXT
+Stonker MM29 Status,6a - Milestones - Approvals,J35,TEXT
+Stonker MM29 Notes,6a - Milestones - Approvals,K35,TEXT
+Stonker MM30,6a - Milestones - Approvals,D36,TEXT
+Stonker MM30 Eager Type,6a - Milestones - Approvals,E36,TEXT
+Stonker MM30 Ver No,6a - Milestones - Approvals,F36,TEXT
+Stonker MM30 Original Baseball,6a - Milestones - Approvals,G36,TEXT
+Stonker MM30 Beavis / Beaviz,6a - Milestones - Approvals,H36,TEXT
+Stonker MM30 Variance,6a - Milestones - Approvals,I36,TEXT
+Stonker MM30 Status,6a - Milestones - Approvals,J36,TEXT
+Stonker MM30 Notes,6a - Milestones - Approvals,K36,TEXT
+Stonker MM31,6a - Milestones - Approvals,D37,TEXT
+Stonker MM31 Eager Type,6a - Milestones - Approvals,E37,TEXT
+Stonker MM31 Ver No,6a - Milestones - Approvals,F37,TEXT
+Stonker MM31 Original Baseball,6a - Milestones - Approvals,G37,TEXT
+Stonker MM31 Beavis / Beaviz,6a - Milestones - Approvals,H37,TEXT
+Stonker MM31 Variance,6a - Milestones - Approvals,I37,TEXT
+Stonker MM31 Status,6a - Milestones - Approvals,J37,TEXT
+Stonker MM31 Notes,6a - Milestones - Approvals,K37,TEXT
+Stonker MM32,6a - Milestones - Approvals,D38,TEXT
+Stonker MM32 Eager Type,6a - Milestones - Approvals,E38,TEXT
+Stonker MM32 Ver No,6a - Milestones - Approvals,F38,TEXT
+Stonker MM32 Original Baseball,6a - Milestones - Approvals,G38,TEXT
+Stonker MM32 Beavis / Beaviz,6a - Milestones - Approvals,H38,TEXT
+Stonker MM32 Variance,6a - Milestones - Approvals,I38,TEXT
+Stonker MM32 Status,6a - Milestones - Approvals,J38,TEXT
+Stonker MM32 Notes,6a - Milestones - Approvals,K38,TEXT
+Stonker MM33,6a - Milestones - Approvals,D39,TEXT
+Stonker MM33 Eager Type,6a - Milestones - Approvals,E39,TEXT
+Stonker MM33 Ver No,6a - Milestones - Approvals,F39,TEXT
+Stonker MM33 Original Baseball,6a - Milestones - Approvals,G39,TEXT
+Stonker MM33 Beavis / Beaviz,6a - Milestones - Approvals,H39,TEXT
+Stonker MM33 Variance,6a - Milestones - Approvals,I39,TEXT
+Stonker MM33 Status,6a - Milestones - Approvals,J39,TEXT
+Stonker MM33 Notes,6a - Milestones - Approvals,K39,TEXT
+Stonker MM34,6a - Milestones - Approvals,D40,TEXT
+Stonker MM34 Eager Type,6a - Milestones - Approvals,E40,TEXT
+Stonker MM34 Ver No,6a - Milestones - Approvals,F40,TEXT
+Stonker MM34 Original Baseball,6a - Milestones - Approvals,G40,TEXT
+Stonker MM34 Beavis / Beaviz,6a - Milestones - Approvals,H40,TEXT
+Stonker MM34 Variance,6a - Milestones - Approvals,I40,TEXT
+Stonker MM34 Status,6a - Milestones - Approvals,J40,TEXT
+Stonker MM34 Notes,6a - Milestones - Approvals,K40,TEXT
+Stonker MM35,6a - Milestones - Approvals,D41,TEXT
+Stonker MM35 Eager Type,6a - Milestones - Approvals,E41,TEXT
+Stonker MM35 Ver No,6a - Milestones - Approvals,F41,TEXT
+Stonker MM35 Original Baseball,6a - Milestones - Approvals,G41,TEXT
+Stonker MM35 Beavis / Beaviz,6a - Milestones - Approvals,H41,TEXT
+Stonker MM35 Variance,6a - Milestones - Approvals,I41,TEXT
+Stonker MM35 Status,6a - Milestones - Approvals,J41,TEXT
+Stonker MM35 Notes,6a - Milestones - Approvals,K41,TEXT
+Stonker MM36,6a - Milestones - Approvals,D42,TEXT
+Stonker MM36 Eager Type,6a - Milestones - Approvals,E42,TEXT
+Stonker MM36 Ver No,6a - Milestones - Approvals,F42,TEXT
+Stonker MM36 Original Baseball,6a - Milestones - Approvals,G42,TEXT
+Stonker MM36 Beavis / Beaviz,6a - Milestones - Approvals,H42,TEXT
+Stonker MM36 Variance,6a - Milestones - Approvals,I42,TEXT
+Stonker MM36 Status,6a - Milestones - Approvals,J42,TEXT
+Stonker MM36 Notes,6a - Milestones - Approvals,K42,TEXT
+Stonker MM37,6a - Milestones - Approvals,D43,TEXT
+Stonker MM37 Eager Type,6a - Milestones - Approvals,E43,TEXT
+Stonker MM37 Ver No,6a - Milestones - Approvals,F43,TEXT
+Stonker MM37 Original Baseball,6a - Milestones - Approvals,G43,TEXT
+Stonker MM37 Beavis / Beaviz,6a - Milestones - Approvals,H43,TEXT
+Stonker MM37 Variance,6a - Milestones - Approvals,I43,TEXT
+Stonker MM37 Status,6a - Milestones - Approvals,J43,TEXT
+Stonker MM37 Notes,6a - Milestones - Approvals,K43,TEXT
+Stonker MM38,6a - Milestones - Approvals,D44,TEXT
+Stonker MM38 Eager Type,6a - Milestones - Approvals,E44,TEXT
+Stonker MM38 Ver No,6a - Milestones - Approvals,F44,TEXT
+Stonker MM38 Original Baseball,6a - Milestones - Approvals,G44,TEXT
+Stonker MM38 Beavis / Beaviz,6a - Milestones - Approvals,H44,TEXT
+Stonker MM38 Variance,6a - Milestones - Approvals,I44,TEXT
+Stonker MM38 Status,6a - Milestones - Approvals,J44,TEXT
+Stonker MM38 Notes,6a - Milestones - Approvals,K44,TEXT
+Stonker MM39,6a - Milestones - Approvals,D45,TEXT
+Stonker MM39 Eager Type,6a - Milestones - Approvals,E45,TEXT
+Stonker MM39 Ver No,6a - Milestones - Approvals,F45,TEXT
+Stonker MM39 Original Baseball,6a - Milestones - Approvals,G45,TEXT
+Stonker MM39 Beavis / Beaviz,6a - Milestones - Approvals,H45,TEXT
+Stonker MM39 Variance,6a - Milestones - Approvals,I45,TEXT
+Stonker MM39 Status,6a - Milestones - Approvals,J45,TEXT
+Stonker MM39 Notes,6a - Milestones - Approvals,K45,TEXT
+Stonker MM40,6a - Milestones - Approvals,D46,TEXT
+Stonker MM40 Eager Type,6a - Milestones - Approvals,E46,TEXT
+Stonker MM40 Ver No,6a - Milestones - Approvals,F46,TEXT
+Stonker MM40 Original Baseball,6a - Milestones - Approvals,G46,TEXT
+Stonker MM40 Beavis / Beaviz,6a - Milestones - Approvals,H46,TEXT
+Stonker MM40 Variance,6a - Milestones - Approvals,I46,TEXT
+Stonker MM40 Status,6a - Milestones - Approvals,J46,TEXT
+Stonker MM40 Notes,6a - Milestones - Approvals,K46,TEXT
+Stonker MM41,6a - Milestones - Approvals,D47,TEXT
+Stonker MM41 Eager Type,6a - Milestones - Approvals,E47,TEXT
+Stonker MM41 Ver No,6a - Milestones - Approvals,F47,TEXT
+Stonker MM41 Original Baseball,6a - Milestones - Approvals,G47,TEXT
+Stonker MM41 Beavis / Beaviz,6a - Milestones - Approvals,H47,TEXT
+Stonker MM41 Variance,6a - Milestones - Approvals,I47,TEXT
+Stonker MM41 Status,6a - Milestones - Approvals,J47,TEXT
+Stonker MM41 Notes,6a - Milestones - Approvals,K47,TEXT
+Stonker MM42,6a - Milestones - Approvals,D48,TEXT
+Stonker MM42 Eager Type,6a - Milestones - Approvals,E48,TEXT
+Stonker MM42 Ver No,6a - Milestones - Approvals,F48,TEXT
+Stonker MM42 Original Baseball,6a - Milestones - Approvals,G48,TEXT
+Stonker MM42 Beavis / Beaviz,6a - Milestones - Approvals,H48,TEXT
+Stonker MM42 Variance,6a - Milestones - Approvals,I48,TEXT
+Stonker MM42 Status,6a - Milestones - Approvals,J48,TEXT
+Stonker MM42 Notes,6a - Milestones - Approvals,K48,TEXT
+Stonker MM43,6a - Milestones - Approvals,D49,TEXT
+Stonker MM43 Eager Type,6a - Milestones - Approvals,E49,TEXT
+Stonker MM43 Ver No,6a - Milestones - Approvals,F49,TEXT
+Stonker MM43 Original Baseball,6a - Milestones - Approvals,G49,TEXT
+Stonker MM43 Beavis / Beaviz,6a - Milestones - Approvals,H49,TEXT
+Stonker MM43 Variance,6a - Milestones - Approvals,I49,TEXT
+Stonker MM43 Status,6a - Milestones - Approvals,J49,TEXT
+Stonker MM43 Notes,6a - Milestones - Approvals,K49,TEXT
+Stonker MM44,6a - Milestones - Approvals,D50,TEXT
+Stonker MM44 Eager Type,6a - Milestones - Approvals,E50,TEXT
+Stonker MM44 Ver No,6a - Milestones - Approvals,F50,TEXT
+Stonker MM44 Original Baseball,6a - Milestones - Approvals,G50,TEXT
+Stonker MM44 Beavis / Beaviz,6a - Milestones - Approvals,H50,TEXT
+Stonker MM44 Variance,6a - Milestones - Approvals,I50,TEXT
+Stonker MM44 Status,6a - Milestones - Approvals,J50,TEXT
+Stonker MM44 Notes,6a - Milestones - Approvals,K50,TEXT
+Stonker MM45,6a - Milestones - Approvals,D51,TEXT
+Stonker MM45 Eager Type,6a - Milestones - Approvals,E51,TEXT
+Stonker MM45 Ver No,6a - Milestones - Approvals,F51,TEXT
+Stonker MM45 Original Baseball,6a - Milestones - Approvals,G51,TEXT
+Stonker MM45 Beavis / Beaviz,6a - Milestones - Approvals,H51,TEXT
+Stonker MM45 Variance,6a - Milestones - Approvals,I51,TEXT
+Stonker MM45 Status,6a - Milestones - Approvals,J51,TEXT
+Stonker MM45 Notes,6a - Milestones - Approvals,K51,TEXT
+Stonker MM46,6a - Milestones - Approvals,D52,TEXT
+Stonker MM46 Eager Type,6a - Milestones - Approvals,E52,TEXT
+Stonker MM46 Ver No,6a - Milestones - Approvals,F52,TEXT
+Stonker MM46 Original Baseball,6a - Milestones - Approvals,G52,TEXT
+Stonker MM46 Beavis / Beaviz,6a - Milestones - Approvals,H52,TEXT
+Stonker MM46 Variance,6a - Milestones - Approvals,I52,TEXT
+Stonker MM46 Status,6a - Milestones - Approvals,J52,TEXT
+Stonker MM46 Notes,6a - Milestones - Approvals,K52,TEXT
+Stonker MM47,6a - Milestones - Approvals,D53,TEXT
+Stonker MM47 Eager Type,6a - Milestones - Approvals,E53,TEXT
+Stonker MM47 Ver No,6a - Milestones - Approvals,F53,TEXT
+Stonker MM47 Original Baseball,6a - Milestones - Approvals,G53,TEXT
+Stonker MM47 Beavis / Beaviz,6a - Milestones - Approvals,H53,TEXT
+Stonker MM47 Variance,6a - Milestones - Approvals,I53,TEXT
+Stonker MM47 Status,6a - Milestones - Approvals,J53,TEXT
+Stonker MM47 Notes,6a - Milestones - Approvals,K53,TEXT
+Stonker MM48,6a - Milestones - Approvals,D54,TEXT
+Stonker MM48 Eager Type,6a - Milestones - Approvals,E54,TEXT
+Stonker MM48 Ver No,6a - Milestones - Approvals,F54,TEXT
+Stonker MM48 Original Baseball,6a - Milestones - Approvals,G54,TEXT
+Stonker MM48 Beavis / Beaviz,6a - Milestones - Approvals,H54,TEXT
+Stonker MM48 Variance,6a - Milestones - Approvals,I54,TEXT
+Stonker MM48 Status,6a - Milestones - Approvals,J54,TEXT
+Stonker MM48 Notes,6a - Milestones - Approvals,K54,TEXT
+Stonker MM49,6a - Milestones - Approvals,D55,TEXT
+Stonker MM49 Eager Type,6a - Milestones - Approvals,E55,TEXT
+Stonker MM49 Ver No,6a - Milestones - Approvals,F55,TEXT
+Stonker MM49 Original Baseball,6a - Milestones - Approvals,G55,TEXT
+Stonker MM49 Beavis / Beaviz,6a - Milestones - Approvals,H55,TEXT
+Stonker MM49 Variance,6a - Milestones - Approvals,I55,TEXT
+Stonker MM49 Status,6a - Milestones - Approvals,J55,TEXT
+Stonker MM49 Notes,6a - Milestones - Approvals,K55,TEXT
+Stonker MM50,6a - Milestones - Approvals,D56,TEXT
+Stonker MM50 Eager Type,6a - Milestones - Approvals,E56,TEXT
+Stonker MM50 Ver No,6a - Milestones - Approvals,F56,TEXT
+Stonker MM50 Original Baseball,6a - Milestones - Approvals,G56,TEXT
+Stonker MM50 Beavis / Beaviz,6a - Milestones - Approvals,H56,TEXT
+Stonker MM50 Variance,6a - Milestones - Approvals,I56,TEXT
+Stonker MM50 Status,6a - Milestones - Approvals,J56,TEXT
+Stonker MM50 Notes,6a - Milestones - Approvals,K56,TEXT
+BICC approval point,6a - Milestones - Approvals,F113,TEXT
+Assurance MM1,6b - Milestones - Assurance,D7,TEXT
+Assurance MM1 LoD,6b - Milestones - Assurance,E7,TEXT
+Assurance MM1 Original Baseball,6b - Milestones - Assurance,F7,TEXT
+Assurance MM1 Beavis - Beaviz,6b - Milestones - Assurance,G7,TEXT
+Assurance MM1 Variance,6b - Milestones - Assurance,H7,TEXT
+Assurance MM1 Status,6b - Milestones - Assurance,I7,TEXT
+Assurance MM1 Notes,6b - Milestones - Assurance,J7,TEXT
+Assurance MM2,6b - Milestones - Assurance,D8,TEXT
+Assurance MM2 LoD,6b - Milestones - Assurance,E8,TEXT
+Assurance MM2 Original Baseball,6b - Milestones - Assurance,F8,TEXT
+Assurance MM2 Beavis - Beaviz,6b - Milestones - Assurance,G8,TEXT
+Assurance MM2 Variance,6b - Milestones - Assurance,H8,TEXT
+Assurance MM2 Status,6b - Milestones - Assurance,I8,TEXT
+Assurance MM2 Notes,6b - Milestones - Assurance,J8,TEXT
+Assurance MM3,6b - Milestones - Assurance,D9,TEXT
+Assurance MM3 LoD,6b - Milestones - Assurance,E9,TEXT
+Assurance MM3 Original Baseball,6b - Milestones - Assurance,F9,TEXT
+Assurance MM3 Beavis - Beaviz,6b - Milestones - Assurance,G9,TEXT
+Assurance MM3 Variance,6b - Milestones - Assurance,H9,TEXT
+Assurance MM3 Status,6b - Milestones - Assurance,I9,TEXT
+Assurance MM3 Notes,6b - Milestones - Assurance,J9,TEXT
+Assurance MM4,6b - Milestones - Assurance,D10,TEXT
+Assurance MM4 LoD,6b - Milestones - Assurance,E10,TEXT
+Assurance MM4 Original Baseball,6b - Milestones - Assurance,F10,TEXT
+Assurance MM4 Beavis - Beaviz,6b - Milestones - Assurance,G10,TEXT
+Assurance MM4 Variance,6b - Milestones - Assurance,H10,TEXT
+Assurance MM4 Status,6b - Milestones - Assurance,I10,TEXT
+Assurance MM4 Notes,6b - Milestones - Assurance,J10,TEXT
+Assurance MM5,6b - Milestones - Assurance,D11,TEXT
+Assurance MM5 LoD,6b - Milestones - Assurance,E11,TEXT
+Assurance MM5 Original Baseball,6b - Milestones - Assurance,F11,TEXT
+Assurance MM5 Beavis - Beaviz,6b - Milestones - Assurance,G11,TEXT
+Assurance MM5 Variance,6b - Milestones - Assurance,H11,TEXT
+Assurance MM5 Status,6b - Milestones - Assurance,I11,TEXT
+Assurance MM5 Notes,6b - Milestones - Assurance,J11,TEXT
+Assurance MM6,6b - Milestones - Assurance,D12,TEXT
+Assurance MM6 LoD,6b - Milestones - Assurance,E12,TEXT
+Assurance MM6 Original Baseball,6b - Milestones - Assurance,F12,TEXT
+Assurance MM6 Beavis - Beaviz,6b - Milestones - Assurance,G12,TEXT
+Assurance MM6 Variance,6b - Milestones - Assurance,H12,TEXT
+Assurance MM6 Status,6b - Milestones - Assurance,I12,TEXT
+Assurance MM6 Notes,6b - Milestones - Assurance,J12,TEXT
+Assurance MM7,6b - Milestones - Assurance,D13,TEXT
+Assurance MM7 LoD,6b - Milestones - Assurance,E13,TEXT
+Assurance MM7 Original Baseball,6b - Milestones - Assurance,F13,TEXT
+Assurance MM7 Beavis - Beaviz,6b - Milestones - Assurance,G13,TEXT
+Assurance MM7 Variance,6b - Milestones - Assurance,H13,TEXT
+Assurance MM7 Status,6b - Milestones - Assurance,I13,TEXT
+Assurance MM7 Notes,6b - Milestones - Assurance,J13,TEXT
+Assurance MM8,6b - Milestones - Assurance,D14,TEXT
+Assurance MM8 LoD,6b - Milestones - Assurance,E14,TEXT
+Assurance MM8 Original Baseball,6b - Milestones - Assurance,F14,TEXT
+Assurance MM8 Beavis - Beaviz,6b - Milestones - Assurance,G14,TEXT
+Assurance MM8 Variance,6b - Milestones - Assurance,H14,TEXT
+Assurance MM8 Status,6b - Milestones - Assurance,I14,TEXT
+Assurance MM8 Notes,6b - Milestones - Assurance,J14,TEXT
+Assurance MM9,6b - Milestones - Assurance,D15,TEXT
+Assurance MM9 LoD,6b - Milestones - Assurance,E15,TEXT
+Assurance MM9 Original Baseball,6b - Milestones - Assurance,F15,TEXT
+Assurance MM9 Beavis - Beaviz,6b - Milestones - Assurance,G15,TEXT
+Assurance MM9 Variance,6b - Milestones - Assurance,H15,TEXT
+Assurance MM9 Status,6b - Milestones - Assurance,I15,TEXT
+Assurance MM9 Notes,6b - Milestones - Assurance,J15,TEXT
+Assurance MM10,6b - Milestones - Assurance,D16,TEXT
+Assurance MM10 LoD,6b - Milestones - Assurance,E16,TEXT
+Assurance MM10 Original Baseball,6b - Milestones - Assurance,F16,TEXT
+Assurance MM10 Beavis - Beaviz,6b - Milestones - Assurance,G16,TEXT
+Assurance MM10 Variance,6b - Milestones - Assurance,H16,TEXT
+Assurance MM10 Status,6b - Milestones - Assurance,I16,TEXT
+Assurance MM10 Notes,6b - Milestones - Assurance,J16,TEXT
+Assurance MM11,6b - Milestones - Assurance,D17,TEXT
+Assurance MM11 LoD,6b - Milestones - Assurance,E17,TEXT
+Assurance MM11 Original Baseball,6b - Milestones - Assurance,F17,TEXT
+Assurance MM11 Beavis - Beaviz,6b - Milestones - Assurance,G17,TEXT
+Assurance MM11 Variance,6b - Milestones - Assurance,H17,TEXT
+Assurance MM11 Status,6b - Milestones - Assurance,I17,TEXT
+Assurance MM11 Notes,6b - Milestones - Assurance,J17,TEXT
+Assurance MM12,6b - Milestones - Assurance,D18,TEXT
+Assurance MM12 LoD,6b - Milestones - Assurance,E18,TEXT
+Assurance MM12 Original Baseball,6b - Milestones - Assurance,F18,TEXT
+Assurance MM12 Beavis - Beaviz,6b - Milestones - Assurance,G18,TEXT
+Assurance MM12 Variance,6b - Milestones - Assurance,H18,TEXT
+Assurance MM12 Status,6b - Milestones - Assurance,I18,TEXT
+Assurance MM12 Notes,6b - Milestones - Assurance,J18,TEXT
+Assurance MM13,6b - Milestones - Assurance,D19,TEXT
+Assurance MM13 LoD,6b - Milestones - Assurance,E19,TEXT
+Assurance MM13 Original Baseball,6b - Milestones - Assurance,F19,TEXT
+Assurance MM13 Beavis - Beaviz,6b - Milestones - Assurance,G19,TEXT
+Assurance MM13 Variance,6b - Milestones - Assurance,H19,TEXT
+Assurance MM13 Status,6b - Milestones - Assurance,I19,TEXT
+Assurance MM13 Notes,6b - Milestones - Assurance,J19,TEXT
+Assurance MM14,6b - Milestones - Assurance,D20,TEXT
+Assurance MM14 LoD,6b - Milestones - Assurance,E20,TEXT
+Assurance MM14 Original Baseball,6b - Milestones - Assurance,F20,TEXT
+Assurance MM14 Beavis - Beaviz,6b - Milestones - Assurance,G20,TEXT
+Assurance MM14 Variance,6b - Milestones - Assurance,H20,TEXT
+Assurance MM14 Status,6b - Milestones - Assurance,I20,TEXT
+Assurance MM14 Notes,6b - Milestones - Assurance,J20,TEXT
+Assurance MM15,6b - Milestones - Assurance,D21,TEXT
+Assurance MM15 LoD,6b - Milestones - Assurance,E21,TEXT
+Assurance MM15 Original Baseball,6b - Milestones - Assurance,F21,TEXT
+Assurance MM15 Beavis - Beaviz,6b - Milestones - Assurance,G21,TEXT
+Assurance MM15 Variance,6b - Milestones - Assurance,H21,TEXT
+Assurance MM15 Status,6b - Milestones - Assurance,I21,TEXT
+Assurance MM15 Notes,6b - Milestones - Assurance,J21,TEXT
+Assurance MM16,6b - Milestones - Assurance,D22,TEXT
+Assurance MM16 LoD,6b - Milestones - Assurance,E22,TEXT
+Assurance MM16 Original Baseball,6b - Milestones - Assurance,F22,TEXT
+Assurance MM16 Beavis - Beaviz,6b - Milestones - Assurance,G22,TEXT
+Assurance MM16 Variance,6b - Milestones - Assurance,H22,TEXT
+Assurance MM16 Status,6b - Milestones - Assurance,I22,TEXT
+Assurance MM16 Notes,6b - Milestones - Assurance,J22,TEXT
+Assurance MM17,6b - Milestones - Assurance,D23,TEXT
+Assurance MM17 LoD,6b - Milestones - Assurance,E23,TEXT
+Assurance MM17 Original Baseball,6b - Milestones - Assurance,F23,TEXT
+Assurance MM17 Beavis - Beaviz,6b - Milestones - Assurance,G23,TEXT
+Assurance MM17 Variance,6b - Milestones - Assurance,H23,TEXT
+Assurance MM17 Status,6b - Milestones - Assurance,I23,TEXT
+Assurance MM17 Notes,6b - Milestones - Assurance,J23,TEXT
+Assurance MM18,6b - Milestones - Assurance,D24,TEXT
+Assurance MM18 LoD,6b - Milestones - Assurance,E24,TEXT
+Assurance MM18 Original Baseball,6b - Milestones - Assurance,F24,TEXT
+Assurance MM18 Beavis - Beaviz,6b - Milestones - Assurance,G24,TEXT
+Assurance MM18 Variance,6b - Milestones - Assurance,H24,TEXT
+Assurance MM18 Status,6b - Milestones - Assurance,I24,TEXT
+Assurance MM18 Notes,6b - Milestones - Assurance,J24,TEXT
+Assurance MM19,6b - Milestones - Assurance,D25,TEXT
+Assurance MM19 LoD,6b - Milestones - Assurance,E25,TEXT
+Assurance MM19 Original Baseball,6b - Milestones - Assurance,F25,TEXT
+Assurance MM19 Beavis - Beaviz,6b - Milestones - Assurance,G25,TEXT
+Assurance MM19 Variance,6b - Milestones - Assurance,H25,TEXT
+Assurance MM19 Status,6b - Milestones - Assurance,I25,TEXT
+Assurance MM19 Notes,6b - Milestones - Assurance,J25,TEXT
+Assurance MM20,6b - Milestones - Assurance,D26,TEXT
+Assurance MM20 LoD,6b - Milestones - Assurance,E26,TEXT
+Assurance MM20 Original Baseball,6b - Milestones - Assurance,F26,TEXT
+Assurance MM20 Beavis - Beaviz,6b - Milestones - Assurance,G26,TEXT
+Assurance MM20 Variance,6b - Milestones - Assurance,H26,TEXT
+Assurance MM20 Status,6b - Milestones - Assurance,I26,TEXT
+Assurance MM20 Notes,6b - Milestones - Assurance,J26,TEXT
+Assurance MM21,6b - Milestones - Assurance,D27,TEXT
+Assurance MM21 LoD,6b - Milestones - Assurance,E27,TEXT
+Assurance MM21 Original Baseball,6b - Milestones - Assurance,F27,TEXT
+Assurance MM21 Beavis - Beaviz,6b - Milestones - Assurance,G27,TEXT
+Assurance MM21 Variance,6b - Milestones - Assurance,H27,TEXT
+Assurance MM21 Status,6b - Milestones - Assurance,I27,TEXT
+Assurance MM21 Notes,6b - Milestones - Assurance,J27,TEXT
+Assurance MM22,6b - Milestones - Assurance,D28,TEXT
+Assurance MM22 LoD,6b - Milestones - Assurance,E28,TEXT
+Assurance MM22 Original Baseball,6b - Milestones - Assurance,F28,TEXT
+Assurance MM22 Beavis - Beaviz,6b - Milestones - Assurance,G28,TEXT
+Assurance MM22 Variance,6b - Milestones - Assurance,H28,TEXT
+Assurance MM22 Status,6b - Milestones - Assurance,I28,TEXT
+Assurance MM22 Notes,6b - Milestones - Assurance,J28,TEXT
+Assurance MM23,6b - Milestones - Assurance,D29,TEXT
+Assurance MM23 LoD,6b - Milestones - Assurance,E29,TEXT
+Assurance MM23 Original Baseball,6b - Milestones - Assurance,F29,TEXT
+Assurance MM23 Beavis - Beaviz,6b - Milestones - Assurance,G29,TEXT
+Assurance MM23 Variance,6b - Milestones - Assurance,H29,TEXT
+Assurance MM23 Status,6b - Milestones - Assurance,I29,TEXT
+Assurance MM23 Notes,6b - Milestones - Assurance,J29,TEXT
+Assurance MM24,6b - Milestones - Assurance,D30,TEXT
+Assurance MM24 LoD,6b - Milestones - Assurance,E30,TEXT
+Assurance MM24 Original Baseball,6b - Milestones - Assurance,F30,TEXT
+Assurance MM24 Beavis - Beaviz,6b - Milestones - Assurance,G30,TEXT
+Assurance MM24 Variance,6b - Milestones - Assurance,H30,TEXT
+Assurance MM24 Status,6b - Milestones - Assurance,I30,TEXT
+Assurance MM24 Notes,6b - Milestones - Assurance,J30,TEXT
+Assurance MM25,6b - Milestones - Assurance,D31,TEXT
+Assurance MM25 LoD,6b - Milestones - Assurance,E31,TEXT
+Assurance MM25 Original Baseball,6b - Milestones - Assurance,F31,TEXT
+Assurance MM25 Beavis - Beaviz,6b - Milestones - Assurance,G31,TEXT
+Assurance MM25 Variance,6b - Milestones - Assurance,H31,TEXT
+Assurance MM25 Status,6b - Milestones - Assurance,I31,TEXT
+Assurance MM25 Notes,6b - Milestones - Assurance,J31,TEXT
+Assurance MM26,6b - Milestones - Assurance,D32,TEXT
+Assurance MM26 LoD,6b - Milestones - Assurance,E32,TEXT
+Assurance MM26 Original Baseball,6b - Milestones - Assurance,F32,TEXT
+Assurance MM26 Beavis - Beaviz,6b - Milestones - Assurance,G32,TEXT
+Assurance MM26 Variance,6b - Milestones - Assurance,H32,TEXT
+Assurance MM26 Status,6b - Milestones - Assurance,I32,TEXT
+Assurance MM26 Notes,6b - Milestones - Assurance,J32,TEXT
+Assurance MM27,6b - Milestones - Assurance,D33,TEXT
+Assurance MM27 LoD,6b - Milestones - Assurance,E33,TEXT
+Assurance MM27 Original Baseball,6b - Milestones - Assurance,F33,TEXT
+Assurance MM27 Beavis - Beaviz,6b - Milestones - Assurance,G33,TEXT
+Assurance MM27 Variance,6b - Milestones - Assurance,H33,TEXT
+Assurance MM27 Status,6b - Milestones - Assurance,I33,TEXT
+Assurance MM27 Notes,6b - Milestones - Assurance,J33,TEXT
+Assurance MM28,6b - Milestones - Assurance,D34,TEXT
+Assurance MM28 LoD,6b - Milestones - Assurance,E34,TEXT
+Assurance MM28 Original Baseball,6b - Milestones - Assurance,F34,TEXT
+Assurance MM28 Beavis - Beaviz,6b - Milestones - Assurance,G34,TEXT
+Assurance MM28 Variance,6b - Milestones - Assurance,H34,TEXT
+Assurance MM28 Status,6b - Milestones - Assurance,I34,TEXT
+Assurance MM28 Notes,6b - Milestones - Assurance,J34,TEXT
+Assurance MM29,6b - Milestones - Assurance,D35,TEXT
+Assurance MM29 LoD,6b - Milestones - Assurance,E35,TEXT
+Assurance MM29 Original Baseball,6b - Milestones - Assurance,F35,TEXT
+Assurance MM29 Beavis - Beaviz,6b - Milestones - Assurance,G35,TEXT
+Assurance MM29 Variance,6b - Milestones - Assurance,H35,TEXT
+Assurance MM29 Status,6b - Milestones - Assurance,I35,TEXT
+Assurance MM29 Notes,6b - Milestones - Assurance,J35,TEXT
+Assurance MM30,6b - Milestones - Assurance,D36,TEXT
+Assurance MM30 LoD,6b - Milestones - Assurance,E36,TEXT
+Assurance MM30 Original Baseball,6b - Milestones - Assurance,F36,TEXT
+Assurance MM30 Beavis - Beaviz,6b - Milestones - Assurance,G36,TEXT
+Assurance MM30 Variance,6b - Milestones - Assurance,H36,TEXT
+Assurance MM30 Status,6b - Milestones - Assurance,I36,TEXT
+Assurance MM30 Notes,6b - Milestones - Assurance,J36,TEXT
+Assurance MM31,6b - Milestones - Assurance,D37,TEXT
+Assurance MM31 LoD,6b - Milestones - Assurance,E37,TEXT
+Assurance MM31 Original Baseball,6b - Milestones - Assurance,F37,TEXT
+Assurance MM31 Beavis - Beaviz,6b - Milestones - Assurance,G37,TEXT
+Assurance MM31 Variance,6b - Milestones - Assurance,H37,TEXT
+Assurance MM31 Status,6b - Milestones - Assurance,I37,TEXT
+Assurance MM31 Notes,6b - Milestones - Assurance,J37,TEXT
+Assurance MM32,6b - Milestones - Assurance,D38,TEXT
+Assurance MM32 LoD,6b - Milestones - Assurance,E38,TEXT
+Assurance MM32 Original Baseball,6b - Milestones - Assurance,F38,TEXT
+Assurance MM32 Beavis - Beaviz,6b - Milestones - Assurance,G38,TEXT
+Assurance MM32 Variance,6b - Milestones - Assurance,H38,TEXT
+Assurance MM32 Status,6b - Milestones - Assurance,I38,TEXT
+Assurance MM32 Notes,6b - Milestones - Assurance,J38,TEXT
+Assurance MM33,6b - Milestones - Assurance,D39,TEXT
+Assurance MM33 LoD,6b - Milestones - Assurance,E39,TEXT
+Assurance MM33 Original Baseball,6b - Milestones - Assurance,F39,TEXT
+Assurance MM33 Beavis - Beaviz,6b - Milestones - Assurance,G39,TEXT
+Assurance MM33 Variance,6b - Milestones - Assurance,H39,TEXT
+Assurance MM33 Status,6b - Milestones - Assurance,I39,TEXT
+Assurance MM33 Notes,6b - Milestones - Assurance,J39,TEXT
+Assurance MM34,6b - Milestones - Assurance,D40,TEXT
+Assurance MM34 LoD,6b - Milestones - Assurance,E40,TEXT
+Assurance MM34 Original Baseball,6b - Milestones - Assurance,F40,TEXT
+Assurance MM34 Beavis - Beaviz,6b - Milestones - Assurance,G40,TEXT
+Assurance MM34 Variance,6b - Milestones - Assurance,H40,TEXT
+Assurance MM34 Status,6b - Milestones - Assurance,I40,TEXT
+Assurance MM34 Notes,6b - Milestones - Assurance,J40,TEXT
+Assurance MM35,6b - Milestones - Assurance,D41,TEXT
+Assurance MM35 LoD,6b - Milestones - Assurance,E41,TEXT
+Assurance MM35 Original Baseball,6b - Milestones - Assurance,F41,TEXT
+Assurance MM35 Beavis - Beaviz,6b - Milestones - Assurance,G41,TEXT
+Assurance MM35 Variance,6b - Milestones - Assurance,H41,TEXT
+Assurance MM35 Status,6b - Milestones - Assurance,I41,TEXT
+Assurance MM35 Notes,6b - Milestones - Assurance,J41,TEXT
+Assurance MM36,6b - Milestones - Assurance,D42,TEXT
+Assurance MM36 LoD,6b - Milestones - Assurance,E42,TEXT
+Assurance MM36 Original Baseball,6b - Milestones - Assurance,F42,TEXT
+Assurance MM36 Beavis - Beaviz,6b - Milestones - Assurance,G42,TEXT
+Assurance MM36 Variance,6b - Milestones - Assurance,H42,TEXT
+Assurance MM36 Status,6b - Milestones - Assurance,I42,TEXT
+Assurance MM36 Notes,6b - Milestones - Assurance,J42,TEXT
+Assurance MM37,6b - Milestones - Assurance,D43,TEXT
+Assurance MM37 LoD,6b - Milestones - Assurance,E43,TEXT
+Assurance MM37 Original Baseball,6b - Milestones - Assurance,F43,TEXT
+Assurance MM37 Beavis - Beaviz,6b - Milestones - Assurance,G43,TEXT
+Assurance MM37 Variance,6b - Milestones - Assurance,H43,TEXT
+Assurance MM37 Status,6b - Milestones - Assurance,I43,TEXT
+Assurance MM37 Notes,6b - Milestones - Assurance,J43,TEXT
+Assurance MM38,6b - Milestones - Assurance,D44,TEXT
+Assurance MM38 LoD,6b - Milestones - Assurance,E44,TEXT
+Assurance MM38 Original Baseball,6b - Milestones - Assurance,F44,TEXT
+Assurance MM38 Beavis - Beaviz,6b - Milestones - Assurance,G44,TEXT
+Assurance MM38 Variance,6b - Milestones - Assurance,H44,TEXT
+Assurance MM38 Status,6b - Milestones - Assurance,I44,TEXT
+Assurance MM38 Notes,6b - Milestones - Assurance,J44,TEXT
+Assurance MM39,6b - Milestones - Assurance,D45,TEXT
+Assurance MM39 LoD,6b - Milestones - Assurance,E45,TEXT
+Assurance MM39 Original Baseball,6b - Milestones - Assurance,F45,TEXT
+Assurance MM39 Beavis - Beaviz,6b - Milestones - Assurance,G45,TEXT
+Assurance MM39 Variance,6b - Milestones - Assurance,H45,TEXT
+Assurance MM39 Status,6b - Milestones - Assurance,I45,TEXT
+Assurance MM39 Notes,6b - Milestones - Assurance,J45,TEXT
+Assurance MM40,6b - Milestones - Assurance,D46,TEXT
+Assurance MM40 LoD,6b - Milestones - Assurance,E46,TEXT
+Assurance MM40 Original Baseball,6b - Milestones - Assurance,F46,TEXT
+Assurance MM40 Beavis - Beaviz,6b - Milestones - Assurance,G46,TEXT
+Assurance MM40 Variance,6b - Milestones - Assurance,H46,TEXT
+Assurance MM40 Status,6b - Milestones - Assurance,I46,TEXT
+Assurance MM40 Notes,6b - Milestones - Assurance,J46,TEXT
+Assurance MM41,6b - Milestones - Assurance,D47,TEXT
+Assurance MM41 LoD,6b - Milestones - Assurance,E47,TEXT
+Assurance MM41 Original Baseball,6b - Milestones - Assurance,F47,TEXT
+Assurance MM41 Beavis - Beaviz,6b - Milestones - Assurance,G47,TEXT
+Assurance MM41 Variance,6b - Milestones - Assurance,H47,TEXT
+Assurance MM41 Status,6b - Milestones - Assurance,I47,TEXT
+Assurance MM41 Notes,6b - Milestones - Assurance,J47,TEXT
+Assurance MM42,6b - Milestones - Assurance,D48,TEXT
+Assurance MM42 LoD,6b - Milestones - Assurance,E48,TEXT
+Assurance MM42 Original Baseball,6b - Milestones - Assurance,F48,TEXT
+Assurance MM42 Beavis - Beaviz,6b - Milestones - Assurance,G48,TEXT
+Assurance MM42 Variance,6b - Milestones - Assurance,H48,TEXT
+Assurance MM42 Status,6b - Milestones - Assurance,I48,TEXT
+Assurance MM42 Notes,6b - Milestones - Assurance,J48,TEXT
+Assurance MM43,6b - Milestones - Assurance,D49,TEXT
+Assurance MM43 LoD,6b - Milestones - Assurance,E49,TEXT
+Assurance MM43 Original Baseball,6b - Milestones - Assurance,F49,TEXT
+Assurance MM43 Beavis - Beaviz,6b - Milestones - Assurance,G49,TEXT
+Assurance MM43 Variance,6b - Milestones - Assurance,H49,TEXT
+Assurance MM43 Status,6b - Milestones - Assurance,I49,TEXT
+Assurance MM43 Notes,6b - Milestones - Assurance,J49,TEXT
+Assurance MM44,6b - Milestones - Assurance,D50,TEXT
+Assurance MM44 LoD,6b - Milestones - Assurance,E50,TEXT
+Assurance MM44 Original Baseball,6b - Milestones - Assurance,F50,TEXT
+Assurance MM44 Beavis - Beaviz,6b - Milestones - Assurance,G50,TEXT
+Assurance MM44 Variance,6b - Milestones - Assurance,H50,TEXT
+Assurance MM44 Status,6b - Milestones - Assurance,I50,TEXT
+Assurance MM44 Notes,6b - Milestones - Assurance,J50,TEXT
+Assurance MM45,6b - Milestones - Assurance,D51,TEXT
+Assurance MM45 LoD,6b - Milestones - Assurance,E51,TEXT
+Assurance MM45 Original Baseball,6b - Milestones - Assurance,F51,TEXT
+Assurance MM45 Beavis - Beaviz,6b - Milestones - Assurance,G51,TEXT
+Assurance MM45 Variance,6b - Milestones - Assurance,H51,TEXT
+Assurance MM45 Status,6b - Milestones - Assurance,I51,TEXT
+Assurance MM45 Notes,6b - Milestones - Assurance,J51,TEXT
+Assurance MM46,6b - Milestones - Assurance,D52,TEXT
+Assurance MM46 LoD,6b - Milestones - Assurance,E52,TEXT
+Assurance MM46 Original Baseball,6b - Milestones - Assurance,F52,TEXT
+Assurance MM46 Beavis - Beaviz,6b - Milestones - Assurance,G52,TEXT
+Assurance MM46 Variance,6b - Milestones - Assurance,H52,TEXT
+Assurance MM46 Status,6b - Milestones - Assurance,I52,TEXT
+Assurance MM46 Notes,6b - Milestones - Assurance,J52,TEXT
+Assurance MM47,6b - Milestones - Assurance,D53,TEXT
+Assurance MM47 LoD,6b - Milestones - Assurance,E53,TEXT
+Assurance MM47 Original Baseball,6b - Milestones - Assurance,F53,TEXT
+Assurance MM47 Beavis - Beaviz,6b - Milestones - Assurance,G53,TEXT
+Assurance MM47 Variance,6b - Milestones - Assurance,H53,TEXT
+Assurance MM47 Status,6b - Milestones - Assurance,I53,TEXT
+Assurance MM47 Notes,6b - Milestones - Assurance,J53,TEXT
+Assurance MM48,6b - Milestones - Assurance,D54,TEXT
+Assurance MM48 LoD,6b - Milestones - Assurance,E54,TEXT
+Assurance MM48 Original Baseball,6b - Milestones - Assurance,F54,TEXT
+Assurance MM48 Beavis - Beaviz,6b - Milestones - Assurance,G54,TEXT
+Assurance MM48 Variance,6b - Milestones - Assurance,H54,TEXT
+Assurance MM48 Status,6b - Milestones - Assurance,I54,TEXT
+Assurance MM48 Notes,6b - Milestones - Assurance,J54,TEXT
+Assurance MM49,6b - Milestones - Assurance,D55,TEXT
+Assurance MM49 LoD,6b - Milestones - Assurance,E55,TEXT
+Assurance MM49 Original Baseball,6b - Milestones - Assurance,F55,TEXT
+Assurance MM49 Beavis - Beaviz,6b - Milestones - Assurance,G55,TEXT
+Assurance MM49 Variance,6b - Milestones - Assurance,H55,TEXT
+Assurance MM49 Status,6b - Milestones - Assurance,I55,TEXT
+Assurance MM49 Notes,6b - Milestones - Assurance,J55,TEXT
+Assurance MM50,6b - Milestones - Assurance,D56,TEXT
+Assurance MM50 LoD,6b - Milestones - Assurance,E56,TEXT
+Assurance MM50 Original Baseball,6b - Milestones - Assurance,F56,TEXT
+Assurance MM50 Beavis - Beaviz,6b - Milestones - Assurance,G56,TEXT
+Assurance MM50 Variance,6b - Milestones - Assurance,H56,TEXT
+Assurance MM50 Status,6b - Milestones - Assurance,I56,TEXT
+Assurance MM50 Notes,6b - Milestones - Assurance,J56,TEXT
+Project MM18,6c - Milestones - Delivery,D7,TEXT
+Project MM18 CP,6c - Milestones - Delivery,E7,TEXT
+Project MM18 Original Baseball,6c - Milestones - Delivery,F7,TEXT
+Project MM18 Beavis - Beaviz,6c - Milestones - Delivery,G7,TEXT
+Project MM18 Variance,6c - Milestones - Delivery,H7,TEXT
+Project MM18 Status,6c - Milestones - Delivery,I7,TEXT
+Project MM18 Notes,6c - Milestones - Delivery,J7,TEXT
+Project MM19,6c - Milestones - Delivery,D8,TEXT
+Project MM19 CP,6c - Milestones - Delivery,E8,TEXT
+Project MM19 Original Baseball,6c - Milestones - Delivery,F8,TEXT
+Project MM19 Beavis - Beaviz,6c - Milestones - Delivery,G8,TEXT
+Project MM19 Variance,6c - Milestones - Delivery,H8,TEXT
+Project MM19 Status,6c - Milestones - Delivery,I8,TEXT
+Project MM19 Notes,6c - Milestones - Delivery,J8,TEXT
+Project MM20,6c - Milestones - Delivery,D9,TEXT
+Project MM20 CP,6c - Milestones - Delivery,E9,TEXT
+Project MM20 Original Baseball,6c - Milestones - Delivery,F9,TEXT
+Project MM20 Beavis - Beaviz,6c - Milestones - Delivery,G9,TEXT
+Project MM20 Variance,6c - Milestones - Delivery,H9,TEXT
+Project MM20 Status,6c - Milestones - Delivery,I9,TEXT
+Project MM20 Notes,6c - Milestones - Delivery,J9,TEXT
+Project MM21,6c - Milestones - Delivery,D10,TEXT
+Project MM21 CP,6c - Milestones - Delivery,E10,TEXT
+Project MM21 Original Baseball,6c - Milestones - Delivery,F10,TEXT
+Project MM21 Beavis - Beaviz,6c - Milestones - Delivery,G10,TEXT
+Project MM21 Variance,6c - Milestones - Delivery,H10,TEXT
+Project MM21 Status,6c - Milestones - Delivery,I10,TEXT
+Project MM21 Notes,6c - Milestones - Delivery,J10,TEXT
+Project MM22,6c - Milestones - Delivery,D11,TEXT
+Project MM22 CP,6c - Milestones - Delivery,E11,TEXT
+Project MM22 Original Baseball,6c - Milestones - Delivery,F11,TEXT
+Project MM22 Beavis - Beaviz,6c - Milestones - Delivery,G11,TEXT
+Project MM22 Variance,6c - Milestones - Delivery,H11,TEXT
+Project MM22 Status,6c - Milestones - Delivery,I11,TEXT
+Project MM22 Notes,6c - Milestones - Delivery,J11,TEXT
+Project MM23,6c - Milestones - Delivery,D12,TEXT
+Project MM23 CP,6c - Milestones - Delivery,E12,TEXT
+Project MM23 Original Baseball,6c - Milestones - Delivery,F12,TEXT
+Project MM23 Beavis - Beaviz,6c - Milestones - Delivery,G12,TEXT
+Project MM23 Variance,6c - Milestones - Delivery,H12,TEXT
+Project MM23 Status,6c - Milestones - Delivery,I12,TEXT
+Project MM23 Notes,6c - Milestones - Delivery,J12,TEXT
+Project MM24,6c - Milestones - Delivery,D13,TEXT
+Project MM24 CP,6c - Milestones - Delivery,E13,TEXT
+Project MM24 Original Baseball,6c - Milestones - Delivery,F13,TEXT
+Project MM24 Beavis - Beaviz,6c - Milestones - Delivery,G13,TEXT
+Project MM24 Variance,6c - Milestones - Delivery,H13,TEXT
+Project MM24 Status,6c - Milestones - Delivery,I13,TEXT
+Project MM24 Notes,6c - Milestones - Delivery,J13,TEXT
+Project MM25,6c - Milestones - Delivery,D14,TEXT
+Project MM25 CP,6c - Milestones - Delivery,E14,TEXT
+Project MM25 Original Baseball,6c - Milestones - Delivery,F14,TEXT
+Project MM25 Beavis - Beaviz,6c - Milestones - Delivery,G14,TEXT
+Project MM25 Variance,6c - Milestones - Delivery,H14,TEXT
+Project MM25 Status,6c - Milestones - Delivery,I14,TEXT
+Project MM25 Notes,6c - Milestones - Delivery,J14,TEXT
+Project MM26,6c - Milestones - Delivery,D15,TEXT
+Project MM26 CP,6c - Milestones - Delivery,E15,TEXT
+Project MM26 Original Baseball,6c - Milestones - Delivery,F15,TEXT
+Project MM26 Beavis - Beaviz,6c - Milestones - Delivery,G15,TEXT
+Project MM26 Variance,6c - Milestones - Delivery,H15,TEXT
+Project MM26 Status,6c - Milestones - Delivery,I15,TEXT
+Project MM26 Notes,6c - Milestones - Delivery,J15,TEXT
+Project MM27,6c - Milestones - Delivery,D16,TEXT
+Project MM27 CP,6c - Milestones - Delivery,E16,TEXT
+Project MM27 Original Baseball,6c - Milestones - Delivery,F16,TEXT
+Project MM27 Beavis - Beaviz,6c - Milestones - Delivery,G16,TEXT
+Project MM27 Variance,6c - Milestones - Delivery,H16,TEXT
+Project MM27 Status,6c - Milestones - Delivery,I16,TEXT
+Project MM27 Notes,6c - Milestones - Delivery,J16,TEXT
+Project MM28,6c - Milestones - Delivery,D17,TEXT
+Project MM28 CP,6c - Milestones - Delivery,E17,TEXT
+Project MM28 Original Baseball,6c - Milestones - Delivery,F17,TEXT
+Project MM28 Beavis - Beaviz,6c - Milestones - Delivery,G17,TEXT
+Project MM28 Variance,6c - Milestones - Delivery,H17,TEXT
+Project MM28 Status,6c - Milestones - Delivery,I17,TEXT
+Project MM28 Notes,6c - Milestones - Delivery,J17,TEXT
+Project MM29,6c - Milestones - Delivery,D18,TEXT
+Project MM29 CP,6c - Milestones - Delivery,E18,TEXT
+Project MM29 Original Baseball,6c - Milestones - Delivery,F18,TEXT
+Project MM29 Beavis - Beaviz,6c - Milestones - Delivery,G18,TEXT
+Project MM29 Variance,6c - Milestones - Delivery,H18,TEXT
+Project MM29 Status,6c - Milestones - Delivery,I18,TEXT
+Project MM29 Notes,6c - Milestones - Delivery,J18,TEXT
+Project MM30,6c - Milestones - Delivery,D19,TEXT
+Project MM30 CP,6c - Milestones - Delivery,E19,TEXT
+Project MM30 Original Baseball,6c - Milestones - Delivery,F19,TEXT
+Project MM30 Beavis - Beaviz,6c - Milestones - Delivery,G19,TEXT
+Project MM30 Variance,6c - Milestones - Delivery,H19,TEXT
+Project MM30 Status,6c - Milestones - Delivery,I19,TEXT
+Project MM30 Notes,6c - Milestones - Delivery,J19,TEXT
+Project MM31,6c - Milestones - Delivery,D20,TEXT
+Project MM31 CP,6c - Milestones - Delivery,E20,TEXT
+Project MM31 Original Baseball,6c - Milestones - Delivery,F20,TEXT
+Project MM31 Beavis - Beaviz,6c - Milestones - Delivery,G20,TEXT
+Project MM31 Variance,6c - Milestones - Delivery,H20,TEXT
+Project MM31 Status,6c - Milestones - Delivery,I20,TEXT
+Project MM31 Notes,6c - Milestones - Delivery,J20,TEXT
+Project MM32,6c - Milestones - Delivery,D21,TEXT
+Project MM32 CP,6c - Milestones - Delivery,E21,TEXT
+Project MM32 Original Baseball,6c - Milestones - Delivery,F21,TEXT
+Project MM32 Beavis - Beaviz,6c - Milestones - Delivery,G21,TEXT
+Project MM32 Variance,6c - Milestones - Delivery,H21,TEXT
+Project MM32 Status,6c - Milestones - Delivery,I21,TEXT
+Project MM32 Notes,6c - Milestones - Delivery,J21,TEXT
+Project MM33,6c - Milestones - Delivery,D22,TEXT
+Project MM33 CP,6c - Milestones - Delivery,E22,TEXT
+Project MM33 Original Baseball,6c - Milestones - Delivery,F22,TEXT
+Project MM33 Beavis - Beaviz,6c - Milestones - Delivery,G22,TEXT
+Project MM33 Variance,6c - Milestones - Delivery,H22,TEXT
+Project MM33 Status,6c - Milestones - Delivery,I22,TEXT
+Project MM33 Notes,6c - Milestones - Delivery,J22,TEXT
+Project MM34,6c - Milestones - Delivery,D23,TEXT
+Project MM34 CP,6c - Milestones - Delivery,E23,TEXT
+Project MM34 Original Baseball,6c - Milestones - Delivery,F23,TEXT
+Project MM34 Beavis - Beaviz,6c - Milestones - Delivery,G23,TEXT
+Project MM34 Variance,6c - Milestones - Delivery,H23,TEXT
+Project MM34 Status,6c - Milestones - Delivery,I23,TEXT
+Project MM34 Notes,6c - Milestones - Delivery,J23,TEXT
+Project MM35,6c - Milestones - Delivery,D24,TEXT
+Project MM35 CP,6c - Milestones - Delivery,E24,TEXT
+Project MM35 Original Baseball,6c - Milestones - Delivery,F24,TEXT
+Project MM35 Beavis - Beaviz,6c - Milestones - Delivery,G24,TEXT
+Project MM35 Variance,6c - Milestones - Delivery,H24,TEXT
+Project MM35 Status,6c - Milestones - Delivery,I24,TEXT
+Project MM35 Notes,6c - Milestones - Delivery,J24,TEXT
+Project MM36,6c - Milestones - Delivery,D25,TEXT
+Project MM36 CP,6c - Milestones - Delivery,E25,TEXT
+Project MM36 Original Baseball,6c - Milestones - Delivery,F25,TEXT
+Project MM36 Beavis - Beaviz,6c - Milestones - Delivery,G25,TEXT
+Project MM36 Variance,6c - Milestones - Delivery,H25,TEXT
+Project MM36 Status,6c - Milestones - Delivery,I25,TEXT
+Project MM36 Notes,6c - Milestones - Delivery,J25,TEXT
+Project MM37,6c - Milestones - Delivery,D26,TEXT
+Project MM37 CP,6c - Milestones - Delivery,E26,TEXT
+Project MM37 Original Baseball,6c - Milestones - Delivery,F26,TEXT
+Project MM37 Beavis - Beaviz,6c - Milestones - Delivery,G26,TEXT
+Project MM37 Variance,6c - Milestones - Delivery,H26,TEXT
+Project MM37 Status,6c - Milestones - Delivery,I26,TEXT
+Project MM37 Notes,6c - Milestones - Delivery,J26,TEXT
+Project MM38,6c - Milestones - Delivery,D27,TEXT
+Project MM38 CP,6c - Milestones - Delivery,E27,TEXT
+Project MM38 Original Baseball,6c - Milestones - Delivery,F27,TEXT
+Project MM38 Beavis - Beaviz,6c - Milestones - Delivery,G27,TEXT
+Project MM38 Variance,6c - Milestones - Delivery,H27,TEXT
+Project MM38 Status,6c - Milestones - Delivery,I27,TEXT
+Project MM38 Notes,6c - Milestones - Delivery,J27,TEXT
+Project MM39,6c - Milestones - Delivery,D28,TEXT
+Project MM39 CP,6c - Milestones - Delivery,E28,TEXT
+Project MM39 Original Baseball,6c - Milestones - Delivery,F28,TEXT
+Project MM39 Beavis - Beaviz,6c - Milestones - Delivery,G28,TEXT
+Project MM39 Variance,6c - Milestones - Delivery,H28,TEXT
+Project MM39 Status,6c - Milestones - Delivery,I28,TEXT
+Project MM39 Notes,6c - Milestones - Delivery,J28,TEXT
+Project MM40,6c - Milestones - Delivery,D29,TEXT
+Project MM40 CP,6c - Milestones - Delivery,E29,TEXT
+Project MM40 Original Baseball,6c - Milestones - Delivery,F29,TEXT
+Project MM40 Beavis - Beaviz,6c - Milestones - Delivery,G29,TEXT
+Project MM40 Variance,6c - Milestones - Delivery,H29,TEXT
+Project MM40 Status,6c - Milestones - Delivery,I29,TEXT
+Project MM40 Notes,6c - Milestones - Delivery,J29,TEXT
+Project MM41,6c - Milestones - Delivery,D30,TEXT
+Project MM41 CP,6c - Milestones - Delivery,E30,TEXT
+Project MM41 Original Baseball,6c - Milestones - Delivery,F30,TEXT
+Project MM41 Beavis - Beaviz,6c - Milestones - Delivery,G30,TEXT
+Project MM41 Variance,6c - Milestones - Delivery,H30,TEXT
+Project MM41 Status,6c - Milestones - Delivery,I30,TEXT
+Project MM41 Notes,6c - Milestones - Delivery,J30,TEXT
+Project MM42,6c - Milestones - Delivery,D31,TEXT
+Project MM42 CP,6c - Milestones - Delivery,E31,TEXT
+Project MM42 Original Baseball,6c - Milestones - Delivery,F31,TEXT
+Project MM42 Beavis - Beaviz,6c - Milestones - Delivery,G31,TEXT
+Project MM42 Variance,6c - Milestones - Delivery,H31,TEXT
+Project MM42 Status,6c - Milestones - Delivery,I31,TEXT
+Project MM42 Notes,6c - Milestones - Delivery,J31,TEXT
+Project MM43,6c - Milestones - Delivery,D32,TEXT
+Project MM43 CP,6c - Milestones - Delivery,E32,TEXT
+Project MM43 Original Baseball,6c - Milestones - Delivery,F32,TEXT
+Project MM43 Beavis - Beaviz,6c - Milestones - Delivery,G32,TEXT
+Project MM43 Variance,6c - Milestones - Delivery,H32,TEXT
+Project MM43 Status,6c - Milestones - Delivery,I32,TEXT
+Project MM43 Notes,6c - Milestones - Delivery,J32,TEXT
+Project MM44,6c - Milestones - Delivery,D33,TEXT
+Project MM44 CP,6c - Milestones - Delivery,E33,TEXT
+Project MM44 Original Baseball,6c - Milestones - Delivery,F33,TEXT
+Project MM44 Beavis - Beaviz,6c - Milestones - Delivery,G33,TEXT
+Project MM44 Variance,6c - Milestones - Delivery,H33,TEXT
+Project MM44 Status,6c - Milestones - Delivery,I33,TEXT
+Project MM44 Notes,6c - Milestones - Delivery,J33,TEXT
+Project MM45,6c - Milestones - Delivery,D34,TEXT
+Project MM45 CP,6c - Milestones - Delivery,E34,TEXT
+Project MM45 Original Baseball,6c - Milestones - Delivery,F34,TEXT
+Project MM45 Beavis - Beaviz,6c - Milestones - Delivery,G34,TEXT
+Project MM45 Variance,6c - Milestones - Delivery,H34,TEXT
+Project MM45 Status,6c - Milestones - Delivery,I34,TEXT
+Project MM45 Notes,6c - Milestones - Delivery,J34,TEXT
+Project MM46,6c - Milestones - Delivery,D35,TEXT
+Project MM46 CP,6c - Milestones - Delivery,E35,TEXT
+Project MM46 Original Baseball,6c - Milestones - Delivery,F35,TEXT
+Project MM46 Beavis - Beaviz,6c - Milestones - Delivery,G35,TEXT
+Project MM46 Variance,6c - Milestones - Delivery,H35,TEXT
+Project MM46 Status,6c - Milestones - Delivery,I35,TEXT
+Project MM46 Notes,6c - Milestones - Delivery,J35,TEXT
+Project MM47,6c - Milestones - Delivery,D36,TEXT
+Project MM47 CP,6c - Milestones - Delivery,E36,TEXT
+Project MM47 Original Baseball,6c - Milestones - Delivery,F36,TEXT
+Project MM47 Beavis - Beaviz,6c - Milestones - Delivery,G36,TEXT
+Project MM47 Variance,6c - Milestones - Delivery,H36,TEXT
+Project MM47 Status,6c - Milestones - Delivery,I36,TEXT
+Project MM47 Notes,6c - Milestones - Delivery,J36,TEXT
+Project MM48 ,6c - Milestones - Delivery,D37,TEXT
+Project MM48 CP,6c - Milestones - Delivery,E37,TEXT
+Project MM48 Original Baseball,6c - Milestones - Delivery,F37,TEXT
+Project MM48 Beavis - Beaviz,6c - Milestones - Delivery,G37,TEXT
+Project MM48 Variance,6c - Milestones - Delivery,H37,TEXT
+Project MM48 Status,6c - Milestones - Delivery,I37,TEXT
+Project MM48 Notes,6c - Milestones - Delivery,J37,TEXT
+Project MM49,6c - Milestones - Delivery,D38,TEXT
+Project MM49 CP,6c - Milestones - Delivery,E38,TEXT
+Project MM49 Original Baseball,6c - Milestones - Delivery,F38,TEXT
+Project MM49 Beavis - Beaviz,6c - Milestones - Delivery,G38,TEXT
+Project MM49 Variance,6c - Milestones - Delivery,H38,TEXT
+Project MM49 Status,6c - Milestones - Delivery,I38,TEXT
+Project MM49 Notes,6c - Milestones - Delivery,J38,TEXT
+Project MM50,6c - Milestones - Delivery,D39,TEXT
+Project MM50 CP,6c - Milestones - Delivery,E39,TEXT
+Project MM50 Original Baseball,6c - Milestones - Delivery,F39,TEXT
+Project MM50 Beavis - Beaviz,6c - Milestones - Delivery,G39,TEXT
+Project MM50 Variance,6c - Milestones - Delivery,H39,TEXT
+Project MM50 Status,6c - Milestones - Delivery,I39,TEXT
+Project MM50 Notes,6c - Milestones - Delivery,J39,TEXT
+Project MM51,6c - Milestones - Delivery,D40,TEXT
+Project MM51 CP,6c - Milestones - Delivery,E40,TEXT
+Project MM51 Original Baseball,6c - Milestones - Delivery,F40,TEXT
+Project MM51 Beavis - Beaviz,6c - Milestones - Delivery,G40,TEXT
+Project MM51 Variance,6c - Milestones - Delivery,H40,TEXT
+Project MM51 Status,6c - Milestones - Delivery,I40,TEXT
+Project MM51 Notes,6c - Milestones - Delivery,J40,TEXT
+Project MM52,6c - Milestones - Delivery,D41,TEXT
+Project MM52 CP,6c - Milestones - Delivery,E41,TEXT
+Project MM52 Original Baseball,6c - Milestones - Delivery,F41,TEXT
+Project MM52 Beavis - Beaviz,6c - Milestones - Delivery,G41,TEXT
+Project MM52 Variance,6c - Milestones - Delivery,H41,TEXT
+Project MM52 Status,6c - Milestones - Delivery,I41,TEXT
+Project MM52 Notes,6c - Milestones - Delivery,J41,TEXT
+Project MM53,6c - Milestones - Delivery,D42,TEXT
+Project MM53 CP,6c - Milestones - Delivery,E42,TEXT
+Project MM53 Original Baseball,6c - Milestones - Delivery,F42,TEXT
+Project MM53 Beavis - Beaviz,6c - Milestones - Delivery,G42,TEXT
+Project MM53 Variance,6c - Milestones - Delivery,H42,TEXT
+Project MM53 Status,6c - Milestones - Delivery,I42,TEXT
+Project MM53 Notes,6c - Milestones - Delivery,J42,TEXT
+Project MM54,6c - Milestones - Delivery,D43,TEXT
+Project MM54 CP,6c - Milestones - Delivery,E43,TEXT
+Project MM54 Original Baseball,6c - Milestones - Delivery,F43,TEXT
+Project MM54 Beavis - Beaviz,6c - Milestones - Delivery,G43,TEXT
+Project MM54 Variance,6c - Milestones - Delivery,H43,TEXT
+Project MM54 Status,6c - Milestones - Delivery,I43,TEXT
+Project MM54 Notes,6c - Milestones - Delivery,J43,TEXT
+Project MM55,6c - Milestones - Delivery,D44,TEXT
+Project MM55 CP,6c - Milestones - Delivery,E44,TEXT
+Project MM55 Original Baseball,6c - Milestones - Delivery,F44,TEXT
+Project MM55 Beavis - Beaviz,6c - Milestones - Delivery,G44,TEXT
+Project MM55 Variance,6c - Milestones - Delivery,H44,TEXT
+Project MM55 Status,6c - Milestones - Delivery,I44,TEXT
+Project MM55 Notes,6c - Milestones - Delivery,J44,TEXT
+Project MM56,6c - Milestones - Delivery,D45,TEXT
+Project MM56 CP,6c - Milestones - Delivery,E45,TEXT
+Project MM56 Original Baseball,6c - Milestones - Delivery,F45,TEXT
+Project MM56 Beavis - Beaviz,6c - Milestones - Delivery,G45,TEXT
+Project MM56 Variance,6c - Milestones - Delivery,H45,TEXT
+Project MM56 Status,6c - Milestones - Delivery,I45,TEXT
+Project MM56 Notes,6c - Milestones - Delivery,J45,TEXT
+Project MM57,6c - Milestones - Delivery,D46,TEXT
+Project MM57 CP,6c - Milestones - Delivery,E46,TEXT
+Project MM57 Original Baseball,6c - Milestones - Delivery,F46,TEXT
+Project MM57 Beavis - Beaviz,6c - Milestones - Delivery,G46,TEXT
+Project MM57 Variance,6c - Milestones - Delivery,H46,TEXT
+Project MM57 Status,6c - Milestones - Delivery,I46,TEXT
+Project MM57 Notes,6c - Milestones - Delivery,J46,TEXT
+Project MM58,6c - Milestones - Delivery,D47,TEXT
+Project MM58 CP,6c - Milestones - Delivery,E47,TEXT
+Project MM58 Original Baseball,6c - Milestones - Delivery,F47,TEXT
+Project MM58 Beavis - Beaviz,6c - Milestones - Delivery,G47,TEXT
+Project MM58 Variance,6c - Milestones - Delivery,H47,TEXT
+Project MM58 Status,6c - Milestones - Delivery,I47,TEXT
+Project MM58 Notes,6c - Milestones - Delivery,J47,TEXT
+Project MM59,6c - Milestones - Delivery,D48,TEXT
+Project MM59 CP,6c - Milestones - Delivery,E48,TEXT
+Project MM59 Original Baseball,6c - Milestones - Delivery,F48,TEXT
+Project MM59 Beavis - Beaviz,6c - Milestones - Delivery,G48,TEXT
+Project MM59 Variance,6c - Milestones - Delivery,H48,TEXT
+Project MM59 Status,6c - Milestones - Delivery,I48,TEXT
+Project MM59 Notes,6c - Milestones - Delivery,J48,TEXT
+Project MM60,6c - Milestones - Delivery,D49,TEXT
+Project MM60 CP,6c - Milestones - Delivery,E49,TEXT
+Project MM60 Original Baseball,6c - Milestones - Delivery,F49,TEXT
+Project MM60 Beavis - Beaviz,6c - Milestones - Delivery,G49,TEXT
+Project MM60 Variance,6c - Milestones - Delivery,H49,TEXT
+Project MM60 Status,6c - Milestones - Delivery,I49,TEXT
+Project MM60 Notes,6c - Milestones - Delivery,J49,TEXT
+Project MM61,6c - Milestones - Delivery,D50,TEXT
+Project MM61 CP,6c - Milestones - Delivery,E50,TEXT
+Project MM61 Original Baseball,6c - Milestones - Delivery,F50,TEXT
+Project MM61 Beavis - Beaviz,6c - Milestones - Delivery,G50,TEXT
+Project MM61 Variance,6c - Milestones - Delivery,H50,TEXT
+Project MM61 Status,6c - Milestones - Delivery,I50,TEXT
+Project MM61 Notes,6c - Milestones - Delivery,J50,TEXT
+Project MM62,6c - Milestones - Delivery,D51,TEXT
+Project MM62 CP,6c - Milestones - Delivery,E51,TEXT
+Project MM62 Original Baseball,6c - Milestones - Delivery,F51,TEXT
+Project MM62 Beavis - Beaviz,6c - Milestones - Delivery,G51,TEXT
+Project MM62 Variance,6c - Milestones - Delivery,H51,TEXT
+Project MM62 Status,6c - Milestones - Delivery,I51,TEXT
+Project MM62 Notes,6c - Milestones - Delivery,J51,TEXT
+Project MM63,6c - Milestones - Delivery,D52,TEXT
+Project MM63 CP,6c - Milestones - Delivery,E52,TEXT
+Project MM63 Original Baseball,6c - Milestones - Delivery,F52,TEXT
+Project MM63 Beavis - Beaviz,6c - Milestones - Delivery,G52,TEXT
+Project MM63 Variance,6c - Milestones - Delivery,H52,TEXT
+Project MM63 Status,6c - Milestones - Delivery,I52,TEXT
+Project MM63 Notes,6c - Milestones - Delivery,J52,TEXT
+Project MM64,6c - Milestones - Delivery,D53,TEXT
+Project MM64 CP,6c - Milestones - Delivery,E53,TEXT
+Project MM64 Original Baseball,6c - Milestones - Delivery,F53,TEXT
+Project MM64 Beavis - Beaviz,6c - Milestones - Delivery,G53,TEXT
+Project MM64 Variance,6c - Milestones - Delivery,H53,TEXT
+Project MM64 Status,6c - Milestones - Delivery,I53,TEXT
+Project MM64 Notes,6c - Milestones - Delivery,J53,TEXT
+Project MM65,6c - Milestones - Delivery,D54,TEXT
+Project MM65 CP,6c - Milestones - Delivery,E54,TEXT
+Project MM65 Original Baseball,6c - Milestones - Delivery,F54,TEXT
+Project MM65 Beavis - Beaviz,6c - Milestones - Delivery,G54,TEXT
+Project MM65 Variance,6c - Milestones - Delivery,H54,TEXT
+Project MM65 Status,6c - Milestones - Delivery,I54,TEXT
+Project MM65 Notes,6c - Milestones - Delivery,J54,TEXT
+Project MM66,6c - Milestones - Delivery,D55,TEXT
+Project MM66 CP,6c - Milestones - Delivery,E55,TEXT
+Project MM66 Original Baseball,6c - Milestones - Delivery,F55,TEXT
+Project MM66 Beavis - Beaviz,6c - Milestones - Delivery,G55,TEXT
+Project MM66 Variance,6c - Milestones - Delivery,H55,TEXT
+Project MM66 Status,6c - Milestones - Delivery,I55,TEXT
+Project MM66 Notes,6c - Milestones - Delivery,J55,TEXT
+Project MM67,6c - Milestones - Delivery,D56,TEXT
+Project MM67 CP,6c - Milestones - Delivery,E56,TEXT
+Project MM67 Original Baseball,6c - Milestones - Delivery,F56,TEXT
+Project MM67 Beavis - Beaviz,6c - Milestones - Delivery,G56,TEXT
+Project MM67 Variance,6c - Milestones - Delivery,H56,TEXT
+Project MM67 Status,6c - Milestones - Delivery,I56,TEXT
+Project MM67 Notes,6c - Milestones - Delivery,J56,TEXT
+Milestone Commentary,6c - Milestones - Delivery,F110,TEXT
+SRO Schedule Confidence,6c - Milestones - Delivery,F109,TEXT
+Project stage,7 - Business Case,E6,TEXT
+Project Stage if Other,7 - Business Case,E7,TEXT
+Latest Treasury Stonker Point (TAP) or equivalent,7 - Business Case,E10,TEXT
+Version Number Of Document used to Source Figures (TOFGM - TAP version Number),7 - Business Case,E11,TEXT
+Business Case & Version No.,7 - Business Case,E12,TEXT
+Date of TAP used to source figures,7 - Business Case,E13,TEXT
+"If no HMT Business Case, please advise why?",7 - Business Case,E14,TEXT
+"Is your HMT Business case updated / approved annually by HMT, or more frequently?",7 - Business Case,E15,TEXT
+Does the HMT Businesss Case cover the full life of the project?,7 - Business Case,E16,TEXT
+"If not, please provide explanation as to why",7 - Business Case,E17,TEXT
+"If not, please advise how many years are covered",7 - Business Case,E18,TEXT
+"If not, please advise how much cost is covered, as a percentage",7 - Business Case,E19,TEXT
+Are the baselines in this return from the most recent HMT Approved Business Case?,7 - Business Case,E20,TEXT
+"If not, what is the source of baselines in this returns?",7 - Business Case,E21,TEXT
+"If not, please give a reason why baselines",7 - Business Case,E22,TEXT
+What is the source of all forecasts in this return?,7 - Business Case,E23,TEXT
+"Please provide details of any formal arrangement with HMT regarding Business cases, that are outside the classical model",7 - Business Case,E24,TEXT
+BC One Off new costs,7 - Business Case,E29,TEXT
+BC Recurring new costs,7 - Business Case,F29,TEXT
+BC Recurring old costs,7 - Business Case,G29,TEXT
+BC Non Eagerernment costs,7 - Business Case,H29,TEXT
+BC Income,7 - Business Case,I29,TEXT
+BC Remnant benefits,7 - Business Case,E31,TEXT
+BC Non-Remnant benefits,7 - Business Case,F31,TEXT
+BC IOK Economic benefits,7 - Business Case,G31,TEXT
+BC Disbenefits in the cost section,7 - Business Case,H31,TEXT
+BC Positive AME benefits in Remnant,7 - Business Case,I31,TEXT
+BC Non Monetised Benefits,7 - Business Case,J31,TEXT
+Real or Nominal - Baseball,8 - Finance,E6,TEXT
+Real or Nominal - Beaviz/Beavis,8 - Finance,E7,TEXT
+Index Year,8 - Finance,E8,TEXT
+Deflator,8 - Finance,E9,TEXT
+Are you reporting the full costs of the project?,8 - Finance,E10,TEXT
+"If no, please provide reason why?",8 - Finance,E11,TEXT
+Does this project create income?,8 - Finance,E14,TEXT
+Who recieves the income?,8 - Finance,E15,TEXT
+Do you net the income with your costs in the TOFGM return,8 - Finance,E16,TEXT
+Income Against which Cost category?,8 - Finance,E17,TEXT
+Income Baseball - Real or Nominal,8 - Finance,E18,TEXT
+Income Beavis - Real or Nominal,8 - Finance,E19,TEXT
+"Income If real, Index Year used?",8 - Finance,E20,TEXT
+"Income If real, Deflator used?",8 - Finance,E21,TEXT
+Are you reporting the full income of the project?,8 - Finance,E22,TEXT
+"Income If no, please provide reason why?",8 - Finance,E23,TEXT
+Does this project create monetised benefits?,8 - Finance,E26,TEXT
+Benefits Baseball - Real or Nominal,8 - Finance,E27,TEXT
+Benefits Beavis - Real or Nominal,8 - Finance,E28,TEXT
+"Benefits If real, Index Year used?",8 - Finance,E29,TEXT
+"Benefits If real, Deflator used?",8 - Finance,E30,TEXT
+Are you reporting the full benefits of the project?,8 - Finance,E31,TEXT
+"Benefits If no, please provide reason why?",8 - Finance,E32,TEXT
+Source of Finance,8 - Finance,E35,TEXT
+Other Finance type Description,8 - Finance,E36,TEXT
+Optimism Bias Percentage Used in Cost Baseballs,8 - Finance,E37,TEXT
+Overall figure for Optimism Bias (-m),8 - Finance,E38,TEXT
+Built in contingency (% of Whole Life Cost),8 - Finance,E39,TEXT
+Overall contingency (-m),8 - Finance,E40,TEXT
+NPV for all projects and NPV for programmes if available,8 - Finance,E41,TEXT
+Internal Rate of Return (IRR),8 - Finance,E42,TEXT
+Adjusted Benefits Cost Ratio (BCR),8 - Finance,E43,TEXT
+Benefits Map,8 - Finance,E47,TEXT
+Benefits Analysed,8 - Finance,E48,TEXT
+Benefits Realisation Plan,8 - Finance,E49,TEXT
+Initial Benefits Cost Ratio (BCR),8 - Finance,E44,TEXT
+VfM Category,8 - Finance,E50,TEXT
+Present Value Cost (PVC),8 - Finance,E45,TEXT
+Present Value Benefit (PVB),8 - Finance,E46,TEXT
+Project Costs Narrative,9 - Costs,E6,TEXT
+Cost comparison with last quarters cost - narrative ,9 - Costs,E7,TEXT
+Cost comparison within this quarters cost - narrative ,9 - Costs,E8,TEXT
+Total Budget/BL,9 - Costs,F20,TEXT
+Total Beavis,9 - Costs,H20,TEXT
+Pre 19-20 HTEL BL one off new costs,9 - Costs,E27,TEXT
+Pre 19-20 HTEL BL recurring new costs,9 - Costs,F27,TEXT
+Pre 19-20 HTEL BL recurring old costs,9 - Costs,G27,TEXT
+Pre 19-20 HTEL BL Non Eager costs,9 - Costs,H27,TEXT
+Pre 19-20 HTEL BL Total,9 - Costs,I27,TEXT
+Pre 19-20 HTEL BL Income,9 - Costs,L27,TEXT
+Pre 19-20 HTEL Beavis one off new costs,9 - Costs,E28,TEXT
+Pre 19-20 HTEL Beavis recurring new costs,9 - Costs,F28,TEXT
+Pre 19-20 HTEL Beavis recurring old costs,9 - Costs,G28,TEXT
+Pre 19-20 HTEL Beavis Non Eager costs,9 - Costs,H28,TEXT
+Pre 19-20 HTEL Beavis Total,9 - Costs,I28,TEXT
+Pre 19-20 HTEL Beavis Income,9 - Costs,L28,TEXT
+19-20 HTEL BL one off new costs,9 - Costs,E29,TEXT
+19-20 HTEL BL recurring new costs,9 - Costs,F29,TEXT
+19-20 HTEL BL recurring old costs,9 - Costs,G29,TEXT
+19-20 HTEL BL Non Eager costs,9 - Costs,H29,TEXT
+19-20 HTEL BL Total,9 - Costs,I29,TEXT
+19-20 HTEL BL Income,9 - Costs,L29,TEXT
+19-20 HTEL Beavis one off new costs,9 - Costs,E30,TEXT
+19-20 HTEL Beavis recurring new costs,9 - Costs,F30,TEXT
+19-20 HTEL Beavis recurring old costs,9 - Costs,G30,TEXT
+19-20 HTEL Beavis Non Eager costs,9 - Costs,H30,TEXT
+19-20 HTEL Beavis Total,9 - Costs,I30,TEXT
+19-20 HTEL Beavis Income,9 - Costs,L30,TEXT
+20-21 HTEL BL one off new costs,9 - Costs,E31,TEXT
+20-21 HTEL BL recurring new costs,9 - Costs,F31,TEXT
+20-21 HTEL BL recurring old costs,9 - Costs,G31,TEXT
+20-21 HTEL BL Non Eager costs,9 - Costs,H31,TEXT
+20-21 HTEL BL Total,9 - Costs,I31,TEXT
+20-21 HTEL BL Income,9 - Costs,L31,TEXT
+20-21 HTEL Beavis one off new costs,9 - Costs,E32,TEXT
+20-21 HTEL Beavis recurring new costs,9 - Costs,F32,TEXT
+20-21 HTEL Beavis recurring old costs,9 - Costs,G32,TEXT
+20-21 HTEL Beavis Non Eager costs,9 - Costs,H32,TEXT
+20-21 HTEL Beavis Total,9 - Costs,I32,TEXT
+20-21 HTEL Beavis Income,9 - Costs,L32,TEXT
+21-22 HTEL BL one off new costs,9 - Costs,E33,TEXT
+21-22 HTEL BL recurring new costs,9 - Costs,F33,TEXT
+21-22 HTEL BL recurring old costs,9 - Costs,G33,TEXT
+21-22 HTEL BL Non Eager costs,9 - Costs,H33,TEXT
+21-22 HTEL BL Total,9 - Costs,I33,TEXT
+21-22 HTEL BL Income,9 - Costs,L33,TEXT
+21-22 HTEL Beavis one off new costs,9 - Costs,E34,TEXT
+21-22 HTEL Beavis recurring new costs,9 - Costs,F34,TEXT
+21-22 HTEL Beavis recurring old costs,9 - Costs,G34,TEXT
+21-22 HTEL Beavis Non Eager costs,9 - Costs,H34,TEXT
+21-22 HTEL Beavis Total,9 - Costs,I34,TEXT
+21-22 HTEL Beavis Income,9 - Costs,L34,TEXT
+22-23 HTEL BL one off new costs,9 - Costs,E35,TEXT
+22-23 HTEL BL recurring new costs,9 - Costs,F35,TEXT
+22-23 HTEL BL recurring old costs,9 - Costs,G35,TEXT
+22-23 HTEL BL Non Eager costs,9 - Costs,H35,TEXT
+22-23 HTEL BL Total,9 - Costs,I35,TEXT
+22-23 HTEL BL Income,9 - Costs,L35,TEXT
+22-23 HTEL Beavis one off new costs,9 - Costs,E36,TEXT
+22-23 HTEL Beavis recurring new costs,9 - Costs,F36,TEXT
+22-23 HTEL Beavis recurring old costs,9 - Costs,G36,TEXT
+22-23 HTEL Beavis Non Eager costs,9 - Costs,H36,TEXT
+22-23 HTEL Beavis Total,9 - Costs,I36,TEXT
+22-23 HTEL Beavis Income,9 - Costs,L36,TEXT
+23-24 HTEL BL one off new costs,9 - Costs,E37,TEXT
+23-24 HTEL BL recurring new costs,9 - Costs,F37,TEXT
+23-24 HTEL BL recurring old costs,9 - Costs,G37,TEXT
+23-24 HTEL BL Non Eager costs,9 - Costs,H37,TEXT
+23-24 HTEL BL Total,9 - Costs,I37,TEXT
+23-24 HTEL BL Income,9 - Costs,L37,TEXT
+23-24 HTEL Beavis one off new costs,9 - Costs,E38,TEXT
+23-24 HTEL Beavis recurring new costs,9 - Costs,F38,TEXT
+23-24 HTEL Beavis recurring old costs,9 - Costs,G38,TEXT
+23-24 HTEL Beavis Non Eager costs,9 - Costs,H38,TEXT
+23-24 HTEL Beavis Total,9 - Costs,I38,TEXT
+23-24 HTEL Beavis Income,9 - Costs,L38,TEXT
+24-25 HTEL BL one off new costs,9 - Costs,E39,TEXT
+24-25 HTEL BL recurring new costs,9 - Costs,F39,TEXT
+24-25 HTEL BL recurring old costs,9 - Costs,G39,TEXT
+24-25 HTEL BL Non Eager costs,9 - Costs,H39,TEXT
+24-25 HTEL BL Total,9 - Costs,I39,TEXT
+24-25 HTEL BL Income,9 - Costs,L39,TEXT
+24-25 HTEL Beavis one off new costs,9 - Costs,E40,TEXT
+24-25 HTEL Beavis recurring new costs,9 - Costs,F40,TEXT
+24-25 HTEL Beavis recurring old costs,9 - Costs,G40,TEXT
+24-25 HTEL Beavis Non Eager costs,9 - Costs,H40,TEXT
+24-25 HTEL Beavis Total,9 - Costs,I40,TEXT
+24-25 HTEL Beavis Income,9 - Costs,L40,TEXT
+25-26 HTEL BL one off new costs,9 - Costs,E41,TEXT
+25-26 HTEL BL recurring new costs,9 - Costs,F41,TEXT
+25-26 HTEL BL recurring old costs,9 - Costs,G41,TEXT
+25-26 HTEL BL Non Eager costs,9 - Costs,H41,TEXT
+25-26 HTEL BL Total,9 - Costs,I41,TEXT
+25-26 HTEL BL Income,9 - Costs,L41,TEXT
+25-26 HTEL Beavis one off new costs,9 - Costs,E42,TEXT
+25-26 HTEL Beavis recurring new costs,9 - Costs,F42,TEXT
+25-26 HTEL Beavis recurring old costs,9 - Costs,G42,TEXT
+25-26 HTEL Beavis Non Eager costs,9 - Costs,H42,TEXT
+25-26 HTEL Beavis Total,9 - Costs,I42,TEXT
+25-26 HTEL Beavis Income,9 - Costs,L42,TEXT
+26-27 HTEL BL one off new costs,9 - Costs,E43,TEXT
+26-27 HTEL BL recurring new costs,9 - Costs,F43,TEXT
+26-27 HTEL BL recurring old costs,9 - Costs,G43,TEXT
+26-27 HTEL BL Non Eager costs,9 - Costs,H43,TEXT
+26-27 HTEL BL Total,9 - Costs,I43,TEXT
+26-27 HTEL BL Income,9 - Costs,L43,TEXT
+26-27 HTEL Beavis one off new costs,9 - Costs,E44,TEXT
+26-27 HTEL Beavis recurring new costs,9 - Costs,F44,TEXT
+26-27 HTEL Beavis recurring old costs,9 - Costs,G44,TEXT
+26-27 HTEL Beavis Non Eager costs,9 - Costs,H44,TEXT
+26-27 HTEL Beavis Total,9 - Costs,I44,TEXT
+26-27 HTEL Beavis Income,9 - Costs,L44,TEXT
+27-28 HTEL BL one off new costs,9 - Costs,E45,TEXT
+27-28 HTEL BL recurring new costs,9 - Costs,F45,TEXT
+27-28 HTEL BL recurring old costs,9 - Costs,G45,TEXT
+27-28 HTEL BL Non Eager costs,9 - Costs,H45,TEXT
+27-28 HTEL BL Total,9 - Costs,I45,TEXT
+27-28 HTEL BL Income,9 - Costs,L45,TEXT
+27-28 HTEL Beavis one off new costs,9 - Costs,E46,TEXT
+27-28 HTEL Beavis recurring new costs,9 - Costs,F46,TEXT
+27-28 HTEL Beavis recurring old costs,9 - Costs,G46,TEXT
+27-28 HTEL Beavis Non Eager costs,9 - Costs,H46,TEXT
+27-28 HTEL Beavis Total,9 - Costs,I46,TEXT
+27-28 HTEL Beavis Income,9 - Costs,L46,TEXT
+28-29 HTEL BL one off new costs,9 - Costs,E47,TEXT
+28-29 HTEL BL recurring new costs,9 - Costs,F47,TEXT
+28-29 HTEL BL recurring old costs,9 - Costs,G47,TEXT
+28-29 HTEL BL Non Eager costs,9 - Costs,H47,TEXT
+28-29 HTEL BL Total,9 - Costs,I47,TEXT
+28-29 HTEL BL Income,9 - Costs,L47,TEXT
+28-29 HTEL Beavis one off new costs,9 - Costs,E48,TEXT
+28-29 HTEL Beavis recurring new costs,9 - Costs,F48,TEXT
+28-29 HTEL Beavis recurring old costs,9 - Costs,G48,TEXT
+28-29 HTEL Beavis Non Eager costs,9 - Costs,H48,TEXT
+28-29 HTEL Beavis Total,9 - Costs,I48,TEXT
+28-29 HTEL Beavis Income,9 - Costs,L48,TEXT
+Unprofiled HTEL BL one off new costs,9 - Costs,E49,TEXT
+Unprofiled HTEL BL recurring new costs,9 - Costs,F49,TEXT
+Unprofiled HTEL BL recurring old costs,9 - Costs,G49,TEXT
+Unprofiled HTEL BL Non Eager costs,9 - Costs,H49,TEXT
+Unprofiled HTEL BL Total,9 - Costs,I49,TEXT
+Unprofiled HTEL BL Income,9 - Costs,L49,TEXT
+Unprofiled HTEL Beavis one off new costs,9 - Costs,E50,TEXT
+Unprofiled HTEL Beavis recurring new costs,9 - Costs,F50,TEXT
+Unprofiled HTEL Beavis recurring old costs,9 - Costs,G50,TEXT
+Unprofiled HTEL Beavis Non Eager costs,9 - Costs,H50,TEXT
+Unprofiled HTEL Beavis Total,9 - Costs,I50,TEXT
+Unprofiled HTEL Beavis Income,9 - Costs,L50,TEXT
+Total HTEL BL one off new costs,9 - Costs,E51,TEXT
+Total HTEL BL recurring new costs,9 - Costs,F51,TEXT
+Total HTEL BL recurring old costs,9 - Costs,G51,TEXT
+Total HTEL BL Non Eager costs,9 - Costs,H51,TEXT
+Total HTEL BL Total,9 - Costs,I51,TEXT
+Total HTEL BL Income,9 - Costs,L51,TEXT
+Total HTEL Beavis one off new costs,9 - Costs,E52,TEXT
+Total HTEL Beavis recurring new costs,9 - Costs,F52,TEXT
+Total HTEL Beavis recurring old costs,9 - Costs,G52,TEXT
+Total HTEL Beavis Non Eager costs,9 - Costs,H52,TEXT
+Total HTEL Beavis Total,9 - Costs,I52,TEXT
+Total HTEL Beavis Income,9 - Costs,L52,TEXT
+Year HTEL spend stops,9 - Costs,E53,TEXT
+Pre 19-20 REPTOL BL one off new costs,9 - Costs,E56,TEXT
+Pre 19-20 REPTOL BL recurring new costs,9 - Costs,F56,TEXT
+Pre 19-20 REPTOL BL recurring old costs,9 - Costs,G56,TEXT
+Pre 19-20 BL Non-Eager,9 - Costs,H56,TEXT
+Pre 19-20 REPTOL BL WLC,9 - Costs,I56,TEXT
+Pre 19-20 BL Income both Revenue and Capital,9 - Costs,L56,TEXT
+Pre 19-20 REPTOL Beavis Total,9 - Costs,E57,TEXT
+Pre 19-20 REPTOL Beavis recurring new costs,9 - Costs,F57,TEXT
+Pre 19-20 REPTOL Beavis recurring old costs,9 - Costs,G57,TEXT
+Pre 19-20 Beavis Non-Eager,9 - Costs,H57,TEXT
+Pre 19-20 REPTOL Beavis Total WLC,9 - Costs,I57,TEXT
+Pre 19-20 Beaviz Income both Revenue and Capital,9 - Costs,L57,TEXT
+19-20 REPTOL BL one off new costs,9 - Costs,E58,TEXT
+19-20 REPTOL BL recurring new costs,9 - Costs,F58,TEXT
+19-20 REPTOL BL recurring old costs,9 - Costs,G58,TEXT
+19-20 BL Non-Eager,9 - Costs,H58,TEXT
+19-20 REPTOL BL WLC,9 - Costs,I58,TEXT
+19-20 BL Income both Revenue and Capital,9 - Costs,L58,TEXT
+19-20 REPTOL Beavis Total,9 - Costs,E59,TEXT
+19-20 REPTOL Beavis recurring new costs,9 - Costs,F59,TEXT
+19-20 REPTOL Beavis recurring old costs,9 - Costs,G59,TEXT
+19-20 Beavis Non-Eager,9 - Costs,H59,TEXT
+19-20 REPTOL Beavis Total WLC,9 - Costs,I59,TEXT
+19-20 Beavis - Income both Revenue and Capital,9 - Costs,L59,TEXT
+20-21 REPTOL BL one off new costs,9 - Costs,E60,TEXT
+20-21 REPTOL BL recurring new costs,9 - Costs,F60,TEXT
+20-21 REPTOL BL recurring old costs,9 - Costs,G60,TEXT
+20-21 BL Non-Eager,9 - Costs,H60,TEXT
+20-21 REPTOL BL WLC,9 - Costs,I60,TEXT
+20-21 BL Income both Revenue and Capital,9 - Costs,L60,TEXT
+20-21 REPTOL Beavis Total,9 - Costs,E61,TEXT
+20-21 REPTOL Beavis recurring new costs,9 - Costs,F61,TEXT
+20-21 REPTOL Beavis recurring old costs,9 - Costs,G61,TEXT
+20-21 Beavis Non-Eager,9 - Costs,H61,TEXT
+20-21 REPTOL Beavis Total WLC,9 - Costs,I61,TEXT
+20-21 Beavis - Income both Revenue and Capital,9 - Costs,L61,TEXT
+21-22 REPTOL BL one off new costs,9 - Costs,E62,TEXT
+21-22 REPTOL BL recurring new costs,9 - Costs,F62,TEXT
+21-22 REPTOL BL recurring old costs,9 - Costs,G62,TEXT
+21-22 BL Non-Eager,9 - Costs,H62,TEXT
+21-22 REPTOL BL WLC,9 - Costs,I62,TEXT
+21-22 BL - Income both Revenue and Capital,9 - Costs,L62,TEXT
+21-22 REPTOL Beavis Total,9 - Costs,E63,TEXT
+21-22 REPTOL Beavis recurring new costs,9 - Costs,F63,TEXT
+21-22 REPTOL Beavis recurring old costs,9 - Costs,G63,TEXT
+21-22 Beavis Non-Eager,9 - Costs,H63,TEXT
+21-22 REPTOL Beavis Total WLC,9 - Costs,I63,TEXT
+21-22 Beavis - Income both Revenue and Capital,9 - Costs,L63,TEXT
+22-23 REPTOL BL one off new costs,9 - Costs,E64,TEXT
+22-23 REPTOL BL recurring new costs,9 - Costs,F64,TEXT
+22-23 REPTOL BL recurring old costs,9 - Costs,G64,TEXT
+22-23 BL Non-Eager,9 - Costs,H64,TEXT
+22-23 REPTOL BL WLC,9 - Costs,I64,TEXT
+22-23 BL Income both Revenue and Capital,9 - Costs,L64,TEXT
+22-23 REPTOL Beavis Total,9 - Costs,E65,TEXT
+22-23 REPTOL Beavis recurring new costs,9 - Costs,F65,TEXT
+22-23 REPTOL Beavis recurring old costs,9 - Costs,G65,TEXT
+22-23 Beavis Non-Eager,9 - Costs,H65,TEXT
+22-23 REPTOL Beavis Total WLC,9 - Costs,I65,TEXT
+22-23 Beavis - Income both Revenue and Capital,9 - Costs,L65,TEXT
+23-24 REPTOL BL one off new costs,9 - Costs,E66,TEXT
+23-24 REPTOL BL recurring new costs,9 - Costs,F66,TEXT
+23-24 REPTOL BL recurring old costs,9 - Costs,G66,TEXT
+23-24 BL Non-Eager,9 - Costs,H66,TEXT
+23-24 REPTOL BL WLC,9 - Costs,I66,TEXT
+23-24 BL Income both Revenue and Capital,9 - Costs,L66,TEXT
+23-24 REPTOL Beavis Total,9 - Costs,E67,TEXT
+23-24 REPTOL Beavis recurring new costs,9 - Costs,F67,TEXT
+23-24 REPTOL Beavis recurring old costs,9 - Costs,G67,TEXT
+23-24 Beavis Non-Eager,9 - Costs,H67,TEXT
+23-24 REPTOL Beavis Total WLC,9 - Costs,I67,TEXT
+23-24 Beavis - Income both Revenue and Capital,9 - Costs,L67,TEXT
+24-25 REPTOL BL one off new costs,9 - Costs,E68,TEXT
+24-25 REPTOL BL recurring new costs,9 - Costs,F68,TEXT
+24-25 REPTOL BL recurring old costs,9 - Costs,G68,TEXT
+24-25 BL Non-Eager,9 - Costs,H68,TEXT
+24-25 REPTOL BL WLC,9 - Costs,I68,TEXT
+24-25 BL Income both Revenue and Capital,9 - Costs,L68,TEXT
+24-25 REPTOL Beavis Total,9 - Costs,E69,TEXT
+24-25 REPTOL Beavis recurring new costs,9 - Costs,F69,TEXT
+24-25 REPTOL Beavis recurring old costs,9 - Costs,G69,TEXT
+24-25 Beavis Non-Eager,9 - Costs,H69,TEXT
+24-25 REPTOL Beavis Total WLC,9 - Costs,I69,TEXT
+24-25 Beavis - Income both Revenue and Capital,9 - Costs,L69,TEXT
+25-26 REPTOL BL one off new costs,9 - Costs,E70,TEXT
+25-26 REPTOL BL recurring new costs,9 - Costs,F70,TEXT
+25-26 REPTOL BL recurring old costs,9 - Costs,G70,TEXT
+25-26 BL Non-Eager,9 - Costs,H70,TEXT
+25-26 REPTOL BL WLC,9 - Costs,I70,TEXT
+25-26 BL Income both Revenue and Capital,9 - Costs,L70,TEXT
+25-26 REPTOL Beavis Total,9 - Costs,E71,TEXT
+25-26 REPTOL Beavis recurring new costs,9 - Costs,F71,TEXT
+25-26 REPTOL Beavis recurring old costs,9 - Costs,G71,TEXT
+25-26 Beavis Non-Eager,9 - Costs,H71,TEXT
+25-26 REPTOL Beavis Total WLC,9 - Costs,I71,TEXT
+25-26 Beavis - Income both Revenue and Capital,9 - Costs,L71,TEXT
+26-27 REPTOL BL one off new costs,9 - Costs,E72,TEXT
+26-27 REPTOL BL recurring new costs,9 - Costs,F72,TEXT
+26-27 REPTOL BL recurring old costs,9 - Costs,G72,TEXT
+26-27 BL Non-Eager,9 - Costs,H72,TEXT
+26-27 REPTOL BL WLC,9 - Costs,I72,TEXT
+26-27 BL Income both Revenue and Capital,9 - Costs,L72,TEXT
+26-27 REPTOL Beavis Total,9 - Costs,E73,TEXT
+26-27 REPTOL Beavis recurring new costs,9 - Costs,F73,TEXT
+26-27 REPTOL Beavis recurring old costs,9 - Costs,G73,TEXT
+26-27 Beavis Non-Eager,9 - Costs,H73,TEXT
+26-27 REPTOL Beavis Total WLC,9 - Costs,I73,TEXT
+26-27 Beavis - Income both Revenue and Capital,9 - Costs,L73,TEXT
+27-28 REPTOL BL one off new costs,9 - Costs,E74,TEXT
+27-28 REPTOL BL recurring new costs,9 - Costs,F74,TEXT
+27-28 REPTOL BL recurring old costs,9 - Costs,G74,TEXT
+27-28 BL Non-Eager,9 - Costs,H74,TEXT
+27-28 REPTOL BL WLC,9 - Costs,I74,TEXT
+27-28 BL Income both Revenue and Capital,9 - Costs,L74,TEXT
+27-28 REPTOL Beavis Total,9 - Costs,E75,TEXT
+27-28 REPTOL Beavis recurring new costs,9 - Costs,F75,TEXT
+27-28 REPTOL Beavis recurring old costs,9 - Costs,G75,TEXT
+27-28 Beavis Non-Eager,9 - Costs,H75,TEXT
+27-28 REPTOL Beavis Total WLC,9 - Costs,I75,TEXT
+27-28 Beavis - Income both Revenue and Capital,9 - Costs,L75,TEXT
+28-29 REPTOL BL one off new costs,9 - Costs,E76,TEXT
+28-29 REPTOL BL recurring new costs,9 - Costs,F76,TEXT
+28-29 REPTOL BL recurring old costs,9 - Costs,G76,TEXT
+28-29 BL Non-Eager,9 - Costs,H76,TEXT
+28-29 REPTOL BL WLC,9 - Costs,I76,TEXT
+28-29 BL Income both Revenue and Capital,9 - Costs,L76,TEXT
+28-29 REPTOL Beavis Total,9 - Costs,E77,TEXT
+28-29 REPTOL Beavis recurring new costs,9 - Costs,F77,TEXT
+28-29 REPTOL Beavis recurring old costs,9 - Costs,G77,TEXT
+28-29 Beavis Non-Eager,9 - Costs,H77,TEXT
+28-29 REPTOL Beavis Total WLC,9 - Costs,I77,TEXT
+28-29 Beavis - Income both Revenue and Capital,9 - Costs,L77,TEXT
+Unprofiled REPTOL BL one off new costs,9 - Costs,E78,TEXT
+Unprofiled REPTOL BL recurring new costs,9 - Costs,F78,TEXT
+Unprofiled REPTOL BL recurring old costs,9 - Costs,G78,TEXT
+Unprofiled BL Non-Eager,9 - Costs,H78,TEXT
+Unprofiled REPTOL BL WLC,9 - Costs,I78,TEXT
+Unprofiled BL Income,9 - Costs,L78,TEXT
+Unprofiled REPTOL Beavis Total,9 - Costs,E79,TEXT
+Unprofiled REPTOL Beavis recurring new costs,9 - Costs,F79,TEXT
+Unprofiled REPTOL Beavis recurring old costs,9 - Costs,G79,TEXT
+Unprofiled Beavis-Eager,9 - Costs,H79,TEXT
+Unprofiled REPTOL Beavis Total WLC,9 - Costs,I79,TEXT
+Unprofiled Beavis Income,9 - Costs,L79,TEXT
+Total REPTOL BL one off new costs,9 - Costs,E80,TEXT
+Total REPTOL BL recurring new costs,9 - Costs,F80,TEXT
+Total REPTOL BL recurring old costs,9 - Costs,G80,TEXT
+Non-Eager Total Budget/BL,9 - Costs,H80,TEXT
+Total REPTOL BL WLC,9 - Costs,I80,TEXT
+Total Baseball - Income both Revenue and Capital,9 - Costs,L80,TEXT
+Total REPTOL Beavis Total,9 - Costs,E81,TEXT
+Total REPTOL Beavis recurring new costs,9 - Costs,F81,TEXT
+Total REPTOL Beavis recurring old costs,9 - Costs,G81,TEXT
+Non-Eager Total Beavis,9 - Costs,H81,TEXT
+Total REPTOL Beavis Total WLC,9 - Costs,I81,TEXT
+Total Beavis - Income both Revenue and Capital,9 - Costs,L81,TEXT
+Year REPTOL spend stops,9 - Costs,E82,TEXT
+SRO Finance confidence,9 - Costs,E118,TEXT
+Benefits Narrative,10 - Benefits,E6,TEXT
+Ben comparison with last quarters cost - narrative ,10 - Benefits,E7,TEXT
+Ben comparison within this quarters cost - narrative ,10 - Benefits,E8,TEXT
+Narrative on any project Non-Monetised benefits,10 - Benefits,E9,TEXT
+"If benefits profile (by years) not provided, please provide reason and date for when they will be",10 - Benefits,E10,TEXT
+Pre 19-20 BEN Baseball - Eager. Remnant,10 - Benefits,E25,TEXT
+Pre 19-20 BEN Baseball - Eager. Non-Remnant,10 - Benefits,F25,TEXT
+Pre 19-20 BEN Baseball - Economic (inc Private Partner),10 - Benefits,G25,TEXT
+Pre 19-20 BEN Baseball - Disbenefit IOK Economic,10 - Benefits,H25,TEXT
+Pre 19-20 BEN Baseball - Total Monetised Benefits,10 - Benefits,K25,TEXT
+Pre 19-20 BEN Beavis - Eager. Remnant,10 - Benefits,E26,TEXT
+Pre 19-20 BEN Beavis - Eager. Non-Remnant,10 - Benefits,F26,TEXT
+Pre 19-20 BEN Beavis - Economic (inc Private Partner),10 - Benefits,G26,TEXT
+Pre 19-20 BEN Beavis - Disbenefit IOK Economic,10 - Benefits,H26,TEXT
+Pre 19-20 BEN Beavis - Total Monetised Benefits,10 - Benefits,K26,TEXT
+19-20 BEN Baseball - Eager. Remnant,10 - Benefits,E27,TEXT
+19-20 BEN Baseball - Eager. Non-Remnant,10 - Benefits,F27,TEXT
+19-20 BEN Baseball - Economic (inc Private Partner),10 - Benefits,G27,TEXT
+19-20 BEN Baseball - Disbenefit IOK Economic,10 - Benefits,H27,TEXT
+19-20 BEN Baseball - Total Monetised Benefits,10 - Benefits,K27,TEXT
+19-20 BEN Beavis - Eager. Remnant,10 - Benefits,E28,TEXT
+19-20 BEN Beavis - Eager. Non-Remnant,10 - Benefits,F28,TEXT
+19-20 BEN Beavis - Economic (inc Private Partner),10 - Benefits,G28,TEXT
+19-20 BEN Beavis - Disbenefit IOK Economic,10 - Benefits,H28,TEXT
+19-20 BEN Beavis - Total Monetised Benefits,10 - Benefits,K28,TEXT
+20-21 BEN Baseball - Eager. Remnant,10 - Benefits,E29,TEXT
+20-21 BEN Baseball - Eager. Non-Remnant,10 - Benefits,F29,TEXT
+20-21 BEN Baseball - Economic (inc Private Partner),10 - Benefits,G29,TEXT
+20-21 BEN Baseball - Disbenefit IOK Economic,10 - Benefits,H29,TEXT
+20-21 BEN Baseball - Total Monetised Benefits,10 - Benefits,K29,TEXT
+20-21 BEN Beavis - Eager. Remnant,10 - Benefits,E30,TEXT
+20-21 BEN Beavis - Eager. Non-Remnant,10 - Benefits,F30,TEXT
+20-21 BEN Beavis - Economic (inc Private Partner),10 - Benefits,G30,TEXT
+20-21 BEN Beavis - Disbenefit IOK Economic,10 - Benefits,H30,TEXT
+20-21 BEN Beavis - Total Monetised Benefits,10 - Benefits,K30,TEXT
+21-22 BEN Baseball - Eager. Remnant,10 - Benefits,E31,TEXT
+21-22 BEN Baseball - Eager. Non-Remnant,10 - Benefits,F31,TEXT
+21-22 BEN Baseball - Economic (inc Private Partner),10 - Benefits,G31,TEXT
+21-22 BEN Baseball - Disbenefit IOK Economic,10 - Benefits,H31,TEXT
+21-22 BEN Baseball - Total Monetised Benefits,10 - Benefits,K31,TEXT
+21-22 BEN Beavis - Eager. Remnant,10 - Benefits,E32,TEXT
+21-22 BEN Beavis - Eager. Non-Remnant,10 - Benefits,F32,TEXT
+21-22 BEN Beavis - Economic (inc Private Partner),10 - Benefits,G32,TEXT
+21-22 BEN Beavis - Disbenefit IOK Economic,10 - Benefits,H32,TEXT
+21-22 BEN Beavis - Total Monetised Benefits,10 - Benefits,K32,TEXT
+22-23 BEN Baseball - Eager. Remnant,10 - Benefits,E33,TEXT
+22-23 BEN Baseball - Eager. Non-Remnant,10 - Benefits,F33,TEXT
+22-23 BEN Baseball - Economic (inc Private Partner),10 - Benefits,G33,TEXT
+22-23 BEN Baseball - Disbenefit IOK Economic,10 - Benefits,H33,TEXT
+22-23 BEN Baseball - Total Monetised Benefits,10 - Benefits,K33,TEXT
+22-23 BEN Beavis - Eager. Remnant,10 - Benefits,E34,TEXT
+22-23 BEN Beavis - Eager. Non-Remnant,10 - Benefits,F34,TEXT
+22-23 BEN Beavis - Economic (inc Private Partner),10 - Benefits,G34,TEXT
+22-23 BEN Beavis - Disbenefit IOK Economic,10 - Benefits,H34,TEXT
+22-23 BEN Beavis - Total Monetised Benefits,10 - Benefits,K34,TEXT
+23-24 BEN Baseball - Eager. Remnant,10 - Benefits,E35,TEXT
+23-24 BEN Baseball - Eager. Non-Remnant,10 - Benefits,F35,TEXT
+23-24 BEN Baseball - Economic (inc Private Partner),10 - Benefits,G35,TEXT
+23-24 BEN Baseball - Disbenefit IOK Economic,10 - Benefits,H35,TEXT
+23-24 BEN Baseball - Total Monetised Benefits,10 - Benefits,K35,TEXT
+23-24 BEN Beavis - Eager. Remnant,10 - Benefits,E36,TEXT
+23-24 BEN Beavis - Eager. Non-Remnant,10 - Benefits,F36,TEXT
+23-24 BEN Beavis - Economic (inc Private Partner),10 - Benefits,G36,TEXT
+23-24 BEN Beavis - Disbenefit IOK Economic,10 - Benefits,H36,TEXT
+23-24 BEN Beavis - Total Monetised Benefits,10 - Benefits,K36,TEXT
+24-25 BEN Baseball - Eager. Remnant,10 - Benefits,E37,TEXT
+24-25 BEN Baseball - Eager. Non-Remnant,10 - Benefits,F37,TEXT
+24-25 BEN Baseball - Economic (inc Private Partner),10 - Benefits,G37,TEXT
+24-25 BEN Baseball - Disbenefit IOK Economic,10 - Benefits,H37,TEXT
+24-25 BEN Baseball - Total Monetised Benefits,10 - Benefits,K37,TEXT
+24-25 BEN Beavis - Eager. Remnant,10 - Benefits,E38,TEXT
+24-25 BEN Beavis - Eager. Non-Remnant,10 - Benefits,F38,TEXT
+24-25 BEN Beavis - Economic (inc Private Partner),10 - Benefits,G38,TEXT
+24-25 BEN Beavis - Disbenefit IOK Economic,10 - Benefits,H38,TEXT
+24-25 BEN Beavis - Total Monetised Benefits,10 - Benefits,K38,TEXT
+25-26 BEN Baseball - Eager. Remnant,10 - Benefits,E39,TEXT
+25-26 BEN Baseball - Eager. Non-Remnant,10 - Benefits,F39,TEXT
+25-26 BEN Baseball - Economic (inc Private Partner),10 - Benefits,G39,TEXT
+25-26 BEN Baseball - Disbenefit IOK Economic,10 - Benefits,H39,TEXT
+25-26 BEN Baseball - Total Monetised Benefits,10 - Benefits,K39,TEXT
+25-26 BEN Beavis - Eager. Remnant,10 - Benefits,E40,TEXT
+25-26 BEN Beavis - Eager. Non-Remnant,10 - Benefits,F40,TEXT
+25-26 BEN Beavis - Economic (inc Private Partner),10 - Benefits,G40,TEXT
+25-26 BEN Beavis - Disbenefit IOK Economic,10 - Benefits,H40,TEXT
+25-26 BEN Beavis - Total Monetised Benefits,10 - Benefits,K40,TEXT
+26-27 BEN Baseball - Eager. Remnant,10 - Benefits,E41,TEXT
+26-27 BEN Baseball - Eager. Non-Remnant,10 - Benefits,F41,TEXT
+26-27 BEN Baseball - Economic (inc Private Partner),10 - Benefits,G41,TEXT
+26-27 BEN Baseball - Disbenefit IOK Economic,10 - Benefits,H41,TEXT
+26-27 BEN Baseball - Total Monetised Benefits,10 - Benefits,K41,TEXT
+26-27 BEN Beavis - Eager. Remnant,10 - Benefits,E42,TEXT
+26-27 BEN Beavis - Eager. Non-Remnant,10 - Benefits,F42,TEXT
+26-27 BEN Beavis - Economic (inc Private Partner),10 - Benefits,G42,TEXT
+26-27 BEN Beavis - Disbenefit IOK Economic,10 - Benefits,H42,TEXT
+26-27 BEN Beavis - Total Monetised Benefits,10 - Benefits,K42,TEXT
+27-28 BEN Baseball - Eager. Remnant,10 - Benefits,E43,TEXT
+27-28 BEN Baseball - Eager. Non-Remnant,10 - Benefits,F43,TEXT
+27-28 BEN Baseball - Economic (inc Private Partner),10 - Benefits,G43,TEXT
+27-28 BEN Baseball - Disbenefit IOK Economic,10 - Benefits,H43,TEXT
+27-28 BEN Baseball - Total Monetised Benefits,10 - Benefits,K43,TEXT
+27-28 BEN Beavis - Eager. Remnant,10 - Benefits,E44,TEXT
+27-28 BEN Beavis - Eager. Non-Remnant,10 - Benefits,F44,TEXT
+27-28 BEN Beavis - Economic (inc Private Partner),10 - Benefits,G44,TEXT
+27-28 BEN Beavis - Disbenefit IOK Economic,10 - Benefits,H44,TEXT
+27-28 BEN Beavis - Total Monetised Benefits,10 - Benefits,K44,TEXT
+28-29 BEN Baseball - Eager. Remnant,10 - Benefits,E45,TEXT
+28-29 BEN Baseball - Eager. Non-Remnant,10 - Benefits,F45,TEXT
+28-29 BEN Baseball - Economic (inc Private Partner),10 - Benefits,G45,TEXT
+28-29 BEN Baseball - Disbenefit IOK Economic,10 - Benefits,H45,TEXT
+28-29 BEN Baseball - Total Monetised Benefits,10 - Benefits,K45,TEXT
+28-29 BEN Beavis - Eager. Remnant,10 - Benefits,E46,TEXT
+28-29 BEN Beavis - Eager. Non-Remnant,10 - Benefits,F46,TEXT
+28-29 BEN Beavis - Economic (inc Private Partner),10 - Benefits,G46,TEXT
+28-29 BEN Beavis - Disbenefit IOK Economic,10 - Benefits,H46,TEXT
+28-29 BEN Beavis - Total Monetised Benefits,10 - Benefits,K46,TEXT
+Unprofiled Remainder BEN Baseball - Eager. Remnant,10 - Benefits,E47,TEXT
+Unprofiled Remainder BEN Baseball - Eager. Non-Remnant,10 - Benefits,F47,TEXT
+Unprofiled Remainder BEN Baseball - Economic (inc Private Partner),10 - Benefits,G47,TEXT
+Unprofiled Remainder BEN Baseball - Disbenefit IOK Economic,10 - Benefits,H47,TEXT
+Unprofiled Remainder BEN Baseball - Total Monetised Benefits,10 - Benefits,K47,TEXT
+Unprofiled Remainder BEN Beavis - Eager. Remnant,10 - Benefits,E48,TEXT
+Unprofiled Remainder BEN Beavis - Eager. Non-Remnant,10 - Benefits,F48,TEXT
+Unprofiled Remainder BEN Beavis - Economic (inc Private Partner),10 - Benefits,G48,TEXT
+Unprofiled Remainder BEN Beavis - Disbenefit IOK Economic,10 - Benefits,H48,TEXT
+Unprofiled Remainder BEN Beavis - Total Monetised Benefits,10 - Benefits,K48,TEXT
+Total BEN Baseball - Eager. Remnant,10 - Benefits,E49,TEXT
+Total BEN Baseball - Eager. Non-Remnant,10 - Benefits,F49,TEXT
+Total BEN Baseball - Economic (inc Private Partner),10 - Benefits,G49,TEXT
+Total BEN Baseball - Disbenefit IOK Economic,10 - Benefits,H49,TEXT
+Total BEN Baseball - Total Monetised Benefits,10 - Benefits,K49,TEXT
+Total BEN Beavis - Eager. Remnant,10 - Benefits,E50,TEXT
+Total BEN Beavis - Eager. Non-Remnant,10 - Benefits,F50,TEXT
+Total BEN Beavis - Economic (inc Private Partner),10 - Benefits,G50,TEXT
+Total BEN Beavis - Disbenefit IOK Economic,10 - Benefits,H50,TEXT
+Total BEN Beavis - Total Monetised Benefits,10 - Benefits,K50,TEXT
+Year BEN spend stops,10 - Benefits,E51,TEXT
+No Deductions - Net Benefits Provided,10 - Benefits,K54,TEXT
+Deduct HTEL One Off New Costs?,10 - Benefits,K55,TEXT
+Deduct REPTOL one off New Costs?,10 - Benefits,K56,TEXT
+Deduct HTEL Recurring New Costs?,10 - Benefits,K57,TEXT
+Deduct REPTOL Recurring New Costs?,10 - Benefits,K58,TEXT
+Deduct HTEL Recurring Old Costs?,10 - Benefits,K59,TEXT
+Deduct REPTOL Recurring Old Costs?,10 - Benefits,K60,TEXT
+No Monetised Benefits / Initial Business Case Being Prepared,10 - Benefits,K61,TEXT
+SRO Benefits OOT,10 - Benefits,E64,TEXT

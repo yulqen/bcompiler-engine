@@ -1,11 +1,13 @@
 import setuptools
 
+import engine
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="bcompiler-engine",
-    version="0.0.1",
+    version=engine.__version__,
     author="Matthew Lemon",
     author_email="matt@matthewlemon.com",
     description="Library for parsing spreadsheets using datamaps",

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Running pre-push hook"
-tox
+make test
 
 if [ $? -ne 0 ]; then
     echo "Tests must pass before commit!"

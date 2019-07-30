@@ -31,7 +31,7 @@ def test_query_data_from_data_file(
 ):
     mock_config.initialise()
     shutil.copy2(dat_file, mock_config.BCOMPILER_LIBRARY_DATA_DIR)
-    shutil.copy2(spreadsheet_same_data_as_dat_file, mock_config.PLATFORM_DOCS_DIR)
+    shutil.copy2(spreadsheet_same_data_as_dat_file, mock_config.PLATFORM_DOCS_DIR / "input")
     repo = FSPopulatedTemplatesRepo(mock_config.PLATFORM_DOCS_DIR)
     parse_populated_templates_use_case = ParsePopulatedTemplatesUseCase(repo)
     result = parse_populated_templates_use_case.execute()
@@ -43,6 +43,7 @@ def test_query_data_from_data_file(
     )
 
 
+@pytest.mark.slow
 def test_in_memory_datamap_application_to_extracted_data(
     mock_config, doc_directory, datamap, template
 ):
@@ -53,6 +54,7 @@ def test_in_memory_datamap_application_to_extracted_data(
     )
     dm_repo = InMemorySingleDatamapRepository(datamap)
     uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
+    uc.execute()
     assert (
         uc.query_key("test_template.xlsx", "String Key", "Summary")
         == "This is a string"
