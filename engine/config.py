@@ -87,6 +87,7 @@ class Config:
         if not Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).exists():
             Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
             cls.config_parser.read(cls.BCOMPILER_LIBRARY_CONFIG_FILE)
+        cls.config_parser.read(cls.BCOMPILER_LIBRARY_CONFIG_FILE)
 
         # then we need to create the docs directory if it doesn't exist
         try:
