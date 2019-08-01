@@ -12,12 +12,9 @@ cache files.
 
 def test_basic_config_variables(mock_config):
     if platform.system() == "Linux":
-        assert Path(mock_config.BCOMPILER_LIBRARY_DATA_DIR) == Path(
-            Path.home() / ".local/share/bcompiler-data")
-        assert Path(mock_config.BCOMPILER_LIBRARY_CONFIG_DIR) == Path(
-            Path.home() / ".config/bcompiler-data")
-        assert Path(mock_config.BCOMPILER_LIBRARY_CONFIG_FILE) == Path(
-            Path.home() / ".config/bcompiler-data/config.ini")
+        assert Path(mock_config.BCOMPILER_LIBRARY_DATA_DIR) == Path("/tmp") / Path(".local/share/bcompiler-data")
+        assert Path(mock_config.BCOMPILER_LIBRARY_CONFIG_DIR) == Path("/tmp") / Path(".config/bcompiler-data")
+        assert Path(mock_config.BCOMPILER_LIBRARY_CONFIG_FILE) == Path("/tmp") / Path(".config/bcompiler-data/config.ini")
 
     # Test first that none of these paths exist
     assert not Path(mock_config.BCOMPILER_LIBRARY_DATA_DIR).exists()

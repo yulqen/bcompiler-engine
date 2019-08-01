@@ -124,6 +124,9 @@ def datamap_match_test_template():
 @pytest.fixture
 def mock_config(monkeypatch):
     monkeypatch.setattr(Config, "PLATFORM_DOCS_DIR", Path("/tmp/Documents/bcompiler"))
+    monkeypatch.setattr(Config, "BCOMPILER_LIBRARY_DATA_DIR", Path("/tmp/.local/share/bcompiler-data"))
+    monkeypatch.setattr(Config, "BCOMPILER_LIBRARY_CONFIG_DIR", Path("/tmp/.config/bcompiler-data"))
+    monkeypatch.setattr(Config, "BCOMPILER_LIBRARY_CONFIG_FILE", Path("/tmp/.config/bcompiler-data/config.ini"))
     yield Config
     try:
         shutil.rmtree(Config.BCOMPILER_LIBRARY_DATA_DIR)
