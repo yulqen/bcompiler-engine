@@ -1,6 +1,6 @@
 "Entities relating to the datamap."
 from enum import Enum, auto
-from typing import Dict
+from typing import Dict, Optional
 
 # pylint: disable=R0903,R0913;
 
@@ -23,7 +23,7 @@ class DatamapLine:
     Data structure representing all cell data extracted from templates/spreadsheets.
     """
 
-    def __init__(self, key: str, sheet: str, cellref: str, data_type: str,
+    def __init__(self, key: str, sheet: str, cellref: str, data_type: Optional[str],
                  filename: str) -> None:
 
         self.key = key

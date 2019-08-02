@@ -1,6 +1,7 @@
+import pytest
+
 from engine.domain.datamap import DatamapLineValueType
-from engine.use_cases.parsing import (datamap_check, datamap_reader,
-                                      template_reader)
+from engine.use_cases.parsing import datamap_reader, template_reader
 from engine.utils.extraction import _get_cell_data
 
 NUMBER = DatamapLineValueType.NUMBER
@@ -54,3 +55,26 @@ def test_incorrect_headers_are_coerced_or_flagged(datamap_moderately_bad_headers
     assert data[14].sheet == "Introduction"
     assert data[14].cellref == "C35"
     assert data[14].data_type == "TEXT"
+
+
+def test_very_bad_headers_are_rejected(datamap_very_bad_headers):
+    "We want the datamap to be checked first and rejected if the headers are bad"
+    with pytest.raises(IndexError):
+        data = datamap_reader(datamap_very_bad_headers) # noqa
+
+
+def test_datamap_type_is_optional(datamap_no_type_col):
+    """We want the datamap to be processed even if it doesn't have a type col, which
+    should be optional.
+    """
+    data = datamap_reader(datamap_no_type_col)
+    assert data[14].key == "Bad Spacing"
+    assert data[14].sheet == "Introduction"
+    assert data[14].cellref == "C35"
+    assert data[14].data_type is None
+
+
+def test_datamap_with_only_single_header_raises_exception(datamap_single_header):
+    "We want the datamap to be checked first and rejected if the headers are bad"
+    with pytest.raises(IndexError):
+        data = datamap_reader(datamap_single_header) # noqa

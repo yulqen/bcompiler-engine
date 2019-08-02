@@ -206,25 +206,54 @@ class DatamapFile:
 
 
 def datamap_check(dm_file):
-    "Given a datamap csv file, returns a dict of the headers used in reality..."
-    breakpoint()
+    """Given a datamap csv file, returns a dict of the headers used in reality...
+
+    raises IndexError if less than three headers are found (type header can be None)
+    """
     _good_keys = ["cell_key", "cellkey", "key"]
     _good_sheet = ["template_sheet", "sheet", "templatesheet"]
     _good_cellref = ["cell_reference", "cell_ref", "cellref", "cellreference"]
     _good_type = ["type", "value_type", "cell_type", "celltype"]
     headers = {}
+    using_type = True
     with DatamapFile(dm_file) as datamap_file:
         top_row = next(datamap_file).rstrip().split(",")
+        if len(top_row) < 4 and top_row[-1] not in _good_type:
+            # likely that we are not using type column here
+            headers.update(type=None)
+            using_type = False
         if top_row[0] in _good_keys:
             headers.update(key=top_row[0])
-        if top_row[1] in _good_sheet:
-            headers.update(sheet=top_row[1])
-        if top_row[2] in _good_cellref:
-            headers.update(cellref=top_row[2])
-        if top_row[3] in _good_type:
-            headers.update(type=top_row[3])
-    return headers
-
+            logger.info("Using {} as header".format(top_row[0]))
+        try:
+            if top_row[1] in _good_sheet:
+                headers.update(sheet=top_row[1])
+                logger.info("Using {} as header".format(top_row[1]))
+        except IndexError:
+            raise IndexError(
+                "The datamap requires at least 3 headers to function! "
+                "Only found {} so far. Cannot proceed".format(top_row[0])
+            )
+        try:
+            if top_row[2] in _good_cellref:
+                headers.update(cellref=top_row[2])
+                logger.info("Using {} as header".format(top_row[2]))
+        except IndexError:
+            raise IndexError(
+                "The datamap requires at least 3 headers to function! "
+                "Only found {} so far. Cannot proceed".format(top_row[0], top_row[1])
+            )
+        if using_type:
+            if top_row[3] in _good_type:
+                headers.update(type=top_row[3])
+                logger.info("Using {} as header".format(top_row[3]))
+    if len(headers.keys()) == 4:
+        return headers
+    else:
+        raise IndexError(
+            "Cannot proceed unless CSV headers are: cell_key, "
+            "template_sheet, cellreference and type"
+        )
 
 
 def datamap_reader(dm_file: str) -> List[DatamapLine]:
@@ -234,15 +263,26 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
     with DatamapFile(dm_file) as datamap_file:
         reader = csv.DictReader(datamap_file)
         for line in reader:
-            data.append(
-                DatamapLine(
-                    key=_clean(line[headers["key"]]),
-                    sheet=_clean(line[headers["sheet"]]),
-                    cellref=_clean(line[headers["cellref"]], is_cellref=True),
-                    data_type=_clean(line[headers["type"]]),
-                    filename=dm_file,
+            if headers["type"] is None:
+                data.append(
+                    DatamapLine(
+                        key=_clean(line[headers["key"]]),
+                        sheet=_clean(line[headers["sheet"]]),
+                        cellref=_clean(line[headers["cellref"]], is_cellref=True),
+                        data_type=None,
+                        filename=dm_file,
+                    )
                 )
-            )
+            else:
+                data.append(
+                    DatamapLine(
+                        key=_clean(line[headers["key"]]),
+                        sheet=_clean(line[headers["sheet"]]),
+                        cellref=_clean(line[headers["cellref"]], is_cellref=True),
+                        data_type=_clean(line[headers["type"]]),
+                        filename=dm_file,
+                    )
+                )
     return data
 
 

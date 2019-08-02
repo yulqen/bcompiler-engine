@@ -122,6 +122,24 @@ def datamap_moderately_bad_headers():
 
 
 @pytest.fixture
+def datamap_very_bad_headers():
+    here = os.path.abspath(os.curdir)
+    return os.path.join(here, "tests/resources/datamap_very_bad_headers.csv")
+
+
+@pytest.fixture
+def datamap_single_header():
+    here = os.path.abspath(os.curdir)
+    return os.path.join(here, "tests/resources/datamap_single_header.csv")
+
+
+@pytest.fixture
+def datamap_no_type_col():
+    here = os.path.abspath(os.curdir)
+    return os.path.join(here, "tests/resources/datamap_no_type_col.csv")
+
+
+@pytest.fixture
 def datamap_match_test_template():
     here = os.path.abspath(os.curdir)
     return os.path.join(here, "tests/resources/datamap_match_test_template.csv")
