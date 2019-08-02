@@ -1,7 +1,8 @@
 import pytest
 
 from engine.domain.datamap import DatamapLineValueType
-from engine.use_cases.parsing import datamap_reader, template_reader
+from engine.use_cases.parsing import (MalFormedCSVHeaderException,
+                                      datamap_reader, template_reader)
 from engine.utils.extraction import _get_cell_data
 
 NUMBER = DatamapLineValueType.NUMBER
@@ -59,7 +60,7 @@ def test_incorrect_headers_are_coerced_or_flagged(datamap_moderately_bad_headers
 
 def test_very_bad_headers_are_rejected(datamap_very_bad_headers):
     "We want the datamap to be checked first and rejected if the headers are bad"
-    with pytest.raises(IndexError):
+    with pytest.raises(MalFormedCSVHeaderException):
         data = datamap_reader(datamap_very_bad_headers) # noqa
 
 
@@ -76,5 +77,5 @@ def test_datamap_type_is_optional(datamap_no_type_col):
 
 def test_datamap_with_only_single_header_raises_exception(datamap_single_header):
     "We want the datamap to be checked first and rejected if the headers are bad"
-    with pytest.raises(IndexError):
+    with pytest.raises(MalFormedCSVHeaderException):
         data = datamap_reader(datamap_single_header) # noqa

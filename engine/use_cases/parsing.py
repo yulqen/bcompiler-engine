@@ -38,6 +38,7 @@ import datetime
 import json
 import logging
 import sys
+import warnings
 from concurrent import futures
 from pathlib import Path
 from typing import IO, List
@@ -51,9 +52,14 @@ from engine.utils.extraction import (_clean, _extract_cellrefs,
 
 # pylint: disable=R0903,R0913;
 
+warnings.filterwarnings("ignore", ".*Data Validation*.")
 
 logger = logging.getLogger(__name__)
 logger.setLevel("INFO")
+
+
+class MalFormedCSVHeaderException(Exception):
+    pass
 
 
 class ParsePopulatedTemplatesUseCase:
@@ -210,6 +216,7 @@ def datamap_check(dm_file):
 
     raises IndexError if less than three headers are found (type header can be None)
     """
+    sys.stdout.write("Checking datamap file {}\n".format(dm_file))
     _good_keys = ["cell_key", "cellkey", "key"]
     _good_sheet = ["template_sheet", "sheet", "templatesheet"]
     _good_cellref = ["cell_reference", "cell_ref", "cellref", "cellreference"]
@@ -230,7 +237,7 @@ def datamap_check(dm_file):
                 headers.update(sheet=top_row[1])
                 logger.info("Using {} as header".format(top_row[1]))
         except IndexError:
-            raise IndexError(
+            raise MalFormedCSVHeaderException(
                 "The datamap requires at least 3 headers to function! "
                 "Only found {} so far. Cannot proceed".format(top_row[0])
             )
@@ -239,7 +246,7 @@ def datamap_check(dm_file):
                 headers.update(cellref=top_row[2])
                 logger.info("Using {} as header".format(top_row[2]))
         except IndexError:
-            raise IndexError(
+            raise MalFormedCSVHeaderException(
                 "The datamap requires at least 3 headers to function! "
                 "Only found {} so far. Cannot proceed".format(top_row[0], top_row[1])
             )
@@ -248,9 +255,10 @@ def datamap_check(dm_file):
                 headers.update(type=top_row[3])
                 logger.info("Using {} as header".format(top_row[3]))
     if len(headers.keys()) == 4:
+        sys.stdout.write("{} checked ok".format(dm_file))
         return headers
     else:
-        raise IndexError(
+        raise MalFormedCSVHeaderException(
             "Cannot proceed unless CSV headers are: cell_key, "
             "template_sheet, cellreference and type"
         )
@@ -288,6 +296,7 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
 
 def template_reader(template_file):
     "Given a populated xlsx file, returns all data in a list of TemplateCell objects."
+    sys.stdout.write("Importing {}\n".format(template_file))
     inner_dict = {"data": {}}
     f_path = Path(template_file)
     logger.info("Extracting from: {}".format(f_path.name))
@@ -302,7 +311,7 @@ def template_reader(template_file):
             )
         )
         logger.critical(msg)
-        sys.stderr.write(msg)
+        sys.stderr.write(msg + "\n")
         raise
     checksum = _hash_single_file(f_path)
     holding = []
