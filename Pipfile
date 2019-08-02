@@ -15,8 +15,7 @@ pytest-profiling = "*"
 snakeviz = "*"
 
 [packages]
-appdirs = "*"
-openpyxl = "*"
+bcompiler-engine = {editable = true,path = "."}
 
 [requires]
 python_version = "3.7"

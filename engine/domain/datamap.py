@@ -32,7 +32,7 @@ class DatamapLine:
         self.data_type = data_type
         self.filename = filename
 
-    def to_dict(self) -> Dict[str, str]:
+    def to_dict(self) -> Dict[str, Optional[str]]:
         "Return the attributes as a dictionary."
         return {
             "key": self.key,

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "bc652c5499f773fb7f07bd38ded50482f913b6841ea4451442c45615034029bf"
+            "sha256": "92ebac09065a2049aa06ad9b63459835e2ba92816cce91d13e06bd0bbb3065b5"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -23,6 +23,10 @@
             ],
             "index": "pypi",
             "version": "==1.4.3"
+        },
+        "bcompiler-engine": {
+            "editable": true,
+            "path": "."
         },
         "et-xmlfile": {
             "hashes": [
