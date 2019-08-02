@@ -1,5 +1,6 @@
 from engine.domain.datamap import DatamapLineValueType
-from engine.use_cases.parsing import datamap_reader, template_reader
+from engine.use_cases.parsing import (datamap_check, datamap_reader,
+                                      template_reader)
 from engine.utils.extraction import _get_cell_data
 
 NUMBER = DatamapLineValueType.NUMBER
@@ -43,3 +44,13 @@ def test_template_reader(template) -> None:
 
     assert _get_cell_data(template, data, "Another Sheet", "K25")["value"] == "Float:"
     assert _get_cell_data(template, data, "Another Sheet", "K25")["data_type"] == "TEXT"
+
+
+def test_incorrect_headers_are_coerced_or_flagged(datamap_moderately_bad_headers):
+    data = datamap_reader(datamap_moderately_bad_headers)
+    # using same test as above because even though this datamap file has bad keys, we
+    # accept them because they are not too bad...
+    assert data[14].key == "Bad Spacing"
+    assert data[14].sheet == "Introduction"
+    assert data[14].cellref == "C35"
+    assert data[14].data_type == "TEXT"

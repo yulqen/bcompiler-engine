@@ -116,6 +116,12 @@ def datamap() -> str:
 
 
 @pytest.fixture
+def datamap_moderately_bad_headers():
+    here = os.path.abspath(os.curdir)
+    return os.path.join(here, "tests/resources/datamap_moderately_bad_headers.csv")
+
+
+@pytest.fixture
 def datamap_match_test_template():
     here = os.path.abspath(os.curdir)
     return os.path.join(here, "tests/resources/datamap_match_test_template.csv")

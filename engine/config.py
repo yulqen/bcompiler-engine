@@ -1,37 +1,3 @@
-# config.py
-
-"""
-Configuration and application file system locations:
-
-This should all be in the CLI application - not the library.
-We need an interface in the library which expects these variables.
-
-Linux
------
-
-configuration:              ~/.config/bcompiler-engine/config.ini
-cache/serialized data:      ~/.bcompiler-engine-data
-document drop directory:    AS PER CONFIG.INI
-                            AS PER CONFIG.INI
-
-Mac
----
-
-configuration:              ~/Library/Application Support/bcompiler-engine/config.ini
-cache/serialized data:      ~/.bcompiler-engine-data
-document drop directory:    AS PER CONFIG.INI
-                            AS PER CONFIG.INI
-
-Windows
--------
-
-configuration:              ~/Library/Application Support/bcompiler-engine/config.ini
-cache/serialized data:      ~/.bcompiler-engine-data
-document drop directory:    AS PER CONFIG.INI
-                            AS PER CONFIG.INI
-
-"""
-
 import os
 import platform
 import textwrap
@@ -48,7 +14,7 @@ def _platform_docs_dir() -> Optional[Path]:
     if platform.system() == "Darwin":
         return Path.home() / "Documents" / "bcompiler"
     if platform.system() == "Windows":
-        return Path.home() / "MyDocuments" / "bcompiler"
+        return Path.home() / "Documents" / "bcompiler"
     return None
 
 

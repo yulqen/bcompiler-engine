@@ -205,18 +205,41 @@ class DatamapFile:
         self.f_obj.close()
 
 
+def datamap_check(dm_file):
+    "Given a datamap csv file, returns a dict of the headers used in reality..."
+    breakpoint()
+    _good_keys = ["cell_key", "cellkey", "key"]
+    _good_sheet = ["template_sheet", "sheet", "templatesheet"]
+    _good_cellref = ["cell_reference", "cell_ref", "cellref", "cellreference"]
+    _good_type = ["type", "value_type", "cell_type", "celltype"]
+    headers = {}
+    with DatamapFile(dm_file) as datamap_file:
+        top_row = next(datamap_file).rstrip().split(",")
+        if top_row[0] in _good_keys:
+            headers.update(key=top_row[0])
+        if top_row[1] in _good_sheet:
+            headers.update(sheet=top_row[1])
+        if top_row[2] in _good_cellref:
+            headers.update(cellref=top_row[2])
+        if top_row[3] in _good_type:
+            headers.update(type=top_row[3])
+    return headers
+
+
+
 def datamap_reader(dm_file: str) -> List[DatamapLine]:
     "Given a datamap csv file, returns a list of DatamapLine objects."
+    headers = datamap_check(dm_file)
     data = []
     with DatamapFile(dm_file) as datamap_file:
         reader = csv.DictReader(datamap_file)
         for line in reader:
             data.append(
                 DatamapLine(
-                    key=_clean(line["cell_key"]),
-                    sheet=_clean(line["template_sheet"]),
-                    cellref=_clean(line["cellreference"], is_cellref=True),
-                    data_type=_clean(line["type"]),
+                    key=_clean(line[headers["key"]]),
+                    sheet=_clean(line[headers["sheet"]]),
+                    cellref=_clean(line[headers["cellref"]], is_cellref=True),
+                    data_type=_clean(line[headers["type"]]),
                     filename=dm_file,
                 )
             )
