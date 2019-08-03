@@ -58,6 +58,13 @@ logger = logging.getLogger(__name__)
 logger.setLevel("INFO")
 
 
+# function monkeypatched from adapter code into here which can wrap statements intended for output
+ECHO_FUNC_RED = None
+ECHO_FUNC_GREEN = None
+ECHO_FUNC_YELLOW = None
+ECHO_FUNC_WHITE = None
+
+
 class MalFormedCSVHeaderException(Exception):
     pass
 
@@ -216,7 +223,8 @@ def datamap_check(dm_file):
 
     raises IndexError if less than three headers are found (type header can be None)
     """
-    sys.stdout.write("Checking datamap file {}\n".format(dm_file))
+    if ECHO_FUNC_YELLOW is not None:
+        ECHO_FUNC_YELLOW("Checking datamap file {}\n".format(dm_file))
     _good_keys = ["cell_key", "cellkey", "key"]
     _good_sheet = ["template_sheet", "sheet", "templatesheet"]
     _good_cellref = ["cell_reference", "cell_ref", "cellref", "cellreference"]
@@ -255,7 +263,8 @@ def datamap_check(dm_file):
                 headers.update(type=top_row[3])
                 logger.info("Using {} as header".format(top_row[3]))
     if len(headers.keys()) == 4:
-        sys.stdout.write("{} checked ok".format(dm_file))
+        if ECHO_FUNC_GREEN is not None:
+            ECHO_FUNC_GREEN("{} checked ok".format(dm_file))
         return headers
     else:
         raise MalFormedCSVHeaderException(
@@ -296,7 +305,8 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
 
 def template_reader(template_file):
     "Given a populated xlsx file, returns all data in a list of TemplateCell objects."
-    sys.stdout.write("Importing {}\n".format(template_file))
+    if ECHO_FUNC_WHITE is not None:
+        ECHO_FUNC_WHITE("Importing {}\n".format(template_file))
     inner_dict = {"data": {}}
     f_path = Path(template_file)
     logger.info("Extracting from: {}".format(f_path.name))
