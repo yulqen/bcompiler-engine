@@ -238,7 +238,7 @@ def datamap_check(dm_file):
             raise MalFormedCSVHeaderException("Datamap contains only one header - need at least three to proceed. Quitting.")
         if len(top_row) == 2:
             raise MalFormedCSVHeaderException("Datamap contains only two headers - need at least three to proceed. Quitting.")
-        if len(top_row) < 4 and top_row[-1] not in _good_type:
+        if top_row[-1] not in _good_type:
             # test if we are using type column here
             headers.update(type=None)
             using_type = False
@@ -255,15 +255,15 @@ def datamap_check(dm_file):
             if top_row[3] in _good_type:
                 headers.update(type=top_row[3])
                 logger.info("Using {} as header".format(top_row[3]))
-    if len(headers.keys()) == 4:
+    if len(headers.keys()) >= 2:
+        # final test - we don't want to proceed unless we have minimum headers
+        if not all([x in list(headers.keys()) for x in ["key", "sheet", "cellref", "type"]]):
+            raise MalFormedCSVHeaderException("Cannot proceed without required number of headers")
         if ECHO_FUNC_GREEN is not None:
             ECHO_FUNC_GREEN("{} checked ok".format(dm_file))
         return headers
     else:
-        raise MalFormedCSVHeaderException(
-            "Cannot proceed unless CSV headers are: cell_key, "
-            "template_sheet, cellreference and type"
-        )
+        return MalFormedCSVHeaderException("Datamap does not contain the required headers. Cannot proceed")
 
 
 def datamap_reader(dm_file: str) -> List[DatamapLine]:
