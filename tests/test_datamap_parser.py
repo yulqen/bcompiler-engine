@@ -61,7 +61,7 @@ def test_incorrect_headers_are_coerced_or_flagged(datamap_moderately_bad_headers
 def test_very_bad_headers_are_rejected(datamap_very_bad_headers):
     "We want the datamap to be checked first and rejected if the headers are bad"
     with pytest.raises(MalFormedCSVHeaderException):
-        data = datamap_reader(datamap_very_bad_headers) # noqa
+        data = datamap_reader(datamap_very_bad_headers)  # noqa
 
 
 def test_datamap_type_is_optional(datamap_no_type_col):
@@ -77,5 +77,29 @@ def test_datamap_type_is_optional(datamap_no_type_col):
 
 def test_datamap_with_only_single_header_raises_exception(datamap_single_header):
     "We want the datamap to be checked first and rejected if the headers are bad"
-    with pytest.raises(MalFormedCSVHeaderException):
-        data = datamap_reader(datamap_single_header) # noqa
+    with pytest.raises(MalFormedCSVHeaderException) as excinfo:
+        data = datamap_reader(datamap_single_header)  # noqa
+    msg = excinfo.value.args[0]
+    assert (
+        msg == "Datamap contains only one header - need at least three to proceed. Quitting."
+    )
+
+
+def test_datamap_with_two_headers(datamap_two_headers):
+    with pytest.raises(MalFormedCSVHeaderException) as excinfo:
+        data = datamap_reader(datamap_two_headers)  # noqa
+    msg = excinfo.value.args[0]
+    assert (
+        msg == "Datamap contains only two headers - need at least three to proceed. Quitting."
+    )
+
+
+def test_datamap_with_three_headers(datamap_three_headers):
+    """
+    Should pass because fourth col (type) is optional.
+    """
+    data = datamap_reader(datamap_three_headers)
+    assert data[14].key == "Bad Spacing"
+    assert data[14].sheet == "Introduction"
+    assert data[14].cellref == "C35"
+    assert data[14].data_type is None

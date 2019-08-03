@@ -140,6 +140,24 @@ def datamap_no_type_col():
 
 
 @pytest.fixture
+def datamap_two_headers():
+    here = os.path.abspath(os.curdir)
+    return os.path.join(here, "tests/resources/datamap_two_headers.csv")
+
+
+@pytest.fixture
+def datamap_three_headers():
+    here = os.path.abspath(os.curdir)
+    return os.path.join(here, "tests/resources/datamap_three_headers.csv")
+
+
+@pytest.fixture
+def datamap_empty_cols():
+    here = os.path.abspath(os.curdir)
+    return os.path.join(here, "tests/resources/datamap_empty_cols.csv")
+
+
+@pytest.fixture
 def datamap_match_test_template():
     here = os.path.abspath(os.curdir)
     return os.path.join(here, "tests/resources/datamap_match_test_template.csv")

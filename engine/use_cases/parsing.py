@@ -232,32 +232,25 @@ def datamap_check(dm_file):
     headers = {}
     using_type = True
     with DatamapFile(dm_file) as datamap_file:
+        # initial check - have we got enough headers? If not - raise exception
         top_row = next(datamap_file).rstrip().split(",")
+        if len(top_row) == 1:
+            raise MalFormedCSVHeaderException("Datamap contains only one header - need at least three to proceed. Quitting.")
+        if len(top_row) == 2:
+            raise MalFormedCSVHeaderException("Datamap contains only two headers - need at least three to proceed. Quitting.")
         if len(top_row) < 4 and top_row[-1] not in _good_type:
-            # likely that we are not using type column here
+            # test if we are using type column here
             headers.update(type=None)
             using_type = False
         if top_row[0] in _good_keys:
             headers.update(key=top_row[0])
             logger.info("Using {} as header".format(top_row[0]))
-        try:
-            if top_row[1] in _good_sheet:
-                headers.update(sheet=top_row[1])
-                logger.info("Using {} as header".format(top_row[1]))
-        except IndexError:
-            raise MalFormedCSVHeaderException(
-                "The datamap requires at least 3 headers to function! "
-                "Only found {} so far. Cannot proceed".format(top_row[0])
-            )
-        try:
-            if top_row[2] in _good_cellref:
-                headers.update(cellref=top_row[2])
-                logger.info("Using {} as header".format(top_row[2]))
-        except IndexError:
-            raise MalFormedCSVHeaderException(
-                "The datamap requires at least 3 headers to function! "
-                "Only found {} so far. Cannot proceed".format(top_row[0], top_row[1])
-            )
+        if top_row[1] in _good_sheet:
+            headers.update(sheet=top_row[1])
+            logger.info("Using {} as header".format(top_row[1]))
+        if top_row[2] in _good_cellref:
+            headers.update(cellref=top_row[2])
+            logger.info("Using {} as header".format(top_row[2]))
         if using_type:
             if top_row[3] in _good_type:
                 headers.update(type=top_row[3])
