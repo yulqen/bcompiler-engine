@@ -260,7 +260,7 @@ def datamap_check(dm_file):
         if not all([x in list(headers.keys()) for x in ["key", "sheet", "cellref", "type"]]):
             raise MalFormedCSVHeaderException("Cannot proceed without required number of headers")
         if ECHO_FUNC_GREEN is not None:
-            ECHO_FUNC_GREEN("{} checked ok".format(dm_file))
+            ECHO_FUNC_GREEN("{} checked ok\n".format(dm_file))
         return headers
     else:
         return MalFormedCSVHeaderException("Datamap does not contain the required headers. Cannot proceed")
