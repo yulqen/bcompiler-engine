@@ -124,8 +124,8 @@ class ApplyDatamapToExtractionUseCase:
         "Does the work of creating the template_data and datamap_data attributes"
         t_uc = ParsePopulatedTemplatesUseCase(self._template_repo)
         d_uc = ParseDatamapUseCase(self._datamap_repo)
-        self._template_data = t_uc.execute()
         self._datamap_data = d_uc.execute()
+        self._template_data = t_uc.execute()
 
     def get_values(self):
         for _file_name in self._template_data:
