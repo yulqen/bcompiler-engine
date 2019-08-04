@@ -298,7 +298,7 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
 
 def template_reader(template_file):
     "Given a populated xlsx file, returns all data in a list of TemplateCell objects."
-    print(("Importing {}\n".format(template_file)))
+    print(("Importing {}".format(template_file)))
     inner_dict = {"data": {}}
     f_path = Path(template_file)
     logger.info("Extracting from: {}".format(f_path.name))
