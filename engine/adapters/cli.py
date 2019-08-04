@@ -28,9 +28,11 @@ def import_and_create_master(echo_funcs):
     tmpl_repo = InMemoryPopulatedTemplatesRepository(
         Config.PLATFORM_DOCS_DIR / "input"
     )
-    # TODO make the name configurable in config.ini
-    dm = Path(tmpl_repo.directory_path) / "datamap.csv"
+    master_fn = Config.config_parser["DEFAULT"]["master file name"]
+    dm_fn = Config.config_parser["DEFAULT"]["datamap file name"]
+    dm = Path(tmpl_repo.directory_path) / dm_fn
     dm_repo = InMemorySingleDatamapRepository(str(dm))
     output_repo = MasterOutputRepository
     uc = CreateMasterUseCase(dm_repo, tmpl_repo, output_repo)
-    uc.execute("master.xlsx")
+    uc.execute(master_fn)
+    echo_funcs["click_echo_green"]("{} successfully created in {}\n".format(master_fn, Path(Config.PLATFORM_DOCS_DIR / "output")))

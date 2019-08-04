@@ -35,6 +35,8 @@ class Config:
     # This is the value that appears in cell A1 in a master
     # Might be more relevant to rename it to project name, for example
     return reference name = file name
+    master file name = master.xlsx
+    datamap file name = datamap.csv
 
     [PATHS]
     document directory = {0}
@@ -54,6 +56,10 @@ class Config:
             Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
             cls.config_parser.read(cls.BCOMPILER_LIBRARY_CONFIG_FILE)
         cls.config_parser.read(cls.BCOMPILER_LIBRARY_CONFIG_FILE)
+
+
+        # writing the config file again to accommodate changes
+        Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
 
         # then we need to create the docs directory if it doesn't exist
         try:
