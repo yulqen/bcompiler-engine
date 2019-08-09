@@ -11,6 +11,8 @@ from engine.domain.template import TemplateCell
 FILE_DATA = Dict[str, Union[str, Dict[str, Dict[str, str]]]]
 DAT_DATA = Dict[str, FILE_DATA]
 SHEET_DATA_IN_LST = List[Dict[str, str]]
+ALL_IMPORT_DATA = Dict[str, Dict[str, Dict[str, Dict[str, Dict[str, str]]]]]
+
 
 
 def _check_file_in_datafile(spreadsheet_file: Path, data_file: Path) -> bool:

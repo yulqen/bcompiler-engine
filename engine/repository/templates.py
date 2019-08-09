@@ -3,7 +3,7 @@ import os
 
 from engine.use_cases.parsing import \
     extract_from_multiple_xlsx_files as extract
-from engine.utils.extraction import _get_xlsx_files
+from engine.utils.extraction import ALL_IMPORT_DATA, _get_xlsx_files
 
 from ..config import Config
 
@@ -31,7 +31,7 @@ class InMemoryPopulatedTemplatesRepository:
 
     def __init__(self, directory_path: str) -> None:
         self.directory_path = directory_path
-        self.state = {} # type: ignore
+        self.state: ALL_IMPORT_DATA = {}
 
     def list_as_json(self) -> str:
         "Return data from a directory of populated templates as json."

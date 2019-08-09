@@ -41,14 +41,15 @@ import sys
 import warnings
 from concurrent import futures
 from pathlib import Path
-from typing import IO, Any, Dict, List
+from typing import IO, Any, Dict, List, Optional
 
 from openpyxl import load_workbook
 
 from engine.domain.datamap import DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
-from engine.utils.extraction import (SHEET_DATA_IN_LST, _clean,
-                                     _extract_cellrefs, _hash_single_file)
+from engine.utils.extraction import (ALL_IMPORT_DATA, SHEET_DATA_IN_LST,
+                                     _clean, _extract_cellrefs,
+                                     _hash_single_file)
 
 # pylint: disable=R0903,R0913;
 
@@ -73,8 +74,8 @@ class ParsePopulatedTemplatesUseCase:
     def __init__(self, repo):
         self.repo = repo
 
-    def execute(self):
-        return self.repo.list_as_json()
+    def execute(self) -> str:
+        return self.repo.list_as_json()  # type: ignore
 
 
 class ApplyDatamapToExtractionUseCase:
@@ -83,30 +84,35 @@ class ApplyDatamapToExtractionUseCase:
     def __init__(self, datamap_repo, template_repo) -> None:
         self._datamap_repo = datamap_repo
         self._template_repo = template_repo
-        self._template_data = {}  # type: ignore
-        self._datamap_data = []  # type: ignore
-        self.data_for_master = []  # type: ignore
+        self._template_data_dict: ALL_IMPORT_DATA = {}
+        self._datamap_data_dict: List[Dict[str, str]] = []
+        self.data_for_master: List[ALL_IMPORT_DATA] = []
+        self._datamap_data_json: str = ""
+        self._template_data_json: str = ""
 
-    def _get_value_of_cell_referred_by_key(self, filename, key, sheet):
+    def _get_value_of_cell_referred_by_key(
+        self, filename: str, key: str, sheet: str
+    ) -> str:
         """Given a filename, a template_data json str, a datamap_data dict, key and sheet, returns
         the value in the spreadsheet at given datamap key.
 
         Throws KeyError if the datamap refers to a sheet/cellref combo in the target file that does not exist.
         """
-        #       _datamap_lst = json.loads(datamap_data)
-        if key not in [x["key"] for x in self._datamap_data]:
+        output = ""
+        if key not in [x["key"] for x in self._datamap_data_dict]:
             raise KeyError('No key "{}" in datamap'.format(key))
-        if sheet not in [x["sheet"] for x in self._datamap_data]:
+        if sheet not in [x["sheet"] for x in self._datamap_data_dict]:
             raise KeyError('No sheet "{}" in datamap'.format(sheet))
         _target_cellref = [
             x["cellref"]
-            for x in self._datamap_data
+            for x in self._datamap_data_dict
             if x["key"] == key and x["sheet"] == sheet
         ]
         _cellref = _target_cellref[0]
         try:
-            output = self._template_data[filename]["data"][sheet][_cellref]["value"]
-            return output
+            output = self._template_data_dict[filename]["data"][sheet][_cellref][
+                "value"
+            ]
         except KeyError as e:
             if e.args[0] == sheet:
                 logger.critical(
@@ -119,25 +125,26 @@ class ApplyDatamapToExtractionUseCase:
                         sheet, filename
                     )
                 )
+        return output
 
     def _get_datamap_and_template_data(self) -> None:
         "Does the work of creating the template_data and datamap_data attributes"
         t_uc = ParsePopulatedTemplatesUseCase(self._template_repo)
         d_uc = ParseDatamapUseCase(self._datamap_repo)
-        self._datamap_data = d_uc.execute()
-        self._template_data = t_uc.execute()
+        self._datamap_data_json = d_uc.execute()
+        self._template_data_json = t_uc.execute()
 
     def get_values(self):
-        for _file_name in self._template_data:
-            for _dml in self._datamap_data:
+        for _file_name in self._template_data_dict:
+            for _dml in self._datamap_data_dict:
                 val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
                 yield {(_file_name, _dml["key"], _dml["sheet"], _dml["cellref"]): val}
 
     def execute(self, as_obj=False, for_master=False):
-        if self._template_data is not True and self._datamap_data is not True:
+        if self._template_data_dict is not True and self._datamap_data_dict is not True:
             self._get_datamap_and_template_data()
-        self._datamap_data = json.loads(self._datamap_data)
-        self._template_data = json.loads(self._template_data)
+        self._datamap_data_dict = json.loads(self._datamap_data_json)
+        self._template_data_dict = json.loads(self._template_data_json)
         if for_master:
             self._format_data_for_master()
 
@@ -146,7 +153,7 @@ class ApplyDatamapToExtractionUseCase:
 
         Raises KeyError if any of filename, key and sheet are not in the datamap.
         """
-        if not bool(self._template_data) and bool(self._datamap_data):
+        if not bool(self._template_data_dict) and bool(self._datamap_data_dict):
             self._get_datamap_and_template_data()
         try:
             return self._get_value_of_cell_referred_by_key(filename, key, sheet)
@@ -157,11 +164,11 @@ class ApplyDatamapToExtractionUseCase:
             raise
 
     def _format_data_for_master(self):
-        output = [{fname: []} for fname in self._template_data]
+        output = [{fname: []} for fname in self._template_data_dict]
         # FIXME - this is where crash is happening
         # see test test_master_from_org_templates/test_create_master_spreadsheet
-        f_data = self._template_data
-        dm_data = self._datamap_data
+        f_data = self._template_data_dict
+        dm_data = self._datamap_data_dict
         for _file_name in f_data:
             for _dml in dm_data:
                 val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
@@ -187,8 +194,8 @@ class ParseDatamapUseCase:
     def __init__(self, repo):
         self.repo = repo
 
-    def execute(self):
-        return self.repo.list_as_json()
+    def execute(self) -> str:
+        return self.repo.list_as_json()  # type: ignore
 
 
 class DatamapFile:
@@ -235,9 +242,13 @@ def datamap_check(dm_file):
         # initial check - have we got enough headers? If not - raise exception
         top_row = next(datamap_file).rstrip().split(",")
         if len(top_row) == 1:
-            raise MalFormedCSVHeaderException("Datamap contains only one header - need at least three to proceed. Quitting.")
+            raise MalFormedCSVHeaderException(
+                "Datamap contains only one header - need at least three to proceed. Quitting."
+            )
         if len(top_row) == 2:
-            raise MalFormedCSVHeaderException("Datamap contains only two headers - need at least three to proceed. Quitting.")
+            raise MalFormedCSVHeaderException(
+                "Datamap contains only two headers - need at least three to proceed. Quitting."
+            )
         if top_row[-1] not in _good_type:
             # test if we are using type column here
             headers.update(type=None)
@@ -257,13 +268,19 @@ def datamap_check(dm_file):
                 logger.info("Using {} as header".format(top_row[3]))
     if len(headers.keys()) >= 2:
         # final test - we don't want to proceed unless we have minimum headers
-        if not all([x in list(headers.keys()) for x in ["key", "sheet", "cellref", "type"]]):
-            raise MalFormedCSVHeaderException("Cannot proceed without required number of headers")
+        if not all(
+            [x in list(headers.keys()) for x in ["key", "sheet", "cellref", "type"]]
+        ):
+            raise MalFormedCSVHeaderException(
+                "Cannot proceed without required number of headers"
+            )
         if ECHO_FUNC_GREEN is not None:
             ECHO_FUNC_GREEN("{} checked ok\n".format(dm_file))
         return headers
     else:
-        return MalFormedCSVHeaderException("Datamap does not contain the required headers. Cannot proceed")
+        return MalFormedCSVHeaderException(
+            "Datamap does not contain the required headers. Cannot proceed"
+        )
 
 
 def datamap_reader(dm_file: str) -> List[DatamapLine]:
@@ -348,7 +365,7 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
         holding.append(sheet_dict)
     for sd in holding:
         inner_dict["data"].update(sd)
-        inner_dict.update({"checksum": checksum}) #type: ignore
+        inner_dict.update({"checksum": checksum})  # type: ignore
     shell_dict = {f_path.name: inner_dict}
     return shell_dict
 
@@ -361,7 +378,7 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
 #    return data
 
 
-def extract_from_multiple_xlsx_files(xlsx_files):
+def extract_from_multiple_xlsx_files(xlsx_files) -> ALL_IMPORT_DATA:
     "Extract raw data from list of paths to excel files. Return as complex dictionary."
     data = {}
     with futures.ProcessPoolExecutor() as pool:
