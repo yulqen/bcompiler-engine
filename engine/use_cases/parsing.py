@@ -41,14 +41,14 @@ import sys
 import warnings
 from concurrent import futures
 from pathlib import Path
-from typing import IO, List
+from typing import IO, Any, Dict, List
 
 from openpyxl import load_workbook
 
 from engine.domain.datamap import DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
-from engine.utils.extraction import (_clean, _extract_cellrefs,
-                                     _hash_single_file)
+from engine.utils.extraction import (SHEET_DATA_IN_LST, _clean,
+                                     _extract_cellrefs, _hash_single_file)
 
 # pylint: disable=R0903,R0913;
 
@@ -296,11 +296,11 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
     return data
 
 
-def template_reader(template_file):
+def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     "Given a populated xlsx file, returns all data in a list of TemplateCell objects."
     print(("Importing {}".format(template_file)))
-    inner_dict = {"data": {}}
-    f_path = Path(template_file)
+    inner_dict: Dict[str, Dict[Any, Any]] = {"data": {}}
+    f_path: Path = Path(template_file)
     logger.info("Extracting from: {}".format(f_path.name))
     try:
         workbook = load_workbook(template_file, data_only=True)
@@ -315,12 +315,12 @@ def template_reader(template_file):
         logger.critical(msg)
         sys.stderr.write(msg + "\n")
         raise
-    checksum = _hash_single_file(f_path)
+    checksum: str = _hash_single_file(f_path)
     holding = []
     for sheet in workbook.worksheets:
         logger.info("Processing sheet {} | {}".format(f_path.name, sheet.title))
-        sheet_data = []
-        sheet_dict = {}
+        sheet_data: SHEET_DATA_IN_LST = []
+        sheet_dict: Dict[str, Dict[str, Dict[str, str]]] = {}
         for row in sheet.rows:
             for cell in row:
                 if cell.value is not None:
@@ -348,7 +348,7 @@ def template_reader(template_file):
         holding.append(sheet_dict)
     for sd in holding:
         inner_dict["data"].update(sd)
-    inner_dict.update({"checksum": checksum})
+        inner_dict.update({"checksum": checksum}) #type: ignore
     shell_dict = {f_path.name: inner_dict}
     return shell_dict
 
