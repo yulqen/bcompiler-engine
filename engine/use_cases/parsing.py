@@ -41,7 +41,7 @@ import sys
 import warnings
 from concurrent import futures
 from pathlib import Path
-from typing import IO, Any, Dict, List, Optional
+from typing import IO, Any, Dict, List
 
 from openpyxl import load_workbook
 
