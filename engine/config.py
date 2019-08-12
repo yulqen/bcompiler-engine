@@ -3,19 +3,17 @@ import platform
 import textwrap
 from configparser import ConfigParser
 from pathlib import Path
-from typing import Optional
 
 from appdirs import user_config_dir, user_data_dir
 
 
-def _platform_docs_dir() -> Optional[Path]:
+def _platform_docs_dir() -> Path:
     if platform.system() == "Linux":
         return Path.home() / "Documents" / "bcompiler"
     if platform.system() == "Darwin":
         return Path.home() / "Documents" / "bcompiler"
-    if platform.system() == "Windows":
+    else:
         return Path.home() / "Documents" / "bcompiler"
-    return None
 
 
 class Config:

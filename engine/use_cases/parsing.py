@@ -127,7 +127,7 @@ class ApplyDatamapToExtractionUseCase:
                 )
         return output
 
-    def _get_datamap_and_template_data(self) -> None:
+    def _set_datamap_and_template_data(self) -> None:
         "Does the work of creating the template_data and datamap_data attributes"
         t_uc = ParsePopulatedTemplatesUseCase(self._template_repo)
         d_uc = ParseDatamapUseCase(self._datamap_repo)
@@ -142,7 +142,7 @@ class ApplyDatamapToExtractionUseCase:
 
     def execute(self, as_obj=False, for_master=False):
         if self._template_data_dict is not True and self._datamap_data_dict is not True:
-            self._get_datamap_and_template_data()
+            self._set_datamap_and_template_data()
         self._datamap_data_dict = json.loads(self._datamap_data_json)
         self._template_data_dict = json.loads(self._template_data_json)
         if for_master:
@@ -154,7 +154,7 @@ class ApplyDatamapToExtractionUseCase:
         Raises KeyError if any of filename, key and sheet are not in the datamap.
         """
         if not bool(self._template_data_dict) and bool(self._datamap_data_dict):
-            self._get_datamap_and_template_data()
+            self._set_datamap_and_template_data()
         try:
             return self._get_value_of_cell_referred_by_key(filename, key, sheet)
         except KeyError:

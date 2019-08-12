@@ -11,7 +11,7 @@ class MasterOutputRepository:
         self.data = data
         self.output_filename = output_file_name
 
-    def save(self):
+    def save(self) -> None:
         _master_return_reference = Config.config_parser["DEFAULT"]["return reference name"]
         output_path = Path(Config.PLATFORM_DOCS_DIR) / "output"
         wb = Workbook()
