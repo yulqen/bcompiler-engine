@@ -1,11 +1,18 @@
 import json
 import os
+from pathlib import Path
 
 from engine.use_cases.parsing import \
     extract_from_multiple_xlsx_files as extract
 from engine.utils.extraction import ALL_IMPORT_DATA, _get_xlsx_files
 
 from ..config import Config
+
+
+class MultipleTemplatesWriteRepo:
+    def __init__(self, directory_path: Path):
+        "directory_path is the directory in which to write the files."
+        pass
 
 
 class FSPopulatedTemplatesRepo:

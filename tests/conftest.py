@@ -110,6 +110,16 @@ def pop_template() -> Path:
 
 
 @pytest.fixture
+def master() -> Path:
+    return Path.cwd() / "tests" / "resources" / "master.xlsx"
+
+
+@pytest.fixture
+def blank_template() -> Path:
+    return Path.cwd() / "tests" / "resources" / "blank_template.xlsm"
+
+
+@pytest.fixture
 def datamap() -> str:
     here = os.path.abspath(os.curdir)
     return os.path.join(here, "tests/resources/datamap.csv")

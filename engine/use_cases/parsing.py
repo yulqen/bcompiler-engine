@@ -41,7 +41,7 @@ import sys
 import warnings
 from concurrent import futures
 from pathlib import Path
-from typing import IO, Any, Dict, List
+from typing import IO, Any, Dict, List, Union
 
 from openpyxl import load_workbook
 
@@ -194,8 +194,11 @@ class ParseDatamapUseCase:
     def __init__(self, repo):
         self.repo = repo
 
-    def execute(self) -> str:
-        return self.repo.list_as_json()  # type: ignore
+    def execute(self, obj=False):
+        if not obj:
+            return self.repo.list_as_json()  # type: ignore
+        else:
+            return self.repo.list_as_objs()
 
 
 class DatamapFile:
