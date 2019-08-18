@@ -5,3 +5,4 @@ htmlcov/*
 pip-wheel-metadata/*
 prof/*
 tags
+skip-covered/
