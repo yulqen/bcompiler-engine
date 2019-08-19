@@ -5,8 +5,16 @@ import engine.use_cases.parsing
 from engine.config import Config
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
-from engine.repository.templates import InMemoryPopulatedTemplatesRepository
+from engine.repository.templates import (InMemoryPopulatedTemplatesRepository,
+                                         MultipleTemplatesWriteRepo)
+from engine.use_cases.output import WriteMasterToTemplates
 from engine.use_cases.parsing import CreateMasterUseCase
+
+
+def write_master_to_templates(blank_template: Path, datamap: Path, master: Path):
+    output_repo = MultipleTemplatesWriteRepo(blank_template)
+    uc = WriteMasterToTemplates(output_repo, datamap, master, blank_template)
+    uc.execute()
 
 
 def import_and_create_master(echo_funcs):
