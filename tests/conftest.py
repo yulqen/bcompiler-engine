@@ -183,6 +183,7 @@ def mock_config(monkeypatch):
     try:
         shutil.rmtree(Config.BCOMPILER_LIBRARY_DATA_DIR)
         shutil.rmtree(Config.BCOMPILER_LIBRARY_CONFIG_DIR)
+        shutil.rmtree(Config.PLATFORM_DOCS_DIR)
     except FileNotFoundError:
         pass
 
