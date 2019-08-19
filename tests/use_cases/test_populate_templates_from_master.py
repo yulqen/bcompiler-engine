@@ -13,8 +13,7 @@ from engine.use_cases.output import WriteMasterToTemplates
 
 def test_output_gateway(mock_config, datamap, master, blank_template):
     mock_config.initialise()
-    output_dir = mock_config.PLATFORM_DOCS_DIR / "output"
-    output_repo = MultipleTemplatesWriteRepo(output_dir, blank_template)
+    output_repo = MultipleTemplatesWriteRepo(blank_template)
     uc = WriteMasterToTemplates(output_repo, datamap, master, blank_template)
     uc.execute()
     result_file = mock_config.PLATFORM_DOCS_DIR / "output" / "Chutney Bridge.xlsm"

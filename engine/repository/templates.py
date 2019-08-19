@@ -12,9 +12,15 @@ from ..config import Config
 
 
 class MultipleTemplatesWriteRepo:
-    def __init__(self, directory_path: Path, blank_template: Path):
+    """Write data to a blank template.
+
+    Given data (e.g. from extracted from a master xlsx file), writes
+    each data set to a blank template and save it in the output directory,
+    which by default is in "User/Documents/bcompiler/output."
+    """
+    def __init__(self, blank_template: Path):
         "directory_path is the directory in which to write the files."
-        self.output_path = directory_path
+        self.output_path = Config.PLATFORM_DOCS_DIR / "output"
         self.blank_template = blank_template
 
     def _populate_workbook(self, workbook: Workbook, file_data) -> None:

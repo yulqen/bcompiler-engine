@@ -28,6 +28,12 @@ MASTER_DATA_FOR_FILE = List[MASTER_COL_DATA]
 
 
 class WriteMasterToTemplates:
+    """
+    Re-creation of the old bcompiler -a functionality.
+
+    Writes data from a given master to a blank template and saves each file according
+    to each relevant column in the master.
+    """
     def __init__(self, output_repo, datamap: Path, master: Path, blank_template: Path):
         self.output_repo = output_repo
         self._datamap = datamap
