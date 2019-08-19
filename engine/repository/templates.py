@@ -6,6 +6,7 @@ from openpyxl import Workbook, load_workbook
 
 from engine.use_cases.parsing import \
     extract_from_multiple_xlsx_files as extract
+from engine.use_cases.typing import MASTER_COL_DATA, MASTER_DATA_FOR_FILE
 from engine.utils.extraction import ALL_IMPORT_DATA, _get_xlsx_files
 
 from ..config import Config
@@ -23,7 +24,7 @@ class MultipleTemplatesWriteRepo:
         self.output_path = Config.PLATFORM_DOCS_DIR / "output"
         self.blank_template = blank_template
 
-    def _populate_workbook(self, workbook: Workbook, file_data) -> None:
+    def _populate_workbook(self, workbook: Workbook, file_data: MASTER_COL_DATA) -> None:
         # get sheets from file_data
         sheets = {x.sheet for x in file_data}
         # TODO - raise exception here if not sheets
@@ -32,18 +33,18 @@ class MultipleTemplatesWriteRepo:
             for cell in file_data:
                 _sheet[cell.cellref].value = cell.value
 
-    def write(self, data, file_name, from_json: bool = False) -> None:
+    def write(self, data: MASTER_DATA_FOR_FILE, file_name: str, from_json: bool = False) -> None:
         """Writes data from a single column in a master Excel file to a file.
 
         data: list of ColData tuples, which contains the key, sheet and value
         file_name: file name to be appended to output path
         """
         for file_data in data:
-            workbook = load_workbook(
+            workbook: Workbook = load_workbook(
                 self.blank_template, read_only=False, keep_vba=True
             )
             self._populate_workbook(workbook, file_data)
-            output_file = ".".join([file_name, "xlsm"])
+            output_file: str = ".".join([file_name, "xlsm"])
             workbook.save(filename=Config.PLATFORM_DOCS_DIR / "output" / output_file)
 
 
