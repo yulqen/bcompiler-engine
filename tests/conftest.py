@@ -174,6 +174,11 @@ def datamap_match_test_template():
 
 
 @pytest.fixture
+def blank_org_template():
+    return Path(Path.cwd() / "tests/resources/blank_template_password_removed.xlsx")
+
+
+@pytest.fixture
 def mock_config(monkeypatch):
     monkeypatch.setattr(Config, "PLATFORM_DOCS_DIR", Path("/tmp/Documents/bcompiler"))
     monkeypatch.setattr(Config, "BCOMPILER_LIBRARY_DATA_DIR", Path("/tmp/.local/share/bcompiler-data"))

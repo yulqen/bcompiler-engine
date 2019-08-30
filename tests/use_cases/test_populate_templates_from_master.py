@@ -10,6 +10,20 @@ from openpyxl import load_workbook
 from engine.repository.templates import MultipleTemplatesWriteRepo
 from engine.use_cases.output import WriteMasterToTemplates
 
+#from openpyxl import Workbook
+#from openpyxl.worksheet.datavalidation import DataValidation
+
+
+# NOT INCLUDED IN TESTS - FOR PROVING DATA VALIDATION
+#def test_write_simple_data_validation_into_file(blank_org_template):
+#    wb = Workbook()
+#    ws = wb.active
+#    dv = DataValidation(type="list", formula1='"Trumpet,Piano"', allow_blank=True)
+#    ws.add_data_validation(dv)
+#    dv.add("A1:B20")
+#    wb.save("/tmp/tosser.xlsx")
+#
+#
 
 def test_output_gateway(mock_config, datamap, master, blank_template):
     mock_config.initialise()
