@@ -77,4 +77,4 @@ class WriteMasterToTemplates:
             ]
             master_data.append(tups)
 
-        self.output_repo.write(master_data, file_name, from_json=False)
+        self.output_repo.write(master_data, from_json=False)

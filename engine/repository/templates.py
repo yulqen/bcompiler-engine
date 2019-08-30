@@ -19,33 +19,42 @@ class MultipleTemplatesWriteRepo:
     each data set to a blank template and save it in the output directory,
     which by default is in "User/Documents/bcompiler/output."
     """
+
     def __init__(self, blank_template: Path):
         "directory_path is the directory in which to write the files."
         self.output_path = Config.PLATFORM_DOCS_DIR / "output"
         self.blank_template = blank_template
 
-    def _populate_workbook(self, workbook: Workbook, file_data: MASTER_COL_DATA) -> None:
-        # get sheets from file_data
-        sheets = {x.sheet for x in file_data}
-        # TODO - raise exception here if not sheets
-        for sheet in sheets:
-            _sheet = workbook.get_sheet_by_name(sheet)
-            for cell in file_data:
+    def _populate_workbook(
+        self, workbook: Workbook, file_data: MASTER_COL_DATA
+    ) -> Workbook:
+        for cell in file_data:
+            _sheet = workbook.get_sheet_by_name(cell.sheet)
+            try:
                 _sheet[cell.cellref].value = cell.value
+            except AttributeError:
+                # TODO fix the wording for this exception
+                raise AttributeError(
+                    "PROBLEM: Object->{} Current Val->{} Attempted Val->{}".format(
+                        cell, cell.value, _sheet[cell.cellref].value
+                    )
+                )
+        return workbook
 
-    def write(self, data: MASTER_DATA_FOR_FILE, file_name: str, from_json: bool = False) -> None:
+    def write(self, data: MASTER_DATA_FOR_FILE, from_json: bool = False) -> None:
         """Writes data from a single column in a master Excel file to a file.
 
         data: list of ColData tuples, which contains the key, sheet and value
         file_name: file name to be appended to output path
         """
+        blank_workbook: Workbook = load_workbook(
+            self.blank_template, read_only=False, keep_vba=True
+        )
         for file_data in data:
-            workbook: Workbook = load_workbook(
-                self.blank_template, read_only=False, keep_vba=True
-            )
-            self._populate_workbook(workbook, file_data)
-            output_file: str = ".".join([file_name, "xlsm"])
-            workbook.save(filename=Config.PLATFORM_DOCS_DIR / "output" / output_file)
+            file_name = file_data[0].file_name
+            _wb = self._populate_workbook(blank_workbook, file_data)
+            output_file_name: str = ".".join([file_name, "xlsm"])
+            _wb.save(filename=Config.PLATFORM_DOCS_DIR / "output" / output_file_name)
 
 
 class FSPopulatedTemplatesRepo:
