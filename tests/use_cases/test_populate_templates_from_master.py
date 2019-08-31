@@ -25,11 +25,10 @@ from engine.use_cases.output import WriteMasterToTemplates
 #
 
 
-def test_get_all_data_validation_in_sheet(blank_org_template):
-    breakpoint()
-    wb = load_workbook(blank_org_template)
-    ws = wb["1 - Project Info"]
-    validations = ws.data_validations.dataValidation
+#def test_get_all_data_validation_in_sheet(blank_org_template):
+#    wb = load_workbook(blank_org_template)
+#    ws = wb["1 - Project Info"]
+#    validations = ws.data_validations.dataValidation
 
 
 def test_output_gateway(mock_config, datamap, master, blank_template):

@@ -1,6 +1,7 @@
 import json
 import os
 from pathlib import Path
+from typing import List, Tuple
 
 from openpyxl import Workbook, load_workbook
 
@@ -24,6 +25,7 @@ class MultipleTemplatesWriteRepo:
         "directory_path is the directory in which to write the files."
         self.output_path = Config.PLATFORM_DOCS_DIR / "output"
         self.blank_template = blank_template
+        self.unsaved_workbooks: List[Tuple[str, Workbook]] = []
 
     def _populate_workbook(
         self, workbook: Workbook, file_data: MASTER_COL_DATA
@@ -54,7 +56,20 @@ class MultipleTemplatesWriteRepo:
             file_name = file_data[0].file_name
             _wb = self._populate_workbook(blank_workbook, file_data)
             output_file_name: str = ".".join([file_name, "xlsm"])
-            _wb.save(filename=Config.PLATFORM_DOCS_DIR / "output" / output_file_name)
+            self.unsaved_workbooks.append((output_file_name, _wb))
+        self._write_each_workbook()
+
+
+    def _save_workbook(self, wb_t: Tuple[str, Workbook]) -> None:
+        _wb = wb_t[1]
+        _output_file_name = wb_t[0]
+        print("Saving {}".format(_output_file_name))
+        _wb.save(filename=Config.PLATFORM_DOCS_DIR / "output" / _output_file_name)
+
+
+    def _write_each_workbook(self):
+        for wb in map(self._save_workbook, self.unsaved_workbooks):
+            pass
 
 
 class FSPopulatedTemplatesRepo:
