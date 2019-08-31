@@ -5,17 +5,16 @@ templates with data from a single master file.
 
 import datetime
 
-from openpyxl import load_workbook
+from openpyxl import Workbook, load_workbook
 
 from engine.repository.templates import MultipleTemplatesWriteRepo
 from engine.use_cases.output import WriteMasterToTemplates
 
-#from openpyxl import Workbook
 #from openpyxl.worksheet.datavalidation import DataValidation
 
 
 # NOT INCLUDED IN TESTS - FOR PROVING DATA VALIDATION
-#def test_write_simple_data_validation_into_file(blank_org_template):
+#def test_write_simple_data_validation_into_file():
 #    wb = Workbook()
 #    ws = wb.active
 #    dv = DataValidation(type="list", formula1='"Trumpet,Piano"', allow_blank=True)
@@ -24,6 +23,14 @@ from engine.use_cases.output import WriteMasterToTemplates
 #    wb.save("/tmp/tosser.xlsx")
 #
 #
+
+
+def test_get_all_data_validation_in_sheet(blank_org_template):
+    breakpoint()
+    wb = load_workbook(blank_org_template)
+    ws = wb["1 - Project Info"]
+    validations = ws.data_validations.dataValidation
+
 
 def test_output_gateway(mock_config, datamap, master, blank_template):
     mock_config.initialise()
