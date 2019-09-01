@@ -5,17 +5,21 @@
 Path to 2.0 involves replication of basic existing `bcompiler` functionality,
 boiled down to:
 
-1. Import data from populated templates
+###1. Import data from populated templates
 
-*2.0 implementation*: `bcompiler import templates --to-master/-m`. This
+2.0 implementation:
+
+`bcompiler import templates --to-master/-m`. This
 replaces `bcompiler compile/bcompiler` command in version 1.
 
-2. Export data from master spreadsheet to blank templates
+###2. Export data from master spreadsheet to blank templates
 
-*2.0 implementation*: `bcompiler export master DATAMAP_PATH BLANK_PATH
+2.0 implementation:
+
+`bcompiler export master DATAMAP_PATH BLANK_PATH
 MASTER_PATH`. This replaces `bcompiler -a` command in version 1.
 
-3. API
+###3. API
 
 The official API for bcompiler 1.0 is documented [here](https://bcompiler.readthedocs.io/en/latest/api.html).
 Imports take the form `from bcompiler.api import project_data_from_master`. Currently 
@@ -26,8 +30,10 @@ only a few items are made available:
 * FinancialYear
 * Row
 
-*2.0 implementation*: mirror existing API. Any changes should be marked as
-deprecations and warnings issued to the user.
+2.0 implementation:
+
+Mirror existing API. Any changes should be marked as deprecations and warnings
+issued to the user.
 
 ## Command line format
 
