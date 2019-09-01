@@ -175,7 +175,7 @@ def datamap_match_test_template():
 
 @pytest.fixture
 def blank_org_template():
-    return Path(Path.cwd() / "tests/resources/blank_template_password_removed.xlsx")
+    return Path(Path.cwd() / "tests/resources/blank_template_password_removed.xlsm")
 
 
 @pytest.fixture
