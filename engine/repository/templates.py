@@ -67,7 +67,7 @@ class MultipleTemplatesWriteRepo:
         _wb.save(filename=Config.PLATFORM_DOCS_DIR / "output" / _output_file_name)
 
 
-    def _write_each_workbook(self):
+    def _write_each_workbook(self) -> None:
         for wb in map(self._save_workbook, self.unsaved_workbooks):
             pass
 

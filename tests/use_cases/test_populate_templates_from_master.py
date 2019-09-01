@@ -9,6 +9,7 @@ from openpyxl import Workbook, load_workbook
 
 from engine.repository.templates import MultipleTemplatesWriteRepo
 from engine.use_cases.output import WriteMasterToTemplates
+from engine.utils.extraction import data_validation_report
 
 #from openpyxl.worksheet.datavalidation import DataValidation
 
@@ -29,6 +30,15 @@ from engine.use_cases.output import WriteMasterToTemplates
 #    wb = load_workbook(blank_org_template)
 #    ws = wb["1 - Project Info"]
 #    validations = ws.data_validations.dataValidation
+#    breakpoint()
+
+
+def test_validation_report(blank_org_template):
+    wb = load_workbook(blank_org_template)
+    ws = wb["1 - Project Info"]
+    report = data_validation_report(ws)
+    expected1 = 'Sheet: 1 - Project Info; E58:K58; Type: list; Formula: "Yes,No"'
+    assert expected1 in report
 
 
 def test_output_gateway(mock_config, datamap, master, blank_template):

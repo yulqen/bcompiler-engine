@@ -15,6 +15,21 @@ ALL_IMPORT_DATA = Dict[str, Dict[str, Dict[str, Dict[str, Dict[str, str]]]]]
 
 
 
+def data_validation_report(sheet) -> List[str]:
+    """Given an openpyxl sheet, produces a list of statements regarding dv cells.
+
+    To be used by the adapters.
+    """
+    output = []
+    validations = sheet.data_validations.dataValidation
+    for v in validations:
+        output.append(
+            f"Sheet: {sheet.title}; {v.sqref}; Type: {v.type}; Formula: {v.formula1}"
+        )
+    return output
+
+
+
 def _check_file_in_datafile(spreadsheet_file: Path, data_file: Path) -> bool:
     """Given a spreadsheet file, checks whether its data is already contained in a data file.
 
