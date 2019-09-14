@@ -2,6 +2,7 @@
 Use cases related to writing data to an output repository.
 """
 
+import warnings
 from pathlib import Path
 from typing import List
 
@@ -11,6 +12,10 @@ from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.use_cases.parsing import ParseDatamapUseCase
 from engine.use_cases.typing import (MASTER_COL_DATA, MASTER_DATA_FOR_FILE,
                                      ColData)
+
+# TODO handle these more appropriately (such as config)
+warnings.filterwarnings("ignore", ".*Conditional Formatting*.")
+warnings.filterwarnings("ignore", ".*Sparkline Group*.")
 
 
 class WriteMasterToTemplates:

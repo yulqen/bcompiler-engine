@@ -35,6 +35,7 @@ class Config:
     return reference name = file name
     master file name = master.xlsx
     datamap file name = datamap.csv
+    blank file name = blank_template.xlsm
 
     [PATHS]
     document directory = {0}

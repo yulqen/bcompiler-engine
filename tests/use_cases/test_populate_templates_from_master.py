@@ -4,6 +4,7 @@ templates with data from a single master file.
 """
 
 import datetime
+from pathlib import Path
 
 import pytest
 from openpyxl import load_workbook
@@ -112,6 +113,28 @@ def test_validation_report(blank_org_template):
     report = data_validation_report(ws)
     expected1 = 'Sheet: 1 - Project Info; E58:K58; Type: list; Formula: "Yes,No"'
     assert expected1 in report
+
+
+def test_config_has_correct_files(mock_config):
+    mock_config.initialise()
+    input_dir = mock_config.PLATFORM_DOCS_DIR / "input"
+
+    blank_fn = mock_config.config_parser["DEFAULT"]["blank file name"]
+    datamap_fn = mock_config.config_parser["DEFAULT"]["datamap file name"]
+
+    blank_template = input_dir / blank_fn
+    datamap = input_dir / datamap_fn
+
+    assert "tmp" in blank_template.parts
+    assert "input" in blank_template.parts
+    assert "Documents" in blank_template.parts
+    assert "blank_template.xlsm" in blank_template.parts
+
+    assert "tmp" in datamap.parts
+    assert "input" in datamap.parts
+    assert "Documents" in datamap.parts
+    assert "datamap.csv" in datamap.parts
+
 
 
 def test_output_gateway(mock_config, datamap, master, blank_template):

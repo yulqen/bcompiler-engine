@@ -49,9 +49,14 @@ class MultipleTemplatesWriteRepo:
         data: list of ColData tuples, which contains the key, sheet and value
         file_name: file name to be appended to output path
         """
-        blank_workbook: Workbook = load_workbook(
-            self.blank_template, read_only=False, keep_vba=True
-        )
+        try:
+            blank_workbook: Workbook = load_workbook(
+                self.blank_template, read_only=False, keep_vba=True
+            )
+        except FileNotFoundError as e:
+            raise FileNotFoundError(f"Cannot find file {e.filename}. Do you have "
+                                    "file set correctly in config file?")
+
         for file_data in data:
             file_name = file_data[0].file_name
             _wb = self._populate_workbook(blank_workbook, file_data)
