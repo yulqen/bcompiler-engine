@@ -6,3 +6,4 @@ pip-wheel-metadata/*
 prof/*
 tags
 skip-covered/
+.idea/
