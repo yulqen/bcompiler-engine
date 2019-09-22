@@ -12,7 +12,9 @@ class MasterOutputRepository:
         self.output_filename = output_file_name
 
     def save(self) -> None:
-        _master_return_reference = Config.config_parser["DEFAULT"]["return reference name"]
+        _master_return_reference = Config.config_parser["DEFAULT"][
+            "return reference name"
+        ]
         output_path = Path(Config.PLATFORM_DOCS_DIR) / "output"
         wb = Workbook()
         ws = wb.active
@@ -24,7 +26,9 @@ class MasterOutputRepository:
             ws.cell(column=1, row=i, value=k)
         # other cols
         for counter, file_data in enumerate(self.data, start=2):
-            ws.cell(column=counter, row=1, value=list(file_data.keys())[0].split(".")[0])
+            ws.cell(
+                column=counter, row=1, value=list(file_data.keys())[0].split(".")[0]
+            )
             _key_value_lst = list(file_data.values())[0]
             for idx, tup in enumerate(_key_value_lst, start=2):
                 ws.cell(column=counter, row=idx, value=tup[1])
