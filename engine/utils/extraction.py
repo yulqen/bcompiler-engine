@@ -5,6 +5,9 @@ import os
 from itertools import groupby
 from pathlib import Path
 from typing import Dict, List, Union
+from typing import NamedTuple
+
+from openpyxl.worksheet.cell_range import MultiCellRange
 
 from engine.domain.template import TemplateCell
 
@@ -14,8 +17,14 @@ SHEET_DATA_IN_LST = List[Dict[str, str]]
 ALL_IMPORT_DATA = Dict[str, Dict[str, Dict[str, Dict[str, Dict[str, str]]]]]
 
 
+class ValidationReportItem(NamedTuple):
+    """Can be used to allow better access to data from a Data Validation."""
+    formula: str
+    cell_range: MultiCellRange
+    report_line: str
 
-def data_validation_report(sheet) -> List[str]:
+
+def data_validation_report(sheet) -> List[ValidationReportItem]:
     """Given an openpyxl sheet, produces a list of statements regarding dv cells.
 
     To be used by the adapters.
@@ -23,11 +32,12 @@ def data_validation_report(sheet) -> List[str]:
     output = []
     validations = sheet.data_validations.dataValidation
     for v in validations:
-        output.append(
-            f"Sheet: {sheet.title}; {v.sqref}; Type: {v.type}; Formula: {v.formula1}"
-        )
+        output.append(ValidationReportItem(
+            v.formula1,
+            v.ranges,
+            f"Sheet: {sheet.title}; {v.sqref}; Type: {v.type}; Formula: {v.formula1}",
+        ))
     return output
-
 
 
 def _check_file_in_datafile(spreadsheet_file: Path, data_file: Path) -> bool:

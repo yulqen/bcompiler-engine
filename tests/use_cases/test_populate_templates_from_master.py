@@ -4,7 +4,7 @@ templates with data from a single master file.
 """
 
 import datetime
-from pathlib import Path
+from typing import List
 
 import pytest
 from openpyxl import load_workbook
@@ -12,6 +12,7 @@ from openpyxl import load_workbook
 from engine.adapters.cli import write_master_to_templates
 from engine.repository.templates import MultipleTemplatesWriteRepo
 from engine.use_cases.output import WriteMasterToTemplates
+from engine.utils.extraction import ValidationReportItem
 from engine.utils.extraction import data_validation_report
 
 # from openpyxl.worksheet.datavalidation import DataValidation
@@ -60,7 +61,9 @@ def test_dv_loss():
 
     # let's get the validations in the blank sheet
     #   wb0 = load_workbook("/home/lemon/Documents/bcompiler/templates/DfT_Template_1920_Q1_Unlocked.xlsm")
-    wb0 = load_workbook("/home/lemon/code/python/bcompiler-engine/tests/resources/blank_template_password_removed.xlsm")
+    wb0 = load_workbook(
+        "/home/lemon/code/python/bcompiler-engine/tests/resources/blank_template_password_removed.xlsm"
+    )
     ws0 = wb0["1 - Project Info"]
     validations0 = ws0.data_validations.dataValidation
 
@@ -68,7 +71,8 @@ def test_dv_loss():
     write_master_to_templates(blank, datamap, master)
     # and checks the validations in that
     wb = load_workbook(
-        "/home/lemon/Documents/bcompiler/output/A417%20Air%20Balloon_Q1%20Apr%20-%20June%202019_Return.xlsm")
+        "/home/lemon/Documents/bcompiler/output/A417%20Air%20Balloon_Q1%20Apr%20-%20June%202019_Return.xlsm"
+    )
     ws = wb["1 - Project Info"]
     validations = ws.data_validations.dataValidation
 
@@ -77,7 +81,6 @@ def test_dv_loss():
     assert len(validations0) == len(validations)
 
 
-@pytest.mark.skip("Should only be run individually - not part of test suite")
 def test_write_into_dropdown(blank_org_template):
     wb = load_workbook(blank_org_template, read_only=False, keep_vba=True)
     ws = wb["1 - Project Info"]
@@ -85,7 +88,14 @@ def test_write_into_dropdown(blank_org_template):
     wb.save("/tmp/tosser.xlsm")
     wb1 = load_workbook("/tmp/tosser.xlsm", keep_vba=True)
     ws1 = wb1["1 - Project Info"]
-    validations = ws1.data_validations.dataValidation
+    report: List[ValidationReportItem] = data_validation_report(ws1)
+    formulae = [r.formula for r in report]
+    assert '"Yes,No"' in formulae
+    assert "'Drop Downs'!$F$3:$F$22" in formulae
+    assert "'Drop Downs'!$S$3:$S$8" in formulae
+    assert report[0].cell_range == "B6"
+    assert report[2].cell_range.ranges[0].bounds == (2, 8, 2, 8)  # represents B8
+    assert report[2].cell_range.ranges[1].bounds == (2, 11, 2, 11)  # represents B11
 
 
 # NOT INCLUDED IN TESTS - FOR PROVING DATA VALIDATION

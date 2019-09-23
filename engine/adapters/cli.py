@@ -1,5 +1,8 @@
 # cli adapters
 from pathlib import Path
+from typing import List
+
+from openpyxl import load_workbook
 
 import engine.use_cases.parsing
 from engine.config import Config
@@ -9,6 +12,23 @@ from engine.repository.templates import (InMemoryPopulatedTemplatesRepository,
                                          MultipleTemplatesWriteRepo)
 from engine.use_cases.output import WriteMasterToTemplates
 from engine.use_cases.parsing import CreateMasterUseCase
+from engine.utils.extraction import data_validation_report
+
+
+def report_data_validations_in_file(file: Path) -> List[str]:
+    """Take a file and report details of data validations.
+    :param file:
+    :type Path:
+    """
+    wb = load_workbook(file)
+    output = []
+    sheets = wb.get_sheet_names()
+    for s in sheets:
+        ws = wb[s]
+        report = data_validation_report(ws)
+        for x in [r.report_line for r in report]:
+            output.append(x)
+    return output
 
 
 def write_master_to_templates(blank_template: Path, datamap: Path, master: Path):
