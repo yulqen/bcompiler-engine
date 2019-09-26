@@ -43,10 +43,10 @@ def data_validation_report(sheet: Worksheet) -> List[ValidationReportItem]:
 
 def _check_file_in_datafile(spreadsheet_file: Path, data_file: Path) -> bool:
     """Given a spreadsheet file, checks whether its data is already contained in a data file.
-
     - Raises KeyError if file not found in data file.
-
     - Raises FileNotFoundError if either the spreadsheet_file or data_file files cannot be found.
+    :type spreadsheet_file: Path
+    :type data_file: Path
     """
     # expect the params to be Paths, so we convert
     spreadsheet_file = Path(spreadsheet_file)
