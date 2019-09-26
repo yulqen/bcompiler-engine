@@ -74,7 +74,10 @@ def spreadsheet_same_data_as_dat_file():
 @pytest.fixture
 def spreadsheet_one_cell_different_data_than_dat_file():
     "Same as spreadsheet_same_data_as_dat_file() but with cellref newsheet/B5 different"
-    return Path(Path.cwd() / "tests/resources/test_data_file_use_case_diff_data_from_dat_file.xlsx")
+    return Path(
+        Path.cwd()
+        / "tests/resources/test_data_file_use_case_diff_data_from_dat_file.xlsx"
+    )
 
 
 @pytest.fixture
@@ -181,9 +184,17 @@ def blank_org_template():
 @pytest.fixture
 def mock_config(monkeypatch):
     monkeypatch.setattr(Config, "PLATFORM_DOCS_DIR", Path("/tmp/Documents/bcompiler"))
-    monkeypatch.setattr(Config, "BCOMPILER_LIBRARY_DATA_DIR", Path("/tmp/.local/share/bcompiler-data"))
-    monkeypatch.setattr(Config, "BCOMPILER_LIBRARY_CONFIG_DIR", Path("/tmp/.config/bcompiler-data"))
-    monkeypatch.setattr(Config, "BCOMPILER_LIBRARY_CONFIG_FILE", Path("/tmp/.config/bcompiler-data/config.ini"))
+    monkeypatch.setattr(
+        Config, "BCOMPILER_LIBRARY_DATA_DIR", Path("/tmp/.local/share/bcompiler-data")
+    )
+    monkeypatch.setattr(
+        Config, "BCOMPILER_LIBRARY_CONFIG_DIR", Path("/tmp/.config/bcompiler-data")
+    )
+    monkeypatch.setattr(
+        Config,
+        "BCOMPILER_LIBRARY_CONFIG_FILE",
+        Path("/tmp/.config/bcompiler-data/config.ini"),
+    )
     yield Config
     try:
         shutil.rmtree(Config.BCOMPILER_LIBRARY_DATA_DIR)
