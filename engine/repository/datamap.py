@@ -1,3 +1,7 @@
+from typing import Union
+
+from pathlib import Path
+
 import json
 from typing import List
 
@@ -7,8 +11,8 @@ from ..use_cases.parsing import datamap_reader
 
 
 class InMemorySingleDatamapRepository:
-    def __init__(self, directory_path: str):
-        self.directory_path = directory_path
+    def __init__(self, directory_path: Union[Path, str]):
+        self.directory_path = str(directory_path)
 
     def list_as_json(self) -> str:
         "Return list of DatamapLine objects parsed from filepath as json."

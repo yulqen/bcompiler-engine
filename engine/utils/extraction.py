@@ -69,7 +69,7 @@ def _check_file_in_datafile(spreadsheet_file: Path, data_file: Path) -> bool:
             )
 
 
-def _get_xlsx_files(directory: str) -> List[Path]:
+def _get_xlsx_files(directory: Path) -> List[Path]:
     """Return a list of Path objects for each xlsx file in directory, or raise an exception."""
     output = []
     if not os.path.isabs(directory):

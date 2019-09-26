@@ -31,7 +31,7 @@ def report_data_validations_in_file(file: Path) -> List[str]:
     return output
 
 
-def write_master_to_templates(blank_template: Path, datamap: Path, master: Path):
+def write_master_to_templates(blank_template: Path, datamap: Path, master: Path) -> None:
     output_repo = MultipleTemplatesWriteRepo(blank_template)
     uc = WriteMasterToTemplates(output_repo, datamap, master, blank_template)
     uc.execute()

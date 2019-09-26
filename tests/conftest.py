@@ -1,14 +1,13 @@
 import os
+import pytest
 import shutil
 import tempfile
-from pathlib import Path
-from typing import Generator, List
-
-import pytest
-
 from engine.config import Config
 from engine.domain.datamap import DatamapLine
-from engine.use_cases.parsing import DatamapLineValueType, TemplateCell
+from engine.use_cases.parsing import DatamapLineValueType
+from engine.use_cases.parsing import TemplateCell
+from pathlib import Path
+from typing import List
 
 
 @pytest.fixture
@@ -67,7 +66,7 @@ def dat_file() -> Path:
 
 @pytest.fixture
 def spreadsheet_same_data_as_dat_file():
-    "A spreadsheet file containing data that is mirrored in dat_file() above"
+    """A spreadsheet file containing data that is mirrored in dat_file() above"""
     return Path(Path.cwd() / "tests/resources/test_dat_file_use_case.xlsx")
 
 
@@ -123,9 +122,9 @@ def blank_template() -> Path:
 
 
 @pytest.fixture
-def datamap() -> str:
+def datamap() -> Path:
     here = os.path.abspath(os.curdir)
-    return os.path.join(here, "tests/resources/datamap.csv")
+    return Path(os.path.join(here, "tests/resources/datamap.csv"))
 
 
 @pytest.fixture
