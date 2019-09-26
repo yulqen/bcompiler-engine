@@ -22,13 +22,13 @@ class MultipleTemplatesWriteRepo:
     """
 
     def __init__(self, blank_template: Path):
-        "directory_path is the directory in which to write the files."
+        """directory_path is the directory in which to write the files."""
         self.output_path = Config.PLATFORM_DOCS_DIR / "output"
         self.blank_template = blank_template
         self.unsaved_workbooks: List[Tuple[str, Workbook]] = []
 
     def _populate_workbook(
-        self, workbook: Workbook, file_data: MASTER_COL_DATA
+            self, workbook: Workbook, file_data: MASTER_COL_DATA
     ) -> Workbook:
         for cell in file_data:
             _sheet = workbook.get_sheet_by_name(cell.sheet)
@@ -64,30 +64,28 @@ class MultipleTemplatesWriteRepo:
             self.unsaved_workbooks.append((output_file_name, _wb))
         self._write_each_workbook()
 
-
     def _save_workbook(self, wb_t: Tuple[str, Workbook]) -> None:
         _wb = wb_t[1]
         _output_file_name = wb_t[0]
         print("Saving {}".format(_output_file_name))
         _wb.save(filename=Config.PLATFORM_DOCS_DIR / "output" / _output_file_name)
 
-
     def _write_each_workbook(self) -> None:
-        for wb in map(self._save_workbook, self.unsaved_workbooks):
+        for _ in map(self._save_workbook, self.unsaved_workbooks):
             pass
 
 
 class FSPopulatedTemplatesRepo:
-    "A repo that is based on a single data file in the .bcompiler-engine directory."
+    """A repo that is based on a single data file in the .bcompiler-engine directory."""
 
     def __init__(self, directory_path: str):
         self.directory_path = directory_path
 
     def list_as_json(self) -> str:
-        "Try to open the data file containing populated data as json."
+        """Try to open the data file containing populated data as json."""
         try:
             with open(
-                os.path.join(Config.BCOMPILER_LIBRARY_DATA_DIR, "extracted_data.dat")
+                    os.path.join(Config.BCOMPILER_LIBRARY_DATA_DIR, "extracted_data.dat")
             ) as data_file:
                 return data_file.read()
         except FileNotFoundError:
