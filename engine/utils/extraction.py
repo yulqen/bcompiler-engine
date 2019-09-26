@@ -8,6 +8,7 @@ from typing import Dict, List, Union
 from typing import NamedTuple
 
 from openpyxl.worksheet.cell_range import MultiCellRange
+from openpyxl.worksheet.worksheet import Worksheet
 
 from engine.domain.template import TemplateCell
 
@@ -24,10 +25,10 @@ class ValidationReportItem(NamedTuple):
     report_line: str
 
 
-def data_validation_report(sheet) -> List[ValidationReportItem]:
+def data_validation_report(sheet: Worksheet) -> List[ValidationReportItem]:
     """Given an openpyxl sheet, produces a list of statements regarding dv cells.
-
     To be used by the adapters.
+    :type sheet: Worksheet
     """
     output = []
     validations = sheet.data_validations.dataValidation
@@ -69,7 +70,7 @@ def _check_file_in_datafile(spreadsheet_file: Path, data_file: Path) -> bool:
 
 
 def _get_xlsx_files(directory: str) -> List[Path]:
-    "Return a list of Path objects for each xlsx file in directory, or raise an exception."
+    """Return a list of Path objects for each xlsx file in directory, or raise an exception."""
     output = []
     if not os.path.isabs(directory):
         raise RuntimeError("Require absolute path here")
@@ -90,7 +91,7 @@ def _get_cell_data(filepath: Path, data, sheet_name: str, cellref: str):
 
 
 def _clean(target_str: str, is_cellref: bool = False) -> str:
-    "Rids a string of its most common problems: spacing, capitalisation,etc."
+    """Rids a string of its most common problems: spacing, capitalisation,etc."""
     if not isinstance(target_str, str):
         raise TypeError("Can only clean a string.")
     output_str = target_str.lstrip().rstrip()
@@ -100,7 +101,7 @@ def _clean(target_str: str, is_cellref: bool = False) -> str:
 
 
 def _extract_sheets(lst_of_tcs: List[TemplateCell]) -> Dict[str, List[TemplateCell]]:
-    "Given a list of TemplateCell objects, returns the list but as a dict sorted by its sheet_name"
+    """Given a list of TemplateCell objects, returns the list but as a dict sorted by its sheet_name"""
     output: Dict[str, List[TemplateCell]] = {}
     data = sorted(lst_of_tcs, key=lambda x: x.sheet_name)
     for k, group in groupby(data, key=lambda x: x.sheet_name):
@@ -112,7 +113,7 @@ def _extract_cellrefs(lst_of_tcs: SHEET_DATA_IN_LST):
     """Extract value from TemplateCell.cellref for each TemplateCell in a list to group them.
 
     When given a list of TemplateCell objects, this function extracts each TemplateCell
-    by it's cellref value and groups them according. In the curent implementation, this is
+    by it's cellref value and groups them according. In the current implementation, this is
     only called on a list of TemplateCell objects which have the same sheet_name value, and
     therefore expects to find only a single cellref value each time, meaning that the list
     produced by groupby() can be removed and the single value return. Returns an exception
