@@ -1,16 +1,17 @@
+from itertools import groupby
+from pathlib import Path
+from typing import Dict
+from typing import List
+from typing import NamedTuple
+from typing import Union
+
 import fnmatch
 import hashlib
 import json
 import os
-from itertools import groupby
-from pathlib import Path
-from typing import Dict, List, Union
-from typing import NamedTuple
-
+from engine.domain.template import TemplateCell
 from openpyxl.worksheet.cell_range import MultiCellRange
 from openpyxl.worksheet.worksheet import Worksheet
-
-from engine.domain.template import TemplateCell
 
 FILE_DATA = Dict[str, Union[str, Dict[str, Dict[str, str]]]]
 DAT_DATA = Dict[str, FILE_DATA]
@@ -75,7 +76,7 @@ def _get_xlsx_files(directory: Path) -> List[Path]:
     if not os.path.isabs(directory):
         raise RuntimeError("Require absolute path here")
     for file_path in os.listdir(directory):
-        if fnmatch.fnmatch(file_path, "*.xls[xm]"):
+        if fnmatch.fnmatch(file_path, "*.xls[xm]") and "blank_template" not in file_path:
             output.append(Path(os.path.join(directory, file_path)))
     return output
 
