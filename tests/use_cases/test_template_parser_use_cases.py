@@ -30,7 +30,7 @@ def test_query_data_from_data_file(
     mock_config, dat_file, spreadsheet_same_data_as_dat_file
 ):
     mock_config.initialise()
-    shutil.copy2(dat_file, mock_config.BCOMPILER_LIBRARY_DATA_DIR)
+    shutil.copy2(dat_file, mock_config.DATAMAPS_LIBRARY_DATA_DIR)
     shutil.copy2(spreadsheet_same_data_as_dat_file, mock_config.PLATFORM_DOCS_DIR / "input")
     repo = FSPopulatedTemplatesRepo(mock_config.PLATFORM_DOCS_DIR)
     parse_populated_templates_use_case = ParsePopulatedTemplatesUseCase(repo)
@@ -168,7 +168,7 @@ def test_datamap_applied_to_extracted_data_returns_expected_value(
 
 def ensure_data_and_populate_file(config, dat_file, spreadsheet_file) -> None:
     "Ensure the data in a single file is mirrored in a dat file, in correct location for testing"
-    shutil.copy2(dat_file, config.BCOMPILER_LIBRARY_DATA_DIR)
+    shutil.copy2(dat_file, config.DATAMAPS_LIBRARY_DATA_DIR)
     shutil.copy2(spreadsheet_file, config.PLATFORM_DOCS_DIR)
 
 

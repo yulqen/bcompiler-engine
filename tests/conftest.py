@@ -87,7 +87,7 @@ def resources() -> Path:
 
 @pytest.fixture
 def doc_directory():
-    pth = Path(tempfile.gettempdir()) / "Documents" / "bcompiler"
+    pth = Path(tempfile.gettempdir()) / "Documents" / "datamaps"
     yield pth
     shutil.rmtree(pth)
 
@@ -106,7 +106,7 @@ def bad_sheet_template() -> Path:
 
 @pytest.fixture
 def pop_template() -> Path:
-    pth = Path(tempfile.gettempdir()) / "Documents" / "bcompiler"
+    pth = Path(tempfile.gettempdir()) / "Documents" / "datamaps"
     yield pth
     shutil.rmtree(pth)
 
@@ -182,22 +182,22 @@ def blank_org_template():
 
 @pytest.fixture
 def mock_config(monkeypatch):
-    monkeypatch.setattr(Config, "PLATFORM_DOCS_DIR", Path("/tmp/Documents/bcompiler"))
+    monkeypatch.setattr(Config, "PLATFORM_DOCS_DIR", Path("/tmp/Documents/datamaps"))
     monkeypatch.setattr(
-        Config, "BCOMPILER_LIBRARY_DATA_DIR", Path("/tmp/.local/share/bcompiler-data")
+        Config, "DATAMAPS_LIBRARY_DATA_DIR", Path("/tmp/.local/share/datamaps-data")
     )
     monkeypatch.setattr(
-        Config, "BCOMPILER_LIBRARY_CONFIG_DIR", Path("/tmp/.config/bcompiler-data")
+        Config, "DATAMAPS_LIBRARY_CONFIG_DIR", Path("/tmp/.config/datamaps-data")
     )
     monkeypatch.setattr(
         Config,
-        "BCOMPILER_LIBRARY_CONFIG_FILE",
-        Path("/tmp/.config/bcompiler-data/config.ini"),
+        "DATAMAPS_LIBRARY_CONFIG_FILE",
+        Path("/tmp/.config/datamaps-data/config.ini"),
     )
     yield Config
     try:
-        shutil.rmtree(Config.BCOMPILER_LIBRARY_DATA_DIR)
-        shutil.rmtree(Config.BCOMPILER_LIBRARY_CONFIG_DIR)
+        shutil.rmtree(Config.DATAMAPS_LIBRARY_DATA_DIR)
+        shutil.rmtree(Config.DATAMAPS_LIBRARY_CONFIG_DIR)
         shutil.rmtree(Config.PLATFORM_DOCS_DIR)
     except FileNotFoundError:
         pass

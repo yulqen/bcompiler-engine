@@ -9,21 +9,21 @@ from appdirs import user_config_dir, user_data_dir
 
 def _platform_docs_dir() -> Path:
     if platform.system() == "Linux":
-        return Path.home() / "Documents" / "bcompiler"
+        return Path.home() / "Documents" / "datamaps"
     if platform.system() == "Darwin":
-        return Path.home() / "Documents" / "bcompiler"
+        return Path.home() / "Documents" / "datamaps"
     else:
-        return Path.home() / "Documents" / "bcompiler"
+        return Path.home() / "Documents" / "datamaps"
 
 
 class Config:
     "This is created in the application and passed to the library."
 
     USER_NAME = os.getlogin()
-    BCOMPILER_LIBRARY_DATA_DIR = user_data_dir("bcompiler-data", USER_NAME)
-    BCOMPILER_LIBRARY_CONFIG_DIR = user_config_dir("bcompiler-data", USER_NAME)
-    BCOMPILER_LIBRARY_CONFIG_FILE = os.path.join(
-        BCOMPILER_LIBRARY_CONFIG_DIR, "config.ini"
+    DATAMAPS_LIBRARY_DATA_DIR = user_data_dir("datamaps-data", USER_NAME)
+    DATAMAPS_LIBRARY_CONFIG_DIR = user_config_dir("datamaps-data", USER_NAME)
+    DATAMAPS_LIBRARY_CONFIG_FILE = os.path.join(
+        DATAMAPS_LIBRARY_CONFIG_DIR, "config.ini"
     )
     PLATFORM_DOCS_DIR = _platform_docs_dir()
     config_parser = ConfigParser()
@@ -47,19 +47,19 @@ class Config:
 
     @classmethod
     def initialise(cls) -> None:
-        if not Path(cls.BCOMPILER_LIBRARY_DATA_DIR).exists():
-            Path(cls.BCOMPILER_LIBRARY_DATA_DIR).mkdir(parents=True)
-        if not Path(cls.BCOMPILER_LIBRARY_CONFIG_DIR).exists():
-            Path(cls.BCOMPILER_LIBRARY_CONFIG_DIR).mkdir(parents=True)
-        if not Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).exists():
-            Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
-        cls.config_parser.read(cls.BCOMPILER_LIBRARY_CONFIG_FILE)
+        if not Path(cls.DATAMAPS_LIBRARY_DATA_DIR).exists():
+            Path(cls.DATAMAPS_LIBRARY_DATA_DIR).mkdir(parents=True)
+        if not Path(cls.DATAMAPS_LIBRARY_CONFIG_DIR).exists():
+            Path(cls.DATAMAPS_LIBRARY_CONFIG_DIR).mkdir(parents=True)
+        if not Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).exists():
+            Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
+        cls.config_parser.read(cls.DATAMAPS_LIBRARY_CONFIG_FILE)
 
 
         # writing the config file again to accommodate changes
         # TODO fix permissions bug in Windows when doing this
-        Path(cls.BCOMPILER_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
-        cls.config_parser.read(cls.BCOMPILER_LIBRARY_CONFIG_FILE)
+        Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
+        cls.config_parser.read(cls.DATAMAPS_LIBRARY_CONFIG_FILE)
 
         # then we need to create the docs directory if it doesn't exist
         try:
