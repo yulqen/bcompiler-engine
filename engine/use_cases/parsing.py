@@ -114,17 +114,7 @@ class ApplyDatamapToExtractionUseCase:
                 "value"
             ]
         except KeyError as e:
-            if e.args[0] == sheet:
-                logger.critical(
-                    "No sheet named {} in {}. Unable to process.".format(
-                        sheet, filename
-                    )
-                )
-                raise KeyError(
-                    "No sheet named {} in {}. Unable to process.".format(
-                        sheet, filename
-                    )
-                )
+            raise KeyError(f"Unable to find value in {_cellref}", e.args)
         return output
 
     def _set_datamap_and_template_data(self) -> None:
@@ -137,7 +127,10 @@ class ApplyDatamapToExtractionUseCase:
     def get_values(self):
         for _file_name in self._template_data_dict:
             for _dml in self._datamap_data_dict:
-                val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
+                try:
+                    val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
+                except KeyError:
+                    continue
                 yield {(_file_name, _dml["key"], _dml["sheet"], _dml["cellref"]): val}
 
     def execute(self, as_obj=False, for_master=False):
@@ -158,10 +151,7 @@ class ApplyDatamapToExtractionUseCase:
         try:
             return self._get_value_of_cell_referred_by_key(filename, key, sheet)
         except KeyError:
-            logger.critical(
-                f"Unable to import {filename}: sheet: {sheet} | key: {key}"
-            )
-            raise
+            logger.debug(f"{filename} does not contain value at {sheet} | {key}")
 
     def _format_data_for_master(self):
         output = [{fname: []} for fname in self._template_data_dict]
@@ -171,7 +161,12 @@ class ApplyDatamapToExtractionUseCase:
         dm_data = self._datamap_data_dict
         for _file_name in f_data:
             for _dml in dm_data:
-                val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
+                try:
+                    val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
+                except KeyError as e:
+                    breakpoint()
+                    logger.critical(e)
+                    break
                 _col_dict = [d for d in output if list(d.keys())[0] == _file_name][0]
                 _col_dict[_file_name].append((_dml["key"], val))
         self.data_for_master = output
@@ -187,6 +182,7 @@ class CreateMasterUseCase:
         uc = ApplyDatamapToExtractionUseCase(self.datamap_repo, self.template_repo)
         uc.execute(for_master=True)
         output_repo = self.output_repository(uc.data_for_master, output_file_name)
+        logger.info(f"Saving {output_file_name}")
         output_repo.save()
 
 
