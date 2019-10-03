@@ -55,8 +55,8 @@ from engine.utils.extraction import (ALL_IMPORT_DATA, SHEET_DATA_IN_LST,
 
 warnings.filterwarnings("ignore", ".*Data Validation*.")
 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(levelname)s - %(message)s", datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
-logger.setLevel("INFO")
 
 
 # function monkeypatched from adapter code into here which can wrap statements intended for output
@@ -159,7 +159,7 @@ class ApplyDatamapToExtractionUseCase:
             return self._get_value_of_cell_referred_by_key(filename, key, sheet)
         except KeyError:
             logger.critical(
-                "Unable to process datamapline due to problem with sheet/cellref referred to by datamap"
+                f"Unable to import {filename}: sheet: {sheet} | key: {key}"
             )
             raise
 
@@ -318,10 +318,9 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
 
 def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     "Given a populated xlsx file, returns all data in a list of TemplateCell objects."
-    print(("Importing {}".format(template_file)))
     inner_dict: Dict[str, Dict[Any, Any]] = {"data": {}}
     f_path: Path = Path(template_file)
-    logger.info("Extracting from: {}".format(f_path.name))
+    logger.info(f"Importing {f_path}")
     try:
         workbook = load_workbook(template_file, data_only=True)
     except TypeError:
@@ -338,7 +337,7 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     checksum: str = _hash_single_file(f_path)
     holding = []
     for sheet in workbook.worksheets:
-        logger.info("Processing sheet {} | {}".format(f_path.name, sheet.title))
+        logger.debug("Processing sheet {} | {}".format(f_path.name, sheet.title))
         sheet_data: SHEET_DATA_IN_LST = []
         sheet_dict: Dict[str, Dict[str, Dict[str, str]]] = {}
         for row in sheet.rows:
