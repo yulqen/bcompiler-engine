@@ -26,7 +26,7 @@ SHEET_DATA_IN_LST = List[Dict[str, str]]
 ALL_IMPORT_DATA = Dict[str, Dict[str, Dict[str, Dict[str, Dict[str, str]]]]]
 
 
-def datamap_reader(dm_file: str) -> List[DatamapLine]:
+def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
     "Given a datamap csv file, returns a list of DatamapLine objects."
     headers = datamap_check(dm_file)
     data = []
@@ -40,7 +40,7 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
                         sheet=_clean(line[headers["sheet"]]),
                         cellref=_clean(line[headers["cellref"]], is_cellref=True),
                         data_type=None,
-                        filename=dm_file,
+                        filename=str(dm_file),
                     )
                 )
             else:
@@ -50,7 +50,7 @@ def datamap_reader(dm_file: str) -> List[DatamapLine]:
                         sheet=_clean(line[headers["sheet"]]),
                         cellref=_clean(line[headers["cellref"]], is_cellref=True),
                         data_type=_clean(line[headers["type"]]),
-                        filename=dm_file,
+                        filename=str(dm_file),
                     )
                 )
     return data

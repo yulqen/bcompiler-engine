@@ -1,9 +1,8 @@
 "Entities relating to the datamap."
 from enum import Enum, auto
-from typing import Dict, Optional
-
+from pathlib import Path
 # pylint: disable=R0903,R0913;
-from typing import IO
+from typing import IO, Dict, Optional, Union
 
 
 class DatamapLineValueType(Enum):
@@ -51,7 +50,7 @@ class DatamapFile:
     exception with the file isn't found.
     """
 
-    def __init__(self, filepath: str) -> None:
+    def __init__(self, filepath: Union[Path, str]) -> None:
         "Create the context manager"
         self.filepath = filepath
 
