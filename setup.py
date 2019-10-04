@@ -17,7 +17,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         "openpyxl",
-        "appdirs",
+        "appdirs"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
