@@ -56,13 +56,12 @@ def test_in_memory_datamap_application_to_extracted_data(
     uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
     uc.execute()
     assert (
-        uc.get_value_for_key("test_template.xlsx", "String Key", "Summary")
+        uc.query_key("test_template.xlsx", "String Key", "Summary")
         == "This is a string"
     )
-    assert uc.get_value_for_key("test_template.xlsx", "Big Float", "Another Sheet") == 7.2
+    assert uc.query_key("test_template.xlsx", "Big Float", "Another Sheet") == 7.2
 
 
-@pytest.mark.xfail
 def test_in_memory_datamap_application_to_extracted_data_raises_exception(
     mock_config, doc_directory, datamap, template
 ):
@@ -76,13 +75,12 @@ def test_in_memory_datamap_application_to_extracted_data_raises_exception(
     uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
     with pytest.raises(KeyError):
         # note the extra space in the key name
-        uc.get_value_for_key("test_template.xlsx", "Funny Date ", "Another Sheet")
+        uc.query_key("test_template.xlsx", "Funny Date ", "Another Sheet")
     with pytest.raises(KeyError):
         # note the extra space in the sheet name
-        uc.get_value_for_key("test_template.xlsx", "Funny Date", "Another Sheet ")
+        uc.query_key("test_template.xlsx", "Funny Date", "Another Sheet ")
 
 
-@pytest.mark.xfail
 def test_in_memory_datamap_application_throws_exception_wrong_sheet(
     mock_config, doc_directory, datamap_match_test_template, bad_sheet_template
 ):

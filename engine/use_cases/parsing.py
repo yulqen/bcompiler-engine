@@ -128,7 +128,7 @@ class ApplyDatamapToExtractionUseCase:
         for _file_name in self._template_data_dict:
             for _dml in self._datamap_data_dict:
                 try:
-                    val = self.get_value_for_key(_file_name, _dml["key"], _dml["sheet"])
+                    val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
                 except KeyError:
                     continue
                 yield {(_file_name, _dml["key"], _dml["sheet"], _dml["cellref"]): val}
@@ -141,7 +141,7 @@ class ApplyDatamapToExtractionUseCase:
         if for_master:
             self._format_data_for_master()
 
-    def get_value_for_key(self, filename, key, sheet):
+    def query_key(self, filename, key, sheet):
         """Given a filename, key and sheet, raises the value in the spreadsheet.
 
         Raises KeyError if any of filename, key and sheet are not in the datamap.
@@ -162,8 +162,9 @@ class ApplyDatamapToExtractionUseCase:
         for _file_name in f_data:
             for _dml in dm_data:
                 try:
-                    val = self.get_value_for_key(_file_name, _dml["key"], _dml["sheet"])
+                    val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
                 except KeyError as e:
+                    breakpoint()
                     logger.critical(e)
                     break
                 _col_dict = [d for d in output if list(d.keys())[0] == _file_name][0]
