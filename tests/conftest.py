@@ -4,8 +4,8 @@ import shutil
 import tempfile
 from engine.config import Config
 from engine.domain.datamap import DatamapLine
-from engine.use_cases.parsing import DatamapLineValueType
-from engine.use_cases.parsing import TemplateCell
+from engine.domain.datamap import DatamapLineValueType
+from engine.domain.template import TemplateCell
 from pathlib import Path
 from typing import List
 

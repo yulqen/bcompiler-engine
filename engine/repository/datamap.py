@@ -7,7 +7,7 @@ from typing import List
 
 from ..domain.datamap import DatamapLine
 from ..serializers.datamap import DatamapEncoder
-from ..use_cases.parsing import datamap_reader
+from engine.utils.extraction import datamap_reader
 
 
 class InMemorySingleDatamapRepository:

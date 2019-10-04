@@ -5,8 +5,8 @@ import pytest
 
 from engine.domain.datamap import DatamapLineValueType
 from engine.domain.template import TemplateCell
-from engine.use_cases.parsing import (extract_from_multiple_xlsx_files,
-                                      template_reader)
+from engine.use_cases.parsing import (extract_from_multiple_xlsx_files)
+from engine.utils.extraction import template_reader
 from engine.utils.extraction import (_extract_cellrefs, _extract_sheets,
                                      _get_xlsx_files)
 

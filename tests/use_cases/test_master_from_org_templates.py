@@ -9,8 +9,9 @@ from openpyxl import load_workbook
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
 from engine.repository.templates import InMemoryPopulatedTemplatesRepository
-from engine.use_cases.parsing import (CreateMasterUseCase, datamap_reader,
-                                      template_reader)
+from engine.use_cases.parsing import (CreateMasterUseCase)
+from engine.utils.extraction import template_reader
+from engine.utils.extraction import datamap_reader
 
 
 @pytest.mark.slow

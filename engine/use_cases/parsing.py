@@ -33,41 +33,19 @@ objects - will return a dict of the form:
         }
     }
 """
-import csv
-import datetime
 import json
 import logging
-import sys
 import warnings
 from concurrent import futures
-from pathlib import Path
-from typing import IO, Any, Dict, List
-
-from openpyxl import load_workbook
-
-from engine.domain.datamap import DatamapLine, DatamapLineValueType
-from engine.domain.template import TemplateCell
-from engine.utils.extraction import (ALL_IMPORT_DATA, SHEET_DATA_IN_LST,
-                                     _clean, _extract_cellrefs,
-                                     _hash_single_file)
+from typing import Dict, List
 
 # pylint: disable=R0903,R0913;
+from engine.utils.extraction import ALL_IMPORT_DATA, template_reader
 
 warnings.filterwarnings("ignore", ".*Data Validation*.")
 
 logger = logging.getLogger(__name__)
 logger.setLevel("INFO")
-
-
-# function monkeypatched from adapter code into here which can wrap statements intended for output
-ECHO_FUNC_RED = None
-ECHO_FUNC_GREEN = None
-ECHO_FUNC_YELLOW = None
-ECHO_FUNC_WHITE = None
-
-
-class MalFormedCSVHeaderException(Exception):
-    pass
 
 
 class ParsePopulatedTemplatesUseCase:
@@ -199,178 +177,6 @@ class ParseDatamapUseCase:
             return self.repo.list_as_json()  # type: ignore
         else:
             return self.repo.list_as_objs()
-
-
-class DatamapFile:
-    """A context manager that represents the datamap file.
-
-    Having a context manager means we can more elegantly capture the
-    exception with the file isn't found.
-    """
-
-    def __init__(self, filepath: str) -> None:
-        "Create the context manager"
-        self.filepath = filepath
-
-    def __enter__(self) -> IO[str]:
-        try:
-            self.f_obj = open(self.filepath, "r", encoding="utf-8")
-            self.f_obj.read()
-            self.f_obj.seek(0)
-            return self.f_obj
-        except FileNotFoundError:
-            raise FileNotFoundError("Cannot find {}".format(self.filepath))
-        except UnicodeDecodeError:
-            self.f_obj = open(self.filepath, "r", encoding="latin1")
-            return self.f_obj
-
-    def __exit__(self, mytype, value, traceback):  # type: ignore
-        self.f_obj.close()
-
-
-def datamap_check(dm_file):
-    """Given a datamap csv file, returns a dict of the headers used in reality...
-
-    raises IndexError if less than three headers are found (type header can be None)
-    """
-    if ECHO_FUNC_YELLOW is not None:
-        ECHO_FUNC_YELLOW("Checking datamap file {}\n".format(dm_file))
-    _good_keys = ["cell_key", "cellkey", "key"]
-    _good_sheet = ["template_sheet", "sheet", "templatesheet"]
-    _good_cellref = ["cell_reference", "cell_ref", "cellref", "cellreference"]
-    _good_type = ["type", "value_type", "cell_type", "celltype"]
-    headers = {}
-    using_type = True
-    with DatamapFile(dm_file) as datamap_file:
-        # initial check - have we got enough headers? If not - raise exception
-        top_row = next(datamap_file).rstrip().split(",")
-        if len(top_row) == 1:
-            raise MalFormedCSVHeaderException(
-                "Datamap contains only one header - need at least three to proceed. Quitting."
-            )
-        if len(top_row) == 2:
-            raise MalFormedCSVHeaderException(
-                "Datamap contains only two headers - need at least three to proceed. Quitting."
-            )
-        if top_row[-1] not in _good_type:
-            # test if we are using type column here
-            headers.update(type=None)
-            using_type = False
-        if top_row[0] in _good_keys:
-            headers.update(key=top_row[0])
-            logger.info("Using {} as header".format(top_row[0]))
-        if top_row[1] in _good_sheet:
-            headers.update(sheet=top_row[1])
-            logger.info("Using {} as header".format(top_row[1]))
-        if top_row[2] in _good_cellref:
-            headers.update(cellref=top_row[2])
-            logger.info("Using {} as header".format(top_row[2]))
-        if using_type:
-            if top_row[3] in _good_type:
-                headers.update(type=top_row[3])
-                logger.info("Using {} as header".format(top_row[3]))
-    if len(headers.keys()) >= 2:
-        # final test - we don't want to proceed unless we have minimum headers
-        if not all(
-            [x in list(headers.keys()) for x in ["key", "sheet", "cellref", "type"]]
-        ):
-            raise MalFormedCSVHeaderException(
-                "Cannot proceed without required number of headers"
-            )
-        if ECHO_FUNC_GREEN is not None:
-            ECHO_FUNC_GREEN("{} checked ok\n".format(dm_file))
-        return headers
-    else:
-        return MalFormedCSVHeaderException(
-            "Datamap does not contain the required headers. Cannot proceed"
-        )
-
-
-def datamap_reader(dm_file: str) -> List[DatamapLine]:
-    "Given a datamap csv file, returns a list of DatamapLine objects."
-    headers = datamap_check(dm_file)
-    data = []
-    with DatamapFile(dm_file) as datamap_file:
-        reader = csv.DictReader(datamap_file)
-        for line in reader:
-            if headers["type"] is None:
-                data.append(
-                    DatamapLine(
-                        key=_clean(line[headers["key"]]),
-                        sheet=_clean(line[headers["sheet"]]),
-                        cellref=_clean(line[headers["cellref"]], is_cellref=True),
-                        data_type=None,
-                        filename=dm_file,
-                    )
-                )
-            else:
-                data.append(
-                    DatamapLine(
-                        key=_clean(line[headers["key"]]),
-                        sheet=_clean(line[headers["sheet"]]),
-                        cellref=_clean(line[headers["cellref"]], is_cellref=True),
-                        data_type=_clean(line[headers["type"]]),
-                        filename=dm_file,
-                    )
-                )
-    return data
-
-
-def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
-    "Given a populated xlsx file, returns all data in a list of TemplateCell objects."
-    print(("Importing {}".format(template_file)))
-    inner_dict: Dict[str, Dict[Any, Any]] = {"data": {}}
-    f_path: Path = Path(template_file)
-    logger.info("Extracting from: {}".format(f_path.name))
-    try:
-        workbook = load_workbook(template_file, data_only=True)
-    except TypeError:
-        msg = (
-            "Unable to open {}. Potential corruption of file. Try resaving "
-            "in Excel or removing conditionally formatting. See issue at "
-            "https://github.com/hammerheadlemon/bcompiler-engine/issues/3 for update. Quitting.".format(
-                f_path
-            )
-        )
-        logger.critical(msg)
-        sys.stderr.write(msg + "\n")
-        raise
-    checksum: str = _hash_single_file(f_path)
-    holding = []
-    for sheet in workbook.worksheets:
-        logger.info("Processing sheet {} | {}".format(f_path.name, sheet.title))
-        sheet_data: SHEET_DATA_IN_LST = []
-        sheet_dict: Dict[str, Dict[str, Dict[str, str]]] = {}
-        for row in sheet.rows:
-            for cell in row:
-                if cell.value is not None:
-                    try:
-                        val = cell.value.rstrip().lstrip()
-                        c_type = DatamapLineValueType.TEXT
-                    except AttributeError:
-                        if isinstance(cell.value, (float, int)):
-                            val = cell.value
-                            c_type = DatamapLineValueType.NUMBER
-                        elif isinstance(cell.value, (datetime.date, datetime.datetime)):
-                            val = cell.value.isoformat()
-                            c_type = DatamapLineValueType.DATE
-                    cellref = "{}{}".format(cell.column_letter, cell.row)
-                    if isinstance(template_file, Path):
-                        t_cell = TemplateCell(
-                            template_file.as_posix(), sheet.title, cellref, val, c_type
-                        ).to_dict()
-                    else:
-                        t_cell = TemplateCell(
-                            template_file, sheet.title, cellref, val, c_type
-                        ).to_dict()
-                    sheet_data.append(t_cell)
-        sheet_dict.update({sheet.title: _extract_cellrefs(sheet_data)})
-        holding.append(sheet_dict)
-    for sd in holding:
-        inner_dict["data"].update(sd)
-        inner_dict.update({"checksum": checksum})  # type: ignore
-    shell_dict = {f_path.name: inner_dict}
-    return shell_dict
 
 
 # here is the version with out multiprocessing
