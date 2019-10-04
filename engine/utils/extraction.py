@@ -56,7 +56,6 @@ def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
     return data
 
 
-
 class CheckType(enum.Enum):
     FAIL = enum.auto()
     MISSING_SHEET_REQUIRED_BY_DATAMAP = enum.auto()
@@ -71,11 +70,15 @@ class Check:
         self.proceed: bool
 
 
-
 def check_datamap_sheets(datamap: Path, template: Union[Path, Workbook]) -> Check:
+    """Check for valid sheets in a template.
+
+    Check that a template has the sheets expected by the datamap before it has
+    its data extracted!
+    """
     check = Check()
     try:
-        worksheets_in_template = template.worksheets  #type: ignore
+        worksheets_in_template = template.worksheets  # type: ignore
     except AttributeError:
         wb = load_workbook(template)
         worksheets_in_template = set([sheet.title for sheet in wb.worksheets])
@@ -307,7 +310,6 @@ def datamap_check(dm_file):
         return MalFormedCSVHeaderException(
             "Datamap does not contain the required headers. Cannot proceed"
         )
-
 
 
 def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
