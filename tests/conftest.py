@@ -1,13 +1,14 @@
 import os
-import pytest
 import shutil
 import tempfile
-from engine.config import Config
-from engine.domain.datamap import DatamapLine
-from engine.domain.datamap import DatamapLineValueType
-from engine.domain.template import TemplateCell
 from pathlib import Path
 from typing import List
+
+import pytest
+
+from engine.config import Config
+from engine.domain.datamap import DatamapLine, DatamapLineValueType
+from engine.domain.template import TemplateCell
 
 
 @pytest.fixture
@@ -90,6 +91,12 @@ def doc_directory():
     pth = Path(tempfile.gettempdir()) / "Documents" / "datamaps"
     yield pth
     shutil.rmtree(pth)
+
+
+@pytest.fixture
+def template_with_introduction_sheet() -> Path:
+    here = os.path.abspath(os.curdir)
+    return Path(os.path.join(here, "tests/resources/test_template_with_introduction_sheet.xlsm"))
 
 
 @pytest.fixture

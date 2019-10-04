@@ -58,6 +58,7 @@ def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
 
 class CheckType(enum.Enum):
     FAIL = enum.auto()
+    PASS = enum.auto()
     MISSING_SHEET_REQUIRED_BY_DATAMAP = enum.auto()
     UNDEFINED = enum.auto()
 
@@ -92,6 +93,10 @@ def check_datamap_sheets(datamap: Path, template: Union[Path, Workbook]) -> Chec
         check.error_type = CheckType.MISSING_SHEET_REQUIRED_BY_DATAMAP
         check.msg = f"File {template.name} has no sheet[s] {sheets_str}"
         check.proceed = False
+    else:
+        check.state = CheckType.PASS
+        check.msg = "Checked OK."
+        check.proceed = True
     return check
 
 
