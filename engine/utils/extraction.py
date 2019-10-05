@@ -72,11 +72,16 @@ class Check:
     msg: str = ""
 
 
-def check_datamap_sheets(datamap: Path, template: Union[Path, Workbook, str]) -> Check:
+def check_datamap_sheets(datamap: Path, template: Union[Path, Workbook]) -> Check:
     """Check for valid sheets in a template.
 
     Check that a template has the sheets expected by the datamap before it has
     its data extracted!
+
+    datamap: Path
+    template Union[Path, Workbook]
+
+    Neither datamap or template can be a str path.
     """
     try:
         worksheets_in_template = template.worksheets  # type: ignore
