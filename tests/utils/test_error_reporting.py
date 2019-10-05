@@ -30,7 +30,7 @@ def test_template_checked_for_correct_sheets_which_fails(mock_config, resources)
     check_status = check_datamap_sheets(datamap, template)
     assert isinstance(check_status, Check)
     assert check_status.state == CheckType.FAIL
-    assert check_status.error_type == CheckType.MISSING_SHEET_REQUIRED_BY_DATAMAP
+    assert check_status.error_type == CheckType.MISSING_SHEETS_REQUIRED_BY_DATAMAP
     assert check_status.msg == "File /tmp/Documents/datamaps/input/test_template.xlsx has no sheet[s] Introduction"
     assert check_status.proceed is False
 
