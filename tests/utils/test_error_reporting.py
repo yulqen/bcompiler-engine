@@ -35,14 +35,22 @@ def test_template_checked_for_correct_sheets_which_fails(mock_config, resources)
     assert check_status.proceed is False
 
 
-def test_template_checked_for_correct_sheets_which_passes(mock_config, datamap, template_with_introduction_sheet):
+def test_template_checked_for_correct_sheets_which_passes(mock_config, resources):
     """
     Function under test should notify if a template does not have all the
     sheets included in the datamap.
     """
     mock_config.initialise()
-    check_status = check_datamap_sheets(datamap, template_with_introduction_sheet)
+    for fl in os.listdir(resources):
+        if fl == "test_template_with_introduction_sheet.xlsm" or fl == "datamap.csv":
+            shutil.copy(
+                Path.cwd() / "tests" / "resources" / fl,
+                (Path(mock_config.PLATFORM_DOCS_DIR) / "input"),
+            )
+    template = Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "test_template_with_introduction_sheet.xlsm"
+    datamap = Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "datamap.csv"
+    check_status = check_datamap_sheets(datamap, template)
     assert isinstance(check_status, Check)
     assert check_status.state == CheckType.PASS
-    assert check_status.msg == "Checked OK."
+    assert check_status.msg == "Checked /tmp/Documents/datamaps/input/test_template_with_introduction_sheet.xlsm: OK."
     assert check_status.proceed is True

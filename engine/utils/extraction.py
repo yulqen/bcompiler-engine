@@ -103,7 +103,7 @@ def check_datamap_sheets(datamap: Path, template: Union[Path, Workbook]) -> Chec
     else:
         check = Check(
             state=CheckType.PASS,
-            msg="Checked OK.",
+            msg=f"Checked {template}: OK.",
             proceed=True
         )
     return check
