@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 import sys
+from dataclasses import dataclass
 from itertools import groupby
 from pathlib import Path
 from typing import Any, Dict, List, NamedTuple, Union
@@ -63,12 +64,12 @@ class CheckType(enum.Enum):
     UNDEFINED = enum.auto()
 
 
+@dataclass
 class Check:
-    def __init__(self):
-        self.state = CheckType.UNDEFINED
-        self.error_type = CheckType.UNDEFINED
-        self.msg = ""
-        self.proceed: bool
+    proceed: bool = False
+    state: CheckType = CheckType.UNDEFINED
+    error_type: CheckType = CheckType.UNDEFINED
+    msg: str = ""
 
 
 def check_datamap_sheets(datamap: Path, template: Union[Path, Workbook]) -> Check:
@@ -77,7 +78,6 @@ def check_datamap_sheets(datamap: Path, template: Union[Path, Workbook]) -> Chec
     Check that a template has the sheets expected by the datamap before it has
     its data extracted!
     """
-    check = Check()
     try:
         worksheets_in_template = template.worksheets  # type: ignore
     except AttributeError:
@@ -89,14 +89,18 @@ def check_datamap_sheets(datamap: Path, template: Union[Path, Workbook]) -> Chec
     in_template_not_in_datamap = worksheets_in_datamap - worksheets_in_template
     if in_template_not_in_datamap:
         sheets_str = " ".join(list(in_template_not_in_datamap))
-        check.state = CheckType.FAIL
-        check.error_type = CheckType.MISSING_SHEET_REQUIRED_BY_DATAMAP
-        check.msg = f"File {template.name} has no sheet[s] {sheets_str}"
-        check.proceed = False
+        check = Check(
+            state=CheckType.FAIL,
+            error_type=CheckType.MISSING_SHEET_REQUIRED_BY_DATAMAP,
+            msg=f"File {template.name} has no sheet[s] {sheets_str}",
+            proceed=False
+        )
     else:
-        check.state = CheckType.PASS
-        check.msg = "Checked OK."
-        check.proceed = True
+        check = Check(
+            state=CheckType.PASS,
+            msg="Checked OK.",
+            proceed=True
+        )
     return check
 
 
