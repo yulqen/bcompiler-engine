@@ -72,7 +72,7 @@ class Check:
     msg: str = ""
 
 
-def check_datamap_sheets(datamap: Path, template: Union[Path, Workbook]) -> Check:
+def check_datamap_sheets(datamap: Path, template: Union[Path, Workbook, str]) -> Check:
     """Check for valid sheets in a template.
 
     Check that a template has the sheets expected by the datamap before it has
@@ -92,7 +92,7 @@ def check_datamap_sheets(datamap: Path, template: Union[Path, Workbook]) -> Chec
         check = Check(
             state=CheckType.FAIL,
             error_type=CheckType.MISSING_SHEET_REQUIRED_BY_DATAMAP,
-            msg=f"File {template.name} has no sheet[s] {sheets_str}",
+            msg=f"File {template} has no sheet[s] {sheets_str}",
             proceed=False
         )
     else:
