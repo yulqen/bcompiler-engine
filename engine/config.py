@@ -56,8 +56,6 @@ class Config:
         cls.config_parser.read(cls.DATAMAPS_LIBRARY_CONFIG_FILE)
 
 
-        # writing the config file again to accommodate changes
-        # TODO fix permissions bug in Windows when doing this
         Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
         cls.config_parser.read(cls.DATAMAPS_LIBRARY_CONFIG_FILE)
 

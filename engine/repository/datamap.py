@@ -1,13 +1,11 @@
-from typing import Union
-
-from pathlib import Path
-
 import json
-from typing import List
+from pathlib import Path
+from typing import List, Union
+
+from engine.utils.extraction import datamap_reader
 
 from ..domain.datamap import DatamapLine
 from ..serializers.datamap import DatamapEncoder
-from engine.utils.extraction import datamap_reader
 
 
 class InMemorySingleDatamapRepository:

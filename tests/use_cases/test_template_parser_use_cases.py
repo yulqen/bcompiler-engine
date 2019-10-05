@@ -143,29 +143,6 @@ def test_create_master_spreadsheet(mock_config, datamap_match_test_template, doc
     assert ws["B3"].value == "This is a string"
 
 
-@pytest.mark.skip("This is for FS process - we want to do in mem first")
-def test_datamap_applied_to_extracted_data_returns_expected_value(
-    mock_config, datamap, resources
-):
-    """The use case needs to apply the datamap to the data returned from a repo.
-
-    The repository is on the access layer of this library. The UI application
-    is required to be aware of this and create the correct repository (currently
-    available is an in-memory repository or a file system repository, which should
-    be the default.
-
-    - Check whether there is a data file containing the data required
-    - If there is, pull that data out of the dat file
-    - If it isn't, pull that data out of the excel files
-    - Convert the data to a usable object
-    - The repo pulls all the data from the directory.
-
-    # TODO - func to check for dat file and whether contained data is target of current extraction
-    # TODO - allow for the default repository to be set in the config? (in the application)
-    """
-    pass
-
-
 def ensure_data_and_populate_file(config, dat_file, spreadsheet_file) -> None:
     "Ensure the data in a single file is mirrored in a dat file, in correct location for testing"
     shutil.copy2(dat_file, config.DATAMAPS_LIBRARY_DATA_DIR)

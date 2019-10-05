@@ -35,7 +35,6 @@ class MultipleTemplatesWriteRepo:
             try:
                 _sheet[cell.cellref].value = cell.value
             except AttributeError:
-                # TODO fix the wording for this exception
                 raise AttributeError(
                     "PROBLEM: Object->{} Current Val->{} Attempted Val->{}".format(
                         cell, cell.value, _sheet[cell.cellref].value

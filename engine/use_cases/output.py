@@ -13,7 +13,6 @@ from engine.use_cases.parsing import ParseDatamapUseCase
 from engine.use_cases.typing import (MASTER_COL_DATA, MASTER_DATA_FOR_FILE,
                                      ColData)
 
-# TODO handle these more appropriately (such as config)
 warnings.filterwarnings("ignore", ".*Conditional Formatting*.")
 warnings.filterwarnings("ignore", ".*Sparkline Group*.")
 

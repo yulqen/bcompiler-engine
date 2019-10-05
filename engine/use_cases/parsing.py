@@ -40,7 +40,8 @@ from concurrent import futures
 from typing import Dict, List
 
 # pylint: disable=R0903,R0913;
-from engine.utils.extraction import ALL_IMPORT_DATA, template_reader
+from engine.utils.extraction import (ALL_IMPORT_DATA, check_datamap_sheets,
+                                     template_reader)
 
 warnings.filterwarnings("ignore", ".*Data Validation*.")
 
@@ -123,6 +124,16 @@ class ApplyDatamapToExtractionUseCase:
             self._set_datamap_and_template_data()
         self._datamap_data_dict = json.loads(self._datamap_data_json)
         self._template_data_dict = json.loads(self._template_data_json)
+        checks = check_datamap_sheets(self._datamap_data_dict, self._template_data_dict)
+        # TODO - do something with this now
+        """
+        We need to create a dict of sheets in each template file collected.  Here is now to get one set:
+
+        s_in_template = set([x for x in self._template_data_dict["dft1_tmp (copy 4).xlsm"]["data"].keys()])
+
+        Then we need to compare each template set with the _sheets_in_datamap list and throw out any
+        file that does not comply.
+        """
         if for_master:
             self._format_data_for_master()
 
@@ -143,8 +154,6 @@ class ApplyDatamapToExtractionUseCase:
 
     def _format_data_for_master(self):
         output = [{fname: []} for fname in self._template_data_dict]
-        # FIXME - this is where crash is happening
-        # see test test_master_from_org_templates/test_create_master_spreadsheet
         f_data = self._template_data_dict
         dm_data = self._datamap_data_dict
         for _file_name in f_data:

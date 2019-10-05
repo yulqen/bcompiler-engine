@@ -66,47 +66,40 @@ class CheckType(enum.Enum):
 
 @dataclass
 class Check:
+    filename: str
     proceed: bool = False
     state: CheckType = CheckType.UNDEFINED
     error_type: CheckType = CheckType.UNDEFINED
     msg: str = ""
 
 
-def check_datamap_sheets(datamap: Path, template: Union[Path, Workbook]) -> Check:
-    """Check for valid sheets in a template.
-
-    Check that a template has the sheets expected by the datamap before it has
-    its data extracted!
-
-    datamap: Path
-    template Union[Path, Workbook]
-
-    Neither datamap or template can be a str path.
-    """
-    try:
-        worksheets_in_template = template.worksheets  # type: ignore
-    except AttributeError:
-        wb = load_workbook(template)
-        worksheets_in_template = set([sheet.title for sheet in wb.worksheets])
-    datamap_data = datamap_reader(datamap)
-    worksheets_in_datamap = set([dml.sheet for dml in datamap_data])
-    # We only want sheets in the datamap; extraneous sheets should be flagged
-    in_template_not_in_datamap = worksheets_in_datamap - worksheets_in_template
-    if in_template_not_in_datamap:
-        sheets_str = " ".join(list(in_template_not_in_datamap))
-        check = Check(
-            state=CheckType.FAIL,
-            error_type=CheckType.MISSING_SHEETS_REQUIRED_BY_DATAMAP,
-            msg=f"File {template} has no sheet[s] {sheets_str}",
-            proceed=False
-        )
-    else:
-        check = Check(
-            state=CheckType.PASS,
-            msg=f"Checked {template}: OK.",
-            proceed=True
-        )
-    return check
+def check_datamap_sheets(
+    datamap_data: List[Dict[str, str]], template_data: ALL_IMPORT_DATA
+) -> Dict[str, Check]:
+    "Parse data struct for each of datamap and all template data for sheet compliance."
+    checks = {}
+    sheets_in_datamap: List[str] = list(set([x["sheet"] for x in datamap_data]))
+    files_in_template_data = list(template_data.keys())
+    sheets_in_template_data = {
+        x: list(template_data[x]["data"].keys()) for x in files_in_template_data
+    }
+    for f in files_in_template_data:
+        for s in sheets_in_datamap:
+            if s in sheets_in_template_data[f]:
+                pass
+            else:
+                checks.update(
+                    {
+                        f: Check(
+                            filename=f,
+                            proceed=False,
+                            state=CheckType.FAIL,
+                            error_type=CheckType.MISSING_SHEETS_REQUIRED_BY_DATAMAP,
+                            msg=f"File {f} has no sheet[s] {s}.",
+                        )
+                    }
+                )
+    return checks
 
 
 class ValidationReportItem(NamedTuple):
