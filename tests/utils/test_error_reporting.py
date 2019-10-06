@@ -24,13 +24,11 @@ def test_template_checked_for_correct_sheets_which_fails(
     """
     # Because there is no Introduction sheet in template data (template_dict) - should return a fail check
     check_status = check_datamap_sheets(datamap_lst_with_single_sheet, template_dict)
-    for f in check_status.keys():
-        assert check_status[f].state == CheckType.FAIL
-        assert (
-            check_status[f].error_type == CheckType.MISSING_SHEETS_REQUIRED_BY_DATAMAP
-        )
-        assert check_status[f].msg == f"File {f} has no sheet[s] Introduction."
-        assert check_status[f].proceed is False
+    for f in check_status:
+        assert f.state == CheckType.FAIL
+        assert f.error_type == CheckType.MISSING_SHEETS_REQUIRED_BY_DATAMAP
+        assert f.msg == f"File {f.filename} has no sheet[s] Introduction."
+        assert f.proceed is False
 
 
 def test_template_checked_for_correct_sheets_which_passes(
@@ -43,10 +41,8 @@ def test_template_checked_for_correct_sheets_which_passes(
     check_status = check_datamap_sheets(
         datamap_lst_with_sheets_same_as_template_dict, template_dict
     )
-    for f in check_status.keys():
-        assert check_status[f].state == CheckType.PASS
-        assert (
-            check_status[f].error_type == CheckType.UNDEFINED
-        )
-        assert check_status[f].msg == f"File {f} checked: OK."
-        assert check_status[f].proceed is True
+    for f in check_status:
+        assert f.state == CheckType.PASS
+        assert f.error_type == CheckType.UNDEFINED
+        assert f.msg == f"File {f.filename} checked: OK."
+        assert f.proceed is True

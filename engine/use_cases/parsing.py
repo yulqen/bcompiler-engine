@@ -126,6 +126,8 @@ class ApplyDatamapToExtractionUseCase:
         self._template_data_dict = json.loads(self._template_data_json)
         checks = check_datamap_sheets(self._datamap_data_dict, self._template_data_dict)
         # TODO - do something with this now
+        # output to logger
+        # throw out offending files
         """
         We need to create a dict of sheets in each template file collected.  Here is now to get one set:
 

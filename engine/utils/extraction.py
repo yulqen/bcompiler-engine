@@ -75,9 +75,9 @@ class Check:
 
 def check_datamap_sheets(
     datamap_data: List[Dict[str, str]], template_data: ALL_IMPORT_DATA
-) -> Dict[str, Check]:
+) -> List[Check]:
     "Parse data struct for each of datamap and all template data for sheet compliance."
-    checks = {}
+    checks = []
     sheets_in_datamap: List[str] = list(set([x["sheet"] for x in datamap_data]))
     files_in_template_data = list(template_data.keys())
     sheets_in_template_data = {
@@ -86,28 +86,24 @@ def check_datamap_sheets(
     for f in files_in_template_data:
         for s in sheets_in_datamap:
             if s in sheets_in_template_data[f]:
-                checks.update(
-                    {
-                        f: Check(
-                            filename=f,
-                            proceed=True,
-                            state=CheckType.PASS,
-                            error_type=CheckType.UNDEFINED,
-                            msg=f"File {f} checked: OK.",
-                        )
-                    }
+                checks.append(
+                    Check(
+                        filename=f,
+                        proceed=True,
+                        state=CheckType.PASS,
+                        error_type=CheckType.UNDEFINED,
+                        msg=f"File {f} checked: OK.",
+                    )
                 )
             else:
-                checks.update(
-                    {
-                        f: Check(
-                            filename=f,
-                            proceed=False,
-                            state=CheckType.FAIL,
-                            error_type=CheckType.MISSING_SHEETS_REQUIRED_BY_DATAMAP,
-                            msg=f"File {f} has no sheet[s] {s}.",
-                        )
-                    }
+                checks.append(
+                    Check(
+                        filename=f,
+                        proceed=False,
+                        state=CheckType.FAIL,
+                        error_type=CheckType.MISSING_SHEETS_REQUIRED_BY_DATAMAP,
+                        msg=f"File {f} has no sheet[s] {s}.",
+                    )
                 )
     return checks
 
