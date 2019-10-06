@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 from openpyxl import load_workbook
 
+from engine.exceptions import NoApplicableSheetsInTemplateFiles
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
 from engine.repository.templates import (FSPopulatedTemplatesRepo,
@@ -45,21 +46,22 @@ def test_query_data_from_data_file(
 
 @pytest.mark.slow
 def test_in_memory_datamap_application_to_extracted_data(
-    mock_config, doc_directory, datamap, template
+    mock_config, doc_directory, datamap, template_with_introduction_sheet
 ):
     mock_config.initialise()
-    shutil.copy2(template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    shutil.copy2(template_with_introduction_sheet, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    shutil.copy2(datamap, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
     tmpl_repo = InMemoryPopulatedTemplatesRepository(
         mock_config.PLATFORM_DOCS_DIR / "input"
     )
-    dm_repo = InMemorySingleDatamapRepository(datamap)
+    dm_repo = InMemorySingleDatamapRepository(Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "datamap.csv")
     uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
     uc.execute()
     assert (
-        uc.query_key("test_template.xlsx", "String Key", "Summary")
+        uc.query_key("test_template_with_introduction_sheet.xlsm", "String Key", "Summary")
         == "This is a string"
     )
-    assert uc.query_key("test_template.xlsx", "Big Float", "Another Sheet") == 7.2
+    assert uc.query_key("test_template_with_introduction_sheet.xlsm", "Big Float", "Another Sheet") == 7.2
 
 
 def test_in_memory_datamap_application_to_extracted_data_raises_exception(
@@ -84,10 +86,13 @@ def test_in_memory_datamap_application_to_extracted_data_raises_exception(
 def test_in_memory_datamap_application_throws_exception_wrong_sheet(
     mock_config, doc_directory, datamap_match_test_template, bad_sheet_template
 ):
-    with pytest.raises(KeyError):
+    with pytest.raises(NoApplicableSheetsInTemplateFiles):
         mock_config.initialise()
         shutil.copy2(
             bad_sheet_template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input")
+        )
+        shutil.copy2(
+            datamap_match_test_template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input")
         )
         tmpl_repo = InMemoryPopulatedTemplatesRepository(
             mock_config.PLATFORM_DOCS_DIR / "input"

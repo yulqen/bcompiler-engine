@@ -39,15 +39,18 @@ import warnings
 from concurrent import futures
 from typing import Dict, List
 
+from engine.exceptions import NoApplicableSheetsInTemplateFiles
 # pylint: disable=R0903,R0913;
 from engine.utils.extraction import (ALL_IMPORT_DATA, check_datamap_sheets,
-                                     template_reader)
+                                     remove_failing_files, template_reader)
 
 warnings.filterwarnings("ignore", ".*Data Validation*.")
 
 logger = logging.getLogger(__name__)
 logger.setLevel("INFO")
 
+# TODO - move this to config
+SKIP_MISSING_SHEETS = False
 
 class ParsePopulatedTemplatesUseCase:
     def __init__(self, repo):
@@ -128,14 +131,20 @@ class ApplyDatamapToExtractionUseCase:
         # TODO - do something with this now
         # output to logger
         # throw out offending files
-        """
-        We need to create a dict of sheets in each template file collected.  Here is now to get one set:
-
-        s_in_template = set([x for x in self._template_data_dict["dft1_tmp (copy 4).xlsm"]["data"].keys()])
-
-        Then we need to compare each template set with the _sheets_in_datamap list and throw out any
-        file that does not comply.
-        """
+        if not SKIP_MISSING_SHEETS:
+            # We set a config variable to choose whether we
+            # throw out files with a single missing sheet
+            try:
+                self._template_data_dict = remove_failing_files(checks, self._template_data_dict)
+            except NoApplicableSheetsInTemplateFiles:
+                # TODO add log message here
+                # for now...
+                print("There are no files containing sheets declared in datamap. Quitting.")
+                print("You may choose to ignore missing sheets by setting 'allowing missing sheets' to True in"
+                      " the config file or pass '--skip-missing-sheets'")
+                # logger.critical("There are no files containing sheets declared in datamap. Quitting.")
+                raise
+        # TODO - we have to do something when SKIP_MISSING_SHEETS is True here
         if for_master:
             self._format_data_for_master()
 

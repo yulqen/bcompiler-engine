@@ -9,16 +9,17 @@ import sys
 from dataclasses import dataclass
 from itertools import groupby
 from pathlib import Path
-from typing import Any, Dict, List, NamedTuple, Union
+from typing import Any, Dict, List, NamedTuple, Optional, Union
 
-from openpyxl import Workbook, load_workbook
+from openpyxl import load_workbook
 from openpyxl.worksheet.cell_range import MultiCellRange
 from openpyxl.worksheet.worksheet import Worksheet
 
 from engine.domain.datamap import (DatamapFile, DatamapLine,
                                    DatamapLineValueType)
 from engine.domain.template import TemplateCell
-from engine.exceptions import MalFormedCSVHeaderException
+from engine.exceptions import (MalFormedCSVHeaderException,
+                               NoApplicableSheetsInTemplateFiles)
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
 
 FILE_DATA = Dict[str, Union[str, Dict[str, Dict[str, str]]]]
@@ -71,6 +72,27 @@ class Check:
     state: CheckType = CheckType.UNDEFINED
     error_type: CheckType = CheckType.UNDEFINED
     msg: str = ""
+
+
+def remove_failing_files(
+    lst_of_checks: List[Check], template_data: ALL_IMPORT_DATA
+) -> ALL_IMPORT_DATA:
+    """Given a list of checks, identify files which contain CheckType.FAIL, then remove them from template_data.
+
+    If this results in an empty template_data dict, return None.
+    """
+    failing_files = list(
+        set([f.filename for f in lst_of_checks if f.state == CheckType.FAIL])
+    )
+    for f in failing_files:
+        template_data.pop(f)
+    if len(template_data.keys()) > 1:
+        return template_data
+    elif len(template_data.keys()) < 1:
+        raise NoApplicableSheetsInTemplateFiles(
+            "There are no files containing sheets declared in datamap. Quitting."
+        )
+    return template_data
 
 
 def check_datamap_sheets(

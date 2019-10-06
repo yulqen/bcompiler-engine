@@ -6,7 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from engine.utils.extraction import Check, CheckType, check_datamap_sheets
+from engine.exceptions import NoApplicableSheetsInTemplateFiles
+from engine.utils.extraction import (Check, CheckType, check_datamap_sheets,
+                                     remove_failing_files)
 
 
 """"
@@ -16,7 +18,7 @@ and exporting occurs.
 
 
 def test_template_checked_for_correct_sheets_which_fails(
-    mock_config, resources, datamap_lst_with_single_sheet, template_dict
+    datamap_lst_with_single_sheet, template_dict
 ):
     """
     Function under test should notify if a template does not have all the
@@ -32,7 +34,7 @@ def test_template_checked_for_correct_sheets_which_fails(
 
 
 def test_template_checked_for_correct_sheets_which_passes(
-    mock_config, resources, datamap_lst_with_sheets_same_as_template_dict, template_dict
+    datamap_lst_with_sheets_same_as_template_dict, template_dict
 ):
     """
     Function under test should notify if a template does not have all the
@@ -46,3 +48,11 @@ def test_template_checked_for_correct_sheets_which_passes(
         assert f.error_type == CheckType.UNDEFINED
         assert f.msg == f"File {f.filename} checked: OK."
         assert f.proceed is True
+
+
+def test_remove_file_data_from_template_data_structure_if_failing_sheets_test(
+    datamap_lst_with_single_sheet, template_dict
+):
+    with pytest.raises(NoApplicableSheetsInTemplateFiles):
+        check_status = check_datamap_sheets(datamap_lst_with_single_sheet, template_dict)
+        template_dict = remove_failing_files(check_status, template_dict)
