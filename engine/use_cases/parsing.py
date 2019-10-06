@@ -39,7 +39,8 @@ import warnings
 from concurrent import futures
 from typing import Dict, List
 
-from engine.exceptions import NoApplicableSheetsInTemplateFiles
+from engine.exceptions import (NoApplicableSheetsInTemplateFiles,
+                               RemoveFileWithNoSheetRequiredByDatamap)
 # pylint: disable=R0903,R0913;
 from engine.utils.extraction import (ALL_IMPORT_DATA, check_datamap_sheets,
                                      remove_failing_files, template_reader)
@@ -51,6 +52,7 @@ logger.setLevel("INFO")
 
 # TODO - move this to config
 SKIP_MISSING_SHEETS = False
+
 
 class ParsePopulatedTemplatesUseCase:
     def __init__(self, repo):
@@ -135,14 +137,25 @@ class ApplyDatamapToExtractionUseCase:
             # We set a config variable to choose whether we
             # throw out files with a single missing sheet
             try:
-                self._template_data_dict = remove_failing_files(checks, self._template_data_dict)
+                self._template_data_dict = remove_failing_files(
+                    checks, self._template_data_dict
+                )
             except NoApplicableSheetsInTemplateFiles:
                 # TODO add log message here
                 # for now...
-                print("There are no files containing sheets declared in datamap. Quitting.")
-                print("You may choose to ignore missing sheets by setting 'allowing missing sheets' to True in"
-                      " the config file or pass '--skip-missing-sheets'")
+                print(
+                    "There are no files containing sheets declared in datamap. Quitting."
+                )
+                print(
+                    "You may choose to ignore missing sheets by setting 'allowing missing sheets' to True in"
+                    " the config file or pass '--skip-missing-sheets'"
+                )
                 # logger.critical("There are no files containing sheets declared in datamap. Quitting.")
+                raise
+            except RemoveFileWithNoSheetRequiredByDatamap as e:
+                print(
+                    f"{e.args[0][0]} does not contain the sheets required by datamap (eg. {e.args[0][1]}). Not set to skip sheets so omitting from master."
+                )
                 raise
         # TODO - we have to do something when SKIP_MISSING_SHEETS is True here
         if for_master:

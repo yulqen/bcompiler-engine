@@ -6,7 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from engine.exceptions import NoApplicableSheetsInTemplateFiles
+from engine.exceptions import (NoApplicableSheetsInTemplateFiles,
+                               RemoveFileWithNoSheetRequiredByDatamap)
 from engine.utils.extraction import (Check, CheckType, check_datamap_sheets,
                                      remove_failing_files)
 
@@ -53,6 +54,6 @@ def test_template_checked_for_correct_sheets_which_passes(
 def test_remove_file_data_from_template_data_structure_if_failing_sheets_test(
     datamap_lst_with_single_sheet, template_dict
 ):
-    with pytest.raises(NoApplicableSheetsInTemplateFiles):
+    with pytest.raises(RemoveFileWithNoSheetRequiredByDatamap):
         check_status = check_datamap_sheets(datamap_lst_with_single_sheet, template_dict)
         template_dict = remove_failing_files(check_status, template_dict)

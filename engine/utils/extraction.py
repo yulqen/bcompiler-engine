@@ -19,7 +19,8 @@ from engine.domain.datamap import (DatamapFile, DatamapLine,
                                    DatamapLineValueType)
 from engine.domain.template import TemplateCell
 from engine.exceptions import (MalFormedCSVHeaderException,
-                               NoApplicableSheetsInTemplateFiles)
+                               NoApplicableSheetsInTemplateFiles,
+                               RemoveFileWithNoSheetRequiredByDatamap)
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
 
 FILE_DATA = Dict[str, Union[str, Dict[str, Dict[str, str]]]]
@@ -68,6 +69,7 @@ class CheckType(enum.Enum):
 @dataclass
 class Check:
     filename: str
+    sheet: str
     proceed: bool = False
     state: CheckType = CheckType.UNDEFINED
     error_type: CheckType = CheckType.UNDEFINED
@@ -82,10 +84,12 @@ def remove_failing_files(
     If this results in an empty template_data dict, return None.
     """
     failing_files = list(
-        set([f.filename for f in lst_of_checks if f.state == CheckType.FAIL])
+        set([(f.filename, f.sheet) for f in lst_of_checks if f.state == CheckType.FAIL])
     )
     for f in failing_files:
-        template_data.pop(f)
+        template_data.pop(f[0])
+        # TODO fix this message
+        raise RemoveFileWithNoSheetRequiredByDatamap(f)
     if len(template_data.keys()) > 1:
         return template_data
     elif len(template_data.keys()) < 1:
@@ -111,6 +115,7 @@ def check_datamap_sheets(
                 checks.append(
                     Check(
                         filename=f,
+                        sheet=s,
                         proceed=True,
                         state=CheckType.PASS,
                         error_type=CheckType.UNDEFINED,
@@ -121,6 +126,7 @@ def check_datamap_sheets(
                 checks.append(
                     Check(
                         filename=f,
+                        sheet=s,
                         proceed=False,
                         state=CheckType.FAIL,
                         error_type=CheckType.MISSING_SHEETS_REQUIRED_BY_DATAMAP,

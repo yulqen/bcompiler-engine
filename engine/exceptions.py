@@ -4,3 +4,7 @@ class MalFormedCSVHeaderException(Exception):
 
 class NoApplicableSheetsInTemplateFiles(Exception):
     pass
+
+
+class RemoveFileWithNoSheetRequiredByDatamap(Exception):
+    pass

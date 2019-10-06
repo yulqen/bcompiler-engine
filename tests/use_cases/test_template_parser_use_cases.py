@@ -5,7 +5,8 @@ from pathlib import Path
 import pytest
 from openpyxl import load_workbook
 
-from engine.exceptions import NoApplicableSheetsInTemplateFiles
+from engine.exceptions import (NoApplicableSheetsInTemplateFiles,
+                               RemoveFileWithNoSheetRequiredByDatamap)
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
 from engine.repository.templates import (FSPopulatedTemplatesRepo,
@@ -86,7 +87,7 @@ def test_in_memory_datamap_application_to_extracted_data_raises_exception(
 def test_in_memory_datamap_application_throws_exception_wrong_sheet(
     mock_config, doc_directory, datamap_match_test_template, bad_sheet_template
 ):
-    with pytest.raises(NoApplicableSheetsInTemplateFiles):
+    with pytest.raises(RemoveFileWithNoSheetRequiredByDatamap):
         mock_config.initialise()
         shutil.copy2(
             bad_sheet_template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input")
