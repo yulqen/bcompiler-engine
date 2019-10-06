@@ -86,7 +86,17 @@ def check_datamap_sheets(
     for f in files_in_template_data:
         for s in sheets_in_datamap:
             if s in sheets_in_template_data[f]:
-                pass
+                checks.update(
+                    {
+                        f: Check(
+                            filename=f,
+                            proceed=True,
+                            state=CheckType.PASS,
+                            error_type=CheckType.UNDEFINED,
+                            msg=f"File {f} checked: OK.",
+                        )
+                    }
+                )
             else:
                 checks.update(
                     {
