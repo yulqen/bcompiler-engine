@@ -4,6 +4,7 @@ import enum
 import fnmatch
 import hashlib
 import json
+import logging
 import os
 import sys
 from dataclasses import dataclass
@@ -28,11 +29,15 @@ DAT_DATA = Dict[str, FILE_DATA]
 SHEET_DATA_IN_LST = List[Dict[str, str]]
 ALL_IMPORT_DATA = Dict[str, Dict[str, Dict[str, Dict[str, Dict[str, str]]]]]
 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(levelname)s - %(message)s", datefmt='%d-%b-%y %H:%M:%S')
+logger = logging.getLogger(__name__)
+
 
 def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
     "Given a datamap csv file, returns a list of DatamapLine objects."
     headers = datamap_check(dm_file)
     data = []
+    logger.info(f"Reading datamap {dm_file}")
     with DatamapFile(dm_file) as datamap_file:
         reader = csv.DictReader(datamap_file)
         for line in reader:
@@ -88,14 +93,13 @@ def remove_failing_files(
     )
     for f in failing_files:
         template_data.pop(f[0])
-        # TODO fix this message
         raise RemoveFileWithNoSheetRequiredByDatamap(f)
     if len(template_data.keys()) > 1:
         return template_data
     elif len(template_data.keys()) < 1:
-        raise NoApplicableSheetsInTemplateFiles(
-            "There are no files containing sheets declared in datamap. Quitting."
-        )
+        msg = "There are no files containing sheets declared in datamap. Quitting."
+        logger.critical(msg)
+        raise NoApplicableSheetsInTemplateFiles(msg)
     return template_data
 
 
@@ -355,7 +359,7 @@ def datamap_check(dm_file):
 
 def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     "Given a populated xlsx file, returns all data in a list of TemplateCell objects."
-    print(("Importing {}".format(template_file)))
+    logger.info(f"Importing {template_file}.")
     inner_dict: Dict[str, Dict[Any, Any]] = {"data": {}}
     f_path: Path = Path(template_file)
     try:
@@ -368,7 +372,7 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
                 f_path
             )
         )
-        sys.stderr.write(msg + "\n")
+        logger.critical(msg)
         raise
     checksum: str = _hash_single_file(f_path)
     holding = []
@@ -404,4 +408,5 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
         inner_dict["data"].update(sd)
         inner_dict.update({"checksum": checksum})  # type: ignore
     shell_dict = {f_path.name: inner_dict}
+    logger.info(f"Compiled data from {f_path.name}")
     return shell_dict

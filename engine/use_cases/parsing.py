@@ -47,8 +47,8 @@ from engine.utils.extraction import (ALL_IMPORT_DATA, check_datamap_sheets,
 
 warnings.filterwarnings("ignore", ".*Data Validation*.")
 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(levelname)s - %(message)s", datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
-logger.setLevel("INFO")
 
 # TODO - move this to config
 SKIP_MISSING_SHEETS = False
@@ -129,10 +129,8 @@ class ApplyDatamapToExtractionUseCase:
             self._set_datamap_and_template_data()
         self._datamap_data_dict = json.loads(self._datamap_data_json)
         self._template_data_dict = json.loads(self._template_data_json)
+        logger.info("Checking template data.")
         checks = check_datamap_sheets(self._datamap_data_dict, self._template_data_dict)
-        # TODO - do something with this now
-        # output to logger
-        # throw out offending files
         if not SKIP_MISSING_SHEETS:
             # We set a config variable to choose whether we
             # throw out files with a single missing sheet
@@ -143,17 +141,17 @@ class ApplyDatamapToExtractionUseCase:
             except NoApplicableSheetsInTemplateFiles:
                 # TODO add log message here
                 # for now...
-                print(
+                logging.warning(
                     "There are no files containing sheets declared in datamap. Quitting."
                 )
-                print(
+                logging.warning(
                     "You may choose to ignore missing sheets by setting 'allowing missing sheets' to True in"
                     " the config file or pass '--skip-missing-sheets'"
                 )
                 # logger.critical("There are no files containing sheets declared in datamap. Quitting.")
                 raise
             except RemoveFileWithNoSheetRequiredByDatamap as e:
-                print(
+                logging.warning(
                     f"{e.args[0][0]} does not contain the sheets required by datamap (eg. {e.args[0][1]}). Not set to skip sheets so omitting from master."
                 )
                 raise
