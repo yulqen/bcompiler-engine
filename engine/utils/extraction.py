@@ -6,11 +6,10 @@ import hashlib
 import json
 import logging
 import os
-import sys
 from dataclasses import dataclass
 from itertools import groupby
 from pathlib import Path
-from typing import Any, Dict, List, NamedTuple, Optional, Union
+from typing import Any, Dict, List, NamedTuple, Union
 
 from openpyxl import load_workbook
 from openpyxl.worksheet.cell_range import MultiCellRange
@@ -86,13 +85,14 @@ def remove_failing_files(
 ) -> ALL_IMPORT_DATA:
     """Given a list of checks, identify files which contain CheckType.FAIL, then remove them from template_data.
 
-    If this results in an empty template_data dict, return None.
+    If this results in an empty template_data dict, raise Exception.
     """
     failing_files = list(
         set([(f.filename, f.sheet) for f in lst_of_checks if f.state == CheckType.FAIL])
     )
     for f in failing_files:
         template_data.pop(f[0])
+        # TODO is this right??
         raise RemoveFileWithNoSheetRequiredByDatamap(f)
     if len(template_data.keys()) > 1:
         return template_data

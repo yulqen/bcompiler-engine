@@ -218,6 +218,67 @@ def org_test_files_dir():
 
 
 @pytest.fixture
+def template_dict_only_one_sheet():
+    return {
+        "filename.xlsm": {
+            "data": {
+                "Rich Tea": {
+                    "A1": {
+                        "cellref": "A1",
+                        "data_type": "TEXT",
+                        "file_name": "/tmp/Documents/datamaps/input/filename.xlsm",
+                        "sheet_name": "Rich Tea",
+                        "value": "Free text drop down",
+                    },
+                    "B1": {
+                        "cellref": "B1",
+                        "data_type": "TEXT",
+                        "file_name": "/tmp/Documents/datamaps/input/filename.xlsm",
+                        "sheet_name": "Rich Tea",
+                        "value": "then update that",
+                    },
+                },
+            }
+        },
+        "filename2.xlsm": {
+            "data": {
+                "To DO": {
+                    "A1": {
+                        "cellref": "A1",
+                        "data_type": "TEXT",
+                        "file_name": "/tmp/Documents/datamaps/input/filename2.xlsm",
+                        "sheet_name": "To DO",
+                        "value": "Free text drop down",
+                    },
+                    "B1": {
+                        "cellref": "B1",
+                        "data_type": "TEXT",
+                        "file_name": "/tmp/Documents/datamaps/input/filename2.xlsm",
+                        "sheet_name": "To DO",
+                        "value": "then update that",
+                    },
+                },
+                "Rich Tea": {
+                    "A1": {
+                        "cellref": "A1",
+                        "data_type": "TEXT",
+                        "file_name": "/tmp/Documents/datamaps/input/filename2.xlsm",
+                        "sheet_name": "Rich Tea",
+                        "value": "Free text drop down",
+                    },
+                    "B1": {
+                        "cellref": "B1",
+                        "data_type": "TEXT",
+                        "file_name": "/tmp/Documents/datamaps/input/filename2.xlsm",
+                        "sheet_name": "Rich Tea",
+                        "value": "then update that",
+                    },
+                },
+            }
+        },
+    }
+
+@pytest.fixture
 def template_dict():
     return {
         "filename.xlsm": {
