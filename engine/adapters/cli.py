@@ -1,4 +1,5 @@
 # cli adapters
+import logging
 from pathlib import Path
 from typing import List
 
@@ -13,6 +14,9 @@ from engine.repository.templates import (InMemoryPopulatedTemplatesRepository,
 from engine.use_cases.output import WriteMasterToTemplates
 from engine.use_cases.parsing import CreateMasterUseCase
 from engine.utils.extraction import data_validation_report
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(levelname)s - %(message)s", datefmt='%d-%b-%y %H:%M:%S')
+logger = logging.getLogger(__name__)
 
 
 def report_data_validations_in_file(file: Path) -> List[str]:
@@ -63,4 +67,4 @@ def import_and_create_master(echo_funcs):
     output_repo = MasterOutputRepository
     uc = CreateMasterUseCase(dm_repo, tmpl_repo, output_repo)
     uc.execute(master_fn)
-    echo_funcs["click_echo_green"]("{} successfully created in {}\n".format(master_fn, Path(Config.PLATFORM_DOCS_DIR / "output")))
+    logger.info("{} successfully created in {}\n".format(master_fn, Path(Config.PLATFORM_DOCS_DIR / "output")))

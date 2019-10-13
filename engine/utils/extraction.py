@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from itertools import groupby
 from pathlib import Path
 from typing import Any, Dict, List, NamedTuple, Optional, Union
+from zipfile import BadZipFile
 
 from openpyxl import load_workbook
 from openpyxl.worksheet.cell_range import MultiCellRange
@@ -374,6 +375,9 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
         )
         logger.critical(msg)
         raise
+    except BadZipFile:
+        raise RuntimeError(f"Cannot open {template_file} due to file not conforming to expected format. "
+                           f"Not contunuing. Remove file from input directory and try again.")
     checksum: str = _hash_single_file(f_path)
     holding = []
     for sheet in workbook.worksheets:
