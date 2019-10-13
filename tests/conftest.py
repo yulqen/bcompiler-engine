@@ -126,6 +126,11 @@ def master() -> Path:
 
 
 @pytest.fixture
+def master_no_col_a() -> Path:
+    return Path.cwd() / "tests" / "resources" / "master_empty_col_a.xlsx"
+
+
+@pytest.fixture
 def blank_template() -> Path:
     return Path.cwd() / "tests" / "resources" / "blank_template.xlsm"
 

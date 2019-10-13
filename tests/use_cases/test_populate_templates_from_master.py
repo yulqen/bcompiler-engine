@@ -116,6 +116,15 @@ def test_config_has_correct_files(mock_config):
     assert "datamap.csv" in datamap.parts
 
 
+def test_exception_when_given_master_with_empty_col_a(mock_config, datamap, master_no_col_a, blank_template):
+    """Test for handling cells in Col A which are empty - and return None."""
+    mock_config.initialise()
+    output_repo = MultipleTemplatesWriteRepo(blank_template)
+    uc = WriteMasterToTemplates(output_repo, datamap, master_no_col_a, blank_template)
+    with pytest.raises(RuntimeError):
+        uc.execute()
+
+
 def test_output_gateway(mock_config, datamap, master, blank_template):
     mock_config.initialise()
     output_repo = MultipleTemplatesWriteRepo(blank_template)
