@@ -1,11 +1,14 @@
 # test_error_reporting.py
 
+import os
+import shutil
+from pathlib import Path
 
 import pytest
 
-from engine.exceptions import RemoveFileWithNoSheetRequiredByDatamap
-from engine.utils.extraction import (CheckType, check_datamap_sheets,
-                                     get_sheets_from_template_data,
+from engine.exceptions import (NoApplicableSheetsInTemplateFiles,
+                               RemoveFileWithNoSheetRequiredByDatamap)
+from engine.utils.extraction import (Check, CheckType, check_datamap_sheets,
                                      remove_failing_files)
 
 
@@ -13,13 +16,6 @@ from engine.utils.extraction import (CheckType, check_datamap_sheets,
 Tests in here to test ensure that files are checked for integrity before importing
 and exporting occurs.
 """
-
-
-def test_get_all_sheets_in_template_data(template_dict):
-    breakpoint()
-    sheets = get_sheets_from_template_data(template_dict, "filename.xlsm")
-    assert "Rich Tea" in sheets
-    assert "To DO" in sheets
 
 
 def test_template_checked_for_correct_sheets_which_fails(

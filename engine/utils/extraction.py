@@ -6,10 +6,11 @@ import hashlib
 import json
 import logging
 import os
+import sys
 from dataclasses import dataclass
 from itertools import groupby
 from pathlib import Path
-from typing import Any, Dict, List, NamedTuple, Union
+from typing import Any, Dict, List, NamedTuple, Optional, Union
 
 from openpyxl import load_workbook
 from openpyxl.worksheet.cell_range import MultiCellRange
@@ -28,18 +29,8 @@ DAT_DATA = Dict[str, FILE_DATA]
 SHEET_DATA_IN_LST = List[Dict[str, str]]
 ALL_IMPORT_DATA = Dict[str, Dict[str, Dict[str, Dict[str, Dict[str, str]]]]]
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s: %(levelname)s - %(message)s",
-    datefmt="%d-%b-%y %H:%M:%S",
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(levelname)s - %(message)s", datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
-
-
-def get_sheets_from_template_data(
-    template_dict: ALL_IMPORT_DATA, filename: str
-) -> List[str]:
-    return list(set(template_dict[filename]["data"].keys()))
 
 
 def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
@@ -95,14 +86,13 @@ def remove_failing_files(
 ) -> ALL_IMPORT_DATA:
     """Given a list of checks, identify files which contain CheckType.FAIL, then remove them from template_data.
 
-    If this results in an empty template_data dict, raise Exception.
+    If this results in an empty template_data dict, return None.
     """
     failing_files = list(
         set([(f.filename, f.sheet) for f in lst_of_checks if f.state == CheckType.FAIL])
     )
     for f in failing_files:
         template_data.pop(f[0])
-        # TODO is this right??
         raise RemoveFileWithNoSheetRequiredByDatamap(f)
     if len(template_data.keys()) > 1:
         return template_data

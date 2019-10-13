@@ -37,13 +37,12 @@ import json
 import logging
 import warnings
 from concurrent import futures
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 from engine.exceptions import (NoApplicableSheetsInTemplateFiles,
                                RemoveFileWithNoSheetRequiredByDatamap)
 # pylint: disable=R0903,R0913;
-from engine.utils.extraction import (ALL_IMPORT_DATA, CheckType,
-                                     check_datamap_sheets,
+from engine.utils.extraction import (ALL_IMPORT_DATA, check_datamap_sheets,
                                      remove_failing_files, template_reader)
 
 warnings.filterwarnings("ignore", ".*Data Validation*.")
@@ -52,7 +51,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(levelname)s - %(m
 logger = logging.getLogger(__name__)
 
 # TODO - move this to config
-SKIP_MISSING_SHEETS = True
+SKIP_MISSING_SHEETS = False
 
 
 class ParsePopulatedTemplatesUseCase:
@@ -74,7 +73,6 @@ class ApplyDatamapToExtractionUseCase:
         self.data_for_master: List[ALL_IMPORT_DATA] = []
         self._datamap_data_json: str = ""
         self._template_data_json: str = ""
-        self._skip_file_sheet: Tuple[str, str] = () # type: ignore
 
     def _get_value_of_cell_referred_by_key(
         self, filename: str, key: str, sheet: str
@@ -106,7 +104,6 @@ class ApplyDatamapToExtractionUseCase:
                         sheet, filename
                     )
                 )
-                breakpoint()
                 raise KeyError(
                     "No sheet named {} in {}. Unable to process.".format(
                         sheet, filename
@@ -134,45 +131,31 @@ class ApplyDatamapToExtractionUseCase:
         self._template_data_dict = json.loads(self._template_data_json)
         logger.info("Checking template data.")
         checks = check_datamap_sheets(self._datamap_data_dict, self._template_data_dict)
-        if not SKIP_MISSING_SHEETS:
-            # We set a config variable to choose whether we
-            # throw out files with a single missing sheet
-            try:
-                self._template_data_dict = remove_failing_files(
-                    checks, self._template_data_dict
-                )
-            except NoApplicableSheetsInTemplateFiles:
-                logging.critical(
-                    "There are no files containing sheets declared in datamap. Quitting."
-                )
-                logging.warning(
-                    "You may choose to ignore missing sheets by setting 'allowing missing sheets' to True in"
-                    " the config file or pass '--skip-missing-sheets'"
-                )
-                # logger.critical("There are no files containing sheets declared in datamap. Quitting.")
-                raise
-            except RemoveFileWithNoSheetRequiredByDatamap as e:
-                logging.warning(
-                    f"{e.args[0][0]} does not contain the sheets required by datamap (eg. {e.args[0][1]}). Not set to skip sheets so omitting from master."
-                )
-                logging.warning(
-                    "You may choose to ignore missing sheets by setting 'allowing missing sheets' to True in"
-                    " the config file or pass '--skip-missing-sheets'."
-                )
-                raise
-        elif SKIP_MISSING_SHEETS:
-            # TODO - we have to do something when SKIP_MISSING_SHEETS is True here
-            # This means we want to carry on importing but just skip all the sheets missing in template
-            # FIXME - this does not work when a file appears that has NO sheets in the datamap. DEBUG THIS.
-            logger.info("Configured to skip missing sheets so will continue to try to write sheets available.")
-            breakpoint()
-            self._skip_file_sheet = [(c.filename, c.sheet) for c in checks if c.state == CheckType.FAIL]
-
-            sheets = [x[1] for x in self._skip_file_sheet if x[0] == "h"]
-            # TODO - we need to check each sheet that fails, and run through the data structure
-            # to get all sheets in that template. If all the skip sheets match the sheets in the template,
-            # we cannot proceed as nothing will make it to the master. Time for a test!
-
+        # TODO -reintroduce SKIP_MISSING_SHEETS check here
+        # We set a config variable to choose whether we
+        # throw out files with a single missing sheet
+        try:
+            self._template_data_dict = remove_failing_files(
+                checks, self._template_data_dict
+            )
+        except NoApplicableSheetsInTemplateFiles:
+            # TODO add log message here
+            # for now...
+            logging.warning(
+                "There are no files containing sheets declared in datamap. Quitting."
+            )
+            logging.warning(
+                "You may choose to ignore missing sheets by setting 'allowing missing sheets' to True in"
+                " the config file or pass '--skip-missing-sheets'"
+            )
+            # logger.critical("There are no files containing sheets declared in datamap. Quitting.")
+            raise
+        except RemoveFileWithNoSheetRequiredByDatamap as e:
+            logging.warning(
+                f"{e.args[0][0]} does not contain the sheets required by datamap (eg. {e.args[0][1]}). Not set to skip sheets so omitting from master."
+            )
+            raise
+        # TODO - we have to do something when SKIP_MISSING_SHEETS is True here
         if for_master:
             self._format_data_for_master()
 
@@ -195,20 +178,11 @@ class ApplyDatamapToExtractionUseCase:
         output = [{fname: []} for fname in self._template_data_dict]
         f_data = self._template_data_dict
         dm_data = self._datamap_data_dict
-        breakpoint()
         for _file_name in f_data:
-            if _file_name in set([x[0] for x in self._skip_file_sheet]):
-                _skip_sheets = [x[1] for x in self._skip_file_sheet if x[0] == _file_name]
-                for _dml in dm_data:
-                    if _dml["sheet"] not in _skip_sheets:
-                        val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
-                        _col_dict = [d for d in output if list(d.keys())[0] == _file_name][0]
-                        _col_dict[_file_name].append((_dml["key"], val))
-            else:
-                for _dml in dm_data:
-                    val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
-                    _col_dict = [d for d in output if list(d.keys())[0] == _file_name][0]
-                    _col_dict[_file_name].append((_dml["key"], val))
+            for _dml in dm_data:
+                val = self.query_key(_file_name, _dml["key"], _dml["sheet"])
+                _col_dict = [d for d in output if list(d.keys())[0] == _file_name][0]
+                _col_dict[_file_name].append((_dml["key"], val))
         self.data_for_master = output
 
 
