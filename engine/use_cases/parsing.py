@@ -141,13 +141,6 @@ class ApplyDatamapToExtractionUseCase:
         except NoApplicableSheetsInTemplateFiles:
             # TODO add log message here
             # for now...
-            logging.warning(
-                "There are no files containing sheets declared in datamap. Quitting."
-            )
-            logging.warning(
-                "You may choose to ignore missing sheets by setting 'allowing missing sheets' to True in"
-                " the config file or pass '--skip-missing-sheets'"
-            )
             # logger.critical("There are no files containing sheets declared in datamap. Quitting.")
             raise
         except RemoveFileWithNoSheetRequiredByDatamap as e:

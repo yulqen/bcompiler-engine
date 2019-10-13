@@ -92,9 +92,13 @@ def remove_failing_files(
     failing_files = list(
         set([(f.filename, f.sheet) for f in lst_of_checks if f.state == CheckType.FAIL])
     )
-    for f in failing_files:
-        template_data.pop(f[0])
-        raise RemoveFileWithNoSheetRequiredByDatamap(f)
+    for f in list(set([x[0] for x in failing_files])):
+        missing_sheets = [x.sheet for x in lst_of_checks if x.filename == f]
+        for ms in missing_sheets:
+            logger.warning(f"{ms} sheet missing from {f} - it is required by the datamap.")
+        template_data.pop(f)
+        logger.warning(f"{f} skipped due to not having requisite sheets named in datamap")
+#       raise RemoveFileWithNoSheetRequiredByDatamap(f)
     if len(template_data.keys()) > 1:
         return template_data
     elif len(template_data.keys()) < 1:
@@ -360,7 +364,7 @@ def datamap_check(dm_file):
 
 def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     "Given a populated xlsx file, returns all data in a list of TemplateCell objects."
-    logger.info(f"Importing {template_file}.")
+    logger.info(f"Starting import of {template_file}.")
     inner_dict: Dict[str, Dict[Any, Any]] = {"data": {}}
     f_path: Path = Path(template_file)
     try:
