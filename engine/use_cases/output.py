@@ -2,6 +2,7 @@
 Use cases related to writing data to an output repository.
 """
 
+import logging
 import warnings
 from pathlib import Path
 from typing import List
@@ -13,9 +14,11 @@ from engine.use_cases.parsing import ParseDatamapUseCase
 from engine.use_cases.typing import (MASTER_COL_DATA, MASTER_DATA_FOR_FILE,
                                      ColData)
 
-# TODO handle these more appropriately (such as config)
 warnings.filterwarnings("ignore", ".*Conditional Formatting*.")
 warnings.filterwarnings("ignore", ".*Sparkline Group*.")
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(levelname)s - %(message)s", datefmt='%d-%b-%y %H:%M:%S')
+logger = logging.getLogger(__name__)
 
 
 class WriteMasterToTemplates:
@@ -37,9 +40,13 @@ class WriteMasterToTemplates:
     def _check_datamap_matches_cola(self) -> bool:
         parsed_dm_data = self._parse_dm_uc.execute(obj=True)
         self._dml_line_tup = [(x.key, x.sheet, x.cellref) for x in parsed_dm_data]
-        self._col_a_vals = [x.value.strip() for x in next(self._master_sheet.columns)][
-            1:
-        ]
+        self._col_a_vals = []
+        for cell in next(self._master_sheet.columns):
+            try:
+                self._col_a_vals.append(cell.value.strip())
+            except AttributeError:
+                self._col_a_vals.append("EMPTY")
+        self._col_a_vals = self._col_a_vals[1:]
         _pass = zip([x[0] for x in self._dml_line_tup], self._col_a_vals)
         return all([x[0] == x[1] for x in _pass])
 
@@ -61,12 +68,10 @@ class WriteMasterToTemplates:
         if not self._check_datamap_matches_cola():
             _missing_keys = self._get_keys_in_datamap_not_in_master()
             # You shall not pass if this is a problem
-            raise RuntimeError(
-                "The following keys are in the datamap "
-                "but not in the master: {}. Not continuing".format(
-                    [x for x in _missing_keys]
-                )
-            )
+            if _missing_keys:
+                for m in _missing_keys:
+                    logger.critical(f"Key {m} in the datamap but not in the master. Not continuing.")
+                raise RuntimeError("Not continuing. Ensure all keys from datamap are in the master.")
         for col in list(self._master_sheet.columns)[1:]:
             file_name = col[0].value.split(".")[0]
             x = zip(self._dml_line_tup, col[1:])

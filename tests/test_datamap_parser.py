@@ -1,9 +1,9 @@
 import pytest
 
 from engine.domain.datamap import DatamapLineValueType
-from engine.use_cases.parsing import (MalFormedCSVHeaderException,
-                                      datamap_reader, template_reader)
-from engine.utils.extraction import _get_cell_data
+from engine.exceptions import MalFormedCSVHeaderException
+from engine.utils.extraction import (_get_cell_data, datamap_reader,
+                                     template_reader)
 
 NUMBER = DatamapLineValueType.NUMBER
 DATE = DatamapLineValueType.DATE
@@ -15,7 +15,7 @@ def test_datamap_reader(datamap):
     assert data[0].key == "Project/Programme Name"
     assert data[0].sheet == "Introduction"
     assert data[0].cellref == "C11"
-    assert data[0].filename == datamap
+    assert data[0].filename == str(datamap)
 
 
 def test_bad_spacing_in_datamap(datamap):

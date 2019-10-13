@@ -5,6 +5,8 @@ from pathlib import Path
 import pytest
 from openpyxl import load_workbook
 
+from engine.exceptions import (NoApplicableSheetsInTemplateFiles,
+                               RemoveFileWithNoSheetRequiredByDatamap)
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
 from engine.repository.templates import (FSPopulatedTemplatesRepo,
@@ -45,21 +47,22 @@ def test_query_data_from_data_file(
 
 @pytest.mark.slow
 def test_in_memory_datamap_application_to_extracted_data(
-    mock_config, doc_directory, datamap, template
+    mock_config, doc_directory, datamap, template_with_introduction_sheet
 ):
     mock_config.initialise()
-    shutil.copy2(template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    shutil.copy2(template_with_introduction_sheet, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    shutil.copy2(datamap, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
     tmpl_repo = InMemoryPopulatedTemplatesRepository(
         mock_config.PLATFORM_DOCS_DIR / "input"
     )
-    dm_repo = InMemorySingleDatamapRepository(datamap)
+    dm_repo = InMemorySingleDatamapRepository(Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "datamap.csv")
     uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
     uc.execute()
     assert (
-        uc.query_key("test_template.xlsx", "String Key", "Summary")
+        uc.query_key("test_template_with_introduction_sheet.xlsm", "String Key", "Summary")
         == "This is a string"
     )
-    assert uc.query_key("test_template.xlsx", "Big Float", "Another Sheet") == 7.2
+    assert uc.query_key("test_template_with_introduction_sheet.xlsm", "Big Float", "Another Sheet") == 7.2
 
 
 def test_in_memory_datamap_application_to_extracted_data_raises_exception(
@@ -80,23 +83,6 @@ def test_in_memory_datamap_application_to_extracted_data_raises_exception(
         # note the extra space in the sheet name
         uc.query_key("test_template.xlsx", "Funny Date", "Another Sheet ")
 
-
-def test_in_memory_datamap_application_throws_exception_wrong_sheet(
-    mock_config, doc_directory, datamap_match_test_template, bad_sheet_template
-):
-    with pytest.raises(KeyError):
-        mock_config.initialise()
-        shutil.copy2(
-            bad_sheet_template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input")
-        )
-        tmpl_repo = InMemoryPopulatedTemplatesRepository(
-            mock_config.PLATFORM_DOCS_DIR / "input"
-        )
-        dm_repo = InMemorySingleDatamapRepository(datamap_match_test_template)
-        uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
-        uc.execute()
-        data = uc.get_values()
-        next(data)
 
 
 def test_in_memory_datamap_generator(
@@ -141,29 +127,6 @@ def test_create_master_spreadsheet(mock_config, datamap_match_test_template, doc
     assert ws["B1"].value == "test_template"
     assert ws["B2"].value == "2019-10-20T00:00:00"
     assert ws["B3"].value == "This is a string"
-
-
-@pytest.mark.skip("This is for FS process - we want to do in mem first")
-def test_datamap_applied_to_extracted_data_returns_expected_value(
-    mock_config, datamap, resources
-):
-    """The use case needs to apply the datamap to the data returned from a repo.
-
-    The repository is on the access layer of this library. The UI application
-    is required to be aware of this and create the correct repository (currently
-    available is an in-memory repository or a file system repository, which should
-    be the default.
-
-    - Check whether there is a data file containing the data required
-    - If there is, pull that data out of the dat file
-    - If it isn't, pull that data out of the excel files
-    - Convert the data to a usable object
-    - The repo pulls all the data from the directory.
-
-    # TODO - func to check for dat file and whether contained data is target of current extraction
-    # TODO - allow for the default repository to be set in the config? (in the application)
-    """
-    pass
 
 
 def ensure_data_and_populate_file(config, dat_file, spreadsheet_file) -> None:

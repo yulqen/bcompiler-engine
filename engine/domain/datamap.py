@@ -1,8 +1,8 @@
 "Entities relating to the datamap."
 from enum import Enum, auto
-from typing import Dict, Optional
-
+from pathlib import Path
 # pylint: disable=R0903,R0913;
+from typing import IO, Dict, Optional, Union
 
 
 class DatamapLineValueType(Enum):
@@ -41,3 +41,30 @@ class DatamapLine:
             "data_type": self.data_type,
             "filename": self.filename,
         }
+
+
+class DatamapFile:
+    """A context manager that represents the datamap file.
+
+    Having a context manager means we can more elegantly capture the
+    exception with the file isn't found.
+    """
+
+    def __init__(self, filepath: Union[Path, str]) -> None:
+        "Create the context manager"
+        self.filepath = filepath
+
+    def __enter__(self) -> IO[str]:
+        try:
+            self.f_obj = open(self.filepath, "r", encoding="utf-8")
+            self.f_obj.read()
+            self.f_obj.seek(0)
+            return self.f_obj
+        except FileNotFoundError:
+            raise FileNotFoundError("Cannot find {}".format(self.filepath))
+        except UnicodeDecodeError:
+            self.f_obj = open(self.filepath, "r", encoding="latin1")
+            return self.f_obj
+
+    def __exit__(self, mytype, value, traceback):  # type: ignore
+        self.f_obj.close()

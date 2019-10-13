@@ -1,13 +1,14 @@
 import os
-import pytest
 import shutil
 import tempfile
-from engine.config import Config
-from engine.domain.datamap import DatamapLine
-from engine.use_cases.parsing import DatamapLineValueType
-from engine.use_cases.parsing import TemplateCell
 from pathlib import Path
 from typing import List
+
+import pytest
+
+from engine.config import Config
+from engine.domain.datamap import DatamapLine, DatamapLineValueType
+from engine.domain.template import TemplateCell
 
 
 @pytest.fixture
@@ -93,6 +94,14 @@ def doc_directory():
 
 
 @pytest.fixture
+def template_with_introduction_sheet() -> Path:
+    here = os.path.abspath(os.curdir)
+    return Path(
+        os.path.join(here, "tests/resources/test_template_with_introduction_sheet.xlsm")
+    )
+
+
+@pytest.fixture
 def template() -> Path:
     here = os.path.abspath(os.curdir)
     return Path(os.path.join(here, "tests/resources/test_template.xlsx"))
@@ -114,6 +123,11 @@ def pop_template() -> Path:
 @pytest.fixture
 def master() -> Path:
     return Path.cwd() / "tests" / "resources" / "master.xlsx"
+
+
+@pytest.fixture
+def master_no_col_a() -> Path:
+    return Path.cwd() / "tests" / "resources" / "master_empty_col_a.xlsx"
 
 
 @pytest.fixture
@@ -206,3 +220,261 @@ def mock_config(monkeypatch):
 @pytest.fixture
 def org_test_files_dir():
     return Path.cwd() / "tests" / "resources" / "org_templates"
+
+
+@pytest.fixture
+def template_dict():
+    return {
+        "filename.xlsm": {
+            "data": {
+                "To DO": {
+                    "A1": {
+                        "cellref": "A1",
+                        "data_type": "TEXT",
+                        "file_name": "/tmp/Documents/datamaps/input/filename.xlsm",
+                        "sheet_name": "To DO",
+                        "value": "Free text drop down",
+                    },
+                    "B1": {
+                        "cellref": "B1",
+                        "data_type": "TEXT",
+                        "file_name": "/tmp/Documents/datamaps/input/filename.xlsm",
+                        "sheet_name": "To DO",
+                        "value": "then update that",
+                    },
+                },
+                "Rich Tea": {
+                    "A1": {
+                        "cellref": "A1",
+                        "data_type": "TEXT",
+                        "file_name": "/tmp/Documents/datamaps/input/filename.xlsm",
+                        "sheet_name": "Rich Tea",
+                        "value": "Free text drop down",
+                    },
+                    "B1": {
+                        "cellref": "B1",
+                        "data_type": "TEXT",
+                        "file_name": "/tmp/Documents/datamaps/input/filename.xlsm",
+                        "sheet_name": "Rich Tea",
+                        "value": "then update that",
+                    },
+                },
+            }
+        },
+        "filename2.xlsm": {
+            "data": {
+                "To DO": {
+                    "A1": {
+                        "cellref": "A1",
+                        "data_type": "TEXT",
+                        "file_name": "/tmp/Documents/datamaps/input/filename2.xlsm",
+                        "sheet_name": "To DO",
+                        "value": "Free text drop down",
+                    },
+                    "B1": {
+                        "cellref": "B1",
+                        "data_type": "TEXT",
+                        "file_name": "/tmp/Documents/datamaps/input/filename2.xlsm",
+                        "sheet_name": "To DO",
+                        "value": "then update that",
+                    },
+                },
+                "Rich Tea": {
+                    "A1": {
+                        "cellref": "A1",
+                        "data_type": "TEXT",
+                        "file_name": "/tmp/Documents/datamaps/input/filename2.xlsm",
+                        "sheet_name": "Rich Tea",
+                        "value": "Free text drop down",
+                    },
+                    "B1": {
+                        "cellref": "B1",
+                        "data_type": "TEXT",
+                        "file_name": "/tmp/Documents/datamaps/input/filename2.xlsm",
+                        "sheet_name": "Rich Tea",
+                        "value": "then update that",
+                    },
+                },
+            }
+        },
+    }
+
+
+@pytest.fixture
+def datamap_lst_with_single_sheet():
+    return [
+        {
+            "cellref": "C11",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Project/Programme Name",
+            "sheet": "Introduction",
+        },
+        {
+            "cellref": "C9",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Department",
+            "sheet": "Introduction",
+        },
+        {
+            "cellref": "C10",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Delivery Body",
+            "sheet": "Introduction",
+        },
+        {
+            "cellref": "C12",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "TOFGM - TUI ID Number",
+            "sheet": "Introduction",
+        },
+        {
+            "cellref": "C13",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Controls Project ID number",
+            "sheet": "Introduction",
+        },
+        {
+            "cellref": "C14",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Project Type (for TUI use)",
+            "sheet": "Introduction",
+        },
+        {
+            "cellref": "C11",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Project/Programme Name",
+            "sheet": "Introduction",
+        },
+        {
+            "cellref": "C9",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Department",
+            "sheet": "Introduction",
+        },
+        {
+            "cellref": "C10",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Delivery Body",
+            "sheet": "Introduction",
+        },
+        {
+            "cellref": "C12",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "TOFGM - TUI ID Number",
+            "sheet": "Introduction",
+        },
+        {
+            "cellref": "C13",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Controls Project ID number",
+            "sheet": "Introduction",
+        },
+        {
+            "cellref": "C14",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Project Type (for TUI use)",
+            "sheet": "Introduction",
+        },
+    ]
+
+
+@pytest.fixture
+def datamap_lst_with_sheets_same_as_template_dict():
+    return [
+        {
+            "cellref": "C11",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Project/Programme Name",
+            "sheet": "To DO",
+        },
+        {
+            "cellref": "C9",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Department",
+            "sheet": "To DO",
+        },
+        {
+            "cellref": "C10",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Delivery Body",
+            "sheet": "To DO",
+        },
+        {
+            "cellref": "C12",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "TOFGM - TUI ID Number",
+            "sheet": "To DO",
+        },
+        {
+            "cellref": "C13",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Controls Project ID number",
+            "sheet": "To DO",
+        },
+        {
+            "cellref": "C14",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Project Type (for TUI use)",
+            "sheet": "To DO",
+        },
+        {
+            "cellref": "C11",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Project/Programme Name",
+            "sheet": "Rich Tea",
+        },
+        {
+            "cellref": "C9",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Department",
+            "sheet": "Rich Tea",
+        },
+        {
+            "cellref": "C10",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Delivery Body",
+            "sheet": "Rich Tea",
+        },
+        {
+            "cellref": "C12",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "TOFGM - TUI ID Number",
+            "sheet": "Rich Tea",
+        },
+        {
+            "cellref": "C13",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Controls Project ID number",
+            "sheet": "Rich Tea",
+        },
+        {
+            "cellref": "C14",
+            "data_type": "TEXT",
+            "filename": "/tmp/Documents/datamaps/input/dft_datamap.csv",
+            "key": "Project Type (for TUI use)",
+            "sheet": "Rich Tea",
+        },
+    ]

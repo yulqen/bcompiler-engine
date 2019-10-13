@@ -12,41 +12,10 @@ from openpyxl import load_workbook
 from engine.adapters.cli import write_master_to_templates
 from engine.repository.templates import MultipleTemplatesWriteRepo
 from engine.use_cases.output import WriteMasterToTemplates
-from engine.utils.extraction import ValidationReportItem
-from engine.utils.extraction import data_validation_report
+from engine.utils.extraction import (ValidationReportItem,
+                                     data_validation_report)
 
 # from openpyxl.worksheet.datavalidation import DataValidation
-
-"""
-Simulating bcompiler cli command that wipes data validation
-bcompiler export master ~/Documents/bcompiler/input/datamap.csv  ~/Documents/bcompiler/templates/DfT_Template_1920_Q1_Unlocked.xlsm ~/Documents/bcompiler/output/master.xlsx
-WHY DOES THIS WIPE OUT DATA VALIDATION BUT DOING THE SINGLE ONE BELOW NOT?
-This test proves that the validations simply disappear for some reason when using real data
-rather than test data.
-
-OBSERVATION:
-
-In tests/resources/blank_template_password_removed.xlsm on sheet 1 - Project Info there
-are 24 validations
-In ~/Documents/bcompiler/templates/DfT_Template_1920_Q1_Unlocked.xlsm there
-are 4 validations
-How did this happen?
-
-CONCLUSION:
-
-Basically, we cannot rely on there being all DV cells in the blank template.
-Saving the file might remove them somehow, but I don't think we have a way of
-checking.
-
-Even if we were to put back all DV from the blank on saving, that's not going
-to fix it.
-
-The best advice is to include in the documentation that blanks should be kept
-as clean as possible.
-
-TODO - I could try resourcessaving DfT_Template_1920_Q1_Unlocked.xlsm to see
-if that brings them back, possibly in Excel?
-"""
 
 
 @pytest.mark.skip("Should only be run individually - not part of test suite")
@@ -145,6 +114,15 @@ def test_config_has_correct_files(mock_config):
     assert "input" in datamap.parts
     assert "Documents" in datamap.parts
     assert "datamap.csv" in datamap.parts
+
+
+def test_exception_when_given_master_with_empty_col_a(mock_config, datamap, master_no_col_a, blank_template):
+    """Test for handling cells in Col A which are empty - and return None."""
+    mock_config.initialise()
+    output_repo = MultipleTemplatesWriteRepo(blank_template)
+    uc = WriteMasterToTemplates(output_repo, datamap, master_no_col_a, blank_template)
+    with pytest.raises(RuntimeError):
+        uc.execute()
 
 
 def test_output_gateway(mock_config, datamap, master, blank_template):

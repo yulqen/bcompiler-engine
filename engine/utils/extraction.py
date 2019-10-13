@@ -1,26 +1,161 @@
-from itertools import groupby
-from pathlib import Path
-from typing import Dict
-from typing import List
-from typing import NamedTuple
-from typing import Union
-
+import csv
+import datetime
+import enum
 import fnmatch
 import hashlib
 import json
+import logging
 import os
-from engine.domain.template import TemplateCell
+import sys
+from dataclasses import dataclass
+from itertools import groupby
+from pathlib import Path
+from typing import Any, Dict, List, NamedTuple, Optional, Union
+from zipfile import BadZipFile
+
+from openpyxl import load_workbook
 from openpyxl.worksheet.cell_range import MultiCellRange
 from openpyxl.worksheet.worksheet import Worksheet
+
+from engine.domain.datamap import (DatamapFile, DatamapLine,
+                                   DatamapLineValueType)
+from engine.domain.template import TemplateCell
+from engine.exceptions import (MalFormedCSVHeaderException,
+                               NoApplicableSheetsInTemplateFiles,
+                               RemoveFileWithNoSheetRequiredByDatamap)
+from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
 
 FILE_DATA = Dict[str, Union[str, Dict[str, Dict[str, str]]]]
 DAT_DATA = Dict[str, FILE_DATA]
 SHEET_DATA_IN_LST = List[Dict[str, str]]
 ALL_IMPORT_DATA = Dict[str, Dict[str, Dict[str, Dict[str, Dict[str, str]]]]]
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s: %(levelname)s - %(message)s",
+    datefmt="%d-%b-%y %H:%M:%S",
+)
+logger = logging.getLogger(__name__)
+
+
+def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
+    "Given a datamap csv file, returns a list of DatamapLine objects."
+    headers = datamap_check(dm_file)
+    data = []
+    logger.info(f"Reading datamap {dm_file}")
+    with DatamapFile(dm_file) as datamap_file:
+        reader = csv.DictReader(datamap_file)
+        for line in reader:
+            if headers["type"] is None:
+                data.append(
+                    DatamapLine(
+                        key=_clean(line[headers["key"]]),
+                        sheet=_clean(line[headers["sheet"]]),
+                        cellref=_clean(line[headers["cellref"]], is_cellref=True),
+                        data_type=None,
+                        filename=str(dm_file),
+                    )
+                )
+            else:
+                data.append(
+                    DatamapLine(
+                        key=_clean(line[headers["key"]]),
+                        sheet=_clean(line[headers["sheet"]]),
+                        cellref=_clean(line[headers["cellref"]], is_cellref=True),
+                        data_type=_clean(line[headers["type"]]),
+                        filename=str(dm_file),
+                    )
+                )
+    return data
+
+
+class CheckType(enum.Enum):
+    FAIL = enum.auto()
+    PASS = enum.auto()
+    MISSING_SHEETS_REQUIRED_BY_DATAMAP = enum.auto()
+    UNDEFINED = enum.auto()
+
+
+@dataclass
+class Check:
+    filename: str
+    sheet: str
+    proceed: bool = False
+    state: CheckType = CheckType.UNDEFINED
+    error_type: CheckType = CheckType.UNDEFINED
+    msg: str = ""
+
+
+def remove_failing_files(
+    lst_of_checks: List[Check], template_data: ALL_IMPORT_DATA
+) -> ALL_IMPORT_DATA:
+    """Given a list of checks, identify files which contain CheckType.FAIL, then remove them from template_data.
+
+    If this results in an empty template_data dict, return None.
+    """
+    failing_files = list(
+        set([(f.filename, f.sheet) for f in lst_of_checks if f.state == CheckType.FAIL])
+    )
+    for f in list(set([x[0] for x in failing_files])):
+        missing_sheets = [x.sheet for x in lst_of_checks if x.filename == f]
+        for ms in missing_sheets:
+            logger.warning(
+                f"{ms} sheet missing from {f} - it is required by the datamap."
+            )
+        template_data.pop(f)
+        logger.warning(
+            f"{f} skipped due to not having requisite sheets named in datamap"
+        )
+    #       raise RemoveFileWithNoSheetRequiredByDatamap(f)
+    if len(template_data.keys()) > 1:
+        return template_data
+    elif len(template_data.keys()) < 1:
+        msg = "There are no files containing sheets declared in datamap. Quitting."
+        logger.critical(msg)
+        raise NoApplicableSheetsInTemplateFiles(msg)
+    return template_data
+
+
+def check_datamap_sheets(
+    datamap_data: List[Dict[str, str]], template_data: ALL_IMPORT_DATA
+) -> List[Check]:
+    "Parse data struct for each of datamap and all template data for sheet compliance."
+    checks = []
+    sheets_in_datamap: List[str] = list(set([x["sheet"] for x in datamap_data]))
+    files_in_template_data = list(template_data.keys())
+    sheets_in_template_data = {
+        x: list(template_data[x]["data"].keys()) for x in files_in_template_data
+    }
+    for f in files_in_template_data:
+        for s in sheets_in_datamap:
+            if s in sheets_in_template_data[f]:
+                checks.append(
+                    Check(
+                        filename=f,
+                        sheet=s,
+                        proceed=True,
+                        state=CheckType.PASS,
+                        error_type=CheckType.UNDEFINED,
+                        msg=f"File {f} checked: OK.",
+                    )
+                )
+            else:
+                checks.append(
+                    Check(
+                        filename=f,
+                        sheet=s,
+                        proceed=False,
+                        state=CheckType.FAIL,
+                        error_type=CheckType.MISSING_SHEETS_REQUIRED_BY_DATAMAP,
+                        msg=f"File {f} has no sheet[s] {s}.",
+                    )
+                )
+    return checks
+
 
 class ValidationReportItem(NamedTuple):
     """Can be used to allow better access to data from a Data Validation."""
+
     formula: str
     cell_range: MultiCellRange
     report_line: str
@@ -34,11 +169,13 @@ def data_validation_report(sheet: Worksheet) -> List[ValidationReportItem]:
     output = []
     validations = sheet.data_validations.dataValidation
     for v in validations:
-        output.append(ValidationReportItem(
-            v.formula1,
-            v.ranges,
-            f"Sheet: {sheet.title}; {v.sqref}; Type: {v.type}; Formula: {v.formula1}",
-        ))
+        output.append(
+            ValidationReportItem(
+                v.formula1,
+                v.ranges,
+                f"Sheet: {sheet.title}; {v.sqref}; Type: {v.type}; Formula: {v.formula1}",
+            )
+        )
     return output
 
 
@@ -76,7 +213,10 @@ def _get_xlsx_files(directory: Path) -> List[Path]:
     if not os.path.isabs(directory):
         raise RuntimeError("Require absolute path here")
     for file_path in os.listdir(directory):
-        if fnmatch.fnmatch(file_path, "*.xls[xm]") and "blank_template" not in file_path:
+        if (
+            fnmatch.fnmatch(file_path, "*.xls[xm]")
+            and "blank_template" not in file_path
+        ):
             output.append(Path(os.path.join(directory, file_path)))
     return output
 
@@ -174,3 +314,118 @@ def _hash_target_files(list_of_files: List[Path]) -> Dict[str, str]:
             hash_obj = hashlib.md5(open(file_name, "rb").read())
             output.update({file_name.name: hash_obj.digest().hex()})
     return output
+
+
+def datamap_check(dm_file):
+    """Given a datamap csv file, returns a dict of the headers used in reality...
+
+    raises IndexError if less than three headers are found (type header can be None)
+    """
+    if ECHO_FUNC_YELLOW is not None:
+        ECHO_FUNC_YELLOW("Checking datamap file {}\n".format(dm_file))
+    _good_keys = ["cell_key", "cellkey", "key"]
+    _good_sheet = ["template_sheet", "sheet", "templatesheet"]
+    _good_cellref = ["cell_reference", "cell_ref", "cellref", "cellreference"]
+    _good_type = ["type", "value_type", "cell_type", "celltype"]
+    headers = {}
+    using_type = True
+    with DatamapFile(dm_file) as datamap_file:
+        # initial check - have we got enough headers? If not - raise exception
+        top_row = next(datamap_file).rstrip().split(",")
+        if len(top_row) == 1:
+            raise MalFormedCSVHeaderException(
+                "Datamap contains only one header - need at least three to proceed. Quitting."
+            )
+        if len(top_row) == 2:
+            raise MalFormedCSVHeaderException(
+                "Datamap contains only two headers - need at least three to proceed. Quitting."
+            )
+        if top_row[-1] not in _good_type:
+            # test if we are using type column here
+            headers.update(type=None)
+            using_type = False
+        if top_row[0] in _good_keys:
+            headers.update(key=top_row[0])
+        if top_row[1] in _good_sheet:
+            headers.update(sheet=top_row[1])
+        if top_row[2] in _good_cellref:
+            headers.update(cellref=top_row[2])
+        if using_type:
+            if top_row[3] in _good_type:
+                headers.update(type=top_row[3])
+    if len(headers.keys()) >= 2:
+        # final test - we don't want to proceed unless we have minimum headers
+        if not all(
+            [x in list(headers.keys()) for x in ["key", "sheet", "cellref", "type"]]
+        ):
+            raise MalFormedCSVHeaderException(
+                "Cannot proceed without required number of headers"
+            )
+        if ECHO_FUNC_GREEN is not None:
+            ECHO_FUNC_GREEN("{} checked ok\n".format(dm_file))
+        return headers
+    else:
+        return MalFormedCSVHeaderException(
+            "Datamap does not contain the required headers. Cannot proceed"
+        )
+
+
+def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
+    "Given a populated xlsx file, returns all data in a list of TemplateCell objects."
+    logger.info(f"Starting import of {template_file}.")
+    inner_dict: Dict[str, Dict[Any, Any]] = {"data": {}}
+    f_path: Path = Path(template_file)
+    try:
+        workbook = load_workbook(template_file, data_only=True)
+    except TypeError:
+        msg = (
+            "Unable to open {}. Potential corruption of file. Try resaving "
+            "in Excel or removing conditionally formatting. See issue at "
+            "https://github.com/hammerheadlemon/bcompiler-engine/issues/3 for update. Quitting.".format(
+                f_path
+            )
+        )
+        logger.critical(msg)
+        raise
+    except BadZipFile:
+        logger.critical(
+            f"Cannot open {template_file} due to file not conforming to expected format. "
+            f"Not contunuing. Remove file from input directory and try again."
+        )
+        raise RuntimeError
+    checksum: str = _hash_single_file(f_path)
+    holding = []
+    for sheet in workbook.worksheets:
+        sheet_data: SHEET_DATA_IN_LST = []
+        sheet_dict: Dict[str, Dict[str, Dict[str, str]]] = {}
+        for row in sheet.rows:
+            for cell in row:
+                if cell.value is not None:
+                    try:
+                        val = cell.value.rstrip().lstrip()
+                        c_type = DatamapLineValueType.TEXT
+                    except AttributeError:
+                        if isinstance(cell.value, (float, int)):
+                            val = cell.value
+                            c_type = DatamapLineValueType.NUMBER
+                        elif isinstance(cell.value, (datetime.date, datetime.datetime)):
+                            val = cell.value.isoformat()
+                            c_type = DatamapLineValueType.DATE
+                    cellref = "{}{}".format(cell.column_letter, cell.row)
+                    if isinstance(template_file, Path):
+                        t_cell = TemplateCell(
+                            template_file.as_posix(), sheet.title, cellref, val, c_type
+                        ).to_dict()
+                    else:
+                        t_cell = TemplateCell(
+                            template_file, sheet.title, cellref, val, c_type
+                        ).to_dict()
+                    sheet_data.append(t_cell)
+        sheet_dict.update({sheet.title: _extract_cellrefs(sheet_data)})
+        holding.append(sheet_dict)
+    for sd in holding:
+        inner_dict["data"].update(sd)
+        inner_dict.update({"checksum": checksum})  # type: ignore
+    shell_dict = {f_path.name: inner_dict}
+    logger.info(f"Compiled data from {f_path.name}")
+    return shell_dict
