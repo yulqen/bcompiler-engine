@@ -6,11 +6,10 @@ import hashlib
 import json
 import logging
 import os
-import sys
 from dataclasses import dataclass
 from itertools import groupby
 from pathlib import Path
-from typing import Any, Dict, List, NamedTuple, Optional, Union
+from typing import Any, Dict, List, NamedTuple, Union
 from zipfile import BadZipFile
 
 from openpyxl import load_workbook
@@ -21,8 +20,7 @@ from engine.domain.datamap import (DatamapFile, DatamapLine,
                                    DatamapLineValueType)
 from engine.domain.template import TemplateCell
 from engine.exceptions import (MalFormedCSVHeaderException,
-                               NoApplicableSheetsInTemplateFiles,
-                               RemoveFileWithNoSheetRequiredByDatamap)
+                               NoApplicableSheetsInTemplateFiles)
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
 
 FILE_DATA = Dict[str, Union[str, Dict[str, Dict[str, str]]]]
