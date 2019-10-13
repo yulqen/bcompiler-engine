@@ -84,26 +84,6 @@ def test_in_memory_datamap_application_to_extracted_data_raises_exception(
         uc.query_key("test_template.xlsx", "Funny Date", "Another Sheet ")
 
 
-def test_in_memory_datamap_application_throws_exception_wrong_sheet(
-    mock_config, doc_directory, datamap_match_test_template, bad_sheet_template
-):
-    with pytest.raises(RemoveFileWithNoSheetRequiredByDatamap):
-        mock_config.initialise()
-        shutil.copy2(
-            bad_sheet_template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input")
-        )
-        shutil.copy2(
-            datamap_match_test_template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input")
-        )
-        tmpl_repo = InMemoryPopulatedTemplatesRepository(
-            mock_config.PLATFORM_DOCS_DIR / "input"
-        )
-        dm_repo = InMemorySingleDatamapRepository(datamap_match_test_template)
-        uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
-        uc.execute()
-        data = uc.get_values()
-        next(data)
-
 
 def test_in_memory_datamap_generator(
     mock_config, doc_directory, datamap_match_test_template, template

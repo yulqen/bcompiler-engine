@@ -49,11 +49,3 @@ def test_template_checked_for_correct_sheets_which_passes(
         assert f.error_type == CheckType.UNDEFINED
         assert f.msg == f"File {f.filename} checked: OK."
         assert f.proceed is True
-
-
-def test_remove_file_data_from_template_data_structure_if_failing_sheets_test(
-    datamap_lst_with_single_sheet, template_dict
-):
-    with pytest.raises(RemoveFileWithNoSheetRequiredByDatamap):
-        check_status = check_datamap_sheets(datamap_lst_with_single_sheet, template_dict)
-        template_dict = remove_failing_files(check_status, template_dict)

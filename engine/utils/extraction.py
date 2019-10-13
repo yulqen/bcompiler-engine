@@ -30,7 +30,11 @@ DAT_DATA = Dict[str, FILE_DATA]
 SHEET_DATA_IN_LST = List[Dict[str, str]]
 ALL_IMPORT_DATA = Dict[str, Dict[str, Dict[str, Dict[str, Dict[str, str]]]]]
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(levelname)s - %(message)s", datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s: %(levelname)s - %(message)s",
+    datefmt="%d-%b-%y %H:%M:%S",
+)
 logger = logging.getLogger(__name__)
 
 
@@ -95,10 +99,14 @@ def remove_failing_files(
     for f in list(set([x[0] for x in failing_files])):
         missing_sheets = [x.sheet for x in lst_of_checks if x.filename == f]
         for ms in missing_sheets:
-            logger.warning(f"{ms} sheet missing from {f} - it is required by the datamap.")
+            logger.warning(
+                f"{ms} sheet missing from {f} - it is required by the datamap."
+            )
         template_data.pop(f)
-        logger.warning(f"{f} skipped due to not having requisite sheets named in datamap")
-#       raise RemoveFileWithNoSheetRequiredByDatamap(f)
+        logger.warning(
+            f"{f} skipped due to not having requisite sheets named in datamap"
+        )
+    #       raise RemoveFileWithNoSheetRequiredByDatamap(f)
     if len(template_data.keys()) > 1:
         return template_data
     elif len(template_data.keys()) < 1:
@@ -380,8 +388,11 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
         logger.critical(msg)
         raise
     except BadZipFile:
-        raise RuntimeError(f"Cannot open {template_file} due to file not conforming to expected format. "
-                           f"Not contunuing. Remove file from input directory and try again.")
+        logger.critical(
+            f"Cannot open {template_file} due to file not conforming to expected format. "
+            f"Not contunuing. Remove file from input directory and try again."
+        )
+        raise RuntimeError
     checksum: str = _hash_single_file(f_path)
     holding = []
     for sheet in workbook.worksheets:
