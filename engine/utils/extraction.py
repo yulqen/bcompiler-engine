@@ -28,8 +28,18 @@ DAT_DATA = Dict[str, FILE_DATA]
 SHEET_DATA_IN_LST = List[Dict[str, str]]
 ALL_IMPORT_DATA = Dict[str, Dict[str, Dict[str, Dict[str, Dict[str, str]]]]]
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(levelname)s - %(message)s", datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s: %(levelname)s - %(message)s",
+    datefmt="%d-%b-%y %H:%M:%S",
+)
 logger = logging.getLogger(__name__)
+
+
+def get_sheets_from_template_data(
+    template_dict: ALL_IMPORT_DATA, filename: str
+) -> List[str]:
+    return list(set(template_dict[filename]["data"].keys()))
 
 
 def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:

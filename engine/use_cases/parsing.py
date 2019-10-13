@@ -164,9 +164,14 @@ class ApplyDatamapToExtractionUseCase:
             # TODO - we have to do something when SKIP_MISSING_SHEETS is True here
             # This means we want to carry on importing but just skip all the sheets missing in template
             # FIXME - this does not work when a file appears that has NO sheets in the datamap. DEBUG THIS.
-            breakpoint()
             logger.info("Configured to skip missing sheets so will continue to try to write sheets available.")
+            breakpoint()
             self._skip_file_sheet = [(c.filename, c.sheet) for c in checks if c.state == CheckType.FAIL]
+
+            sheets = [x[1] for x in self._skip_file_sheet if x[0] == "h"]
+            # TODO - we need to check each sheet that fails, and run through the data structure
+            # to get all sheets in that template. If all the skip sheets match the sheets in the template,
+            # we cannot proceed as nothing will make it to the master. Time for a test!
 
         if for_master:
             self._format_data_for_master()
@@ -190,6 +195,7 @@ class ApplyDatamapToExtractionUseCase:
         output = [{fname: []} for fname in self._template_data_dict]
         f_data = self._template_data_dict
         dm_data = self._datamap_data_dict
+        breakpoint()
         for _file_name in f_data:
             if _file_name in set([x[0] for x in self._skip_file_sheet]):
                 _skip_sheets = [x[1] for x in self._skip_file_sheet if x[0] == _file_name]
