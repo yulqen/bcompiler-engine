@@ -102,7 +102,7 @@ def remove_failing_files(
             )
         template_data.pop(f)
         logger.warning(
-            f"{f} skipped due to not having requisite sheets named in datamap"
+            f"{f} skipped due to not having requisite sheets named in datamap."
         )
     #       raise RemoveFileWithNoSheetRequiredByDatamap(f)
     if len(template_data.keys()) > 1:

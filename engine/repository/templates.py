@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 from pathlib import Path
 from typing import List, Tuple
@@ -11,6 +12,14 @@ from engine.use_cases.typing import MASTER_COL_DATA, MASTER_DATA_FOR_FILE
 from engine.utils.extraction import ALL_IMPORT_DATA, _get_xlsx_files
 
 from ..config import Config
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s: %(levelname)s - %(message)s",
+    datefmt="%d-%b-%y %H:%M:%S",
+)
+
+logger = logging.getLogger(__name__)
 
 
 class MultipleTemplatesWriteRepo:
@@ -66,7 +75,7 @@ class MultipleTemplatesWriteRepo:
     def _save_workbook(self, wb_t: Tuple[str, Workbook]) -> None:
         _wb = wb_t[1]
         _output_file_name = wb_t[0]
-        print("Saving {}".format(_output_file_name))
+        logger.info("Saving {}".format(_output_file_name))
         _wb.save(filename=Config.PLATFORM_DOCS_DIR / "output" / _output_file_name)
 
     def _write_each_workbook(self) -> None:
