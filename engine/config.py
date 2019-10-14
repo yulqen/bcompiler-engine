@@ -1,3 +1,4 @@
+import logging
 import os
 import platform
 import textwrap
@@ -5,6 +6,13 @@ from configparser import ConfigParser
 from pathlib import Path
 
 from appdirs import user_config_dir, user_data_dir
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s: %(levelname)s - %(message)s",
+    datefmt="%d-%b-%y %H:%M:%S",
+)
+logger = logging.getLogger(__name__)
 
 
 def _platform_docs_dir() -> Path:
@@ -46,12 +54,16 @@ class Config:
     ).format(PLATFORM_DOCS_DIR)
 
     @classmethod
-    def initialise(cls) -> None:
+    def initialise(cls) -> bool:
+        proceed = True
         if not Path(cls.DATAMAPS_LIBRARY_DATA_DIR).exists():
+            logger.info(f"Creating data directory at {cls.DATAMAPS_LIBRARY_DATA_DIR}.")
             Path(cls.DATAMAPS_LIBRARY_DATA_DIR).mkdir(parents=True)
         if not Path(cls.DATAMAPS_LIBRARY_CONFIG_DIR).exists():
+            logger.info(f"Creating config directory at {cls.DATAMAPS_LIBRARY_CONFIG_DIR}.")
             Path(cls.DATAMAPS_LIBRARY_CONFIG_DIR).mkdir(parents=True)
         if not Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).exists():
+            logger.info(f"Creating config file at {cls.DATAMAPS_LIBRARY_CONFIG_FILE}.")
             Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
         cls.config_parser.read(cls.DATAMAPS_LIBRARY_CONFIG_FILE)
 
@@ -69,6 +81,16 @@ class Config:
         except TypeError:
             raise TypeError("Unable to detect operating system")
         if not input_dir.exists():
+            logger.warning(f"Required input directory does not exist.")
+            logger.info(f"Creating input directory.")
             input_dir.mkdir(parents=True)
+            proceed = False
         if not output_dir.exists():
+            logger.warning(f"Required output directory does not exist.")
+            logger.info(f"Creating output directory.")
             output_dir.mkdir(parents=True)
+            proceed = False
+        if proceed is False:
+            return False
+        else:
+            return True

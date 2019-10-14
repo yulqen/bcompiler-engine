@@ -24,7 +24,10 @@ def report_data_validations_in_file(file: Path) -> List[str]:
     :param file:
     :type Path:
     """
-    wb = load_workbook(file)
+    try:
+        wb = load_workbook(file)
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Cannot find {file}")
     output = []
     sheets = wb.get_sheet_names()
     for s in sheets:
@@ -66,5 +69,8 @@ def import_and_create_master(echo_funcs):
     dm_repo = InMemorySingleDatamapRepository(str(dm))
     output_repo = MasterOutputRepository
     uc = CreateMasterUseCase(dm_repo, tmpl_repo, output_repo)
-    uc.execute(master_fn)
+    try:
+        uc.execute(master_fn)
+    except FileNotFoundError as e:
+        raise FileNotFoundError(e)
     logger.info("{} successfully created in {}\n".format(master_fn, Path(Config.PLATFORM_DOCS_DIR / "output")))
