@@ -63,7 +63,7 @@ class MultipleTemplatesWriteRepo:
             )
         except FileNotFoundError as e:
             raise FileNotFoundError(f"Cannot find file {e.filename}. Do you have "
-                                    "file set correctly in config file?")
+                                    "file set correctly in config file, or is file missing?")
 
         for file_data in data:
             file_name = file_data[0].file_name
