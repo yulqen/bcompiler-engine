@@ -39,8 +39,13 @@ class MultipleTemplatesWriteRepo:
     def _populate_workbook(
             self, workbook: Workbook, file_data: MASTER_COL_DATA
     ) -> Workbook:
+        _output_tml = "Key: {} missing a 'sheet' value in datamap. Check your datamap. Data MAY not export."
         for cell in file_data:
-            _sheet = workbook.get_sheet_by_name(cell.sheet)
+            try:
+                _sheet = workbook.get_sheet_by_name(cell.sheet)
+            except KeyError:
+                logger.warning(_output_tml.format(cell.key))
+                continue
             try:
                 _sheet[cell.cellref].value = cell.value
             except AttributeError:

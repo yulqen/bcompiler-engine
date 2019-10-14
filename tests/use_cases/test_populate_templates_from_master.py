@@ -116,7 +116,9 @@ def test_config_has_correct_files(mock_config):
     assert "datamap.csv" in datamap.parts
 
 
-def test_exception_when_given_master_with_empty_col_a(mock_config, datamap, master_no_col_a, blank_template):
+def test_exception_when_given_master_with_empty_col_a(
+    mock_config, datamap, master_no_col_a, blank_template
+):
     """Test for handling cells in Col A which are empty - and return None."""
     mock_config.initialise()
     output_repo = MultipleTemplatesWriteRepo(blank_template)
@@ -144,3 +146,21 @@ def test_output_gateway(mock_config, datamap, master, blank_template):
     assert an_sheet["F17"].value == 20.303
     # note that dates come out of spreadsheets as datetime objects
     assert an_sheet["H39"].value == datetime.datetime(2024, 2, 1, 0, 0)
+
+
+def test_export_continues_with_missing_sheet_in_datamap(
+    mock_config, master, datamap_missing_fields, blank_template
+):
+    """When an export takes place using a datamap with missing sheet names"""
+    mock_config.initialise()
+    output_repo = MultipleTemplatesWriteRepo(blank_template)
+    uc = WriteMasterToTemplates(
+        output_repo, datamap_missing_fields, master, blank_template
+    )
+    uc.execute()
+    result_file = mock_config.PLATFORM_DOCS_DIR / "output" / "Chutney Bridge.xlsm"
+    wb = load_workbook(result_file)
+    intro_sheet = wb["Introduction"]
+    assert intro_sheet["C9"].value is None
+    assert intro_sheet["C11"].value is None
+    assert intro_sheet["C10"].value == "Satellite Corp"
