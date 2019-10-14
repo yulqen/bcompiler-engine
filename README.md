@@ -9,7 +9,7 @@ A library that allows for controlled extraction and insertion of data to and
 from spreadsheets used for collecting data. Part of a more modular overall
 design, `bcompiler-engine` focuses on speed, simplicity and data validation. It
 forms the primary back-end to
-[datamaps](https://datamaps.twentyfoursoftware.com) software, and will
+[datamaps](https://datamaps.twentyfoursoftware.com), and will
 eventually have a suitable API making it easy for anyone designing an
 application to use the datamaps philosophy - more on that coming soon.
 
