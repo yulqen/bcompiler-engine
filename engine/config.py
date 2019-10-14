@@ -54,8 +54,7 @@ class Config:
     ).format(PLATFORM_DOCS_DIR)
 
     @classmethod
-    def initialise(cls) -> bool:
-        proceed = True
+    def initialise(cls) -> None:
         if not Path(cls.DATAMAPS_LIBRARY_DATA_DIR).exists():
             logger.info(f"Creating data directory at {cls.DATAMAPS_LIBRARY_DATA_DIR}.")
             Path(cls.DATAMAPS_LIBRARY_DATA_DIR).mkdir(parents=True)
@@ -84,13 +83,7 @@ class Config:
             logger.warning(f"Required input directory does not exist.")
             logger.info(f"Creating input directory.")
             input_dir.mkdir(parents=True)
-            proceed = False
         if not output_dir.exists():
             logger.warning(f"Required output directory does not exist.")
             logger.info(f"Creating output directory.")
             output_dir.mkdir(parents=True)
-            proceed = False
-        if proceed is False:
-            return False
-        else:
-            return True
