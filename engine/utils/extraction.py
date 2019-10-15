@@ -16,11 +16,12 @@ from openpyxl import load_workbook
 from openpyxl.worksheet.cell_range import MultiCellRange
 from openpyxl.worksheet.worksheet import Worksheet
 
-from engine.domain.datamap import (DatamapFile, DatamapLine,
-                                   DatamapLineValueType)
+from engine.domain.datamap import DatamapFile, DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
-from engine.exceptions import (MalFormedCSVHeaderException,
-                               NoApplicableSheetsInTemplateFiles)
+from engine.exceptions import (
+    MalFormedCSVHeaderException,
+    NoApplicableSheetsInTemplateFiles,
+)
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
 
 FILE_DATA = Dict[str, Union[str, Dict[str, Dict[str, str]]]]
@@ -44,26 +45,32 @@ def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
     with DatamapFile(dm_file) as datamap_file:
         reader = csv.DictReader(datamap_file)
         for line in reader:
-            if headers["type"] is None:
-                data.append(
-                    DatamapLine(
-                        key=_clean(line[headers["key"]]),
-                        sheet=_clean(line[headers["sheet"]]),
-                        cellref=_clean(line[headers["cellref"]], is_cellref=True),
-                        data_type=None,
-                        filename=str(dm_file),
+            try:
+                if headers["type"] is None:
+                    data.append(
+                        DatamapLine(
+                            key=_clean(line[headers["key"]]),
+                            sheet=_clean(line[headers["sheet"]]),
+                            cellref=_clean(line[headers["cellref"]], is_cellref=True),
+                            data_type=None,
+                            filename=str(dm_file),
+                        )
                     )
-                )
-            else:
-                data.append(
-                    DatamapLine(
-                        key=_clean(line[headers["key"]]),
-                        sheet=_clean(line[headers["sheet"]]),
-                        cellref=_clean(line[headers["cellref"]], is_cellref=True),
-                        data_type=_clean(line[headers["type"]]),
-                        filename=str(dm_file),
+                else:
+                    data.append(
+                        DatamapLine(
+                            key=_clean(line[headers["key"]]),
+                            sheet=_clean(line[headers["sheet"]]),
+                            cellref=_clean(line[headers["cellref"]], is_cellref=True),
+                            data_type=_clean(line[headers["type"]]),
+                            filename=str(dm_file),
+                        )
                     )
-                )
+            except TypeError as e:
+                if "Can only clean a string." in e.args:
+                    logger.warning(
+                        f"{line[headers['key']]} line in datamap is malformed. Skipping. Check your datamap!"
+                    )
     return data
 
 

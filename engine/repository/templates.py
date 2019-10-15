@@ -48,6 +48,10 @@ class MultipleTemplatesWriteRepo:
                 continue
             try:
                 _sheet[cell.cellref].value = cell.value
+            # if the cellref is missing it will be "" and throw IndexError....
+            except IndexError:
+                logger.warning(f"No cellref in datamap for key: {cell.key}. Cannot export this cell.")
+                continue
             except AttributeError:
                 raise AttributeError(
                     "PROBLEM: Object->{} Current Val->{} Attempted Val->{}".format(
