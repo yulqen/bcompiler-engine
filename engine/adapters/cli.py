@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 
 def report_data_validations_in_file(file: Path) -> List[str]:
     """Take a file and report details of data validations.
+
     :param file:
     :type Path:
     """
@@ -52,7 +53,6 @@ def import_and_create_master(echo_funcs):
 
     Create master spreadsheet immediately.
     """
-
     #patch ECHO_FUNC for datamap creation - hack!
     setattr(engine.use_cases.parsing, "ECHO_FUNC_GREEN", echo_funcs["click_echo_green"])
     setattr(engine.use_cases.parsing, "ECHO_FUNC_RED", echo_funcs["click_echo_red"])
