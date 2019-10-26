@@ -2,7 +2,7 @@ import pytest
 
 from engine.domain.datamap import DatamapLineValueType
 from engine.exceptions import (MalFormedCSVHeaderException,
-                               MissingSheetFieldError)
+                               MissingCellKeyError, MissingSheetFieldError)
 from engine.utils.extraction import (_get_cell_data, datamap_reader,
                                      template_reader)
 
@@ -111,6 +111,12 @@ def test_datamap_with_three_headers(datamap_three_headers):
 def test_datamap_missing_sheet_fields(datamap_missing_fields):
     """We do not want the datamap read to pass if a line has a missing sheet field.
     """
-    # TODO this is contrary to the test currently at engine.utils.extraction.datamap_reader()
     with pytest.raises(MissingSheetFieldError):
         data = datamap_reader(datamap_missing_fields) # noqa
+
+
+def test_datamap_missing_key_fields(datamap_missing_key_fields):
+    """We do not want the datamap read to pass if a line has a missing key field.
+    """
+    with pytest.raises(MissingCellKeyError):
+        data = datamap_reader(datamap_missing_key_fields) # noqa

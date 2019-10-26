@@ -6,6 +6,7 @@ import hashlib
 import json
 import logging
 import os
+from collections import OrderedDict
 from dataclasses import dataclass
 from itertools import groupby
 from pathlib import Path
@@ -20,7 +21,7 @@ from engine.domain.datamap import (DatamapFile, DatamapLine,
                                    DatamapLineValueType)
 from engine.domain.template import TemplateCell
 from engine.exceptions import (MalFormedCSVHeaderException,
-                               MissingSheetFieldError,
+                               MissingCellKeyError, MissingSheetFieldError,
                                NoApplicableSheetsInTemplateFiles)
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
 
@@ -37,6 +38,29 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def _dml_line_check(line: OrderedDict, headers: Dict[str, str]) -> None:
+    """Checks a line from csv.DictReader and raises exception if isn't complete.
+
+    Otherwise passes.
+    """
+    # Missing sheet field check
+    # if we have a blank sheet field
+    missing_fields = [x[0] for x in line.items() if x[1] == ""]
+    if headers.get("sheet") and headers.get("sheet") in missing_fields:
+        raise MissingSheetFieldError(
+            f"Line whose key is {line['cell_key']} is missing a sheet field. Cannot proceed."
+            f" Please fix datamap."
+        )
+    # Missing key field check
+    # if we have a blank key field
+    if headers.get("key") and headers.get("key") in missing_fields:
+        raise MissingCellKeyError(
+            f"Line missing a key field. Contains sheet {line['template_sheet']} and cell reference {line['cellreference']}. "
+            f"Cannot proceed."
+            f" Please fix datamap."
+        )
+
+
 def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
     "Given a datamap csv file, returns a list of DatamapLine objects."
     headers = datamap_check(dm_file)
@@ -46,11 +70,8 @@ def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
     with DatamapFile(dm_file) as datamap_file:
         reader = csv.DictReader(datamap_file)
         for line in reader:
-            # if we have a blank sheet field
-            missing_fields = [x[0] for x in line.items() if x[1] == ""]
-            if headers['sheet'] in missing_fields:
-                raise MissingSheetFieldError(f"Line whose key is {line['cell_key']} is missing a sheet field. Cannot proceed."
-                                             f" Please fix datamap.")
+            # if dml is correct, this passes silently
+            _dml_line_check(line, headers)
             try:
                 if headers["type"] is None:
                     data.append(

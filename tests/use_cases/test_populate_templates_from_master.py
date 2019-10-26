@@ -10,6 +10,7 @@ import pytest
 from openpyxl import load_workbook
 
 from engine.adapters.cli import write_master_to_templates
+from engine.exceptions import MissingSheetFieldError
 from engine.repository.templates import MultipleTemplatesWriteRepo
 from engine.use_cases.output import WriteMasterToTemplates
 from engine.utils.extraction import (ValidationReportItem,
@@ -157,10 +158,5 @@ def test_export_continues_with_missing_sheet_in_datamap(
     uc = WriteMasterToTemplates(
         output_repo, datamap_missing_fields, master, blank_template
     )
-    uc.execute()
-    result_file = mock_config.PLATFORM_DOCS_DIR / "output" / "Chutney Bridge.xlsm"
-    wb = load_workbook(result_file)
-    intro_sheet = wb["Introduction"]
-    assert intro_sheet["C9"].value is None
-    assert intro_sheet["C11"].value is None
-    assert intro_sheet["C10"].value == "Satellite Corp"
+    with pytest.raises(MissingSheetFieldError):
+        uc.execute()

@@ -12,3 +12,7 @@ class NoApplicableSheetsInTemplateFiles(Exception):
 
 class RemoveFileWithNoSheetRequiredByDatamap(Exception):
     pass
+
+
+class MissingCellKeyError(Exception):
+    pass

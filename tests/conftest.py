@@ -148,6 +148,12 @@ def datamap_missing_fields() -> Path:
 
 
 @pytest.fixture
+def datamap_missing_key_fields() -> Path:
+    here = os.path.abspath(os.curdir)
+    return Path(os.path.join(here, "tests/resources/datamap_missing_key_fields.csv"))
+
+
+@pytest.fixture
 def datamap_moderately_bad_headers():
     here = os.path.abspath(os.curdir)
     return os.path.join(here, "tests/resources/datamap_moderately_bad_headers.csv")
