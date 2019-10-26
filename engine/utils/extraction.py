@@ -16,12 +16,12 @@ from openpyxl import load_workbook
 from openpyxl.worksheet.cell_range import MultiCellRange
 from openpyxl.worksheet.worksheet import Worksheet
 
-from engine.domain.datamap import DatamapFile, DatamapLine, DatamapLineValueType
+from engine.domain.datamap import (DatamapFile, DatamapLine,
+                                   DatamapLineValueType)
 from engine.domain.template import TemplateCell
-from engine.exceptions import (
-    MalFormedCSVHeaderException,
-    NoApplicableSheetsInTemplateFiles,
-)
+from engine.exceptions import (MalFormedCSVHeaderException,
+                               MissingSheetFieldError,
+                               NoApplicableSheetsInTemplateFiles)
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
 
 FILE_DATA = Dict[str, Union[str, Dict[str, Dict[str, str]]]]
@@ -42,9 +42,15 @@ def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
     headers = datamap_check(dm_file)
     data = []
     logger.info(f"Reading datamap {dm_file}")
+    logger.info(f"Checking that datamap is valid.")
     with DatamapFile(dm_file) as datamap_file:
         reader = csv.DictReader(datamap_file)
         for line in reader:
+            # if we have a blank sheet field
+            missing_fields = [x[0] for x in line.items() if x[1] == ""]
+            if headers['sheet'] in missing_fields:
+                raise MissingSheetFieldError(f"Line whose key is {line['cell_key']} is missing a sheet field. Cannot proceed."
+                                             f" Please fix datamap.")
             try:
                 if headers["type"] is None:
                     data.append(

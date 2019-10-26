@@ -1,7 +1,8 @@
 import pytest
 
 from engine.domain.datamap import DatamapLineValueType
-from engine.exceptions import MalFormedCSVHeaderException
+from engine.exceptions import (MalFormedCSVHeaderException,
+                               MissingSheetFieldError)
 from engine.utils.extraction import (_get_cell_data, datamap_reader,
                                      template_reader)
 
@@ -81,7 +82,8 @@ def test_datamap_with_only_single_header_raises_exception(datamap_single_header)
         data = datamap_reader(datamap_single_header)  # noqa
     msg = excinfo.value.args[0]
     assert (
-        msg == "Datamap contains only one header - need at least three to proceed. Quitting."
+        msg
+        == "Datamap contains only one header - need at least three to proceed. Quitting."
     )
 
 
@@ -90,7 +92,8 @@ def test_datamap_with_two_headers(datamap_two_headers):
         data = datamap_reader(datamap_two_headers)  # noqa
     msg = excinfo.value.args[0]
     assert (
-        msg == "Datamap contains only two headers - need at least three to proceed. Quitting."
+        msg
+        == "Datamap contains only two headers - need at least three to proceed. Quitting."
     )
 
 
@@ -103,3 +106,11 @@ def test_datamap_with_three_headers(datamap_three_headers):
     assert data[14].sheet == "Introduction"
     assert data[14].cellref == "C35"
     assert data[14].data_type is None
+
+
+def test_datamap_missing_sheet_fields(datamap_missing_fields):
+    """We do not want the datamap read to pass if a line has a missing sheet field.
+    """
+    # TODO this is contrary to the test currently at engine.utils.extraction.datamap_reader()
+    with pytest.raises(MissingSheetFieldError):
+        data = datamap_reader(datamap_missing_fields) # noqa

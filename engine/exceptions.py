@@ -1,3 +1,7 @@
+class MissingSheetFieldError(Exception):
+    pass
+
+
 class MalFormedCSVHeaderException(Exception):
     pass
 
