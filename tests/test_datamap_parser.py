@@ -19,7 +19,6 @@ TEXT = DatamapLineValueType.TEXT
     "datamap_note_pad_utf8.csv",
     "datamap_UTF8.csv",
 ], indirect=True)
-# TODO continue with this test
 def test_datamap_reader_unsupported_encodings(datamap_csv_unsupported_encodings):
     with pytest.raises(DatamapFileEncodingError):
         _ = datamap_reader(datamap_csv_unsupported_encodings)
