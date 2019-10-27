@@ -142,7 +142,13 @@ def datamap() -> Path:
 
 
 @pytest.fixture
-def datamap_csv_all_encodings(request) -> Path:
+def datamap_csv_unsupported_encodings(request) -> Path:
+    here = os.path.abspath(os.curdir)
+    return Path(Path(here) / "tests/resources/datamaps_all_encodings" / request.param)
+
+
+@pytest.fixture
+def datamap_csv_supported_encodings(request) -> Path:
     here = os.path.abspath(os.curdir)
     return Path(Path(here) / "tests/resources/datamaps_all_encodings" / request.param)
 

@@ -16,3 +16,7 @@ class RemoveFileWithNoSheetRequiredByDatamap(Exception):
 
 class MissingCellKeyError(Exception):
     pass
+
+
+class DatamapFileEncodingError(Exception):
+    pass

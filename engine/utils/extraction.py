@@ -20,7 +20,8 @@ from openpyxl.worksheet.worksheet import Worksheet
 from engine.domain.datamap import (DatamapFile, DatamapLine,
                                    DatamapLineValueType)
 from engine.domain.template import TemplateCell
-from engine.exceptions import (MalFormedCSVHeaderException,
+from engine.exceptions import (DatamapFileEncodingError,
+                               MalFormedCSVHeaderException,
                                MissingCellKeyError, MissingSheetFieldError,
                                NoApplicableSheetsInTemplateFiles)
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
@@ -365,9 +366,15 @@ def datamap_check(dm_file):
         # initial check - have we got enough headers? If not - raise exception
         top_row = next(datamap_file).rstrip().split(",")
         if len(top_row) == 1:
-            raise MalFormedCSVHeaderException(
-                "Datamap contains only one header - need at least three to proceed. Quitting."
-            )
+            # test for first char being ascii - if not, likely wrong encoding
+            breakpoint()
+            if not top_row[0][0].isascii():
+                raise DatamapFileEncodingError(f"Incorrect encoding of datamap file. Please ensure "
+                                               f"it is saved in Excel using CSV (Comma delimited) type.")
+            else:
+                raise MalFormedCSVHeaderException(
+                    "Datamap contains only one header - need at least three to proceed. Quitting."
+                )
         if len(top_row) == 2:
             raise MalFormedCSVHeaderException(
                 "Datamap contains only two headers - need at least three to proceed. Quitting."
