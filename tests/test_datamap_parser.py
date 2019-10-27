@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+
 import pytest
 
 from engine.domain.datamap import DatamapLineValueType
@@ -11,12 +14,26 @@ DATE = DatamapLineValueType.DATE
 TEXT = DatamapLineValueType.TEXT
 
 
-def test_datamap_reader(datamap):
-    data = datamap_reader(datamap)
+
+
+@pytest.mark.parametrize("datamap_csv_all_encodings", [
+    "datamap_comma_delimited.csv",
+    "datamap_macintosh.csv",
+    "datamap_msdos.csv",
+    "datamap_unicode_text.csv",
+    "datamap_note_pad_ansi.csv",
+    "datamap_note_pad_ansi.txt",
+    "datamap_note_pad_unicode.csv",
+    "datamap_note_pad_unicode_big_endian.csv",
+    "datamap_note_pad_utf8.csv",
+    "datamap_UTF8.csv",
+], indirect=True)
+def test_datamap_reader(datamap_csv_all_encodings):
+    data = datamap_reader(datamap_csv_all_encodings)
     assert data[0].key == "Project/Programme Name"
     assert data[0].sheet == "Introduction"
     assert data[0].cellref == "C11"
-    assert data[0].filename == str(datamap)
+    assert data[0].filename == str(datamap_csv_all_encodings)
 
 
 def test_bad_spacing_in_datamap(datamap):

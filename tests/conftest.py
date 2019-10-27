@@ -2,7 +2,7 @@ import os
 import shutil
 import tempfile
 from pathlib import Path
-from typing import List
+from typing import Generator, List
 
 import pytest
 
@@ -114,7 +114,7 @@ def bad_sheet_template() -> Path:
 
 
 @pytest.fixture
-def pop_template() -> Path:
+def pop_template() -> Generator:
     pth = Path(tempfile.gettempdir()) / "Documents" / "datamaps"
     yield pth
     shutil.rmtree(pth)
@@ -139,6 +139,12 @@ def blank_template() -> Path:
 def datamap() -> Path:
     here = os.path.abspath(os.curdir)
     return Path(os.path.join(here, "tests/resources/datamap.csv"))
+
+
+@pytest.fixture
+def datamap_csv_all_encodings(request) -> Path:
+    here = os.path.abspath(os.curdir)
+    return Path(Path(here) / "tests/resources/datamaps_all_encodings" / request.param)
 
 
 @pytest.fixture
