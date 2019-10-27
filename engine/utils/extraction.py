@@ -367,7 +367,6 @@ def datamap_check(dm_file):
         top_row = next(datamap_file).rstrip().split(",")
         if len(top_row) == 1:
             # test for first char being ascii - if not, likely wrong encoding
-            breakpoint()
             if not top_row[0][0].isascii():
                 raise DatamapFileEncodingError(f"Incorrect encoding of datamap file. Please ensure "
                                                f"it is saved in Excel using CSV (Comma delimited) type.")
@@ -379,6 +378,9 @@ def datamap_check(dm_file):
             raise MalFormedCSVHeaderException(
                 "Datamap contains only two headers - need at least three to proceed. Quitting."
             )
+        if not top_row[0][0].isascii():
+            raise DatamapFileEncodingError(f"Incorrect encoding of datamap file. Please ensure "
+                                           f"it is saved in Excel using CSV (Comma delimited) type.")
         if top_row[-1] not in _good_type:
             # test if we are using type column here
             headers.update(type=None)
