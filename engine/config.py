@@ -4,6 +4,7 @@ import platform
 import textwrap
 from configparser import ConfigParser
 from pathlib import Path
+from typing import Tuple
 
 from appdirs import user_config_dir, user_data_dir
 
@@ -87,3 +88,27 @@ class Config:
             logger.warning(f"Required output directory does not exist.")
             logger.info(f"Creating output directory.")
             output_dir.mkdir(parents=True)
+
+
+def check_for_blank(config: Config) -> Tuple[bool, str]:
+    """Checks for a blank template, named appropriately, in the Documents/input directory.
+
+    Config should be initialised before passing to this function.
+    """
+    blank = config.PLATFORM_DOCS_DIR / "input" / config.config_parser["DEFAULT"]["blank file name"]
+    if blank.exists():
+        return (True, blank.name)
+    else:
+        return (False, "")
+
+
+def check_for_datamap(config: Config) -> Tuple[bool, str]:
+    """Checks for a datamap file, named appropriately, in the Documents/input directory.
+
+    Config should be initialised before passing to this function.
+    """
+    dm = config.PLATFORM_DOCS_DIR / "input" / config.config_parser["DEFAULT"]["datamap file name"]
+    if dm.exists():
+        return (True, dm.name)
+    else:
+        return (False, "")
