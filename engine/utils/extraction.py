@@ -94,10 +94,12 @@ def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
                             filename=str(dm_file),
                         )
                     )
-            except TypeError as e:
-                if "Can only clean a string." in e.args:
+            except AttributeError as e:
+                if "Cannot clean value other than a string here." in e.args:
                     logger.warning(
-                        f"{line[headers['key']]} line in datamap is malformed. Skipping. Check your datamap!"
+                        f"{line[headers['key']]} line in datamap may be missing a key field, or"
+                        f" the line is formed unexpectedly. This line will be skipped during import/export."
+                        f" Check your datamap!"
                     )
     return data
 
@@ -266,9 +268,10 @@ def _get_cell_data(filepath: Path, data, sheet_name: str, cellref: str):
 
 def _clean(target_str: str, is_cellref: bool = False) -> str:
     """Rids a string of its most common problems: spacing, capitalisation,etc."""
-    if not isinstance(target_str, str):
-        raise TypeError("Can only clean a string.")
-    output_str = target_str.lstrip().rstrip()
+    try:
+        output_str = target_str.lstrip().rstrip()
+    except AttributeError:
+        raise AttributeError("Cannot clean value other than a string here.")
     if is_cellref:
         output_str = output_str.upper()
     return output_str

@@ -14,7 +14,7 @@ from engine.repository.templates import (InMemoryPopulatedTemplatesRepository,
                                          MultipleTemplatesWriteRepo)
 from engine.use_cases.output import WriteMasterToTemplates
 from engine.use_cases.parsing import CreateMasterUseCase
-from engine.utils.extraction import data_validation_report, datamap_check
+from engine.utils.extraction import data_validation_report, datamap_reader
 
 logging.basicConfig(
     level=logging.INFO,
@@ -44,9 +44,8 @@ def check_aux_files(config: Config):
             f"{config.config_parser['DEFAULT']['datamap file name']} in input directory."
         )
         sys.exit(0)
-    # TODO: instead of datamap_check - we should use datamap_reader instead!
-    if datamap_check("/home/lemon/Documents/datamaps/input/datamap.csv"):
-        logger.info("Datamap file passes tests. Ok to proceed.")
+    if datamap_reader("/home/lemon/Documents/datamaps/input/datamap.csv"):
+        logger.info("Datamap file passes tests. Check any WARNING messages. Ok to proceed.")
     else:
         logger.critical("Datamap tests failed")
 
