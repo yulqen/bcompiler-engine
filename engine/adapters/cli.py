@@ -44,11 +44,12 @@ def check_aux_files(config: Config):
             f"{config.config_parser['DEFAULT']['datamap file name']} in input directory."
         )
         sys.exit(0)
-    if datamap_reader("/home/lemon/Documents/datamaps/input/datamap.csv"):
+    # if we get this far, there is a datamap file, so we can run this
+    dm_name = config.config_parser["DEFAULT"]["datamap file name"]
+    if datamap_reader(config.PLATFORM_DOCS_DIR / "input" / dm_name):
         logger.info("Datamap file passes tests. Check any WARNING messages. Ok to proceed.")
     else:
         logger.critical("Datamap tests failed")
-
 
 
 def report_data_validations_in_file(file: Path) -> List[str]:
