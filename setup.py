@@ -22,6 +22,6 @@ setuptools.setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         "Environment :: Console",
-        "License :: MIT License",
+        "License :: OSI Approved :: MIT License",
     ]
 )
