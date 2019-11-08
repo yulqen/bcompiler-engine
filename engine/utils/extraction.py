@@ -22,7 +22,8 @@ from engine.domain.datamap import (DatamapFile, DatamapLine,
 from engine.domain.template import TemplateCell
 from engine.exceptions import (DatamapFileEncodingError,
                                MalFormedCSVHeaderException,
-                               MissingCellKeyError, MissingSheetFieldError,
+                               MissingCellKeyError, MissingLineError,
+                               MissingSheetFieldError,
                                NoApplicableSheetsInTemplateFiles)
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
 
@@ -47,14 +48,18 @@ def _dml_line_check(line: OrderedDict, headers: Dict[str, str]) -> None:
     # Missing sheet field check
     # if we have a blank sheet field
     missing_fields = [x[0] for x in line.items() if x[1] == ""]
-    if headers.get("sheet") and headers.get("sheet") in missing_fields:
+    if (
+        headers.get("key") in missing_fields
+        and headers.get("sheet") in missing_fields
+        and headers.get("cellref") in missing_fields
+    ):
+        raise MissingLineError("Datamap contains a missing line. Please fix datamap before proceeding.")
+    if headers.get("sheet") in missing_fields:
         raise MissingSheetFieldError(
             f"Line whose key is {line['cell_key']} is missing a sheet field. Cannot proceed."
             f" Please fix datamap."
         )
-    # Missing key field check
-    # if we have a blank key field
-    if headers.get("key") and headers.get("key") in missing_fields:
+    if headers.get("key") in missing_fields:
         raise MissingCellKeyError(
             f"Line missing a key field. Contains sheet {line['template_sheet']} and cell reference {line['cellreference']}. "
             f"Cannot proceed."
@@ -371,8 +376,10 @@ def datamap_check(dm_file):
         if len(top_row) == 1:
             # test for first char being ascii - if not, likely wrong encoding
             if not top_row[0][0].isascii():
-                raise DatamapFileEncodingError(f"Incorrect encoding of datamap file. Please ensure "
-                                               f"it is saved in Excel using CSV (Comma delimited) type.")
+                raise DatamapFileEncodingError(
+                    f"Incorrect encoding of datamap file. Please ensure "
+                    f"it is saved in Excel using CSV (Comma delimited) type."
+                )
             else:
                 raise MalFormedCSVHeaderException(
                     "Datamap contains only one header - need at least three to proceed. Quitting."
@@ -382,8 +389,10 @@ def datamap_check(dm_file):
                 "Datamap contains only two headers - need at least three to proceed. Quitting."
             )
         if not top_row[0][0].isascii():
-            raise DatamapFileEncodingError(f"Incorrect encoding of datamap file. Please ensure "
-                                           f"it is saved in Excel using CSV (Comma delimited) type.")
+            raise DatamapFileEncodingError(
+                f"Incorrect encoding of datamap file. Please ensure "
+                f"it is saved in Excel using CSV (Comma delimited) type."
+            )
         if top_row[-1] not in _good_type:
             # test if we are using type column here
             headers.update(type=None)

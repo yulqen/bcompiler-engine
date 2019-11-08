@@ -20,3 +20,7 @@ class MissingCellKeyError(Exception):
 
 class DatamapFileEncodingError(Exception):
     pass
+
+
+class MissingLineError(Exception):
+    pass
