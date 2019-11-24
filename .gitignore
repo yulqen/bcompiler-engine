@@ -7,3 +7,4 @@ prof/*
 tags
 skip-covered/
 .idea/
+dist/
