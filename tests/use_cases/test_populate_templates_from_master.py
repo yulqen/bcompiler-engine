@@ -149,6 +149,26 @@ def test_output_gateway(mock_config, datamap, master, blank_template):
     assert an_sheet["H39"].value == datetime.datetime(2024, 2, 1, 0, 0)
 
 
+def test_output_gateway_reduced_datamap(mock_config, datamap_reduced, master, blank_template):
+    """
+    The idea here is that the resulting master should work even if some lines
+    in the  datamap are removed or hidden. In other words, the export does not
+    depend on the datamap and the master's column A matching.
+    """
+    mock_config.initialise()
+    output_repo = MultipleTemplatesWriteRepo(blank_template)
+    uc = WriteMasterToTemplates(output_repo, datamap_reduced, master, blank_template)
+    uc.execute()
+    result_file = mock_config.PLATFORM_DOCS_DIR / "output" / "Chutney Bridge.xlsm"
+    wb = load_workbook(result_file)
+    intro_sheet = wb["Introduction"]
+    assert intro_sheet["C10"].value == "Satellite Corp"
+    assert intro_sheet["C11"].value == "Chutney Bridge Ltd"
+    assert intro_sheet["C13"].value == 1334
+    # note that dates come out of spreadsheets as datetime objects
+    assert intro_sheet["C17"].value == datetime.datetime(2012, 1, 1, 0, 0)
+
+
 def test_export_continues_with_missing_sheet_in_datamap(
     mock_config, master, datamap_missing_fields, blank_template
 ):

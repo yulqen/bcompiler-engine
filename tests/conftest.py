@@ -142,6 +142,12 @@ def datamap() -> Path:
 
 
 @pytest.fixture
+def datamap_reduced() -> Path:
+    here = os.path.abspath(os.curdir)
+    return Path(os.path.join(here, "tests/resources/datamap_reduced.csv"))
+
+
+@pytest.fixture
 def datamap_csv_unsupported_encodings(request) -> Path:
     here = os.path.abspath(os.curdir)
     return Path(Path(here) / "tests/resources/datamaps_all_encodings" / request.param)

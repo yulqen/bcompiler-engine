@@ -17,7 +17,11 @@ from engine.use_cases.typing import (MASTER_COL_DATA, MASTER_DATA_FOR_FILE,
 warnings.filterwarnings("ignore", ".*Conditional Formatting*.")
 warnings.filterwarnings("ignore", ".*Sparkline Group*.")
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(levelname)s - %(message)s", datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s: %(levelname)s - %(message)s",
+    datefmt="%d-%b-%y %H:%M:%S",
+)
 logger = logging.getLogger(__name__)
 
 
@@ -70,21 +74,31 @@ class WriteMasterToTemplates:
             # You shall not pass if this is a problem
             if _missing_keys:
                 for m in _missing_keys:
-                    logger.critical(f"Key {m} in the datamap but not in the master. Not continuing.")
-                raise RuntimeError("Not continuing. Ensure all keys from datamap are in the master.")
+                    logger.critical(
+                        f"Key {m} in the datamap but not in the master. Not continuing."
+                    )
+                raise RuntimeError(
+                    "Not continuing. Ensure all keys from datamap are in the master."
+                )
+        breakpoint()
+        cola = [x.value for x in list(self._master_sheet.columns)[0]][1:]
         for col in list(self._master_sheet.columns)[1:]:
+            tups = []
             file_name = col[0].value.split(".")[0]
-            x = zip(self._dml_line_tup, col[1:])
-            tups: MASTER_COL_DATA = [
-                ColData(
-                    key=item[0][0],
-                    sheet=item[0][1],
-                    cellref=item[0][2],
-                    value=item[1].value,
+            for i, key in enumerate(cola, start=1):
+                key = key.strip()
+                try:
+                    sheet = [dml[1] for dml in self._dml_line_tup if dml[0] == key][0]
+                except IndexError:
+                    continue
+                cd = ColData(
+                    key=key,
+                    sheet=sheet,
+                    cellref=[dml[2] for dml in self._dml_line_tup if dml[0] == key][0],
+                    value=col[i].value,
                     file_name=file_name,
                 )
-                for item in x
-            ]
+                tups.append(cd)
             master_data.append(tups)
 
         self.output_repo.write(master_data, from_json=False)
