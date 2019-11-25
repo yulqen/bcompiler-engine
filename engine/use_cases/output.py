@@ -84,6 +84,7 @@ class WriteMasterToTemplates:
         for col in list(self._master_sheet.columns)[1:]:
             tups = []
             file_name = col[0].value.split(".")[0]
+            logger.info(f"Extracting data for {file_name} from {self._master_path}")
             for i, key in enumerate(cola, start=1):
                 key = key.strip()
                 try:
