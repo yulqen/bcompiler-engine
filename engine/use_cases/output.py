@@ -3,6 +3,7 @@ Use cases related to writing data to an output repository.
 """
 
 import logging
+import string
 import warnings
 from pathlib import Path
 from typing import List
@@ -83,7 +84,18 @@ class WriteMasterToTemplates:
         cola = [x.value for x in list(self._master_sheet.columns)[0]][1:]
         for col in list(self._master_sheet.columns)[1:]:
             tups = []
-            file_name = col[0].value.split(".")[0]
+            # temp fix for https://github.com/hammerheadlemon/datamaps/issues/5
+            try:
+                file_name = col[0].value.split(".")[0]
+            except AttributeError:
+                _col_des = string.ascii_uppercase[col[0].column - 1]
+                _row_des = str(col[0].row)
+                _cell_coords = "".join([_col_des, _row_des])
+                logger.warning(
+                    f"Cell {_cell_coords} value is empty. Expected a value here. Likely error in master causing column "
+                    f"boundary to be overrun. Continuing, but resulting file may be unstable. Copy your master data to a new file and rerun.")
+                continue
+            # end of temp fix
             logger.info(f"Extracting data for {file_name} from {self._master_path}")
             for i, key in enumerate(cola, start=1):
                 key = key.strip()
