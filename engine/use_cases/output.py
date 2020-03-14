@@ -92,9 +92,10 @@ class WriteMasterToTemplates:
                 _row_des = str(col[0].row)
                 _cell_coords = "".join([_col_des, _row_des])
                 logger.warning(
-                    f"Cell {_cell_coords} value is empty. Expected a value here. Likely error in master causing column "
-                    f"boundary to be overrun. Continuing, but resulting file may be unstable. Copy your master data to a new file and rerun.")
-                continue
+                    f"Cell {_cell_coords} value is empty; require a value in this cell. Cell being empty "
+                    f"suggests a problem so not attempting to read more. You should copy your master data to a clean "
+                    f"file and rerun.")
+                break
             # end of temp fix
             logger.info(f"Extracting data for {file_name} from {self._master_path}")
             for i, key in enumerate(cola, start=1):
