@@ -15,7 +15,7 @@ from engine.use_cases.parsing import (ApplyDatamapToExtractionUseCase,
                                       CreateMasterUseCase,
                                       ParsePopulatedTemplatesUseCase,
                                       extract_from_multiple_xlsx_files)
-from engine.utils.extraction import _check_file_in_datafile, _get_xlsx_files
+from engine.utils.extraction import _check_file_in_datafile, get_xlsx_files
 
 
 def test_template_parser_use_case(resources):

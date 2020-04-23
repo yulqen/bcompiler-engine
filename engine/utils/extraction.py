@@ -49,9 +49,9 @@ def _dml_line_check(line: OrderedDict, headers: Dict[str, str]) -> None:
     # if we have a blank sheet field
     missing_fields = [x[0] for x in line.items() if x[1] == ""]
     if (
-        headers.get("key") in missing_fields
-        and headers.get("sheet") in missing_fields
-        and headers.get("cellref") in missing_fields
+            headers.get("key") in missing_fields
+            and headers.get("sheet") in missing_fields
+            and headers.get("cellref") in missing_fields
     ):
         raise MissingLineError("Datamap contains a missing line. Please fix datamap before proceeding.")
     if headers.get("sheet") in missing_fields:
@@ -127,7 +127,7 @@ class Check:
 
 
 def remove_failing_files(
-    lst_of_checks: List[Check], template_data: ALL_IMPORT_DATA
+        lst_of_checks: List[Check], template_data: ALL_IMPORT_DATA
 ) -> ALL_IMPORT_DATA:
     """Given a list of checks, identify files which contain CheckType.FAIL, then remove them from template_data.
 
@@ -157,7 +157,7 @@ def remove_failing_files(
 
 
 def check_datamap_sheets(
-    datamap_data: List[Dict[str, str]], template_data: ALL_IMPORT_DATA
+        datamap_data: List[Dict[str, str]], template_data: ALL_IMPORT_DATA
 ) -> List[Check]:
     "Parse data struct for each of datamap and all template data for sheet compliance."
     checks = []
@@ -247,15 +247,15 @@ def _check_file_in_datafile(spreadsheet_file: Path, data_file: Path) -> bool:
             )
 
 
-def _get_xlsx_files(directory: Path) -> List[Path]:
+def get_xlsx_files(directory: Path) -> List[Path]:
     """Return a list of Path objects for each xlsx file in directory, or raise an exception."""
     output = []
     if not os.path.isabs(directory):
         raise RuntimeError("Require absolute path here")
     for file_path in os.listdir(directory):
         if (
-            fnmatch.fnmatch(file_path, "*.xls[xm]")
-            and "blank_template" not in file_path
+                fnmatch.fnmatch(file_path, "*.xls[xm]")
+                and "blank_template" not in file_path
         ):
             output.append(Path(os.path.join(directory, file_path)))
     return output
@@ -409,7 +409,7 @@ def datamap_check(dm_file):
     if len(headers.keys()) >= 2:
         # final test - we don't want to proceed unless we have minimum headers
         if not all(
-            [x in list(headers.keys()) for x in ["key", "sheet", "cellref", "type"]]
+                [x in list(headers.keys()) for x in ["key", "sheet", "cellref", "type"]]
         ):
             raise MalFormedCSVHeaderException(
                 "Cannot proceed without required number of headers"
@@ -443,7 +443,7 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     except BadZipFile:
         logger.critical(
             f"Cannot open {template_file} due to file not conforming to expected format. "
-            f"Not contunuing. Remove file from input directory and try again."
+            f"Not continuing. Remove file from input directory and try again."
         )
         raise RuntimeError
     checksum: str = _hash_single_file(f_path)
