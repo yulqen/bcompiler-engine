@@ -12,7 +12,7 @@ from openpyxl import load_workbook
 
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.use_cases.parsing import ParseDatamapUseCase
-from engine.use_cases.typing import (MASTER_COL_DATA, MASTER_DATA_FOR_FILE,
+from engine.use_cases.typing import (MASTER_DATA_FOR_FILE,
                                      ColData)
 
 warnings.filterwarnings("ignore", ".*Conditional Formatting*.")
