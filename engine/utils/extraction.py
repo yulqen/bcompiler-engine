@@ -378,7 +378,7 @@ def datamap_check(dm_file):
             if not top_row[0][0].isascii():
                 raise DatamapFileEncodingError(
                     f"Incorrect encoding of datamap file. Please ensure "
-                    f"it is saved in Excel using CSV (Comma delimited) type."
+                    f"it is saved in Excel using CSV (Comma delimited) type - not CSV UTF-8 (Comma delimited) type."
                 )
             else:
                 raise MalFormedCSVHeaderException(
@@ -391,7 +391,7 @@ def datamap_check(dm_file):
         if not top_row[0][0].isascii():
             raise DatamapFileEncodingError(
                 f"Incorrect encoding of datamap file. Please ensure "
-                f"it is saved in Excel using CSV (Comma delimited) type."
+                f"it is saved in Excel using CSV (Comma delimited) type - not CSV UTF-8 (Comma delimited) type."
             )
         if top_row[-1] not in _good_type:
             # test if we are using type column here
