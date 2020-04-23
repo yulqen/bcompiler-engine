@@ -8,3 +8,12 @@ tags
 skip-covered/
 .idea/
 dist/
+**/.mypy_cache/*
+**/__pycache__/*
+.ropeproject
+.tox
+.coverage
+build/
+**/#*
+**/*.egg-info/*:wq
+bcompiler_engine.egg-info
