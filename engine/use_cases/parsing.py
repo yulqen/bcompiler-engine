@@ -63,7 +63,7 @@ class ParsePopulatedTemplatesUseCase:
 
 
 class ApplyDatamapToExtractionUseCase:
-    "Extract data from a bunch of spreadsheets, but filter based on a datamap."
+    """Extract data from a bunch of spreadsheets, but filter based on a datamap."""
 
     def __init__(self, datamap_repo, template_repo) -> None:
         self._datamap_repo = datamap_repo
@@ -75,7 +75,7 @@ class ApplyDatamapToExtractionUseCase:
         self._template_data_json: str = ""
 
     def _get_value_of_cell_referred_by_key(
-        self, filename: str, key: str, sheet: str
+            self, filename: str, key: str, sheet: str
     ) -> str:
         """Given a filename, a template_data json str, a datamap_data dict, key and sheet, returns
         the value in the spreadsheet at given datamap key.
@@ -112,7 +112,7 @@ class ApplyDatamapToExtractionUseCase:
         return output
 
     def _set_datamap_and_template_data(self) -> None:
-        "Does the work of creating the template_data and datamap_data attributes"
+        """Does the work of creating the template_data and datamap_data attributes"""
         t_uc = ParsePopulatedTemplatesUseCase(self._template_repo)
         d_uc = ParseDatamapUseCase(self._datamap_repo)
         self._datamap_data_json = d_uc.execute()
@@ -145,7 +145,8 @@ class ApplyDatamapToExtractionUseCase:
             raise
         except RemoveFileWithNoSheetRequiredByDatamap as e:
             logging.warning(
-                f"{e.args[0][0]} does not contain the sheets required by datamap (eg. {e.args[0][1]}). Not set to skip sheets so omitting from master."
+                f"{e.args[0][0]} does not contain the sheets required by datamap (eg. {e.args[0][1]}). Not set to "
+                f"skip sheets so omitting from master. "
             )
             raise
         # TODO - we have to do something when SKIP_MISSING_SHEETS is True here
@@ -212,7 +213,7 @@ class ParseDatamapUseCase:
 
 
 def extract_from_multiple_xlsx_files(xlsx_files) -> ALL_IMPORT_DATA:
-    "Extract raw data from list of paths to excel files. Return as complex dictionary."
+    """Extract raw data from list of paths to excel files. Return as complex dictionary."""
     data = {}
     with futures.ProcessPoolExecutor() as pool:
         for file in pool.map(template_reader, xlsx_files):
