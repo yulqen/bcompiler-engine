@@ -78,12 +78,15 @@ class WriteMasterToTemplates:
                     logger.critical(
                         f"Key {m} in the datamap but not in the master. Not continuing."
                     )
+                # TODO - Is it right that export will not run if there are keys in datamap not in the master?
+                #   https://github.com/hammerheadlemon/bcompiler-engine/issues/21
                 raise RuntimeError(
                     "Not continuing. Ensure all keys from datamap are in the master."
                 )
         cola = [x.value for x in list(self._master_sheet.columns)[0]][1:]
         for col in list(self._master_sheet.columns)[1:]:
             tups = []
+            # TODO - here is where we fix the below issue
             # temp fix for https://github.com/hammerheadlemon/datamaps/issues/5
             try:
                 file_name = col[0].value.split(".")[0]
