@@ -3,7 +3,6 @@ Use cases related to writing data to an output repository.
 """
 
 import logging
-import string
 import warnings
 from pathlib import Path
 from typing import List
@@ -78,31 +77,28 @@ class WriteMasterToTemplates:
                     logger.critical(
                         f"Key {m} in the datamap but not in the master. Not continuing."
                     )
-                # TODO - Is it right that export will not run if there are keys in datamap not in the master?
-                #   https://github.com/hammerheadlemon/bcompiler-engine/issues/21
                 raise RuntimeError(
                     "Not continuing. Ensure all keys from datamap are in the master."
                 )
         cola = [x.value for x in list(self._master_sheet.columns)[0]][1:]
         for col in list(self._master_sheet.columns)[1:]:
             tups = []
-            # TODO - here is where we fix the below issue
-            # temp fix for https://github.com/hammerheadlemon/datamaps/issues/5
             try:
                 file_name = col[0].value.split(".")[0]
             except AttributeError:
-                _col_des = string.ascii_uppercase[col[0].column - 1]
-                _row_des = str(col[0].row)
-                _cell_coords = "".join([_col_des, _row_des])
-                logger.warning(
-                    f"Cell {_cell_coords} value is empty; require a value in this cell. Cell being empty "
-                    f"suggests a problem so not attempting to read more. You should copy your master data to a clean "
-                    f"file and rerun.")
+                logger.warning(f"Found values in cells beyond end of expected end column. "
+                               "For most reliable results, use a clean master file.")
                 break
-            # end of temp fix
             logger.info(f"Extracting data for {file_name} from {self._master_path}")
             for i, key in enumerate(cola, start=1):
-                key = key.strip()
+                if key is not None:
+                    key = key.strip()
+                else:
+                    # TODO - create a log register so this does not have to be repeated for every
+                    #   column of data in the master ().
+                    logger.warning(f"Found values in cells beyond end of expected end row. "
+                                   "For most reliable results, use a clean master file.")
+                    break
                 try:
                     sheet = [dml[1] for dml in self._dml_line_tup if dml[0] == key][0]
                 except IndexError:

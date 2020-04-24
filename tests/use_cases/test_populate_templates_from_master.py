@@ -16,6 +16,7 @@ from engine.use_cases.output import WriteMasterToTemplates
 from engine.utils.extraction import (ValidationReportItem,
                                      data_validation_report)
 
+
 # from openpyxl.worksheet.datavalidation import DataValidation
 
 
@@ -118,7 +119,7 @@ def test_config_has_correct_files(mock_config):
 
 
 def test_exception_when_given_master_with_empty_col_a(
-    mock_config, datamap, master_no_col_a, blank_template
+        mock_config, datamap, master_no_col_a, blank_template
 ):
     """Test for handling cells in Col A which are empty - and return None."""
     mock_config.initialise()
@@ -126,6 +127,20 @@ def test_exception_when_given_master_with_empty_col_a(
     uc = WriteMasterToTemplates(output_repo, datamap, master_no_col_a, blank_template)
     with pytest.raises(RuntimeError):
         uc.execute()
+
+
+def test_can_export_more_than_twenty_six_columns(mock_config, datamap,
+                                                 master_with_rogue_cell_vals_beyond_col_and_row_range, blank_template):
+    # master_plus_twenty_six must contain at least 26 projects
+    mock_config.initialise()
+    output_repo = MultipleTemplatesWriteRepo(blank_template)
+    uc = WriteMasterToTemplates(output_repo, datamap, master_with_rogue_cell_vals_beyond_col_and_row_range, blank_template)
+    uc.execute()
+    # Test a project much later - i.e. beyond the 25th project
+    result_file = mock_config.PLATFORM_DOCS_DIR / "output" / "Ramsbottom Knot Gorge Cleanout 26.xlsm"
+    wb = load_workbook(result_file)
+    intro_sheet = wb["Introduction"]
+    assert intro_sheet["C9"].value == "VA Department"
 
 
 def test_output_gateway(mock_config, datamap, master, blank_template):
@@ -170,7 +185,7 @@ def test_output_gateway_reduced_datamap(mock_config, datamap_reduced, master, bl
 
 
 def test_export_continues_with_missing_sheet_in_datamap(
-    mock_config, master, datamap_missing_fields, blank_template
+        mock_config, master, datamap_missing_fields, blank_template
 ):
     """When an export takes place using a datamap with missing sheet names"""
     mock_config.initialise()
