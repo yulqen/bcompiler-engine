@@ -1,4 +1,3 @@
-import platform
 import shutil
 from pathlib import Path
 
@@ -43,18 +42,32 @@ def test_required_config_dirs_exist(mock_config):
 
 
 def test_config_values(mock_config):
-    mock_config.initialise()
-    USER_NAME = mock_config.USER_NAME
-    assert mock_config.config_parser["PATHS"][
-        "input directory"
-    ] == "/home/{0}/Documents/datamaps/input".format(USER_NAME)
-    assert mock_config.config_parser["PATHS"][
-        "output directory"
-    ] == "/home/{0}/Documents/datamaps/output".format(USER_NAME)
-    if platform.system() == "Linux":
+    from sys import platform
+    if platform == "linux":
+        mock_config.initialise()
+        USER_NAME = mock_config.USER_NAME
+        assert mock_config.config_parser["PATHS"][
+            "input directory"
+        ] == "/home/{0}/Documents/datamaps/input".format(USER_NAME)
+        assert mock_config.config_parser["PATHS"][
+            "output directory"
+        ] == "/home/{0}/Documents/datamaps/output".format(USER_NAME)
         assert mock_config.config_parser["PATHS"][
             "document directory"
         ] == "/home/{0}/Documents/datamaps".format(USER_NAME)
+    else:
+        mock_config.initialise()
+        USER_NAME = mock_config.USER_NAME
+        assert mock_config.config_parser["PATHS"][
+                   "input directory"
+               ] == "C:\\Users\\{0}\\Documents\\datamaps\\input".format(USER_NAME)
+        assert mock_config.config_parser["PATHS"][
+                   "output directory"
+               ] == "C:\\Users\\{0}\\Documents\\datamaps\\output".format(USER_NAME)
+        assert mock_config.config_parser["PATHS"][
+                   "document directory"
+               ] == "C:\\Users\\{0}\\Documents\\datamaps".format(USER_NAME)
+
 
 
 def test_presence_of_aux_files(mock_config, blank_template, datamap):

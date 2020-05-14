@@ -35,6 +35,8 @@ class Config:
         DATAMAPS_LIBRARY_CONFIG_DIR, "config.ini"
     )
     PLATFORM_DOCS_DIR = _platform_docs_dir()
+    FULL_PATH_INPUT = Path(PLATFORM_DOCS_DIR) / "input"
+    FULL_PATH_OUTPUT = Path(PLATFORM_DOCS_DIR) / "output"
     config_parser = ConfigParser()
     base_config = textwrap.dedent(
         """\
@@ -48,11 +50,11 @@ class Config:
 
     [PATHS]
     document directory = {0}
-    input directory = %(document directory)s/input
-    output directory =%(document directory)s/output
+    input directory = {1}
+    output directory = {2}
 
     """
-    ).format(PLATFORM_DOCS_DIR)
+    ).format(PLATFORM_DOCS_DIR, FULL_PATH_INPUT, FULL_PATH_OUTPUT)
 
     @classmethod
     def initialise(cls) -> None:
