@@ -1,3 +1,4 @@
+from sys import platform
 import shutil
 from pathlib import Path
 
@@ -13,7 +14,7 @@ cache files.
 
 
 def test_basic_config_variables(mock_config):
-    if platform.system() == "Linux":
+    if platform == "Linux":
         assert Path(mock_config.DATAMAPS_LIBRARY_DATA_DIR) == Path("/tmp") / Path(
             ".local/share/datamaps-data"
         )
