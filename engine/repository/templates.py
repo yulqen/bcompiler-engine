@@ -67,6 +67,7 @@ class MultipleTemplatesWriteRepo:
         file_name: file name to be appended to output path
         """
 
+        # TODO - better logging in here because this is a black hole for the UI, where it takes ages.
         for file_data in data:
             try:
                 blank_workbook: Workbook = load_workbook(

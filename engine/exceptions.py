@@ -1,3 +1,7 @@
+class DatamapNotCSVException(Exception):
+    pass
+
+
 class MissingSheetFieldError(Exception):
     pass
 

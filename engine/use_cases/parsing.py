@@ -40,7 +40,7 @@ from concurrent import futures
 from typing import Dict, List
 
 from engine.exceptions import (NoApplicableSheetsInTemplateFiles,
-                               RemoveFileWithNoSheetRequiredByDatamap)
+                               RemoveFileWithNoSheetRequiredByDatamap, DatamapNotCSVException)
 # pylint: disable=R0903,R0913;
 from engine.utils.extraction import (ALL_IMPORT_DATA, check_datamap_sheets,
                                      remove_failing_files, template_reader)
@@ -115,7 +115,10 @@ class ApplyDatamapToExtractionUseCase:
         """Does the work of creating the template_data and datamap_data attributes"""
         t_uc = ParsePopulatedTemplatesUseCase(self._template_repo)
         d_uc = ParseDatamapUseCase(self._datamap_repo)
-        self._datamap_data_json = d_uc.execute()
+        try:
+            self._datamap_data_json = d_uc.execute()
+        except DatamapNotCSVException:
+            raise
         self._template_data_json = t_uc.execute()
 
     def get_values(self):
@@ -126,7 +129,10 @@ class ApplyDatamapToExtractionUseCase:
 
     def execute(self, as_obj=False, for_master=False):
         if self._template_data_dict is not True and self._datamap_data_dict is not True:
-            self._set_datamap_and_template_data()
+            try:
+                self._set_datamap_and_template_data()
+            except DatamapNotCSVException:
+                raise
         self._datamap_data_dict = json.loads(self._datamap_data_json)
         self._template_data_dict = json.loads(self._template_data_json)
         logger.info("Checking template data.")
@@ -188,7 +194,10 @@ class CreateMasterUseCase:
 
     def execute(self, output_file_name):
         uc = ApplyDatamapToExtractionUseCase(self.datamap_repo, self.template_repo)
-        uc.execute(for_master=True)
+        try:
+            uc.execute(for_master=True)
+        except DatamapNotCSVException:
+            raise
         output_repo = self.output_repository(uc.data_for_master, output_file_name)
         output_repo.save()
 
@@ -199,7 +208,10 @@ class ParseDatamapUseCase:
 
     def execute(self, obj=False):
         if not obj:
-            return self.repo.list_as_json()  # type: ignore
+            try:
+                return self.repo.list_as_json()  # type: ignore
+            except DatamapNotCSVException:
+                raise
         else:
             return self.repo.list_as_objs()
 

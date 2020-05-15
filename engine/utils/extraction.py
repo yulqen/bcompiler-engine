@@ -6,6 +6,7 @@ import hashlib
 import json
 import logging
 import os
+import sys
 from collections import OrderedDict
 from dataclasses import dataclass
 from itertools import groupby
@@ -24,7 +25,7 @@ from engine.exceptions import (DatamapFileEncodingError,
                                MalFormedCSVHeaderException,
                                MissingCellKeyError, MissingLineError,
                                MissingSheetFieldError,
-                               NoApplicableSheetsInTemplateFiles)
+                               NoApplicableSheetsInTemplateFiles, DatamapNotCSVException)
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
 
 FILE_DATA = Dict[str, Union[str, Dict[str, Dict[str, str]]]]
@@ -69,7 +70,10 @@ def _dml_line_check(line: OrderedDict, headers: Dict[str, str]) -> None:
 
 def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
     "Given a datamap csv file, returns a list of DatamapLine objects."
-    headers = datamap_check(dm_file)
+    try:
+        headers = datamap_check(dm_file)
+    except DatamapNotCSVException:
+        raise
     data = []
     logger.info(f"Reading datamap {dm_file}")
     logger.info(f"Checking that datamap is valid.")
@@ -370,42 +374,45 @@ def datamap_check(dm_file):
     _good_type = ["type", "value_type", "cell_type", "celltype"]
     headers = {}
     using_type = True
-    with DatamapFile(dm_file) as datamap_file:
-        # initial check - have we got enough headers? If not - raise exception
-        top_row = next(datamap_file).rstrip().split(",")
-        if len(top_row) == 1:
-            # test for first char being ascii - if not, likely wrong encoding
+    try:
+        with DatamapFile(dm_file) as datamap_file:
+            # initial check - have we got enough headers? If not - raise exception
+            top_row = next(datamap_file).rstrip().split(",")
+            if len(top_row) == 1:
+                # test for first char being ascii - if not, likely wrong encoding
+                if not top_row[0][0].isascii():
+                    raise DatamapFileEncodingError(
+                        f"Incorrect encoding of datamap file. Please ensure "
+                        f"it is saved in Excel using CSV (Comma delimited) type - not CSV UTF-8 (Comma delimited) type."
+                    )
+                else:
+                    raise MalFormedCSVHeaderException(
+                        "Datamap contains only one header - need at least three to proceed. Quitting."
+                    )
+            if len(top_row) == 2:
+                raise MalFormedCSVHeaderException(
+                    "Datamap contains only two headers - need at least three to proceed. Quitting."
+                )
             if not top_row[0][0].isascii():
                 raise DatamapFileEncodingError(
                     f"Incorrect encoding of datamap file. Please ensure "
                     f"it is saved in Excel using CSV (Comma delimited) type - not CSV UTF-8 (Comma delimited) type."
                 )
-            else:
-                raise MalFormedCSVHeaderException(
-                    "Datamap contains only one header - need at least three to proceed. Quitting."
-                )
-        if len(top_row) == 2:
-            raise MalFormedCSVHeaderException(
-                "Datamap contains only two headers - need at least three to proceed. Quitting."
-            )
-        if not top_row[0][0].isascii():
-            raise DatamapFileEncodingError(
-                f"Incorrect encoding of datamap file. Please ensure "
-                f"it is saved in Excel using CSV (Comma delimited) type - not CSV UTF-8 (Comma delimited) type."
-            )
-        if top_row[-1] not in _good_type:
-            # test if we are using type column here
-            headers.update(type=None)
-            using_type = False
-        if top_row[0] in _good_keys:
-            headers.update(key=top_row[0])
-        if top_row[1] in _good_sheet:
-            headers.update(sheet=top_row[1])
-        if top_row[2] in _good_cellref:
-            headers.update(cellref=top_row[2])
-        if using_type:
-            if top_row[3] in _good_type:
-                headers.update(type=top_row[3])
+            if top_row[-1] not in _good_type:
+                # test if we are using type column here
+                headers.update(type=None)
+                using_type = False
+            if top_row[0] in _good_keys:
+                headers.update(key=top_row[0])
+            if top_row[1] in _good_sheet:
+                headers.update(sheet=top_row[1])
+            if top_row[2] in _good_cellref:
+                headers.update(cellref=top_row[2])
+            if using_type:
+                if top_row[3] in _good_type:
+                    headers.update(type=top_row[3])
+    except DatamapNotCSVException:
+        raise
     if len(headers.keys()) >= 2:
         # final test - we don't want to proceed unless we have minimum headers
         if not all(

@@ -4,6 +4,8 @@ from pathlib import Path
 # pylint: disable=R0903,R0913;
 from typing import IO, Dict, Optional, Union
 
+from engine.exceptions import DatamapNotCSVException
+
 
 class DatamapLineValueType(Enum):
     """A representation of a data type for us in validating data from the spreadsheet.
@@ -56,10 +58,18 @@ class DatamapFile:
 
     def __enter__(self) -> IO[str]:
         try:
+            # first check - is it a CSV file?
+            _ext = self.filepath.rpartition(".")[-1]
+            if _ext != "csv":
+                raise DatamapNotCSVException(
+                    "Given datamap file is not in CSV format."
+                )
             self.f_obj = open(self.filepath, "r", encoding="utf-8")
             self.f_obj.read()
             self.f_obj.seek(0)
             return self.f_obj
+        except DatamapNotCSVException:
+            raise
         except FileNotFoundError:
             raise FileNotFoundError("Cannot find {}".format(self.filepath))
         except UnicodeDecodeError:

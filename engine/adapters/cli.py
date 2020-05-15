@@ -8,6 +8,7 @@ from openpyxl import load_workbook
 
 import engine.use_cases.parsing
 from engine.config import Config, check_for_blank, check_for_datamap
+from engine.exceptions import DatamapNotCSVException
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
 from engine.repository.templates import (InMemoryPopulatedTemplatesRepository,
@@ -80,7 +81,7 @@ def write_master_to_templates(
     uc.execute()
 
 
-def import_and_create_master(echo_funcs):
+def import_and_create_master(echo_funcs, datamap=None):
     """Import all spreadsheet files from input directory and process with datamap.
 
     echo_func - a function sent from the front-end interface allowing for suitable output (stdout, etc)
@@ -98,7 +99,10 @@ def import_and_create_master(echo_funcs):
 
     tmpl_repo = InMemoryPopulatedTemplatesRepository(Config.PLATFORM_DOCS_DIR / "input")
     master_fn = Config.config_parser["DEFAULT"]["master file name"]
-    dm_fn = Config.config_parser["DEFAULT"]["datamap file name"]
+    if datamap:
+        dm_fn = datamap
+    else:
+        dm_fn = Config.config_parser["DEFAULT"]["datamap file name"]
     dm = Path(tmpl_repo.directory_path) / dm_fn
     dm_repo = InMemorySingleDatamapRepository(str(dm))
     output_repo = MasterOutputRepository
@@ -107,6 +111,8 @@ def import_and_create_master(echo_funcs):
         uc.execute(master_fn)
     except FileNotFoundError as e:
         raise FileNotFoundError(e)
+    except DatamapNotCSVException:
+        raise
     logger.info(
         "{} successfully created in {}\n".format(
             master_fn, Path(Config.PLATFORM_DOCS_DIR / "output")
