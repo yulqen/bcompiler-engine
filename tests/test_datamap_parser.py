@@ -29,7 +29,7 @@ def test_datamap_reader_unsupported_encodings(datamap_csv_unsupported_encodings)
     "datamap_macintosh.csv",
     "datamap_msdos.csv",
     "datamap_note_pad_ansi.csv",
-    "datamap_note_pad_ansi.txt",
+    # "datamap_note_pad_ansi.txt", #  We do not currently support .txt files, even if in csv format. Confusing.
 ], indirect=True)
 def test_datamap_reader_supported_encodings(datamap_csv_supported_encodings):
     data = datamap_reader(datamap_csv_supported_encodings)
@@ -54,11 +54,11 @@ def test_template_reader(template) -> None:
     assert _get_cell_data(template, data, "Summary", "B4")["data_type"] == "NUMBER"
     assert _get_cell_data(template, data, "Summary", "B5")["data_type"] == "NUMBER"
     assert (
-        _get_cell_data(template, data, "Summary", "B2")["value"]
-        == "2019-10-20T00:00:00"
+            _get_cell_data(template, data, "Summary", "B2")["value"]
+            == "2019-10-20T00:00:00"
     )
     assert (
-        _get_cell_data(template, data, "Summary", "B3")["value"] == "This is a string"
+            _get_cell_data(template, data, "Summary", "B3")["value"] == "This is a string"
     )
     assert _get_cell_data(template, data, "Summary", "B4")["value"] == 2.2
     assert _get_cell_data(template, data, "Summary", "B4")["value"] == 2.20
@@ -102,8 +102,8 @@ def test_datamap_with_only_single_header_raises_exception(datamap_single_header)
         data = datamap_reader(datamap_single_header)  # noqa
     msg = excinfo.value.args[0]
     assert (
-        msg
-        == "Datamap contains only one header - need at least three to proceed. Quitting."
+            msg
+            == "Datamap contains only one header - need at least three to proceed. Quitting."
     )
 
 
@@ -112,8 +112,8 @@ def test_datamap_with_two_headers(datamap_two_headers):
         data = datamap_reader(datamap_two_headers)  # noqa
     msg = excinfo.value.args[0]
     assert (
-        msg
-        == "Datamap contains only two headers - need at least three to proceed. Quitting."
+            msg
+            == "Datamap contains only two headers - need at least three to proceed. Quitting."
     )
 
 
@@ -132,11 +132,15 @@ def test_datamap_missing_sheet_fields(datamap_missing_fields):
     """We do not want the datamap read to pass if a line has a missing sheet field.
     """
     with pytest.raises(MissingSheetFieldError):
-        data = datamap_reader(datamap_missing_fields) # noqa
+        data = datamap_reader(datamap_missing_fields)  # noqa
 
 
 def test_datamap_missing_key_fields(datamap_missing_key_fields):
     """We do not want the datamap read to pass if a line has a missing key field.
     """
     with pytest.raises(MissingCellKeyError):
-        data = datamap_reader(datamap_missing_key_fields) # noqa
+        data = datamap_reader(datamap_missing_key_fields)  # noqa
+
+
+def test_get_file_suffix_from_path(datamap):
+    assert datamap.suffix == ".csv"

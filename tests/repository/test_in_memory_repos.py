@@ -4,6 +4,7 @@ import json
 
 import pytest
 
+from engine.exceptions import DatamapNotCSVException
 from engine.repository.datamap import InMemorySingleDatamapRepository
 
 
@@ -17,6 +18,6 @@ def test_datamapline_repository_single_file_repo(datamap,
 
 
 def test_datamapline_repository_non_existant_file(datamapline_list_objects):
-    with pytest.raises(FileNotFoundError):
+    with pytest.raises(DatamapNotCSVException):
         repo = InMemorySingleDatamapRepository("non-file.txt")  # noqua
         repo.list_as_objs()[0].key == datamapline_list_objects[0].key

@@ -59,8 +59,12 @@ class DatamapFile:
     def __enter__(self) -> IO[str]:
         try:
             # first check - is it a CSV file?
-            _ext = self.filepath.rpartition(".")[-1]
-            if _ext != "csv":
+            # Note: that you are able to pass in Path objects here as well as str paths.
+            try:
+                _ext = f".{self.filepath.rpartition('.')[-1]}"
+            except AttributeError:
+                _ext = self.filepath.suffix
+            if _ext != ".csv":
                 raise DatamapNotCSVException(
                     "Given datamap file is not in CSV format."
                 )
