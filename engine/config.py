@@ -30,7 +30,7 @@ class Config:
 
     # Specifically for Github Actions CI
     USER_NAME = (
-        os.environ["GITHUB_ACTIONS_RUNNER"] if os.environ["GITHUB_ACTIONS_RUNNER"] else os.getlogin()
+        os.environ["GITHUB_ACTIONS_RUNNER"] if os.environ.get("GITHUB_ACTIONS_RUNNER") else os.getlogin()
     )
 
     DATAMAPS_LIBRARY_DATA_DIR = user_data_dir("datamaps-data", USER_NAME)
