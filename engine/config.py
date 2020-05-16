@@ -28,7 +28,11 @@ def _platform_docs_dir() -> Path:
 class Config:
     "This is created in the application and passed to the library."
 
-    USER_NAME = os.getlogin()
+    # Specifically for Github Actions CI
+    USER_NAME = (
+        os.environ["GITHUB_ACTOR"] if os.environ["GITHUB_ACTOR"] else os.getlogin()
+    )
+
     DATAMAPS_LIBRARY_DATA_DIR = user_data_dir("datamaps-data", USER_NAME)
     DATAMAPS_LIBRARY_CONFIG_DIR = user_config_dir("datamaps-data", USER_NAME)
     DATAMAPS_LIBRARY_CONFIG_FILE = os.path.join(
@@ -62,13 +66,14 @@ class Config:
             logger.info(f"Creating data directory at {cls.DATAMAPS_LIBRARY_DATA_DIR}.")
             Path(cls.DATAMAPS_LIBRARY_DATA_DIR).mkdir(parents=True)
         if not Path(cls.DATAMAPS_LIBRARY_CONFIG_DIR).exists():
-            logger.info(f"Creating config directory at {cls.DATAMAPS_LIBRARY_CONFIG_DIR}.")
+            logger.info(
+                f"Creating config directory at {cls.DATAMAPS_LIBRARY_CONFIG_DIR}."
+            )
             Path(cls.DATAMAPS_LIBRARY_CONFIG_DIR).mkdir(parents=True)
         if not Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).exists():
             logger.info(f"Creating config file at {cls.DATAMAPS_LIBRARY_CONFIG_FILE}.")
             Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
         cls.config_parser.read(cls.DATAMAPS_LIBRARY_CONFIG_FILE)
-
 
         Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
         cls.config_parser.read(cls.DATAMAPS_LIBRARY_CONFIG_FILE)
@@ -97,7 +102,11 @@ def check_for_blank(config: Config) -> Tuple[bool, str]:
 
     Config should be initialised before passing to this function.
     """
-    blank = config.PLATFORM_DOCS_DIR / "input" / config.config_parser["DEFAULT"]["blank file name"]
+    blank = (
+            config.PLATFORM_DOCS_DIR
+            / "input"
+            / config.config_parser["DEFAULT"]["blank file name"]
+    )
     if blank.exists():
         return (True, blank.name)
     else:
@@ -109,7 +118,11 @@ def check_for_datamap(config: Config) -> Tuple[bool, str]:
 
     Config should be initialised before passing to this function.
     """
-    dm = config.PLATFORM_DOCS_DIR / "input" / config.config_parser["DEFAULT"]["datamap file name"]
+    dm = (
+            config.PLATFORM_DOCS_DIR
+            / "input"
+            / config.config_parser["DEFAULT"]["datamap file name"]
+    )
     if dm.exists():
         return (True, dm.name)
     else:
