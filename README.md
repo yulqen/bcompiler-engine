@@ -1,6 +1,6 @@
 ## bcompiler-engine
 
-[![Build Status](https://travis-ci.com/hammerheadlemon/bcompiler-engine.svg?branch=master)](https://travis-ci.com/hammerheadlemon/bcompiler-engine)
+[![Tests](https://github.com/<your-username>/hypermodern-python/workflows/Tests/badge.svg)](https://github.com/hammerheadlemon/bcompiler-engine/actions?workflow=Tests)
 
 A new, faster, more efficient, more modular back end for
 [Datamaps](https://datamaps.twentyfoursoftware.com), and for newer tools and improved interfaces.
