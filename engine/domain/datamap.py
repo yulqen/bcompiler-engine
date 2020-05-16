@@ -1,6 +1,7 @@
 "Entities relating to the datamap."
 from enum import Enum, auto
 from pathlib import Path
+
 # pylint: disable=R0903,R0913;
 from typing import IO, Dict, Optional, Union
 
@@ -25,9 +26,14 @@ class DatamapLine:
     Data structure representing all cell data extracted from templates/spreadsheets.
     """
 
-    def __init__(self, key: str, sheet: str, cellref: str, data_type: Optional[str],
-                 filename: str) -> None:
-
+    def __init__(
+        self,
+        key: str,
+        sheet: str,
+        cellref: str,
+        data_type: Optional[str],
+        filename: str,
+    ) -> None:
         self.key = key
         self.sheet = sheet
         self.cellref = cellref
@@ -65,9 +71,7 @@ class DatamapFile:
             except AttributeError:
                 _ext = self.filepath.suffix
             if _ext != ".csv":
-                raise DatamapNotCSVException(
-                    "Given datamap file is not in CSV format."
-                )
+                raise DatamapNotCSVException("Given datamap file is not in CSV format.")
             self.f_obj = open(self.filepath, "r", encoding="utf-8")
             self.f_obj.read()
             self.f_obj.seek(0)

@@ -132,7 +132,12 @@ def master_no_col_a() -> Path:
 
 @pytest.fixture()
 def master_with_rogue_cell_vals_beyond_col_and_row_range() -> Path:
-    return Path.cwd() / "tests" / "resources" / "master_values_beyond_end_of_col_and_row_range.xlsx"
+    return (
+        Path.cwd()
+        / "tests"
+        / "resources"
+        / "master_values_beyond_end_of_col_and_row_range.xlsx"
+    )
 
 
 @pytest.fixture

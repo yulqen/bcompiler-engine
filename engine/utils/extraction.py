@@ -6,7 +6,6 @@ import hashlib
 import json
 import logging
 import os
-import sys
 from collections import OrderedDict
 from dataclasses import dataclass
 from itertools import groupby
@@ -18,14 +17,17 @@ from openpyxl import load_workbook
 from openpyxl.worksheet.cell_range import MultiCellRange
 from openpyxl.worksheet.worksheet import Worksheet
 
-from engine.domain.datamap import (DatamapFile, DatamapLine,
-                                   DatamapLineValueType)
+from engine.domain.datamap import DatamapFile, DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
-from engine.exceptions import (DatamapFileEncodingError,
-                               MalFormedCSVHeaderException,
-                               MissingCellKeyError, MissingLineError,
-                               MissingSheetFieldError,
-                               NoApplicableSheetsInTemplateFiles, DatamapNotCSVException)
+from engine.exceptions import (
+    DatamapFileEncodingError,
+    MalFormedCSVHeaderException,
+    MissingCellKeyError,
+    MissingLineError,
+    MissingSheetFieldError,
+    NoApplicableSheetsInTemplateFiles,
+    DatamapNotCSVException,
+)
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
 
 FILE_DATA = Dict[str, Union[str, Dict[str, Dict[str, str]]]]
@@ -50,11 +52,13 @@ def _dml_line_check(line: OrderedDict, headers: Dict[str, str]) -> None:
     # if we have a blank sheet field
     missing_fields = [x[0] for x in line.items() if x[1] == ""]
     if (
-            headers.get("key") in missing_fields
-            and headers.get("sheet") in missing_fields
-            and headers.get("cellref") in missing_fields
+        headers.get("key") in missing_fields
+        and headers.get("sheet") in missing_fields
+        and headers.get("cellref") in missing_fields
     ):
-        raise MissingLineError("Datamap contains a missing line. Please fix datamap before proceeding.")
+        raise MissingLineError(
+            "Datamap contains a missing line. Please fix datamap before proceeding."
+        )
     if headers.get("sheet") in missing_fields:
         raise MissingSheetFieldError(
             f"Line whose key is {line['cell_key']} is missing a sheet field. Cannot proceed."
@@ -131,7 +135,7 @@ class Check:
 
 
 def remove_failing_files(
-        lst_of_checks: List[Check], template_data: ALL_IMPORT_DATA
+    lst_of_checks: List[Check], template_data: ALL_IMPORT_DATA
 ) -> ALL_IMPORT_DATA:
     """Given a list of checks, identify files which contain CheckType.FAIL, then remove them from template_data.
 
@@ -161,7 +165,7 @@ def remove_failing_files(
 
 
 def check_datamap_sheets(
-        datamap_data: List[Dict[str, str]], template_data: ALL_IMPORT_DATA
+    datamap_data: List[Dict[str, str]], template_data: ALL_IMPORT_DATA
 ) -> List[Check]:
     "Parse data struct for each of datamap and all template data for sheet compliance."
     checks = []
@@ -258,8 +262,8 @@ def get_xlsx_files(directory: Path) -> List[Path]:
         raise RuntimeError("Require absolute path here")
     for file_path in os.listdir(directory):
         if (
-                fnmatch.fnmatch(file_path, "*.xls[xm]")
-                and "blank_template" not in file_path
+            fnmatch.fnmatch(file_path, "*.xls[xm]")
+            and "blank_template" not in file_path
         ):
             output.append(Path(os.path.join(directory, file_path)))
     return output
@@ -416,7 +420,7 @@ def datamap_check(dm_file):
     if len(headers.keys()) >= 2:
         # final test - we don't want to proceed unless we have minimum headers
         if not all(
-                [x in list(headers.keys()) for x in ["key", "sheet", "cellref", "type"]]
+            [x in list(headers.keys()) for x in ["key", "sheet", "cellref", "type"]]
         ):
             raise MalFormedCSVHeaderException(
                 "Cannot proceed without required number of headers"

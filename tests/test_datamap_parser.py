@@ -1,36 +1,46 @@
 import pytest
 
 from engine.domain.datamap import DatamapLineValueType
-from engine.exceptions import (DatamapFileEncodingError,
-                               MalFormedCSVHeaderException,
-                               MissingCellKeyError, MissingSheetFieldError)
-from engine.utils.extraction import (_get_cell_data, datamap_reader,
-                                     template_reader)
+from engine.exceptions import (
+    DatamapFileEncodingError,
+    MalFormedCSVHeaderException,
+    MissingCellKeyError,
+    MissingSheetFieldError,
+)
+from engine.utils.extraction import _get_cell_data, datamap_reader, template_reader
 
 NUMBER = DatamapLineValueType.NUMBER
 DATE = DatamapLineValueType.DATE
 TEXT = DatamapLineValueType.TEXT
 
 
-@pytest.mark.parametrize("datamap_csv_unsupported_encodings", [
-    "datamap_unicode_text.csv",
-    "datamap_note_pad_unicode.csv",
-    "datamap_note_pad_unicode_big_endian.csv",
-    "datamap_note_pad_utf8.csv",
-    "datamap_UTF8.csv",
-], indirect=True)
+@pytest.mark.parametrize(
+    "datamap_csv_unsupported_encodings",
+    [
+        "datamap_unicode_text.csv",
+        "datamap_note_pad_unicode.csv",
+        "datamap_note_pad_unicode_big_endian.csv",
+        "datamap_note_pad_utf8.csv",
+        "datamap_UTF8.csv",
+    ],
+    indirect=True,
+)
 def test_datamap_reader_unsupported_encodings(datamap_csv_unsupported_encodings):
     with pytest.raises(DatamapFileEncodingError):
         _ = datamap_reader(datamap_csv_unsupported_encodings)
 
 
-@pytest.mark.parametrize("datamap_csv_supported_encodings", [
-    "datamap_comma_delimited.csv",
-    "datamap_macintosh.csv",
-    "datamap_msdos.csv",
-    "datamap_note_pad_ansi.csv",
-    # "datamap_note_pad_ansi.txt", #  We do not currently support .txt files, even if in csv format. Confusing.
-], indirect=True)
+@pytest.mark.parametrize(
+    "datamap_csv_supported_encodings",
+    [
+        "datamap_comma_delimited.csv",
+        "datamap_macintosh.csv",
+        "datamap_msdos.csv",
+        "datamap_note_pad_ansi.csv",
+        # "datamap_note_pad_ansi.txt", #  We do not currently support .txt files, even if in csv format. Confusing.
+    ],
+    indirect=True,
+)
 def test_datamap_reader_supported_encodings(datamap_csv_supported_encodings):
     data = datamap_reader(datamap_csv_supported_encodings)
     assert data[0].key == "Project/Programme Name"
@@ -54,11 +64,11 @@ def test_template_reader(template) -> None:
     assert _get_cell_data(template, data, "Summary", "B4")["data_type"] == "NUMBER"
     assert _get_cell_data(template, data, "Summary", "B5")["data_type"] == "NUMBER"
     assert (
-            _get_cell_data(template, data, "Summary", "B2")["value"]
-            == "2019-10-20T00:00:00"
+        _get_cell_data(template, data, "Summary", "B2")["value"]
+        == "2019-10-20T00:00:00"
     )
     assert (
-            _get_cell_data(template, data, "Summary", "B3")["value"] == "This is a string"
+        _get_cell_data(template, data, "Summary", "B3")["value"] == "This is a string"
     )
     assert _get_cell_data(template, data, "Summary", "B4")["value"] == 2.2
     assert _get_cell_data(template, data, "Summary", "B4")["value"] == 2.20
@@ -102,8 +112,8 @@ def test_datamap_with_only_single_header_raises_exception(datamap_single_header)
         data = datamap_reader(datamap_single_header)  # noqa
     msg = excinfo.value.args[0]
     assert (
-            msg
-            == "Datamap contains only one header - need at least three to proceed. Quitting."
+        msg
+        == "Datamap contains only one header - need at least three to proceed. Quitting."
     )
 
 
@@ -112,8 +122,8 @@ def test_datamap_with_two_headers(datamap_two_headers):
         data = datamap_reader(datamap_two_headers)  # noqa
     msg = excinfo.value.args[0]
     assert (
-            msg
-            == "Datamap contains only two headers - need at least three to proceed. Quitting."
+        msg
+        == "Datamap contains only two headers - need at least three to proceed. Quitting."
     )
 
 
