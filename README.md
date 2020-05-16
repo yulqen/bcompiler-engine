@@ -1,6 +1,6 @@
 ## bcompiler-engine
 
-![Tests](https://github.com/hammerheadlemon/bcompiler-engine/workflows/Tests/badge.svg?branch=datamaps-cli-opt)
+![Tests](https://github.com/hammerheadlemon/bcompiler-engine/workflows/Tests/badge.svg?branch=master)
 
 A new, faster, more efficient, more modular back end for
 [Datamaps](https://datamaps.twentyfoursoftware.com), and for newer tools and improved interfaces.
