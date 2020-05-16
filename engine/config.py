@@ -1,3 +1,4 @@
+import getpass
 import logging
 import os
 import platform
@@ -30,7 +31,7 @@ class Config:
 
     # Specifically for Github Actions CI
     USER_NAME = (
-        os.environ["GITHUB_ACTIONS_RUNNER"] if os.environ.get("GITHUB_ACTIONS_RUNNER") else os.getlogin()
+        os.environ["GITHUB_ACTIONS_RUNNER"] if os.environ.get("GITHUB_ACTIONS_RUNNER") else getpass.getuser()
     )
 
     DATAMAPS_LIBRARY_DATA_DIR = user_data_dir("datamaps-data", USER_NAME)
