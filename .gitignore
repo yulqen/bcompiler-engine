@@ -17,3 +17,4 @@ build/
 **/#*
 **/*.egg-info/*:wq
 bcompiler_engine.egg-info
+.nox
