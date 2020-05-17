@@ -104,7 +104,7 @@ def import_and_create_master(echo_funcs, datamap=None):
     else:
         dm_fn = Config.config_parser["DEFAULT"]["datamap file name"]
     dm = Path(tmpl_repo.directory_path) / dm_fn
-    dm_repo = InMemorySingleDatamapRepository(str(dm))
+    dm_repo = InMemorySingleDatamapRepository(dm)
     output_repo = MasterOutputRepository
     uc = CreateMasterUseCase(dm_repo, tmpl_repo, output_repo)
     try:

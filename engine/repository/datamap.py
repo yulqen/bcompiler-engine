@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import List, Union
 
 from engine.utils.extraction import datamap_reader
-
 from ..domain.datamap import DatamapLine
 from ..exceptions import DatamapNotCSVException
 from ..serializers.datamap import DatamapEncoder
@@ -11,7 +10,7 @@ from ..serializers.datamap import DatamapEncoder
 
 class InMemorySingleDatamapRepository:
     def __init__(self, datamap_path: Union[Path, str]):
-        self.datamap_path = str(datamap_path)
+        self.datamap_path = datamap_path
 
     def list_as_json(self) -> str:
         """Return list of DatamapLine objects parsed from filepath as json."""
