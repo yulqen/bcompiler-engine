@@ -24,6 +24,8 @@ pytest = "^5.4.1"
 pytest-cov = "^2.7.1"
 coverage = "^5.1"
 nox = "^2019.11.9"
+twine = "^3.1.1"
+wheel = "^0.34.2"
 
 [tools.black]
 max-length-length=88
