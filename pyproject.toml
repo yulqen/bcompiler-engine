@@ -29,6 +29,7 @@ coverage = "^5.1"
 nox = "^2019.11.9"
 twine = "^3.1.1"
 wheel = "^0.34.2"
+mypy = "^0.770"
 
 [tools.black]
 max-length-length=88
