@@ -1,5 +1,7 @@
 import pytest
 
+from pathlib import Path
+
 from engine.domain.datamap import DatamapLineValueType
 from engine.exceptions import (
     DatamapFileEncodingError,
@@ -12,6 +14,11 @@ from engine.utils.extraction import _get_cell_data, datamap_reader, template_rea
 NUMBER = DatamapLineValueType.NUMBER
 DATE = DatamapLineValueType.DATE
 TEXT = DatamapLineValueType.TEXT
+
+
+def test_datamap_file_as_pathlib_object(datamap):
+    data = datamap_reader(Path(datamap))
+    assert len(data) == 18
 
 
 @pytest.mark.parametrize(

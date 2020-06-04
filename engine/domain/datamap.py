@@ -67,9 +67,9 @@ class DatamapFile:
             # first check - is it a CSV file?
             # Note: that you are able to pass in Path objects here as well as str paths.
             try:
-                _ext = f".{self.filepath.rpartition('.')[-1]}"
+                _ext = f".{self.filepath.rpartition('.')[-1]}"  # type: ignore
             except AttributeError:
-                _ext = self.filepath.suffix
+                _ext = self.filepath.suffix  # type: ignore
             if _ext != ".csv":
                 raise DatamapNotCSVException("Given datamap file is not in CSV format.")
             self.f_obj = open(self.filepath, "r", encoding="utf-8")
