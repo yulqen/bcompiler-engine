@@ -1,15 +1,10 @@
 # test_error_reporting.py
 
-import os
-import shutil
-from pathlib import Path
 
-import pytest
-
-from engine.exceptions import (NoApplicableSheetsInTemplateFiles,
-                               RemoveFileWithNoSheetRequiredByDatamap)
-from engine.utils.extraction import (Check, CheckType, check_datamap_sheets,
-                                     remove_failing_files)
+from engine.utils.extraction import (
+    CheckType,
+    check_datamap_sheets,
+)
 
 
 """"
