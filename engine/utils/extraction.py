@@ -435,7 +435,10 @@ def datamap_check(dm_file):
 
 
 def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
-    "Given a populated xlsx file, returns all data in a list of TemplateCell objects."
+    """Given a populated xlsx file, returns all data in a list of TemplateCell objects
+
+    This test uses a fully formatted template file.
+    ."""
     logger.info(f"Starting import of {template_file}.")
     inner_dict: Dict[str, Dict[Any, Any]] = {"data": {}}
     f_path: Path = Path(template_file)
@@ -444,7 +447,7 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     except TypeError:
         msg = (
             "Unable to open {}. Potential corruption of file. Try resaving "
-            "in Excel or removing conditionally formatting. See issue at "
+            "in Excel or removing conditional formatting. See issue at "
             "https://github.com/hammerheadlemon/bcompiler-engine/issues/3 for update. Quitting.".format(
                 f_path
             )
