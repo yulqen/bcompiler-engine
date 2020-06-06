@@ -1,9 +1,10 @@
 import io
-import pytest
-from pathlib import Path
 import zipfile
-from openpyxl import load_workbook
+from pathlib import Path
+
+import pytest
 from lxml import etree
+from openpyxl import load_workbook
 
 
 @pytest.fixture
@@ -19,16 +20,10 @@ def get_sheet_names(xlsx_file):
         with thezip.open("xl/workbook.xml") as wbxml:
             x_data = wbxml.read()
             root = etree.fromstring(x_data)
-            sheets = root[4].getchildren()
-            s1 = sheets[0]
-            breakpoint()
-            for elem in root.getchildren():
-                if not elem.text:
-                    text = "None"
-                else:
-                    text = elem.text
-                print(elem.tag + " => " + text)
-            pass
+            sheets = root.find(
+                "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}sheets"
+            )
+            return [x[0] for x in [sheet.values() for sheet in sheets]]
 
 
 def test_basic_xml_read(xml_test_file):
@@ -75,6 +70,7 @@ def test_bc_func_can_get_spreadsheet_file_sheet_names(org_test_files_dir):
     assert get_sheet_names(tmpl_file)[0] == "Introduction"
 
 
+@pytest.mark.skip("not just now")
 def test_straight_read_using_openpyxl(org_test_files_dir):
     """The test template file here is full-sized and full of formatting.
 
