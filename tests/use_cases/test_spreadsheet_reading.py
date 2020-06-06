@@ -1,7 +1,14 @@
 import io
+import pytest
+from pathlib import Path
 import zipfile
 from openpyxl import load_workbook
 from lxml import etree
+
+
+@pytest.fixture
+def xml_test_file() -> Path:
+    return Path.cwd() / "tests" / "resources" / "test.xml"
 
 
 def get_sheet_names(xlsx_file):
@@ -12,6 +19,9 @@ def get_sheet_names(xlsx_file):
         with thezip.open("xl/workbook.xml") as wbxml:
             x_data = wbxml.read()
             root = etree.fromstring(x_data)
+            sheets = root[4].getchildren()
+            s1 = sheets[0]
+            breakpoint()
             for elem in root.getchildren():
                 if not elem.text:
                     text = "None"
@@ -19,6 +29,14 @@ def get_sheet_names(xlsx_file):
                     text = elem.text
                 print(elem.tag + " => " + text)
             pass
+
+
+def test_basic_xml_read(xml_test_file):
+    tree = etree.parse(str(xml_test_file))
+    assert (
+        tree.getroot().tag
+        == "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}workbook"
+    )
 
 
 def test_bc_func_can_get_spreadsheet_file_sheet_names(org_test_files_dir):
