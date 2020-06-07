@@ -16,14 +16,23 @@ def get_sheet_names(xlsx_file):
     f = open(xlsx_file, "rb")
     data = f.read()
     file_obj = io.BytesIO(data)
+    ns = {"d": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
     with zipfile.ZipFile(file_obj) as thezip:
         with thezip.open("xl/workbook.xml") as wbxml:
-            x_data = wbxml.read()
-            root = etree.fromstring(x_data)
-            sheets = root.find(
-                "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}sheets"
-            )
-            return [x[0] for x in [sheet.values() for sheet in sheets]]
+            tree = etree.parse(wbxml)
+
+            # Original way - returns single element
+            # sheets_a = root.find(
+            #     "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}sheets"
+            # )
+
+            # Then we would need to use a list comp to get the name attribute.
+            #
+            # No need for this - we should use xpath
+            # return [x[0] for x in [sheet.values() for sheet in sheets]]
+
+            # xpath is much easier!
+            return tree.xpath("d:sheets/d:sheet/@name", namespaces=ns)
 
 
 def test_basic_xml_read(xml_test_file):
