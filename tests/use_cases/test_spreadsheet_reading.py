@@ -12,6 +12,47 @@ def xml_test_file() -> Path:
     return Path.cwd() / "tests" / "resources" / "test.xml"
 
 
+WORKSHEET_CONTENT_TYPE = (
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"
+)
+
+
+class ExcelReader:
+    def __init__(self, file_name):
+        self.fn = file_name
+        self.archive = zipfile.ZipFile(self.fn, "r")
+        self.valid_files = self.archive.namelist()
+        self.shared_strings = []
+
+    # def read_manifest(self):
+    #     src = self.archive.read("[Content_Types].xml")
+    #     root = etree.fromstring(src)
+    #     self.package = None
+
+    def _get_worksheet_files(self):
+        ns = {"d": "http://schemas.openxmlformats.org/package/2006/content-types"}
+        src = self.archive.read("[Content_Types].xml")
+        root = etree.fromstring(src)
+        self.worksheet_files = root.xpath(
+            "d:Override[@ContentType='" + WORKSHEET_CONTENT_TYPE + "']/@PartName",
+            namespaces=ns,
+        )
+
+    def read(self):
+        # self.read_manifest()
+        self._get_worksheet_files()
+
+
+def fast_parse_cellvalue(xlsx_file, cellref, sheetname):
+    f = open(xlsx_file, "rb")
+    data = f.read()
+    file_obj = io.BytesIO(data)
+    ns = {"d": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+    with zipfile.ZipFile(file_obj) as thezip:
+        with thezip.open("xl/workbook.xml") as wbxml:
+            tree = etree.parse(wbxml)
+
+
 def get_sheet_names(xlsx_file):
     f = open(xlsx_file, "rb")
     data = f.read()
@@ -41,6 +82,30 @@ def test_basic_xml_read(xml_test_file):
         tree.getroot().tag
         == "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}workbook"
     )
+
+
+def test_excel_reader_class(org_test_files_dir):
+    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
+    reader = ExcelReader(tmpl_file)
+    assert isinstance(reader.archive, zipfile.ZipFile)
+
+
+def test_excel_reader_class_file_list(org_test_files_dir):
+    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
+    reader = ExcelReader(tmpl_file)
+    assert "xl/workbook.xml" in reader.valid_files
+
+
+def test_excel_reader_class_has_package(org_test_files_dir):
+    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
+    reader = ExcelReader(tmpl_file)
+    reader.read()
+    assert "/xl/worksheets/sheet22.xml" in reader.worksheet_files
+
+
+def test_get_cell_value_for_cellref_sheet_lxml(org_test_files_dir):
+    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
+    assert fast_parse_cellvalue(tmpl_file, "C10", "Introduction") == "Coal Tits Ltd"
 
 
 def test_bc_func_can_get_spreadsheet_file_sheet_names(org_test_files_dir):
@@ -77,13 +142,14 @@ def test_bc_func_can_get_spreadsheet_file_sheet_names(org_test_files_dir):
 
     tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
     assert get_sheet_names(tmpl_file)[0] == "Introduction"
+    assert get_sheet_names(tmpl_file)[1] == "Contents"
 
 
-@pytest.mark.skip("not just now")
 def test_straight_read_using_openpyxl(org_test_files_dir):
     """The test template file here is full-sized and full of formatting.
 
     load_workbook() is very slow. Run with --profile
     """
     tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
+    breakpoint()
     data = load_workbook(tmpl_file)

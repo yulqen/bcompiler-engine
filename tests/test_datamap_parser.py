@@ -1,6 +1,6 @@
-import pytest
-
 from pathlib import Path
+
+import pytest
 
 from engine.domain.datamap import DatamapLineValueType
 from engine.exceptions import (
