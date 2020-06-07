@@ -21,12 +21,12 @@ from engine.domain.datamap import DatamapFile, DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
 from engine.exceptions import (
     DatamapFileEncodingError,
+    DatamapNotCSVException,
     MalFormedCSVHeaderException,
     MissingCellKeyError,
     MissingLineError,
     MissingSheetFieldError,
     NoApplicableSheetsInTemplateFiles,
-    DatamapNotCSVException,
 )
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
 
