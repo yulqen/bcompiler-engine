@@ -38,9 +38,16 @@ class ExcelReader:
             namespaces=ns,
         )
 
+    def _get_worksheet_names(self):
+        ns = {"d": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+        src = self.archive.read("xl/workbook.xml")
+        tree = etree.fromstring(src)
+        self.sheet_names = tree.xpath("d:sheets/d:sheet/@name", namespaces=ns)
+
     def read(self):
         # self.read_manifest()
         self._get_worksheet_files()
+        self._get_worksheet_names()
 
 
 def fast_parse_cellvalue(xlsx_file, cellref, sheetname):
@@ -101,6 +108,13 @@ def test_excel_reader_class_has_package(org_test_files_dir):
     reader = ExcelReader(tmpl_file)
     reader.read()
     assert "/xl/worksheets/sheet22.xml" in reader.worksheet_files
+
+
+def test_excel_reader_class_can_get_sheet_names(org_test_files_dir):
+    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
+    reader = ExcelReader(tmpl_file)
+    reader.read()
+    assert reader.sheet_names[0] == "Introduction"
 
 
 def test_get_cell_value_for_cellref_sheet_lxml(org_test_files_dir):
