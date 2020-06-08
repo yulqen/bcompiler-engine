@@ -47,6 +47,23 @@ class ExcelReader:
             namespaces=ns,
         )
 
+    def _get_sheet_rId(self, sheetname):
+        ns = {
+            "d": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        }
+        src = self.archive.read("xl/workbook.xml")
+        tree = etree.fromstring(src)
+        return tree.xpath(
+            "d:sheets/d:sheet[@name='" + sheetname + "']/@r:id", namespaces=ns
+        )[0]
+
+    def _get_worksheet_path_from_rId(self, rid):
+        ns = {"d": "http://schemas.openxmlformats.org/package/2006/relationships"}
+        src = self.archive.read("xl/_rels/workbook.xml.rels")
+        tree = etree.fromstring(src)
+        return tree.xpath("d:Relationship[@Id='" + rid + "']/@Target", namespaces=ns)[0]
+
     def _get_worksheet_names(self):
         ns = {"d": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
         src = self.archive.read("xl/workbook.xml")
@@ -54,7 +71,20 @@ class ExcelReader:
         self.sheet_names = tree.xpath("d:sheets/d:sheet/@name", namespaces=ns)
 
     def get_cell_value(self, cellref: str, sheetname: str):
-        pass
+        ns = {
+            "d": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        }
+        rid = self._get_sheet_rId(sheetname)
+        path = self._get_worksheet_path_from_rId(rid)
+        src = self.archive.read("".join(["xl/", path]))
+        tree = etree.fromstring(src)
+        idx = int(
+            tree.xpath(
+                "d:sheetData/d:row/d:c[@r='" + cellref + "']/d:v", namespaces=ns
+            )[0].text
+        )
+        return self.shared_strings[idx]
 
 
 def get_sheet_names(xlsx_file):
@@ -118,10 +148,27 @@ def test_excel_reader_class_can_get_shared_strings(org_test_files_dir):
     assert reader.shared_strings[0] == "Fantastic Portfolio Collection Sheet"
 
 
+def test_excel_reader_class_can_get_rel_for_worksheet(org_test_files_dir):
+    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
+    reader = ExcelReader(tmpl_file)
+    assert reader._get_sheet_rId("Introduction") == "rId3"
+    assert reader._get_sheet_rId("Contents") == "rId4"
+
+
+def test_excel_reader_class_can_get_worksheet_path_from_rId(org_test_files_dir):
+    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
+    reader = ExcelReader(tmpl_file)
+    assert reader._get_worksheet_path_from_rId("rId3") == "worksheets/sheet1.xml"
+
+
 def test_get_cell_value_for_cellref_sheet_lxml(org_test_files_dir):
     tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
     reader = ExcelReader(tmpl_file)
     assert reader.get_cell_value("C10", "Introduction") == "Coal Tits Ltd"
+    assert (
+        reader.get_cell_value("C9", "Introduction")
+        == "Institute of Hairdressing Dophins"
+    )
 
 
 def test_bc_func_can_get_spreadsheet_file_sheet_names(org_test_files_dir):
@@ -161,6 +208,7 @@ def test_bc_func_can_get_spreadsheet_file_sheet_names(org_test_files_dir):
     assert get_sheet_names(tmpl_file)[1] == "Contents"
 
 
+@pytest.mark.skip("used for exploring openpyxl")
 def test_straight_read_using_openpyxl(org_test_files_dir):
     """The test template file here is full-sized and full of formatting.
 
