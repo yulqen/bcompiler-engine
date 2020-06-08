@@ -171,6 +171,18 @@ def test_get_cell_value_for_cellref_sheet_lxml(org_test_files_dir):
     )
 
 
+def test_get_call_value_for_cellref_sheet_lxml_when_value_from_formula(
+    org_test_files_dir,
+):
+    # TODO
+    pass
+
+
+def test_return_suitable_value_when_cell_is_empty(org_test_files_dir):
+    # TODO
+    pass
+
+
 def test_bc_func_can_get_spreadsheet_file_sheet_names(org_test_files_dir):
     """
     Requisite bit of xl/workbook.xml (and referenced in p66 of IEC29500-1:2016(E)
