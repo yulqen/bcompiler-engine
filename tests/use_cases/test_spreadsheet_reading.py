@@ -85,6 +85,14 @@ def test_get_cell_values_for_sheet(org_test_files_dir):
     assert scope_vals["M41"] == "4th Scope Change"
 
 
+def test_get_all_cell_vals_in_workbook(org_test_files_dir):
+    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
+    reader = SpreadsheetReader(tmpl_file)
+    sheets = reader.sheet_names
+    vals = [reader.get_cell_values(sheetname) for sheetname in sheets]
+    breakpoint()
+
+
 def test_get_call_value_for_cellref_sheet_lxml_when_value_from_formula(
     org_test_files_dir,
 ):
@@ -93,6 +101,11 @@ def test_get_call_value_for_cellref_sheet_lxml_when_value_from_formula(
 
 
 def test_return_suitable_value_when_cell_is_empty(org_test_files_dir):
+    # TODO
+    pass
+
+
+def test_throw_exception_when_sheet_not_in_workbook(org_test_files_dir):
     # TODO
     pass
 

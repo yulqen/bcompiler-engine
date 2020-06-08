@@ -118,7 +118,12 @@ class SpreadsheetReader:
                     elif c_type == "str":
                         v = vtag.text
                     elif c_type == "n":
-                        v = int(vtag.text)
+                        try:
+                            # int
+                            v = int(kids[0].text)
+                        except ValueError:
+                            # float
+                            v = float(kids[0].text)
                     out.update({cellref: v})
             else:
                 out.update({cellref: None})
