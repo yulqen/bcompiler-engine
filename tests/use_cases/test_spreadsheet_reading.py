@@ -23,11 +23,20 @@ class ExcelReader:
         self.archive = zipfile.ZipFile(self.fn, "r")
         self.valid_files = self.archive.namelist()
         self.shared_strings = []
+        self._get_worksheet_files()
+        self._get_worksheet_names()
+        self._get_shared_strings()
 
     # def read_manifest(self):
     #     src = self.archive.read("[Content_Types].xml")
     #     root = etree.fromstring(src)
     #     self.package = None
+
+    def _get_shared_strings(self):
+        ns = {"d": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+        src = self.archive.read("xl/sharedStrings.xml")
+        root = etree.fromstring(src)
+        self.shared_strings = root.xpath("d:si/d:t/text()", namespaces=ns)
 
     def _get_worksheet_files(self):
         ns = {"d": "http://schemas.openxmlformats.org/package/2006/content-types"}
@@ -44,20 +53,8 @@ class ExcelReader:
         tree = etree.fromstring(src)
         self.sheet_names = tree.xpath("d:sheets/d:sheet/@name", namespaces=ns)
 
-    def read(self):
-        # self.read_manifest()
-        self._get_worksheet_files()
-        self._get_worksheet_names()
-
-
-def fast_parse_cellvalue(xlsx_file, cellref, sheetname):
-    f = open(xlsx_file, "rb")
-    data = f.read()
-    file_obj = io.BytesIO(data)
-    ns = {"d": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
-    with zipfile.ZipFile(file_obj) as thezip:
-        with thezip.open("xl/workbook.xml") as wbxml:
-            tree = etree.parse(wbxml)
+    def get_cell_value(self, cellref: str, sheetname: str):
+        pass
 
 
 def get_sheet_names(xlsx_file):
@@ -106,20 +103,25 @@ def test_excel_reader_class_file_list(org_test_files_dir):
 def test_excel_reader_class_has_package(org_test_files_dir):
     tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
     reader = ExcelReader(tmpl_file)
-    reader.read()
     assert "/xl/worksheets/sheet22.xml" in reader.worksheet_files
 
 
 def test_excel_reader_class_can_get_sheet_names(org_test_files_dir):
     tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
     reader = ExcelReader(tmpl_file)
-    reader.read()
     assert reader.sheet_names[0] == "Introduction"
+
+
+def test_excel_reader_class_can_get_shared_strings(org_test_files_dir):
+    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
+    reader = ExcelReader(tmpl_file)
+    assert reader.shared_strings[0] == "Fantastic Portfolio Collection Sheet"
 
 
 def test_get_cell_value_for_cellref_sheet_lxml(org_test_files_dir):
     tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
-    assert fast_parse_cellvalue(tmpl_file, "C10", "Introduction") == "Coal Tits Ltd"
+    reader = ExcelReader(tmpl_file)
+    assert reader.get_cell_value("C10", "Introduction") == "Coal Tits Ltd"
 
 
 def test_bc_func_can_get_spreadsheet_file_sheet_names(org_test_files_dir):
