@@ -74,6 +74,17 @@ def test_get_cell_value_for_cellref_sheet_lxml(org_test_files_dir):
     )
 
 
+def test_get_cell_values_for_sheet(org_test_files_dir):
+    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
+    reader = SpreadsheetReader(tmpl_file)
+    intro_vals = reader.get_cell_values("Introduction")
+    assert intro_vals["B2"] == "Fantastic Portfolio Collection Sheet"
+    assert intro_vals["B14"] == "Project Type (for GOASS use)"
+    assert intro_vals["A35"] == "0.4.5"
+    scope_vals = reader.get_cell_values("3 - Scope History")
+    assert scope_vals["M41"] == "4th Scope Change"
+
+
 def test_get_call_value_for_cellref_sheet_lxml_when_value_from_formula(
     org_test_files_dir,
 ):

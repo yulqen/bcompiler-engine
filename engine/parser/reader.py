@@ -76,6 +76,58 @@ class SpreadsheetReader:
         )
         return self.shared_strings[idx]
 
+    def get_cell_values(self, sheetname: str):
+        ns = {
+            "d": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        }
+        rid = self._get_sheet_rId(sheetname)
+        path = self._get_worksheet_path_from_rId(rid)
+        src = self.archive.read("".join(["xl/", path]))
+        tree = etree.fromstring(src)
+        cells = tree.xpath("d:sheetData/d:row/d:c", namespaces=ns)
+        out = {}
+        for child in cells:
+            cellref = child.attrib["r"]
+            children = child.getchildren()
+            if children:
+                c_type = child.attrib["t"]
+                kids = [ch for ch in children]
+                if len(kids) == 1:
+                    if c_type == "s":
+                        v = self.shared_strings[int(kids[0].text)]
+                    elif c_type == "str":
+                        v = kids[0].text
+                    elif c_type == "n":
+                        try:
+                            # int
+                            v = int(kids[0].text)
+                        except ValueError:
+                            # float
+                            v = float(kids[0].text)
+                    out.update({cellref: v})
+                else:
+                    vtag = [
+                        x
+                        for x in kids
+                        if x.tag
+                        == "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}v"
+                    ][0]
+                    if c_type == "s":
+                        v = self.shared_strings[int(vtag.text)]
+                    elif c_type == "str":
+                        v = vtag.text
+                    elif c_type == "n":
+                        v = int(vtag.text)
+                    out.update({cellref: v})
+            else:
+                out.update({cellref: None})
+        return out
+
+        # nodes = tree.xpath("d:sheetData/d:row/d:c/d:v/text()", namespaces=ns)
+        # vals = tree.xpath("d:sheetData/d:row/d:c/d:v/text()", namespaces=ns)
+        # cellrefs = tree.xpath("d:sheetData/d:row/d:c/@r", namespaces=ns)
+
 
 # retain for posterity regarding doing this the basic way
 #
