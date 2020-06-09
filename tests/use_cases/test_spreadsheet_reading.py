@@ -57,9 +57,12 @@ def test_excel_reader_class_can_get_worksheet_path_from_rId(reader):
 
 
 def test_get_cell_value_for_cellref_sheet_lxml(reader):
-    assert reader.get_cell_value("C10", "Introduction") == "Coal Tits Ltd"
     assert (
-        reader.get_cell_value("C9", "Introduction")
+        reader.get_cell_value(cellref="C10", sheetname="Introduction")
+        == "Coal Tits Ltd"
+    )
+    assert (
+        reader.get_cell_value(cellref="C9", sheetname="Introduction")
         == "Institute of Hairdressing Dophins"
     )
 
@@ -86,21 +89,13 @@ def test_get_all_cell_vals_in_workbook(reader):
     assert vals[15]["sheetname"] == "4 - Leaders"  # hidden sheet
 
 
-def test_get_call_value_for_cellref_sheet_lxml_when_value_from_formula(
-    org_test_files_dir,
-):
-    # TODO
-    pass
+def test_raise_exception_when_trying_to_get_value_from_nonexistant_sheet(reader):
+    with pytest.raises(ValueError):
+        reader.get_cell_value(cellref="C1000", sheetname="Balls")
 
 
-def test_return_suitable_value_when_cell_is_empty(org_test_files_dir):
-    # TODO
-    pass
-
-
-def test_throw_exception_when_sheet_not_in_workbook(org_test_files_dir):
-    # TODO
-    pass
+def test_return_none_when_cellref_out_of_range(reader):
+    assert reader.get_cell_value(cellref="C1000", sheetname="Introduction") is None
 
 
 @pytest.mark.skip("used for exploring openpyxl")

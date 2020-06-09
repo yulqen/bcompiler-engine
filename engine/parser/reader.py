@@ -1,7 +1,8 @@
 import zipfile
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from lxml import etree
+from lxml.etree import Element
 
 WORKSHEET_CONTENT_TYPE = (
     "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"
@@ -51,10 +52,14 @@ class SpreadsheetReader:
     def _get_sheet_rId(self, sheetname: str) -> str:
         src = self.archive.read("xl/workbook.xml")
         tree = etree.fromstring(src)
-        return tree.xpath(  # type:ignore
+        lst_of_rid: List[str] = tree.xpath(  # type:ignore
             "d:sheets/d:sheet[@name='" + sheetname + "']/@r:id",
             namespaces=SpreadsheetReader.ns,
-        )[0]
+        )
+        if len(lst_of_rid) == 0:
+            raise ValueError("Cannot find sheet: {}".format(sheetname))
+        else:
+            return lst_of_rid[0]
 
     def _get_worksheet_path_from_rId(self, rid: str) -> str:
         src = self.archive.read("xl/_rels/workbook.xml.rels")
@@ -71,27 +76,40 @@ class SpreadsheetReader:
             "d:sheets/d:sheet/@name", namespaces=SpreadsheetReader.ns
         )
 
-    def get_cell_value(self, cellref: str, sheetname: str) -> str:
+    def get_cell_value(self, *, cellref: str, sheetname: str) -> Optional[str]:
+        """Returns the value of cell at cellref in sheet sheetname.
+
+        Returns None if the cell is not in range, or contains no value.
+        """
         rid: str = self._get_sheet_rId(sheetname)
         path: str = self._get_worksheet_path_from_rId(rid)
         src = self.archive.read("".join(["xl/", path]))
         tree = etree.fromstring(src)
-        idx = int(
-            tree.xpath(
-                "d:sheetData/d:row/d:c[@r='" + cellref + "']/d:v",
-                namespaces=SpreadsheetReader.ns,
-            )[0].text
+        lst_of_c_tags = tree.xpath(
+            "d:sheetData/d:row/d:c[@r='" + cellref + "']/d:v",
+            namespaces=SpreadsheetReader.ns,
         )
-        return self.shared_strings[idx]
+        if len(lst_of_c_tags) == 0:
+            return None
+        else:
+            idx = int(
+                tree.xpath(
+                    "d:sheetData/d:row/d:c[@r='" + cellref + "']/d:v",
+                    namespaces=SpreadsheetReader.ns,
+                )[0].text
+            )
+            return self.shared_strings[idx]
 
     def get_cell_values(self, sheetname: str) -> CELL_VALUE_MAP:
         """Given a sheet name, will return a dictionary of cellname: value mappings.
         """
-        rid = self._get_sheet_rId(sheetname)
-        path = self._get_worksheet_path_from_rId(rid)
-        src = self.archive.read("".join(["xl/", path]))
-        tree = etree.fromstring(src)
-        cells = tree.xpath("d:sheetData/d:row/d:c", namespaces=SpreadsheetReader.ns)
+        rid: str = self._get_sheet_rId(sheetname)
+        path: str = self._get_worksheet_path_from_rId(rid)
+        src: bytes = self.archive.read("".join(["xl/", path]))
+        tree: Element = etree.fromstring(src)
+        cells: List[Element] = tree.xpath(
+            "d:sheetData/d:row/d:c", namespaces=SpreadsheetReader.ns
+        )
         out = {
             "sheetname": sheetname
         }  # rather than nest the dict here we put the sheetname in as a dict
@@ -116,10 +134,10 @@ class SpreadsheetReader:
                     elif c_type == "n":  # a number
                         try:
                             # int
-                            v = int(child_tags[0].text)
+                            v = int(child_tags[0].text)  # type: ignore
                         except ValueError:
                             # float
-                            v = float(child_tags[0].text)
+                            v = float(child_tags[0].text)  # type: ignore
                     out.update({cellref: v})
                 else:
                     # we have more than one child tag, which means a <f> and <v> tag
@@ -136,10 +154,10 @@ class SpreadsheetReader:
                     elif c_type == "n":
                         try:
                             # int
-                            v = int(child_tags[1].text)
+                            v = int(child_tags[1].text)  # type: ignore
                         except ValueError:
                             # float
-                            v = float(child_tags[1].text)
+                            v = float(child_tags[1].text)  # type: ignore
                     out.update({cellref: v})
         return out
 
