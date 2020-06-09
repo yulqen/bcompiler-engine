@@ -86,7 +86,7 @@ class SpreadsheetReader:
         src = self.archive.read("".join(["xl/", path]))
         tree = etree.fromstring(src)
         cells = tree.xpath("d:sheetData/d:row/d:c", namespaces=ns)
-        out = {}
+        out = {"sheetname": sheetname}
         for child in cells:
             cellref = child.attrib["r"]
             children = child.getchildren()

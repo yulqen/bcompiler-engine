@@ -90,8 +90,14 @@ def test_get_all_cell_vals_in_workbook(org_test_files_dir):
     reader = SpreadsheetReader(tmpl_file)
     sheets = reader.sheet_names
     vals = [reader.get_cell_values(sheetname) for sheetname in sheets]
-    breakpoint()
-    # TODO include assert and split sheets into dicts instead of having a single list
+    assert vals[0]["sheetname"] == "Introduction"
+    assert vals[1]["sheetname"] == "Contents"
+    assert vals[2]["sheetname"] == "Report Summary"
+    assert vals[3]["sheetname"] == "GDPR - New SRO PDs"  # hidden sheet
+    assert vals[4]["sheetname"] == "Data Quality Log"  # hidden sheet
+    assert vals[5]["sheetname"] == "Dropdown List"  # hidden sheet
+    assert vals[6]["sheetname"] == "Data Triangulation"  # hidden sheet
+    assert vals[15]["sheetname"] == "4 - Leaders"  # hidden sheet
 
 
 def test_get_call_value_for_cellref_sheet_lxml_when_value_from_formula(
