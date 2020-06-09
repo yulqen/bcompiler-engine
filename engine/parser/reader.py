@@ -95,11 +95,13 @@ class SpreadsheetReader:
         out = {
             "sheetname": sheetname
         }  # rather than nest the dict here we put the sheetname in as a dict
-        for child in cells:
+        for child in cells:  # go looking for value cells
             cellref = child.attrib["r"]
             child_tags = child.getchildren()
             if not child_tags:
-                out.update({cellref: None})
+                out.update(
+                    {cellref: None}
+                )  # if there is no <v> cell we put None in for cellref
             else:
                 c_type = child.attrib["t"]
 

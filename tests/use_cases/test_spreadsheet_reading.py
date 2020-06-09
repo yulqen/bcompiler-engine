@@ -13,6 +13,12 @@ def xml_test_file() -> Path:
     return Path.cwd() / "tests" / "resources" / "test.xml"
 
 
+@pytest.fixture
+def reader(org_test_files_dir) -> SpreadsheetReader:
+    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
+    return SpreadsheetReader(tmpl_file)
+
+
 def test_basic_xml_read(xml_test_file):
     tree = etree.parse(str(xml_test_file))
     assert (
@@ -21,52 +27,36 @@ def test_basic_xml_read(xml_test_file):
     )
 
 
-def test_excel_reader_class(org_test_files_dir):
-    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
-    reader = SpreadsheetReader(tmpl_file)
+def test_excel_reader_class(reader):
     assert isinstance(reader.archive, zipfile.ZipFile)
 
 
-def test_excel_reader_class_file_list(org_test_files_dir):
-    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
-    reader = SpreadsheetReader(tmpl_file)
+def test_excel_reader_class_file_list(reader):
     assert "xl/workbook.xml" in reader.valid_files
 
 
-def test_excel_reader_class_has_package(org_test_files_dir):
-    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
-    reader = SpreadsheetReader(tmpl_file)
+def test_excel_reader_class_has_package(reader):
     assert "/xl/worksheets/sheet22.xml" in reader.worksheet_files
 
 
-def test_excel_reader_class_can_get_sheet_names(org_test_files_dir):
-    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
-    reader = SpreadsheetReader(tmpl_file)
+def test_excel_reader_class_can_get_sheet_names(reader):
     assert reader.sheet_names[0] == "Introduction"
 
 
-def test_excel_reader_class_can_get_shared_strings(org_test_files_dir):
-    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
-    reader = SpreadsheetReader(tmpl_file)
+def test_excel_reader_class_can_get_shared_strings(reader):
     assert reader.shared_strings[0] == "Fantastic Portfolio Collection Sheet"
 
 
-def test_excel_reader_class_can_get_rel_for_worksheet(org_test_files_dir):
-    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
-    reader = SpreadsheetReader(tmpl_file)
+def test_excel_reader_class_can_get_rel_for_worksheet(reader):
     assert reader._get_sheet_rId("Introduction") == "rId3"
     assert reader._get_sheet_rId("Contents") == "rId4"
 
 
-def test_excel_reader_class_can_get_worksheet_path_from_rId(org_test_files_dir):
-    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
-    reader = SpreadsheetReader(tmpl_file)
+def test_excel_reader_class_can_get_worksheet_path_from_rId(reader):
     assert reader._get_worksheet_path_from_rId("rId3") == "worksheets/sheet1.xml"
 
 
-def test_get_cell_value_for_cellref_sheet_lxml(org_test_files_dir):
-    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
-    reader = SpreadsheetReader(tmpl_file)
+def test_get_cell_value_for_cellref_sheet_lxml(reader):
     assert reader.get_cell_value("C10", "Introduction") == "Coal Tits Ltd"
     assert (
         reader.get_cell_value("C9", "Introduction")
@@ -74,9 +64,7 @@ def test_get_cell_value_for_cellref_sheet_lxml(org_test_files_dir):
     )
 
 
-def test_get_cell_values_for_sheet(org_test_files_dir):
-    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
-    reader = SpreadsheetReader(tmpl_file)
+def test_get_cell_values_for_sheet(reader):
     intro_vals = reader.get_cell_values("Introduction")
     assert intro_vals["B2"] == "Fantastic Portfolio Collection Sheet"
     assert intro_vals["B14"] == "Project Type (for GOASS use)"
@@ -85,9 +73,7 @@ def test_get_cell_values_for_sheet(org_test_files_dir):
     assert scope_vals["M41"] == "4th Scope Change"
 
 
-def test_get_all_cell_vals_in_workbook(org_test_files_dir):
-    tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
-    reader = SpreadsheetReader(tmpl_file)
+def test_get_all_cell_vals_in_workbook(reader):
     sheets = reader.sheet_names
     vals = [reader.get_cell_values(sheetname) for sheetname in sheets]
     assert vals[0]["sheetname"] == "Introduction"
