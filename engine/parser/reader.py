@@ -120,10 +120,10 @@ class SpreadsheetReader:
                     elif c_type == "n":
                         try:
                             # int
-                            v = int(kids[0].text)
+                            v = int(kids[1].text)
                         except ValueError:
                             # float
-                            v = float(kids[0].text)
+                            v = float(kids[1].text)
                     out.update({cellref: v})
             else:
                 out.update({cellref: None})
