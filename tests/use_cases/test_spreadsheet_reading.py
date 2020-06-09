@@ -124,5 +124,4 @@ def test_straight_read_using_openpyxl(org_test_files_dir):
     load_workbook() is very slow. Run with --profile
     """
     tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
-    breakpoint()
     data = load_workbook(tmpl_file)
