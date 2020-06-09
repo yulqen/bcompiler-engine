@@ -1,5 +1,5 @@
 import zipfile
-from typing import Dict
+from typing import Dict, List
 
 from lxml import etree
 
@@ -11,7 +11,10 @@ CELL_VALUE_MAP = Dict[str, str]
 
 
 class SpreadsheetReader:
+    """Reads a spreadsheet and contains its read data.
+    """
 
+    # namespaces from the XML spec
     ns = {
         "d": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
         "dcontent": "http://schemas.openxmlformats.org/package/2006/content-types",
@@ -19,23 +22,23 @@ class SpreadsheetReader:
         "pr": "http://schemas.openxmlformats.org/package/2006/relationships",
     }
 
-    def __init__(self, file_name):
+    def __init__(self, file_name) -> None:
         self.fn = file_name
         self.archive = zipfile.ZipFile(self.fn, "r")
         self.valid_files = self.archive.namelist()
-        self.shared_strings = []
+        self.shared_strings: List[str] = []
         self._get_worksheet_files()
         self._get_worksheet_names()
         self._get_shared_strings()
 
-    def _get_shared_strings(self):
+    def _get_shared_strings(self) -> None:
         src = self.archive.read("xl/sharedStrings.xml")
         root = etree.fromstring(src)
         self.shared_strings = root.xpath(
             "d:si/d:t/text()", namespaces=SpreadsheetReader.ns
         )
 
-    def _get_worksheet_files(self):
+    def _get_worksheet_files(self) -> None:
         src = self.archive.read("[Content_Types].xml")
         root = etree.fromstring(src)
         self.worksheet_files = root.xpath(
@@ -45,32 +48,32 @@ class SpreadsheetReader:
             namespaces=SpreadsheetReader.ns,
         )
 
-    def _get_sheet_rId(self, sheetname):
+    def _get_sheet_rId(self, sheetname: str) -> str:
         src = self.archive.read("xl/workbook.xml")
         tree = etree.fromstring(src)
-        return tree.xpath(
+        return tree.xpath(  # type:ignore
             "d:sheets/d:sheet[@name='" + sheetname + "']/@r:id",
             namespaces=SpreadsheetReader.ns,
         )[0]
 
-    def _get_worksheet_path_from_rId(self, rid):
+    def _get_worksheet_path_from_rId(self, rid: str) -> str:
         src = self.archive.read("xl/_rels/workbook.xml.rels")
         tree = etree.fromstring(src)
-        return tree.xpath(
+        return tree.xpath(  # type: ignore
             "pr:Relationship[@Id='" + rid + "']/@Target",
             namespaces=SpreadsheetReader.ns,
         )[0]
 
-    def _get_worksheet_names(self):
+    def _get_worksheet_names(self) -> None:
         src = self.archive.read("xl/workbook.xml")
         tree = etree.fromstring(src)
         self.sheet_names = tree.xpath(
             "d:sheets/d:sheet/@name", namespaces=SpreadsheetReader.ns
         )
 
-    def get_cell_value(self, cellref: str, sheetname: str):
-        rid = self._get_sheet_rId(sheetname)
-        path = self._get_worksheet_path_from_rId(rid)
+    def get_cell_value(self, cellref: str, sheetname: str) -> str:
+        rid: str = self._get_sheet_rId(sheetname)
+        path: str = self._get_worksheet_path_from_rId(rid)
         src = self.archive.read("".join(["xl/", path]))
         tree = etree.fromstring(src)
         idx = int(
@@ -89,7 +92,9 @@ class SpreadsheetReader:
         src = self.archive.read("".join(["xl/", path]))
         tree = etree.fromstring(src)
         cells = tree.xpath("d:sheetData/d:row/d:c", namespaces=SpreadsheetReader.ns)
-        out = {"sheetname": sheetname}
+        out = {
+            "sheetname": sheetname
+        }  # rather than nest the dict here we put the sheetname in as a dict
         for child in cells:
             cellref = child.attrib["r"]
             child_tags = child.getchildren()
@@ -97,7 +102,11 @@ class SpreadsheetReader:
                 out.update({cellref: None})
             else:
                 c_type = child.attrib["t"]
-                if len(child_tags) == 1:
+
+                # we need to distinguish between <f> and <v> tags
+                # <v> contains the value, <f> the formula
+
+                if len(child_tags) == 1:  # if only one, it is the <v> tag
                     if c_type == "s":  # we need to look up the string
                         v = self.shared_strings[int(child_tags[0].text)]
                     elif c_type == "str":  # value is in the v tag
@@ -111,6 +120,7 @@ class SpreadsheetReader:
                             v = float(child_tags[0].text)
                     out.update({cellref: v})
                 else:
+                    # we have more than one child tag, which means a <f> and <v> tag
                     vtag = [
                         t
                         for t in child_tags
@@ -130,10 +140,6 @@ class SpreadsheetReader:
                             v = float(child_tags[1].text)
                     out.update({cellref: v})
         return out
-
-        # nodes = tree.xpath("d:sheetData/d:row/d:c/d:v/text()", namespaces=ns)
-        # vals = tree.xpath("d:sheetData/d:row/d:c/d:v/text()", namespaces=ns)
-        # cellrefs = tree.xpath("d:sheetData/d:row/d:c/@r", namespaces=ns)
 
 
 # retain for posterity regarding doing this the basic way
