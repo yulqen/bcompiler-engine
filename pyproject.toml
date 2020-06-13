@@ -18,6 +18,7 @@ authors = ["Matthew Lemon"]
 python = "^3.6.0"
 openpyxl = "^3.0.3"
 appdirs = "^1.4.3"
+lxml = "^4.5.1"
 
 [tool.poetry.dev-dependencies]
 pdbpp = "^0.10.2"

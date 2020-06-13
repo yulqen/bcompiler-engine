@@ -1,3 +1,4 @@
+import os
 import zipfile
 from pathlib import Path
 
@@ -6,6 +7,15 @@ from lxml import etree
 from openpyxl import load_workbook
 
 from engine.parser.reader import SpreadsheetReader
+from engine.repository.datamap import InMemorySingleDatamapRepository
+from engine.use_cases.parsing import ParseDatamapUseCase
+from engine.utils.extraction import datamap_reader, fast_parse_template
+
+
+@pytest.fixture
+def heavy_template_datamap():
+    here = os.path.abspath(os.curdir)
+    return os.path.join(here, "tests/resources/org_templates/dft_datamap.csv")
 
 
 @pytest.fixture
@@ -96,6 +106,31 @@ def test_raise_exception_when_trying_to_get_value_from_nonexistant_sheet(reader)
 
 def test_return_none_when_cellref_out_of_range(reader):
     assert reader.get_cell_value(cellref="C1000", sheetname="Introduction") is None
+
+
+############################################################
+# THIS IS WHERE WE DO AN END-TO-END TEST FOR MASTER PARSING#
+############################################################
+
+
+def test_get_datamap_data_using_new_use_case(reader, heavy_template_datamap):
+    """First test for gathering cell values in template using a datamap.
+
+    Uses fast xpath parsing in lxml rather in openpyxl to extract the data.
+    """
+    dm_data = datamap_reader(heavy_template_datamap)
+    sheets = reader.sheet_names
+    vals = [reader.get_cell_values(sheetname) for sheetname in sheets]
+    template_data = fast_parse_template(str(reader.fn), dm_data, vals)
+    assert template_data["Introduction"][0].sheet_name == "Introduction"
+
+    target = [t for t in template_data["Introduction"] if t.cellref == "C11"][0]
+    assert target.cellref == "C11"
+    assert target.value == "Universal Cantilever Bridge over the River Styx"
+
+    target = [t for t in template_data["Introduction"] if t.cellref == "C9"][0]
+    assert target.cellref == "C9"
+    assert target.value == "Institute of Hairdressing Dophins"
 
 
 @pytest.mark.skip("used for exploring openpyxl")

@@ -6,7 +6,7 @@ import hashlib
 import json
 import logging
 import os
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from dataclasses import dataclass
 from itertools import groupby
 from pathlib import Path
@@ -432,6 +432,25 @@ def datamap_check(dm_file):
         return MalFormedCSVHeaderException(
             "Datamap does not contain the required headers. Cannot proceed"
         )
+
+
+def fast_parse_template(filename, dm, vals):
+    cell_refs_in_dm = {d.cellref for d in dm}
+    dt: defaultdict = defaultdict(list)
+    for sheet_data in vals:
+        sheet_name = sheet_data["sheetname"]
+        for item in sheet_data.items():
+            if item[0] in cell_refs_in_dm:
+                dt[sheet_name].append(
+                    TemplateCell(
+                        filename,
+                        sheet_name,
+                        item[0],
+                        sheet_data[item[0]],
+                        DatamapLineValueType.NUMBER,
+                    )
+                )
+    return dt
 
 
 def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
