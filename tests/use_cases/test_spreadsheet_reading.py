@@ -7,9 +7,6 @@ from lxml import etree
 from openpyxl import load_workbook
 
 from engine.parser.reader import SpreadsheetReader
-from engine.repository.datamap import InMemorySingleDatamapRepository
-from engine.use_cases.parsing import ParseDatamapUseCase
-from engine.utils.extraction import datamap_reader, fast_parse_template
 
 
 @pytest.fixture
@@ -24,9 +21,9 @@ def xml_test_file() -> Path:
 
 
 @pytest.fixture
-def reader(org_test_files_dir) -> SpreadsheetReader:
+def reader(org_test_files_dir, heavy_template_datamap) -> SpreadsheetReader:
     tmpl_file = org_test_files_dir / "dft1_tmp.xlsm"
-    return SpreadsheetReader(tmpl_file)
+    return SpreadsheetReader(tmpl_file, heavy_template_datamap)
 
 
 def test_basic_xml_read(xml_test_file):
@@ -118,19 +115,12 @@ def test_get_datamap_data_using_new_use_case(reader, heavy_template_datamap):
 
     Uses fast xpath parsing in lxml rather in openpyxl to extract the data.
     """
-    dm_data = datamap_reader(heavy_template_datamap)
-    sheets = reader.sheet_names
-    vals = [reader.get_cell_values(sheetname) for sheetname in sheets]
-    template_data = fast_parse_template(str(reader.fn), dm_data, vals)
-    assert template_data["Introduction"][0].sheet_name == "Introduction"
+    template_data = reader.read()
 
-    target = [t for t in template_data["Introduction"] if t.cellref == "C11"][0]
-    assert target.cellref == "C11"
-    assert target.value == "Universal Cantilever Bridge over the River Styx"
-
-    target = [t for t in template_data["Introduction"] if t.cellref == "C9"][0]
-    assert target.cellref == "C9"
-    assert target.value == "Institute of Hairdressing Dophins"
+    target_vals = [x.value for x in template_data[reader.fn]["Introduction"]]
+    target_cellrefs = [x.cellref for x in template_data[reader.fn]["Introduction"]]
+    assert "Universal Cantilever Bridge over the River Styx" in target_vals
+    assert "C11" in target_cellrefs
 
 
 @pytest.mark.skip("used for exploring openpyxl")

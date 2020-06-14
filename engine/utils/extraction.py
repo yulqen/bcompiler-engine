@@ -434,25 +434,6 @@ def datamap_check(dm_file):
         )
 
 
-def fast_parse_template(filename, dm, vals):
-    cell_refs_in_dm = {d.cellref for d in dm}
-    dt = defaultdict(list)
-    for sheet_data in vals:
-        sheet_name = sheet_data["sheetname"]
-        for c in cell_refs_in_dm:
-            if c in sheet_data.keys():
-                dt[sheet_name].append(
-                    TemplateCell(
-                        filename,
-                        sheet_name,
-                        c,
-                        sheet_data[c],
-                        DatamapLineValueType.NUMBER,
-                    )
-                )
-    return dt
-
-
 def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     """Given a populated xlsx file, returns all data in a list of TemplateCell objects
 

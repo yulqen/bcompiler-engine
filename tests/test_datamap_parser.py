@@ -17,7 +17,6 @@ TEXT = DatamapLineValueType.TEXT
 
 
 def test_datamap_file_as_pathlib_object(datamap):
-    breakpoint()
     data = datamap_reader(Path(datamap))
     assert len(data) == 18
 
