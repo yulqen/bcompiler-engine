@@ -436,17 +436,17 @@ def datamap_check(dm_file):
 
 def fast_parse_template(filename, dm, vals):
     cell_refs_in_dm = {d.cellref for d in dm}
-    dt: defaultdict = defaultdict(list)
+    dt = defaultdict(list)
     for sheet_data in vals:
         sheet_name = sheet_data["sheetname"]
-        for item in sheet_data.items():
-            if item[0] in cell_refs_in_dm:
+        for c in cell_refs_in_dm:
+            if c in sheet_data.keys():
                 dt[sheet_name].append(
                     TemplateCell(
                         filename,
                         sheet_name,
-                        item[0],
-                        sheet_data[item[0]],
+                        c,
+                        sheet_data[c],
                         DatamapLineValueType.NUMBER,
                     )
                 )
