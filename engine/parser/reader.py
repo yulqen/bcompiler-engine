@@ -1,3 +1,4 @@
+import hashlib
 import zipfile
 from collections import defaultdict
 from pathlib import Path
@@ -8,7 +9,6 @@ from lxml.etree import Element
 
 from engine.domain.datamap import DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
-from engine.utils.extraction import datamap_reader
 
 WORKSHEET_CONTENT_TYPE = (
     "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"
@@ -30,7 +30,7 @@ class SpreadsheetReader:
         "pr": "http://schemas.openxmlformats.org/package/2006/relationships",
     }
 
-    def __init__(self, template, datamap) -> None:
+    def __init__(self, template, datamap=None) -> None:
         self.fn = template
         self.datamap = datamap
         self.archive = zipfile.ZipFile(self.fn, "r")
@@ -47,32 +47,66 @@ class SpreadsheetReader:
             "d:si/d:t/text()", namespaces=SpreadsheetReader.ns
         )
 
-    def read(self) -> EXTRACTED_FILE:
-        """Reads data from the template, given a list of DatamapLine objects.
+    def _make_template_cell_dict(self, data, filename, sheetname):
+        out = []
+        del data["sheetname"]
+        for x in data.items():
+            out.append(
+                (
+                    x[0],
+                    {
+                        "cellref": x[0],
+                        "data_type": "TEXT",
+                        "file_name": filename,
+                        "sheet_name": sheetname,
+                        "value": x[1],
+                    },
+                )
+            )
+        return out
 
-        Returns a dict, whose key is the path to the template file. Each
-        sheet is a sub-dict within.  The actual data is a list of TemplateCell
-        objects.
-        """
-        dm_data = datamap_reader(self.datamap)
+    def read_without_datamap(self):
+        hash_ = hashlib.md5(open(self.fn, "rb").read()).digest().hex()
         sheets = self.sheet_names
         vals = [self.get_cell_values(sheetname) for sheetname in sheets]
-        cell_refs_in_dm = {d.cellref for d in dm_data}
-        dt: EXTRACTED_FILE = defaultdict(lambda: defaultdict(list))
+        base_dict = {"checksum": hash_, "data": {}}
         for sheet_data in vals:
-            sheet_name = sheet_data["sheetname"]
-            for c in cell_refs_in_dm:
-                if c in sheet_data.keys():
-                    dt[self.fn][sheet_name].append(
-                        TemplateCell(
-                            self.fn,
-                            sheet_name,
-                            c,
-                            sheet_data[c],
-                            DatamapLineValueType.NUMBER,
-                        )
-                    )
-        return dt
+            # Need to formulate the TemplateCell obj here
+            s_name = sheet_data["sheetname"]
+            cellmap = {}
+            cellmap.update(
+                self._make_template_cell_dict(sheet_data, self.fn.parts[-1], s_name)
+            )
+            sheetmap = {s_name: cellmap}
+            base_dict["data"].update(sheetmap)
+        return {self.fn.parts[-1]: base_dict}
+
+    #   def read(self) -> EXTRACTED_FILE:
+    #       """Reads data from the template, given a list of DatamapLine objects.
+    #
+    #       Returns a dict, whose key is the path to the template file. Each
+    #       sheet is a sub-dict within.  The actual data is a list of TemplateCell
+    #       objects.
+    #       """
+    #       dm_data = datamap_reader(self.datamap)
+    #       sheets = self.sheet_names
+    #       vals = [self.get_cell_values(sheetname) for sheetname in sheets]
+    #       cell_refs_in_dm = {d.cellref for d in dm_data}
+    #       dt: EXTRACTED_FILE = defaultdict(lambda: defaultdict(list))
+    #       for sheet_data in vals:
+    #           sheet_name = sheet_data["sheetname"]
+    #           for c in cell_refs_in_dm:
+    #               if c in sheet_data.keys():
+    #                   dt[self.fn][sheet_name].append(
+    #                       TemplateCell(
+    #                           self.fn,
+    #                           sheet_name,
+    #                           c,
+    #                           sheet_data[c],
+    #                           DatamapLineValueType.NUMBER,
+    #                       )
+    #                   )
+    #       return dt
 
     def _get_worksheet_files(self) -> None:
         src = self.archive.read("[Content_Types].xml")
