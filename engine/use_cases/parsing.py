@@ -39,15 +39,28 @@ import warnings
 from concurrent import futures
 from typing import Dict, List
 
-from engine.exceptions import (NoApplicableSheetsInTemplateFiles,
-                               RemoveFileWithNoSheetRequiredByDatamap, DatamapNotCSVException)
+from engine.exceptions import (
+    DatamapNotCSVException,
+    NoApplicableSheetsInTemplateFiles,
+    RemoveFileWithNoSheetRequiredByDatamap,
+)
+from engine.parser.reader import template_reader_lxml
+
 # pylint: disable=R0903,R0913;
-from engine.utils.extraction import (ALL_IMPORT_DATA, check_datamap_sheets,
-                                     remove_failing_files, template_reader)
+from engine.utils.extraction import (
+    ALL_IMPORT_DATA,
+    check_datamap_sheets,
+    remove_failing_files,
+    template_reader,
+)
 
 warnings.filterwarnings("ignore", ".*Data Validation*.")
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(levelname)s - %(message)s", datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s: %(levelname)s - %(message)s",
+    datefmt="%d-%b-%y %H:%M:%S",
+)
 logger = logging.getLogger(__name__)
 
 # TODO - move this to config
@@ -75,7 +88,7 @@ class ApplyDatamapToExtractionUseCase:
         self._template_data_json: str = ""
 
     def _get_value_of_cell_referred_by_key(
-            self, filename: str, key: str, sheet: str
+        self, filename: str, key: str, sheet: str
     ) -> str:
         """Given a filename, a template_data json str, a datamap_data dict, key and sheet, returns
         the value in the spreadsheet at given datamap key.
@@ -228,6 +241,6 @@ def extract_from_multiple_xlsx_files(xlsx_files) -> ALL_IMPORT_DATA:
     """Extract raw data from list of paths to excel files. Return as complex dictionary."""
     data = {}
     with futures.ProcessPoolExecutor() as pool:
-        for file in pool.map(template_reader, xlsx_files):
+        for file in pool.map(template_reader_lxml, xlsx_files):
             data.update(file)
     return data

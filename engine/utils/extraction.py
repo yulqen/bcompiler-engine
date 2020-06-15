@@ -28,7 +28,6 @@ from engine.exceptions import (
     MissingSheetFieldError,
     NoApplicableSheetsInTemplateFiles,
 )
-from engine.parser.reader import SpreadsheetReader
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
 
 FILE_DATA = Dict[str, Union[str, Dict[str, Dict[str, str]]]]
@@ -433,29 +432,6 @@ def datamap_check(dm_file):
         return MalFormedCSVHeaderException(
             "Datamap does not contain the required headers. Cannot proceed"
         )
-
-
-def template_reader_lxml(template_file):
-    f_path: Path = Path(template_file)
-    try:
-        reader = SpreadsheetReader(template_file)
-    except TypeError:
-        msg = (
-            "Unable to open {}. Potential corruption of file. Try resaving "
-            "in Excel or removing conditional formatting. See issue at "
-            "https://github.com/hammerheadlemon/bcompiler-engine/issues/3 for update. Quitting.".format(
-                f_path
-            )
-        )
-        logger.critical(msg)
-        raise
-    except BadZipFile:
-        logger.critical(
-            f"Cannot open {template_file} due to file not conforming to expected format. "
-            f"Not continuing. Remove file from input directory and try again."
-        )
-        raise RuntimeError
-    return reader.read_without_datamap()
 
 
 def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:

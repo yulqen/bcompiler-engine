@@ -2,9 +2,9 @@ import hashlib
 
 from engine.use_cases.parsing import extract_from_multiple_xlsx_files
 from engine.utils.extraction import (
-    get_xlsx_files,
     _hash_single_file,
     _hash_target_files,
+    get_xlsx_files,
 )
 
 

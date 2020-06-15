@@ -1,14 +1,17 @@
 import hashlib
+import logging
 import zipfile
 from collections import defaultdict
 from pathlib import Path
 from typing import DefaultDict, Dict, List, Optional
+from zipfile import BadZipFile
 
 from lxml import etree
 from lxml.etree import Element
 
 from engine.domain.datamap import DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
+from engine.utils.extraction import datamap_reader
 
 WORKSHEET_CONTENT_TYPE = (
     "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"
@@ -16,6 +19,13 @@ WORKSHEET_CONTENT_TYPE = (
 
 CELL_VALUE_MAP = Dict[str, str]
 EXTRACTED_FILE = DefaultDict[Path, Dict[str, List[TemplateCell]]]
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s: %(levelname)s - %(message)s",
+    datefmt="%d-%b-%y %H:%M:%S",
+)
+logger = logging.getLogger(__name__)
 
 
 class SpreadsheetReader:
@@ -81,32 +91,32 @@ class SpreadsheetReader:
             base_dict["data"].update(sheetmap)
         return {self.fn.parts[-1]: base_dict}
 
-    #   def read(self) -> EXTRACTED_FILE:
-    #       """Reads data from the template, given a list of DatamapLine objects.
-    #
-    #       Returns a dict, whose key is the path to the template file. Each
-    #       sheet is a sub-dict within.  The actual data is a list of TemplateCell
-    #       objects.
-    #       """
-    #       dm_data = datamap_reader(self.datamap)
-    #       sheets = self.sheet_names
-    #       vals = [self.get_cell_values(sheetname) for sheetname in sheets]
-    #       cell_refs_in_dm = {d.cellref for d in dm_data}
-    #       dt: EXTRACTED_FILE = defaultdict(lambda: defaultdict(list))
-    #       for sheet_data in vals:
-    #           sheet_name = sheet_data["sheetname"]
-    #           for c in cell_refs_in_dm:
-    #               if c in sheet_data.keys():
-    #                   dt[self.fn][sheet_name].append(
-    #                       TemplateCell(
-    #                           self.fn,
-    #                           sheet_name,
-    #                           c,
-    #                           sheet_data[c],
-    #                           DatamapLineValueType.NUMBER,
-    #                       )
-    #                   )
-    #       return dt
+    def read(self) -> EXTRACTED_FILE:
+        """Reads data from the template, given a list of DatamapLine objects.
+
+        Returns a dict, whose key is the path to the template file. Each
+        sheet is a sub-dict within.  The actual data is a list of TemplateCell
+        objects.
+        """
+        dm_data = datamap_reader(self.datamap)
+        sheets = self.sheet_names
+        vals = [self.get_cell_values(sheetname) for sheetname in sheets]
+        cell_refs_in_dm = {d.cellref for d in dm_data}
+        dt: EXTRACTED_FILE = defaultdict(lambda: defaultdict(list))
+        for sheet_data in vals:
+            sheet_name = sheet_data["sheetname"]
+            for c in cell_refs_in_dm:
+                if c in sheet_data.keys():
+                    dt[self.fn][sheet_name].append(
+                        TemplateCell(
+                            self.fn,
+                            sheet_name,
+                            c,
+                            sheet_data[c],
+                            DatamapLineValueType.NUMBER,
+                        )
+                    )
+        return dt
 
     def _get_worksheet_files(self) -> None:
         src = self.archive.read("[Content_Types].xml")
@@ -190,6 +200,9 @@ class SpreadsheetReader:
                     {cellref: None}
                 )  # if there is no <v> cell we put None in for cellref
             else:
+                print(
+                    "Inside {} = {} - {}".format(self.fn, sheetname, child.attrib["r"])
+                )
                 c_type = child.attrib["t"]
 
                 # we need to distinguish between <f> and <v> tags
@@ -229,6 +242,29 @@ class SpreadsheetReader:
                             v = float(child_tags[1].text)  # type: ignore
                     out.update({cellref: v})
         return out
+
+
+def template_reader_lxml(template_file):
+    f_path: Path = Path(template_file)
+    try:
+        reader = SpreadsheetReader(template_file)
+    except TypeError:
+        msg = (
+            "Unable to open {}. Potential corruption of file. Try resaving "
+            "in Excel or removing conditional formatting. See issue at "
+            "https://github.com/hammerheadlemon/bcompiler-engine/issues/3 for update. Quitting.".format(
+                f_path
+            )
+        )
+        logger.critical(msg)
+        raise
+    except BadZipFile:
+        logger.critical(
+            f"Cannot open {template_file} due to file not conforming to expected format. "
+            f"Not continuing. Remove file from input directory and try again."
+        )
+        raise RuntimeError
+    return reader.read_without_datamap()
 
 
 # retain for posterity regarding doing this the basic way
