@@ -108,6 +108,10 @@ class SpreadsheetReader:
             base_dict["data"].update(sheetmap)
         return {self.fn.parts[-1]: base_dict}
 
+    def _conv_xml_type_to_datamaplinevaluetype(self, val):
+        if val in ["s", "str"]: return DatamapLineValueType.TEXT
+        elif val == "t": return DatamapLineValueType.NUMBER
+
     def read(self) -> EXTRACTED_FILE:
         """Reads data from the template, given a list of DatamapLine objects.
 
@@ -133,8 +137,8 @@ class SpreadsheetReader:
                             self.fn,
                             sheet_name,
                             c,
-                            sheet_data[c],
-                            DatamapLineValueType.NUMBER,
+                            sheet_data[c].real_value,
+                            self._conv_xml_type_to_datamaplinevaluetype(sheet_data[c].type)
                         )
                     )
         return dt
