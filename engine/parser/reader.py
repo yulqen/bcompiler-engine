@@ -40,7 +40,7 @@ class SpreadsheetReader:
         "pr": "http://schemas.openxmlformats.org/package/2006/relationships",
     }
 
-    def __init__(self, template, datamap=None) -> None:
+    def __init__(self, template: Path, datamap=None) -> None:
         self.fn = template
         self.datamap = datamap
         self.archive = zipfile.ZipFile(self.fn, "r")
@@ -78,7 +78,11 @@ class SpreadsheetReader:
     def read_without_datamap(self):
         hash_ = hashlib.md5(open(self.fn, "rb").read()).digest().hex()
         sheets = self.sheet_names
-        vals = [self.get_cell_values(sheetname) for sheetname in sheets]
+        vals = [
+            self.get_cell_values(sheetname)
+            for sheetname in sheets
+            if self.get_cell_values(sheetname) is not None
+        ]
         base_dict = {"checksum": hash_, "data": {}}
         for sheet_data in vals:
             # Need to formulate the TemplateCell obj here
@@ -100,7 +104,11 @@ class SpreadsheetReader:
         """
         dm_data = datamap_reader(self.datamap)
         sheets = self.sheet_names
-        vals = [self.get_cell_values(sheetname) for sheetname in sheets]
+        vals = [
+            self.get_cell_values(sheetname)
+            for sheetname in sheets
+            if self.get_cell_values(sheetname) is not None
+        ]
         cell_refs_in_dm = {d.cellref for d in dm_data}
         dt: EXTRACTED_FILE = defaultdict(lambda: defaultdict(list))
         for sheet_data in vals:
@@ -179,7 +187,7 @@ class SpreadsheetReader:
             )
             return self.shared_strings[idx]
 
-    def get_cell_values(self, sheetname: str) -> CELL_VALUE_MAP:
+    def get_cell_values(self, sheetname: str) -> Optional[CELL_VALUE_MAP]:
         """Given a sheet name, will return a dictionary of cellname: value mappings.
         """
         rid: str = self._get_sheet_rId(sheetname)
@@ -189,6 +197,8 @@ class SpreadsheetReader:
         cells: List[Element] = tree.xpath(
             "d:sheetData/d:row/d:c", namespaces=SpreadsheetReader.ns
         )
+        if len(cells) == 0:  # quit - sheet is empty
+            return None
         out = {
             "sheetname": sheetname
         }  # rather than nest the dict here we put the sheetname in as a dict
@@ -200,9 +210,6 @@ class SpreadsheetReader:
                     {cellref: None}
                 )  # if there is no <v> cell we put None in for cellref
             else:
-                print(
-                    "Inside {} = {} - {}".format(self.fn, sheetname, child.attrib["r"])
-                )
                 c_type = child.attrib["t"]
 
                 # we need to distinguish between <f> and <v> tags

@@ -7,12 +7,7 @@ from engine.domain.datamap import DatamapLineValueType
 from engine.domain.template import TemplateCell
 from engine.parser.reader import template_reader_lxml
 from engine.use_cases.parsing import extract_from_multiple_xlsx_files
-from engine.utils.extraction import (
-    _extract_cellrefs,
-    _extract_sheets,
-    get_xlsx_files,
-    template_reader,
-)
+from engine.utils.extraction import _extract_cellrefs, _extract_sheets, get_xlsx_files
 
 
 def test_parse_multiple_templates(resources):

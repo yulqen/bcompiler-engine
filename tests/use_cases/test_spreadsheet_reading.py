@@ -16,6 +16,14 @@ def heavy_template_datamap():
 
 
 @pytest.fixture
+def template_containing_empty_sheet():
+    here = os.path.abspath(os.curdir)
+    return os.path.join(
+        here, "tests/resources/test_template_with_introduction_sheet.xlsm"
+    )
+
+
+@pytest.fixture
 def xml_test_file() -> Path:
     return Path.cwd() / "tests" / "resources" / "test.xml"
 
@@ -110,7 +118,7 @@ def test_return_none_when_cellref_out_of_range(reader):
 ############################################################
 
 
-def test_get_datamap_data_using_new_use_case(reader, heavy_template_datamap):
+def test_get_datamap_data_using_new_use_case(reader):
     """First test for gathering cell values in template using a datamap.
 
     Uses fast xpath parsing in lxml rather in openpyxl to extract the data.
@@ -121,6 +129,16 @@ def test_get_datamap_data_using_new_use_case(reader, heavy_template_datamap):
     target_cellrefs = [x.cellref for x in template_data[reader.fn]["Introduction"]]
     assert "Universal Cantilever Bridge over the River Styx" in target_vals
     assert "C11" in target_cellrefs
+
+
+def test_get_cell_values_using_lxml_handles_empty_sheet(
+    template_containing_empty_sheet,
+):
+    reader = SpreadsheetReader(Path(template_containing_empty_sheet))
+    data = reader.read_without_datamap()
+    assert (
+        len(data[reader.fn.parts[-1]]["data"]) == 2
+    )  # we should not get an Introduction sheet as its empty
 
 
 @pytest.mark.skip("used for exploring openpyxl")
