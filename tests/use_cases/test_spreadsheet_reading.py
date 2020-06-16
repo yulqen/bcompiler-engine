@@ -104,6 +104,19 @@ def test_get_all_cell_vals_in_workbook(reader):
     assert vals[15]["sheetname"] == "4 - Leaders"  # hidden sheet
 
 
+def test_cell_types(reader):
+    sheets = reader.sheet_names
+    vals = [reader.get_cell_values(sheetname) for sheetname in sheets]
+    cell_quant = [(x.get("sheetname"), len(x.items())) for x in vals]
+    empty_sheets = [x for x in cell_quant if x[1] == 1]
+    intro_sheet = [x for x in vals if x["sheetname"] == "Introduction"][0]
+
+    assert intro_sheet["C9"].real_value == "Institute of Hairdressing Dophins"
+    assert intro_sheet["C9"].type == "s"
+
+
+
+
 def test_raise_exception_when_trying_to_get_value_from_nonexistant_sheet(reader):
     with pytest.raises(ValueError):
         reader.get_cell_value(cellref="C1000", sheetname="Balls")

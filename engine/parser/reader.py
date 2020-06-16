@@ -3,7 +3,8 @@ import logging
 import zipfile
 from collections import defaultdict
 from pathlib import Path
-from typing import DefaultDict, Dict, List, Optional
+from typing import DefaultDict, Dict, List, Optional, Union
+from dataclasses import dataclass
 from zipfile import BadZipFile
 
 from lxml import etree
@@ -12,6 +13,18 @@ from lxml.etree import Element
 from engine.domain.datamap import DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
 from engine.utils.extraction import datamap_reader
+
+
+@dataclass
+class ParsedCell:
+    sheetname: str
+    cellref: str
+    type: str
+    cell_value: str
+    real_value: Union[str, float, int]
+
+    def __repr__(self) -> str:
+        return "<ParsedCell {} - {}>".format(self.cellref, self.sheetname)
 
 WORKSHEET_CONTENT_TYPE = (
     "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"
@@ -187,67 +200,35 @@ class SpreadsheetReader:
             )
             return self.shared_strings[idx]
 
-    def get_cell_values(self, sheetname: str) -> Optional[CELL_VALUE_MAP]:
+    def get_cell_values(self, sheetname: str) -> Dict[str, ParsedCell]:
         """Given a sheet name, will return a dictionary of cellname: value mappings.
         """
         rid: str = self._get_sheet_rId(sheetname)
         path: str = self._get_worksheet_path_from_rId(rid)
         src: bytes = self.archive.read("".join(["xl/", path]))
         tree: Element = etree.fromstring(src)
-        cells: List[Element] = tree.xpath(
-            "d:sheetData/d:row/d:c", namespaces=SpreadsheetReader.ns
-        )
-        if len(cells) == 0:  # quit - sheet is empty
-            return None
         out = {
             "sheetname": sheetname
         }  # rather than nest the dict here we put the sheetname in as a dict
-        for child in cells:  # go looking for value cells
-            cellref = child.attrib["r"]
-            child_tags = child.getchildren()
-            if not child_tags:
-                out.update(
-                    {cellref: None}
-                )  # if there is no <v> cell we put None in for cellref
-            else:
-                c_type = child.attrib["t"]
-
-                # we need to distinguish between <f> and <v> tags
-                # <v> contains the value, <f> the formula
-
-                if len(child_tags) == 1:  # if only one, it is the <v> tag
-                    if c_type == "s":  # we need to look up the string
-                        v = self.shared_strings[int(child_tags[0].text)]
-                    elif c_type == "str":  # value is in the v tag
-                        v = child_tags[0].text
-                    elif c_type == "n":  # a number
-                        try:
-                            # int
-                            v = int(child_tags[0].text)  # type: ignore
-                        except ValueError:
-                            # float
-                            v = float(child_tags[0].text)  # type: ignore
-                    out.update({cellref: v})
-                else:
-                    # we have more than one child tag, which means a <f> and <v> tag
-                    vtag = [
-                        t
-                        for t in child_tags
-                        if t.tag
-                        == "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}v"
-                    ][0]
-                    if c_type == "s":
-                        v = self.shared_strings[int(vtag.text)]
-                    elif c_type == "str":
-                        v = vtag.text
-                    elif c_type == "n":
-                        try:
-                            # int
-                            v = int(child_tags[1].text)  # type: ignore
-                        except ValueError:
-                            # float
-                            v = float(child_tags[1].text)  # type: ignore
-                    out.update({cellref: v})
+        vcells: List[Element] = tree.xpath(
+            "d:sheetData/d:row/d:c/d:v", namespaces=SpreadsheetReader.ns
+        )
+        for cell in vcells:  # go looking for value cells
+            parent = cell.getparent()
+            parsed_cell = ParsedCell(sheetname, cellref=parent.attrib["r"], type=parent.attrib["t"], cell_value=cell.text, real_value="")
+            if parsed_cell.type == "s":  # we need to look up the string
+                v = self.shared_strings[int(parsed_cell.cell_value)]
+            elif parsed_cell.type == "str":  # value is in the v tag
+                v = parsed_cell.cell_value
+            elif parsed_cell == "n":  # a number
+                try:
+                    # int
+                    v = int(parsed_text.cell_value)  # type: ignore
+                except ValueError:
+                    # float
+                    v = float(parsed_text.cell_value)  # type: ignore
+            parsed_cell.real_value = v
+            out.update({parsed_cell.cellref: parsed_cell})
         return out
 
 
