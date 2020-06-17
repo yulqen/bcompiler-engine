@@ -86,15 +86,16 @@ def test_lxml_template_reader(template):
 
 
 def test_template_reader(template):
-    dataset = template_reader(template)
+    dataset = template_reader_lxml(template)
     assert (
-        dataset["test_template.xlsx"]["data"]["Summary"]["B3"]["value"]
+        dataset["test_template.xlsx"]["data"]["Summary"]["B3"]["value"].real_value
         == "This is a string"
     )
 
 
 def test_extract_data_from_multiple_files_into_correct_structure(resources):
     xlsx_files = get_xlsx_files(resources)
+    breakpoint()
     dataset = extract_from_multiple_xlsx_files(xlsx_files)
     test_filename = "test_template2.xlsx"
     assert (

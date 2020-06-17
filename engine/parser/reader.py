@@ -2,9 +2,9 @@ import hashlib
 import logging
 import zipfile
 from collections import defaultdict
+from dataclasses import dataclass
 from pathlib import Path
 from typing import DefaultDict, Dict, List, Optional, Union
-from dataclasses import dataclass
 from zipfile import BadZipFile
 
 from lxml import etree
@@ -25,6 +25,7 @@ class ParsedCell:
 
     def __repr__(self) -> str:
         return "<ParsedCell {} - {}>".format(self.cellref, self.sheetname)
+
 
 WORKSHEET_CONTENT_TYPE = (
     "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"
@@ -96,6 +97,11 @@ class SpreadsheetReader:
             for sheetname in sheets
             if self.get_cell_values(sheetname) is not None
         ]
+        cell_quants = [len(x.items()) for x in vals]
+        if 1 in cell_quants:
+            # if there is a sheet in there with no cells
+            vals.pop(cell_quants.index(1))
+
         base_dict = {"checksum": hash_, "data": {}}
         for sheet_data in vals:
             # Need to formulate the TemplateCell obj here
@@ -109,8 +115,10 @@ class SpreadsheetReader:
         return {self.fn.parts[-1]: base_dict}
 
     def _conv_xml_type_to_datamaplinevaluetype(self, val):
-        if val in ["s", "str"]: return DatamapLineValueType.TEXT
-        elif val == "t": return DatamapLineValueType.NUMBER
+        if val in ["s", "str"]:
+            return DatamapLineValueType.TEXT
+        elif val == "t":
+            return DatamapLineValueType.NUMBER
 
     def read(self) -> EXTRACTED_FILE:
         """Reads data from the template, given a list of DatamapLine objects.
@@ -138,7 +146,9 @@ class SpreadsheetReader:
                             sheet_name,
                             c,
                             sheet_data[c].real_value,
-                            self._conv_xml_type_to_datamaplinevaluetype(sheet_data[c].type)
+                            self._conv_xml_type_to_datamaplinevaluetype(
+                                sheet_data[c].type
+                            ),
                         )
                     )
         return dt
@@ -219,7 +229,13 @@ class SpreadsheetReader:
         )
         for cell in vcells:  # go looking for value cells
             parent = cell.getparent()
-            parsed_cell = ParsedCell(sheetname, cellref=parent.attrib["r"], type=parent.attrib["t"], cell_value=cell.text, real_value="")
+            parsed_cell = ParsedCell(
+                sheetname,
+                cellref=parent.attrib["r"],
+                type=parent.attrib["t"],
+                cell_value=cell.text,
+                real_value="",
+            )
             if parsed_cell.type == "s":  # we need to look up the string
                 v = self.shared_strings[int(parsed_cell.cell_value)]
             elif parsed_cell.type == "str":  # value is in the v tag
@@ -227,10 +243,10 @@ class SpreadsheetReader:
             elif parsed_cell == "n":  # a number
                 try:
                     # int
-                    v = int(parsed_text.cell_value)  # type: ignore
+                    v = int(parsed_cell.cell_value)  # type: ignore
                 except ValueError:
                     # float
-                    v = float(parsed_text.cell_value)  # type: ignore
+                    v = float(parsed_cell.cell_value)  # type: ignore
             parsed_cell.real_value = v
             out.update({parsed_cell.cellref: parsed_cell})
         return out
