@@ -145,9 +145,9 @@ class SpreadsheetReader:
                             self.fn,
                             sheet_name,
                             c,
-                            sheet_data[c].real_value,
+                            sheet_data[c],
                             self._conv_xml_type_to_datamaplinevaluetype(
-                                sheet_data[c].type
+                                sheet_data[c]
                             ),
                         )
                     )
@@ -214,7 +214,7 @@ class SpreadsheetReader:
             )
             return self.shared_strings[idx]
 
-    def get_cell_values(self, sheetname: str) -> Dict[str, ParsedCell]:
+    def get_cell_values(self, sheetname: str) -> Dict[str, str]:
         """Given a sheet name, will return a dictionary of cellname: value mappings.
         """
         rid: str = self._get_sheet_rId(sheetname)
@@ -248,7 +248,7 @@ class SpreadsheetReader:
                     # float
                     v = float(parsed_cell.cell_value)  # type: ignore
             parsed_cell.real_value = v
-            out.update({parsed_cell.cellref: parsed_cell})
+            out.update({parsed_cell.cellref: parsed_cell.real_value})
         return out
 
 

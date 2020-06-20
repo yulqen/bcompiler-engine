@@ -85,11 +85,11 @@ def test_get_cell_value_for_cellref_sheet_lxml(reader):
 
 def test_get_cell_values_for_sheet(reader):
     intro_vals = reader.get_cell_values("Introduction")
-    assert intro_vals["B2"].real_value == "Fantastic Portfolio Collection Sheet"
-    assert intro_vals["B14"].real_value == "Project Type (for GOASS use)"
-    assert intro_vals["A35"].real_value == "0.4.5"
+    assert intro_vals["B2"] == "Fantastic Portfolio Collection Sheet"
+    assert intro_vals["B14"] == "Project Type (for GOASS use)"
+    assert intro_vals["A35"] == "0.4.5"
     scope_vals = reader.get_cell_values("3 - Scope History")
-    assert scope_vals["M41"].real_value == "4th Scope Change"
+    assert scope_vals["M41"] == "4th Scope Change"
 
 
 def test_get_all_cell_vals_in_workbook(reader):
@@ -109,9 +109,7 @@ def test_cell_types(reader):
     sheets = reader.sheet_names
     vals = [reader.get_cell_values(sheetname) for sheetname in sheets]
     intro_sheet = [x for x in vals if x["sheetname"] == "Introduction"][0]
-
-    assert intro_sheet["C9"].real_value == "Institute of Hairdressing Dophins"
-    assert intro_sheet["C9"].type == "s"
+    assert intro_sheet["C9"] == "Institute of Hairdressing Dophins"
 
 
 def test_raise_exception_when_trying_to_get_value_from_nonexistant_sheet(reader):
@@ -152,6 +150,7 @@ def test_get_cell_values_using_lxml_handles_empty_sheet(
 
 
 
+@pytest.mark.xfail(reason="Basing type detection on unreliable XML attributes")
 def test_problem_file_using_lxml_parse(resources):
     """
     We are testing this particular file because we know it contains cells which

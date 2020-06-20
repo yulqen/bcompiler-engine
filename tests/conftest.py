@@ -9,6 +9,7 @@ import pytest
 from engine.config import Config
 from engine.domain.datamap import DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
+from engine.parser.reader import ParsedCell
 
 
 @pytest.fixture
@@ -18,6 +19,16 @@ def template_cell_obj() -> TemplateCell:
         sheet_name="Test Sheet 1",
         cellref="A10",
         value="Test Value",
+        data_type=DatamapLineValueType.TEXT,
+    )
+
+@pytest.fixture
+def template_cell_obj_parsed_cell() -> TemplateCell:
+    return TemplateCell(
+        file_name="test.xlsx",
+        sheet_name="Test Sheet 1",
+        cellref="A10",
+        value=ParsedCell("test", "A1", "s", "toss", "toss_real_value"),
         data_type=DatamapLineValueType.TEXT,
     )
 
