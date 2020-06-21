@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 
 [tool.poetry]
 name = "bcompiler-engine"
-version = "1.0.5"
+version = "1.0.6"
 description = "A new, faster, more efficient, more modular back end for datamap tools and  interfaces."
 homepage = "https://github.com/hammerheadlemon/bcompiler-engine"
 repository = "https://github.com/hammerheadlemon/bcompiler-engine"
