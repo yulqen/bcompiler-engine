@@ -67,7 +67,7 @@ class MultipleTemplatesWriteRepo:
         file_name: file name to be appended to output path
         """
 
-        # TODO - better logging in here because this is a black hole for the UI, where it takes ages.
+        logger.info("Preparing to populate blank templates - this can take a few minutes depending on size of master.")
         for file_data in data:
             try:
                 blank_workbook: Workbook = load_workbook(
@@ -77,6 +77,7 @@ class MultipleTemplatesWriteRepo:
                 raise FileNotFoundError(f"Cannot find file {e.filename}. Do you have "
                                         "file set correctly in config file, or is file missing?")
             file_name = file_data[0].file_name
+            logger.info("Populating {}".format(file_name))
             _wb = self._populate_workbook(blank_workbook, file_data)
             output_file_name: str = ".".join([file_name, "xlsm"])
             self.unsaved_workbooks.append((output_file_name, _wb))
