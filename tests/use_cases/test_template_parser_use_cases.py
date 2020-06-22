@@ -147,7 +147,6 @@ def test_create_master_spreadsheet_with_single_file(
     uc.execute("master.xlsx")
     wb = load_workbook(Path(mock_config.PLATFORM_DOCS_DIR) / "output" / "master.xlsx")
     ws = wb.active
-    breakpoint()
     assert ws["A1"].value == "file name"
     assert ws["B1"].value == "test_template"
     assert ws["B2"].value == 43758  # "2019-10-20T00:00:00"
