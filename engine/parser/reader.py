@@ -92,11 +92,11 @@ class SpreadsheetReader:
     def read_without_datamap(self):
         hash_ = hashlib.md5(open(self.fn, "rb").read()).digest().hex()
         sheets = self.sheet_names
-        vals = [
-            self.get_cell_values(sheetname)
-            for sheetname in sheets
-            if self.get_cell_values(sheetname) is not None
-        ]
+        vals = []
+        for sheetname in sheets:
+            dx = self.get_cell_values(sheetname)
+            if dx is not None:
+                vals.append(dx)
         base_dict = {"checksum": hash_, "data": {}}
         for sheet_data in vals:
             # Need to formulate the TemplateCell obj here
@@ -124,11 +124,11 @@ class SpreadsheetReader:
         """
         dm_data = datamap_reader(self.datamap)
         sheets = self.sheet_names
-        vals = [
-            self.get_cell_values(sheetname)
-            for sheetname in sheets
-            if self.get_cell_values(sheetname) is not None
-        ]
+        vals = []
+        for sheetname in sheets:
+            dx = self.get_cell_values(sheetname)
+            if dx is not None:
+                vals.append(dx)
         cell_refs_in_dm = {d.cellref for d in dm_data}
         dt: EXTRACTED_FILE = defaultdict(lambda: defaultdict(list))
         for sheet_data in vals:
