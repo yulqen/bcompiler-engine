@@ -6,11 +6,12 @@ from pathlib import Path
 import pytest
 from openpyxl import load_workbook
 
+from engine.parser.reader import template_reader_lxml
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
 from engine.repository.templates import InMemoryPopulatedTemplatesRepository
 from engine.use_cases.parsing import CreateMasterUseCase
-from engine.utils.extraction import datamap_reader, template_reader
+from engine.utils.extraction import datamap_reader
 
 
 def test_datamap_reader(mock_config, org_test_files_dir):
@@ -36,7 +37,7 @@ def test_template_reader(mock_config, org_test_files_dir):
             (Path(mock_config.PLATFORM_DOCS_DIR) / "input"),
         )
     tmpl_file = Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "dft1_tmp.xlsm"
-    data = template_reader(tmpl_file)
+    data = template_reader_lxml(tmpl_file)
     assert data["dft1_tmp.xlsm"]["data"]["10 - Benefits"]["X34"]["value"] == 1
 
 

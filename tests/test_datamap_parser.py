@@ -9,7 +9,8 @@ from engine.exceptions import (
     MissingCellKeyError,
     MissingSheetFieldError,
 )
-from engine.utils.extraction import _get_cell_data, datamap_reader, template_reader
+from engine.parser.reader import template_reader_lxml
+from engine.utils.extraction import _get_cell_data, datamap_reader
 
 NUMBER = DatamapLineValueType.NUMBER
 DATE = DatamapLineValueType.DATE
@@ -65,10 +66,10 @@ def test_bad_spacing_in_datamap(datamap):
 
 
 def test_template_reader(template) -> None:
-    data = template_reader(template)
+    data = template_reader_lxml(template)
     assert (
         _get_cell_data(template, data, "Summary", "B2")["value"]
-        == "2019-10-20T00:00:00"
+        == 43758  # "2019-10-20T00:00:00"
     )
     assert (
         _get_cell_data(template, data, "Summary", "B3")["value"] == "This is a string"

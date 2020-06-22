@@ -51,7 +51,6 @@ from engine.utils.extraction import (
     ALL_IMPORT_DATA,
     check_datamap_sheets,
     remove_failing_files,
-    template_reader,
 )
 
 warnings.filterwarnings("ignore", ".*Data Validation*.")
