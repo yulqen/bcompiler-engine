@@ -145,7 +145,7 @@ def test_get_cell_values_using_lxml_handles_empty_sheet(
     reader = SpreadsheetReader(Path(template_containing_empty_sheet))
     data = reader.read_without_datamap()
     assert (
-        len(data[reader.fn.parts[-1]]["data"]) == 2
+        len(data[reader.fn.parts[-1]]["data"]) == 3
     )  # we should not get an Introduction sheet as its empty
 
 

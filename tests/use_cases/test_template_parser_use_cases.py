@@ -53,7 +53,6 @@ def test_query_data_from_data_file(
     )
 
 
-@pytest.mark.xfail(reason="NoApplicableSheetsInTemplateFiles")
 def test_in_memory_datamap_application_to_extracted_data(
     mock_config, datamap, template_with_introduction_sheet
 ):

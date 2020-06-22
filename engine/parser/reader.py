@@ -97,11 +97,6 @@ class SpreadsheetReader:
             for sheetname in sheets
             if self.get_cell_values(sheetname) is not None
         ]
-        cell_quants = [len(x.items()) for x in vals]
-        if 1 in cell_quants:
-            # if there is a sheet in there with no cells
-            vals.pop(cell_quants.index(1))
-
         base_dict = {"checksum": hash_, "data": {}}
         for sheet_data in vals:
             # Need to formulate the TemplateCell obj here
