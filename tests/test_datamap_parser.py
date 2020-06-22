@@ -66,10 +66,6 @@ def test_bad_spacing_in_datamap(datamap):
 
 def test_template_reader(template) -> None:
     data = template_reader(template)
-    assert _get_cell_data(template, data, "Summary", "B2")["data_type"] == "DATE"
-    assert _get_cell_data(template, data, "Summary", "B3")["data_type"] == "TEXT"
-    assert _get_cell_data(template, data, "Summary", "B4")["data_type"] == "NUMBER"
-    assert _get_cell_data(template, data, "Summary", "B5")["data_type"] == "NUMBER"
     assert (
         _get_cell_data(template, data, "Summary", "B2")["value"]
         == "2019-10-20T00:00:00"
@@ -83,7 +79,6 @@ def test_template_reader(template) -> None:
     assert _get_cell_data(template, data, "Summary", "B5")["value"] == 10
 
     assert _get_cell_data(template, data, "Another Sheet", "K25")["value"] == "Float:"
-    assert _get_cell_data(template, data, "Another Sheet", "K25")["data_type"] == "TEXT"
 
 
 def test_incorrect_headers_are_coerced_or_flagged(datamap_moderately_bad_headers):

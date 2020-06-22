@@ -470,22 +470,19 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
                 if cell.value is not None:
                     try:
                         val = cell.value.rstrip().lstrip()
-                        c_type = DatamapLineValueType.TEXT
                     except AttributeError:
                         if isinstance(cell.value, (float, int)):
                             val = cell.value
-                            c_type = DatamapLineValueType.NUMBER
                         elif isinstance(cell.value, (datetime.date, datetime.datetime)):
                             val = cell.value.isoformat()
-                            c_type = DatamapLineValueType.DATE
                     cellref = "{}{}".format(cell.column_letter, cell.row)
                     if isinstance(template_file, Path):
                         t_cell = TemplateCell(
-                            template_file.as_posix(), sheet.title, cellref, val, c_type
+                            template_file.as_posix(), sheet.title, cellref, val
                         ).to_dict()
                     else:
                         t_cell = TemplateCell(
-                            template_file, sheet.title, cellref, val, c_type
+                            template_file, sheet.title, cellref, val,
                         ).to_dict()
                     sheet_data.append(t_cell)
         sheet_dict.update({sheet.title: _extract_cellrefs(sheet_data)})

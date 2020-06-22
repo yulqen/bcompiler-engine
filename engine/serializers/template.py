@@ -8,8 +8,7 @@ class TemplateCellSerializer(json.JSONEncoder):
                 "file_name": o.file_name,
                 "sheet_name": o.sheet_name,
                 "cellref": o.cellref,
-                "data_type": o.data_type.name,
             }
             return to_serialize
         except AttributeError:
-            return super().default(o) # type: ignore
+            return super().default(o)  # type: ignore

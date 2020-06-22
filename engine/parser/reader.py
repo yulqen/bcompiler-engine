@@ -141,15 +141,7 @@ class SpreadsheetReader:
             for c in cell_refs_in_dm:
                 if c in sheet_data.keys():
                     dt[self.fn][sheet_name].append(
-                        TemplateCell(
-                            self.fn,
-                            sheet_name,
-                            c,
-                            sheet_data[c],
-                            self._conv_xml_type_to_datamaplinevaluetype(
-                                sheet_data[c]
-                            ),
-                        )
+                        TemplateCell(self.fn, sheet_name, c, sheet_data[c],)
                     )
         return dt
 
@@ -240,7 +232,7 @@ class SpreadsheetReader:
                 v = self.shared_strings[int(parsed_cell.cell_value)]
             elif parsed_cell.type == "str":  # value is in the v tag
                 v = parsed_cell.cell_value
-            elif parsed_cell == "n":  # a number
+            elif parsed_cell.type == "n":  # a number
                 try:
                     # int
                     v = int(parsed_cell.cell_value)  # type: ignore

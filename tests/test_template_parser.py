@@ -22,18 +22,10 @@ def test_raise_exception_when_none_abs_path_passed():
 
 
 def test_func_to_get_sheetnames_as_keys_from_list_of_tcs():
-    tc1 = TemplateCell(
-        "test_file", "Sheet1", "A1", "test_value1", DatamapLineValueType.TEXT
-    )
-    tc2 = TemplateCell(
-        "test_file", "Sheet2", "A2", "test_value2", DatamapLineValueType.TEXT
-    )
-    tc3 = TemplateCell(
-        "test_file", "Sheet2", "A3", "test_value3", DatamapLineValueType.TEXT
-    )
-    tc3_dup = TemplateCell(
-        "test_file", "Sheet3", "A3", "test_value3", DatamapLineValueType.TEXT
-    )
+    tc1 = TemplateCell("test_file", "Sheet1", "A1", "test_value1")
+    tc2 = TemplateCell("test_file", "Sheet2", "A2", "test_value2")
+    tc3 = TemplateCell("test_file", "Sheet2", "A3", "test_value3")
+    tc3_dup = TemplateCell("test_file", "Sheet3", "A3", "test_value3")
     output = [tc3, tc2, tc3_dup, tc1]  # noqa
     assert "Sheet1" in _extract_sheets(output).keys()
     assert "Sheet2" in _extract_sheets(output).keys()
@@ -43,15 +35,9 @@ def test_func_to_get_sheetnames_as_keys_from_list_of_tcs():
 
 
 def test_func_to_get_cellrefs_as_keys_from_list_of_tcs():  # noqa
-    tc1 = TemplateCell(
-        "test_file", "Shee1", "A1", "test_value1", DatamapLineValueType.TEXT
-    )
-    tc2 = TemplateCell(
-        "test_file", "Shee1", "A2", "test_value2", DatamapLineValueType.TEXT
-    )
-    tc4 = TemplateCell(
-        "test_file", "Shee1", "A4", "test_value3", DatamapLineValueType.TEXT
-    )
+    tc1 = TemplateCell("test_file", "Shee1", "A1", "test_value1")
+    tc2 = TemplateCell("test_file", "Shee1", "A2", "test_value2")
+    tc4 = TemplateCell("test_file", "Shee1", "A4", "test_value3")
     output = [tc4.to_dict(), tc2.to_dict(), tc1.to_dict()]
     assert "A1" in _extract_cellrefs(output).keys()
     assert "A2" in _extract_cellrefs(output).keys()

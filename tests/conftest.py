@@ -19,8 +19,8 @@ def template_cell_obj() -> TemplateCell:
         sheet_name="Test Sheet 1",
         cellref="A10",
         value="Test Value",
-        data_type=DatamapLineValueType.TEXT,
     )
+
 
 @pytest.fixture
 def template_cell_obj_parsed_cell() -> TemplateCell:
