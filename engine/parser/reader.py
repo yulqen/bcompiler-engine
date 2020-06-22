@@ -206,7 +206,10 @@ class SpreadsheetReader:
         """
         rid: str = self._get_sheet_rId(sheetname)
         path: str = self._get_worksheet_path_from_rId(rid)
-        src: bytes = self.archive.read("".join(["xl/", path]))
+        if path[:4] == "/xl/":
+            src: bytes = self.archive.read("".join(["xl/", path[4:]]))
+        else:
+            src: bytes = self.archive.read("".join(["xl/", path]))
         tree: Element = etree.fromstring(src)
         out = {
             "sheetname": sheetname
@@ -244,6 +247,8 @@ class SpreadsheetReader:
                 except ValueError:
                     # float
                     v = float(parsed_cell.cell_value)  # type: ignore
+            else:
+                v = ""
             parsed_cell.real_value = v
             out.update({parsed_cell.cellref: parsed_cell.real_value})
         return out
