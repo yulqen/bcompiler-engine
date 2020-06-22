@@ -133,7 +133,9 @@ def test_in_memory_datamap_generator(
     }
 
 
-def test_create_master_spreadsheet(mock_config, datamap_match_test_template, template):
+def test_create_master_spreadsheet_with_single_file(
+    mock_config, datamap_match_test_template, template
+):
     mock_config.initialise()
     shutil.copy2(template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
     tmpl_repo = InMemoryPopulatedTemplatesRepository(
@@ -145,6 +147,7 @@ def test_create_master_spreadsheet(mock_config, datamap_match_test_template, tem
     uc.execute("master.xlsx")
     wb = load_workbook(Path(mock_config.PLATFORM_DOCS_DIR) / "output" / "master.xlsx")
     ws = wb.active
+    breakpoint()
     assert ws["A1"].value == "file name"
     assert ws["B1"].value == "test_template"
     assert ws["B2"].value == 43758  # "2019-10-20T00:00:00"

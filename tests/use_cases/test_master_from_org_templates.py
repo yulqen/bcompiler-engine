@@ -41,7 +41,6 @@ def test_template_reader(mock_config, org_test_files_dir):
     assert data["dft1_tmp.xlsm"]["data"]["10 - Benefits"]["X34"]["value"] == 1
 
 
-# TODO - why is this test slow and test_template_parser_use_cases.test_create_master_spreadsheet is fast?
 @pytest.mark.slow
 def test_create_master_spreadsheet(mock_config, org_test_files_dir):
     mock_config.initialise()
