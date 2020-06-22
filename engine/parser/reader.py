@@ -19,7 +19,7 @@ from engine.utils.extraction import datamap_reader
 class ParsedCell:
     sheetname: str
     cellref: str
-    type: str
+    type: Optional[str]
     cell_value: str
     real_value: Union[str, float, int]
 
@@ -221,13 +221,23 @@ class SpreadsheetReader:
         )
         for cell in vcells:  # go looking for value cells
             parent = cell.getparent()
-            parsed_cell = ParsedCell(
-                sheetname,
-                cellref=parent.attrib["r"],
-                type=parent.attrib["t"],
-                cell_value=cell.text,
-                real_value="",
-            )
+            t = parent.attrib.get("t")
+            if t is None:
+                parsed_cell = ParsedCell(
+                    sheetname,
+                    cellref=parent.attrib.get("r"),
+                    type=None,
+                    cell_value=cell.text,
+                    real_value="",
+                )
+            else:
+                parsed_cell = ParsedCell(
+                    sheetname,
+                    cellref=parent.attrib.get("r"),
+                    type=parent.attrib.get("t"),
+                    cell_value=cell.text,
+                    real_value="",
+                )
             if parsed_cell.type == "s":  # we need to look up the string
                 v = self.shared_strings[int(parsed_cell.cell_value)]
             elif parsed_cell.type == "str":  # value is in the v tag

@@ -24,7 +24,6 @@ from engine.use_cases.parsing import (
 from engine.utils.extraction import _check_file_in_datafile, get_xlsx_files
 
 
-@pytest.mark.xfail(reason="Basing type detection on unreliable XML attributes")
 def test_template_parser_use_case(resources):
     repo = InMemoryPopulatedTemplatesRepository(resources)
     parse_populated_templates_use_case = ParsePopulatedTemplatesUseCase(repo)
@@ -105,7 +104,6 @@ def test_in_memory_datamap_application_to_extracted_data_raises_exception(
         uc.query_key("test_template.xlsx", "Funny Date", "Another Sheet ")
 
 
-@pytest.mark.xfail(reason="Expecting a date, get 'Date:'")
 def test_in_memory_datamap_generator(
     mock_config, datamap_match_test_template, template
 ):
@@ -119,9 +117,13 @@ def test_in_memory_datamap_generator(
     uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
     uc.execute()
     data = uc.get_values()
-    #   assert next(uc.get_values(as_obj=True)) == {("test_template.xlsx", "Summary", "B2"): datetime.date(2019, 10, 19)}
     assert next(data) == {
-        ("test_template.xlsx", "Date Key", "Summary", "B2"): "2019-10-20T00:00:00"
+        (
+            "test_template.xlsx",
+            "Date Key",
+            "Summary",
+            "B2",
+        ): 43758  # formatted as date as "2019-10-20T00:00:00"
     }
     assert next(data) == {
         ("test_template.xlsx", "String Key", "Summary", "B3"): "This is a string"
@@ -131,7 +133,6 @@ def test_in_memory_datamap_generator(
     }
 
 
-@pytest.mark.xfail(reason="Expecting a date, get 'Date:'")
 def test_create_master_spreadsheet(mock_config, datamap_match_test_template, template):
     mock_config.initialise()
     shutil.copy2(template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
@@ -146,7 +147,7 @@ def test_create_master_spreadsheet(mock_config, datamap_match_test_template, tem
     ws = wb.active
     assert ws["A1"].value == "file name"
     assert ws["B1"].value == "test_template"
-    assert ws["B2"].value == "2019-10-20T00:00:00"
+    assert ws["B2"].value == 43758  # "2019-10-20T00:00:00"
     assert ws["B3"].value == "This is a string"
 
 

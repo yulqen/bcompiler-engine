@@ -71,7 +71,6 @@ def test_lxml_template_reader(template):
     )
 
 
-@pytest.mark.xfail(reason="Basing type detection on unreliable XML attributes")
 def test_extract_data_from_multiple_files_into_correct_structure(resources):
     xlsx_files = get_xlsx_files(resources)
     dataset = extract_from_multiple_xlsx_files(xlsx_files)

@@ -7,8 +7,8 @@ from lxml import etree
 from openpyxl import load_workbook
 
 from engine.parser.reader import SpreadsheetReader
-
 from engine.utils.extraction import get_xlsx_files
+
 
 @pytest.fixture
 def heavy_template_datamap():
@@ -149,8 +149,6 @@ def test_get_cell_values_using_lxml_handles_empty_sheet(
     )  # we should not get an Introduction sheet as its empty
 
 
-
-@pytest.mark.xfail(reason="Basing type detection on unreliable XML attributes")
 def test_problem_file_using_lxml_parse(resources):
     """
     We are testing this particular file because we know it contains cells which
@@ -162,8 +160,11 @@ def test_problem_file_using_lxml_parse(resources):
     a number of different parts in the xlsx file. Details are references in the datamaps.rst document.
     """
     excel_files = get_xlsx_files(resources)
-    trouble = [x for x in excel_files if x.parts[-1] == "master_values_beyond_end_of_col_and_row_range.xlsx"][0]
+    trouble = [
+        x
+        for x in excel_files
+        if x.parts[-1] == "master_values_beyond_end_of_col_and_row_range.xlsx"
+    ][0]
     reader = SpreadsheetReader(trouble)
     data = reader.read_without_datamap()
     assert data  # FAIL DUE TO MISSING t attributes
-
