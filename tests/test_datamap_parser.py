@@ -65,7 +65,7 @@ def test_bad_spacing_in_datamap(datamap):
     assert data[14].data_type == "TEXT"
 
 
-def test_template_reader(template) -> None:
+def test_template_reader_lxml(template) -> None:
     data = template_reader_lxml(template)
     assert (
         _get_cell_data(template, data, "Summary", "B2")["value"]
