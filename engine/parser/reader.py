@@ -1,5 +1,6 @@
 import hashlib
 import logging
+import pdb
 import zipfile
 from collections import defaultdict
 from dataclasses import dataclass
@@ -65,7 +66,10 @@ class SpreadsheetReader:
         self._get_shared_strings()
 
     def _get_shared_strings(self) -> None:
-        src = self.archive.read("xl/sharedStrings.xml")
+        try:
+            src = self.archive.read("xl/sharedStrings.xml")
+        except KeyError:
+            return
         root = etree.fromstring(src)
         self.shared_strings = root.xpath(
             "d:si/d:t/text()", namespaces=SpreadsheetReader.ns
@@ -238,6 +242,11 @@ class SpreadsheetReader:
                 )
             if parsed_cell.type == "s":  # we need to look up the string
                 v = self.shared_strings[int(parsed_cell.cell_value)]
+            elif (
+                parsed_cell.type == "inlineStr"
+            ):  # do we even need this if we go straight to the children?
+                # TODO we need to parse <is><t>VALUE</t></is> where are children of <c>
+                print("WE NEED TO PARSE {}".format(parsed_cell))
             elif parsed_cell.type == "str":  # value is in the v tag
                 v = parsed_cell.cell_value
             elif parsed_cell.type == "n":  # a number
