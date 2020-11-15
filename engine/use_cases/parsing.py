@@ -135,6 +135,7 @@ class ApplyDatamapToExtractionUseCase:
                 raise
         self._datamap_data_dict = json.loads(self._datamap_data_json)
         self._template_data_dict = json.loads(self._template_data_json)
+        # TODO - the complete data as a dict is available as self._template_data_dict
         logger.info("Checking template data.")
         checks = check_datamap_sheets(self._datamap_data_dict, self._template_data_dict)
         # TODO -reintroduce SKIP_MISSING_SHEETS check here
