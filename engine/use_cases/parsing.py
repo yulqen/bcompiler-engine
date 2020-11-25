@@ -135,8 +135,24 @@ class ApplyDatamapToExtractionUseCase:
                 raise
         self._datamap_data_dict = json.loads(self._datamap_data_json)
         self._template_data_dict = json.loads(self._template_data_json)
-        # TODO - the complete data as a dict is available as self._template_data_dict
         logger.info("Checking template data.")
+        # TODO - type checking to be done here?
+        #
+        # Creating a type checking report could be done here. Needs a similar
+        # object to engine.utils.extraction.Check dataclass, which uses
+        # engine.utils.extraction.CheckType.
+        #
+        # We should use the engine.domain.datamap.DatamapLineValueType enum
+        # for this.
+        #
+        # Similar to check_datamap_sheets() here, we need a function that
+        # creates a list of value type checks. We can do something with that.
+        #
+        # It should largely be a case of comparing the `data_type` attribute
+        # inside the self._template_data_dict with the required type for that
+        # cell inside self._datamap_data_dict.
+        #
+        breakpoint()
         checks = check_datamap_sheets(self._datamap_data_dict, self._template_data_dict)
         # TODO -reintroduce SKIP_MISSING_SHEETS check here
         # We set a config variable to choose whether we

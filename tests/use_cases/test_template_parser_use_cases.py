@@ -18,6 +18,20 @@ from engine.use_cases.parsing import (ApplyDatamapToExtractionUseCase,
 from engine.utils.extraction import _check_file_in_datafile, get_xlsx_files
 
 
+# TODO - work on this
+def test_apply_datamap_to_extracted_data_with_type_checking(mock_config, datamap, template_with_introduction_sheet):
+    mock_config.initialise()
+    shutil.copy2(template_with_introduction_sheet, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    shutil.copy2(datamap, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    tmpl_repo = InMemoryPopulatedTemplatesRepository(
+        mock_config.PLATFORM_DOCS_DIR / "input"
+    )
+    dm_repo = InMemorySingleDatamapRepository(Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "datamap.csv")
+    uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
+    uc.execute()
+
+
+
 def test_template_parser_use_case(resources):
     repo = InMemoryPopulatedTemplatesRepository(resources)
     parse_populated_templates_use_case = ParsePopulatedTemplatesUseCase(repo)
