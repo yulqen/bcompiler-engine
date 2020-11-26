@@ -13,22 +13,23 @@ from engine.repository.templates import (FSPopulatedTemplatesRepo,
                                          InMemoryPopulatedTemplatesRepository)
 from engine.use_cases.parsing import (ApplyDatamapToExtractionUseCase,
                                       CreateMasterUseCase,
+                                      CreateMasterUseCaseWithValidation,
                                       ParsePopulatedTemplatesUseCase,
                                       extract_from_multiple_xlsx_files)
 from engine.utils.extraction import _check_file_in_datafile, get_xlsx_files
 
 
-# TODO - work on this
-def test_apply_datamap_to_extracted_data_with_type_checking(mock_config, datamap, template_with_introduction_sheet):
+def test_create_master_spreadsheet_with_validation(mock_config, datamap_match_test_template, template):
     mock_config.initialise()
-    shutil.copy2(template_with_introduction_sheet, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
-    shutil.copy2(datamap, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    shutil.copy2(template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
     tmpl_repo = InMemoryPopulatedTemplatesRepository(
         mock_config.PLATFORM_DOCS_DIR / "input"
     )
-    dm_repo = InMemorySingleDatamapRepository(Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "datamap.csv")
-    uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
-    uc.execute()
+    dm_repo = InMemorySingleDatamapRepository(datamap_match_test_template)
+    output_repo = MasterOutputRepository
+    uc = CreateMasterUseCaseWithValidation(dm_repo, tmpl_repo, output_repo)
+    uc.execute("master.xlsx")
+    assert uc.validation_checks[0].passes is True
 
 
 
