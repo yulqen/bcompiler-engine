@@ -37,6 +37,7 @@ import json
 import logging
 import warnings
 from concurrent import futures
+from dataclasses import dataclass
 from typing import Dict, List
 
 from engine.exceptions import (NoApplicableSheetsInTemplateFiles,
@@ -52,6 +53,16 @@ logger = logging.getLogger(__name__)
 
 # TODO - move this to config
 SKIP_MISSING_SHEETS = False
+
+validation_checks = []
+
+
+@dataclass
+class ValidationCheck:
+    passes: bool
+    filename: str
+    cellref: str
+    sheetname: str
 
 
 class ParsePopulatedTemplatesUseCase:
@@ -135,6 +146,7 @@ class ApplyDatamapToExtractionUseCaseWithValidation:
                 raise
         self._datamap_data_dict = json.loads(self._datamap_data_json)
         self._template_data_dict = json.loads(self._template_data_json)
+        breakpoint()
         logger.info("Checking template data.")
         # TODO - type checking to be done here?
         #
@@ -152,6 +164,11 @@ class ApplyDatamapToExtractionUseCaseWithValidation:
         # inside the self._template_data_dict with the required type for that
         # cell inside self._datamap_data_dict.
         #
+
+        # Validation checks populate module validation_checks
+
+        validation_checks.append(ValidationCheck(passes=True))
+         
         checks = check_datamap_sheets(self._datamap_data_dict, self._template_data_dict)
         # TODO -reintroduce SKIP_MISSING_SHEETS check here
         # We set a config variable to choose whether we
@@ -363,7 +380,7 @@ class CreateMasterUseCaseWithValidation:
         self.datamap_repo = datamap_repo
         self.template_repo = template_repo
         self.output_repository = output_repo
-        self.validation_checks = []
+        self.validation_checks = validation_checks
 
 
     def execute(self, output_file_name):
