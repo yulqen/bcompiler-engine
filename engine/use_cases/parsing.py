@@ -146,7 +146,6 @@ class ApplyDatamapToExtractionUseCaseWithValidation:
                 raise
         self._datamap_data_dict = json.loads(self._datamap_data_json)
         self._template_data_dict = json.loads(self._template_data_json)
-        breakpoint()
         logger.info("Checking template data.")
         # TODO - type checking to be done here?
         #
@@ -167,6 +166,9 @@ class ApplyDatamapToExtractionUseCaseWithValidation:
 
         # Validation checks populate module validation_checks
 
+        # TODO(2020-12-20) work out what this is doing and move
+        # the tests.use_cases.test_template_parser_use_cases.validation_checker
+        # in here...?
         validation_checks.append(ValidationCheck(passes=True))
          
         checks = check_datamap_sheets(self._datamap_data_dict, self._template_data_dict)
@@ -374,6 +376,7 @@ class ApplyDatamapToExtractionUseCase:
 
 # At this point, to ensure we have an ApplyDatamapToExtractionUseCaseWithValidation, 
 # we have simply copied ApplyDatamapToExtractionUseCase!! This is obviously horrendous.
+
 
 class CreateMasterUseCaseWithValidation:
     def __init__(self, datamap_repo, template_repo, output_repo):

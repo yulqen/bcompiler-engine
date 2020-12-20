@@ -84,7 +84,6 @@ def test_write_into_dropdown(blank_org_template):
 #    wb = load_workbook(blank_org_template)
 #    ws = wb["1 - Project Info"]
 #    validations = ws.data_validations.dataValidation
-#    breakpoint()
 
 
 @pytest.mark.skip("Are we doing the validation report?")

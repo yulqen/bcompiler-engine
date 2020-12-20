@@ -86,7 +86,7 @@ class WriteMasterToTemplates:
             try:
                 file_name = col[0].value.split(".")[0]
             except AttributeError:
-                logger.warning(f"Found values in cells beyond end of expected end column. "
+                logger.warning("Found values in cells beyond end of expected end column. "
                                "For most reliable results, use a clean master file.")
                 break
             logger.info(f"Extracting data for {file_name} from {self._master_path}")
