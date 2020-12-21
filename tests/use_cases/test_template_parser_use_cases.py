@@ -6,10 +6,6 @@ from pathlib import Path
 import pytest
 from openpyxl import load_workbook
 
-from engine.exceptions import (
-    NoApplicableSheetsInTemplateFiles,
-    RemoveFileWithNoSheetRequiredByDatamap,
-)
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
 from engine.repository.templates import (
@@ -21,48 +17,9 @@ from engine.use_cases.parsing import (
     CreateMasterUseCase,
     CreateMasterUseCaseWithValidation,
     ParsePopulatedTemplatesUseCase,
-    extract_from_multiple_xlsx_files,
+    validation_checker,
 )
-from engine.utils.extraction import _check_file_in_datafile, get_xlsx_files
-
-from engine.use_cases.parsing import ValidationCheck
-
-
-# TODO - continue refactoring this
-def validation_checker(dm_data, tmp_data):
-    checks = []
-    files = tmp_data.keys()
-    for d in dm_data:
-        sheet = d["sheet"]
-        vtype = d["data_type"]
-        cellref = d["cellref"]
-        for f in files:
-            data = tmp_data[f]["data"]
-            sheets = data.keys()
-            for s in sheets:
-                if s == sheet:
-                    cellrefs = tmp_data[f]["data"][s].keys()
-                    for c in cellrefs:
-                        if c == cellref:
-                            if tmp_data[f]["data"][s][c]["data_type"] == vtype:
-                                checks.append(
-                                    ValidationCheck(
-                                        passes=True, filename=f, sheetname=s, cellref=c
-                                    )
-                                )
-                            else:
-                                checks.append(
-                                    ValidationCheck(
-                                        passes=False, filename=f, sheetname=s, cellref=c
-                                    )
-                                )
-    return checks
-
-
-@pytest.mark.skip("This object requires other parms passing")
-def test_validation_check_object():
-    v_obj = ValidationCheck(passes=True)
-    assert v_obj.passes
+from engine.utils.extraction import _check_file_in_datafile
 
 
 def test_compare_datamap_data_with_template_data():
@@ -106,7 +63,6 @@ def test_compare_datamap_data_with_template_data():
         },
     }
     checks = validation_checker(dm_data, tmp_data)
-    breakpoint()
     assert len(checks) == 2
     assert checks[0].passes is True
     assert checks[0].filename == "test_template.xlsx"

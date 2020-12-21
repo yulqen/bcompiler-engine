@@ -40,21 +40,62 @@ from concurrent import futures
 from dataclasses import dataclass
 from typing import Dict, List
 
-from engine.exceptions import (NoApplicableSheetsInTemplateFiles,
-                               RemoveFileWithNoSheetRequiredByDatamap, DatamapNotCSVException)
+from engine.exceptions import (
+    NoApplicableSheetsInTemplateFiles,
+    RemoveFileWithNoSheetRequiredByDatamap,
+    DatamapNotCSVException,
+)
+
 # pylint: disable=R0903,R0913;
-from engine.utils.extraction import (ALL_IMPORT_DATA, check_datamap_sheets,
-                                     remove_failing_files, template_reader)
+from engine.utils.extraction import (
+    ALL_IMPORT_DATA,
+    check_datamap_sheets,
+    remove_failing_files,
+    template_reader,
+)
 
 warnings.filterwarnings("ignore", ".*Data Validation*.")
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(levelname)s - %(message)s", datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s: %(levelname)s - %(message)s",
+    datefmt="%d-%b-%y %H:%M:%S",
+)
 logger = logging.getLogger(__name__)
 
 # TODO - move this to config
 SKIP_MISSING_SHEETS = False
 
-validation_checks = []
+
+# TODO - continue refactoring this
+def validation_checker(dm_data, tmp_data):
+    checks = []
+    files = tmp_data.keys()
+    for d in dm_data:
+        sheet = d["sheet"]
+        vtype = d["data_type"]
+        cellref = d["cellref"]
+        for f in files:
+            data = tmp_data[f]["data"]
+            sheets = data.keys()
+            for s in sheets:
+                if s == sheet:
+                    cellrefs = tmp_data[f]["data"][s].keys()
+                    for c in cellrefs:
+                        if c == cellref:
+                            if tmp_data[f]["data"][s][c]["data_type"] == vtype:
+                                checks.append(
+                                    ValidationCheck(
+                                        passes=True, filename=f, sheetname=s, cellref=c
+                                    )
+                                )
+                            else:
+                                checks.append(
+                                    ValidationCheck(
+                                        passes=False, filename=f, sheetname=s, cellref=c
+                                    )
+                                )
+    return checks
 
 
 @dataclass
@@ -86,7 +127,7 @@ class ApplyDatamapToExtractionUseCaseWithValidation:
         self._template_data_json: str = ""
 
     def _get_value_of_cell_referred_by_key(
-            self, filename: str, key: str, sheet: str
+        self, filename: str, key: str, sheet: str
     ) -> str:
         """Given a filename, a template_data json str, a datamap_data dict, key and sheet, returns
         the value in the spreadsheet at given datamap key.
@@ -169,8 +210,10 @@ class ApplyDatamapToExtractionUseCaseWithValidation:
         # TODO(2020-12-20) work out what this is doing and move
         # the tests.use_cases.test_template_parser_use_cases.validation_checker
         # in here...?
-        validation_checks.append(ValidationCheck(passes=True))
-         
+        self.validation_checks = validation_checker(  # noqa
+            self._datamap_data_dict, self._template_data_dict
+        )
+
         checks = check_datamap_sheets(self._datamap_data_dict, self._template_data_dict)
         # TODO -reintroduce SKIP_MISSING_SHEETS check here
         # We set a config variable to choose whether we
@@ -234,7 +277,7 @@ class ApplyDatamapToExtractionUseCase:
         self._template_data_json: str = ""
 
     def _get_value_of_cell_referred_by_key(
-            self, filename: str, key: str, sheet: str
+        self, filename: str, key: str, sheet: str
     ) -> str:
         """Given a filename, a template_data json str, a datamap_data dict, key and sheet, returns
         the value in the spreadsheet at given datamap key.
@@ -360,6 +403,7 @@ class ApplyDatamapToExtractionUseCase:
                 _col_dict[_file_name].append((_dml["key"], val))
         self.data_for_master = output
 
+
 # TODO - START HERE
 # We have created a new CreateMasterUseCaseWithValidation class
 # the test is at tests.use_cases.test_template_parser_use_cases.test_create_master_spreadsheet_with_validation
@@ -374,7 +418,7 @@ class ApplyDatamapToExtractionUseCase:
 # what we want. There is nothing yet decided about how we present this to the user
 # but this is probably best coordinated by the adapter and sent back out.
 
-# At this point, to ensure we have an ApplyDatamapToExtractionUseCaseWithValidation, 
+# At this point, to ensure we have an ApplyDatamapToExtractionUseCaseWithValidation,
 # we have simply copied ApplyDatamapToExtractionUseCase!! This is obviously horrendous.
 
 
@@ -383,13 +427,14 @@ class CreateMasterUseCaseWithValidation:
         self.datamap_repo = datamap_repo
         self.template_repo = template_repo
         self.output_repository = output_repo
-        self.validation_checks = validation_checks
-
 
     def execute(self, output_file_name):
-        uc = ApplyDatamapToExtractionUseCaseWithValidation(self.datamap_repo, self.template_repo)
+        uc = ApplyDatamapToExtractionUseCaseWithValidation(
+            self.datamap_repo, self.template_repo
+        )
         try:
             uc.execute(for_master=True)
+            self.validation_checks = uc.validation_checks
         except DatamapNotCSVException:
             raise
         output_repo = self.output_repository(uc.data_for_master, output_file_name)
