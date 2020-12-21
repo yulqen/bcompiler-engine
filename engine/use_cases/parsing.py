@@ -86,13 +86,23 @@ def validation_checker(dm_data, tmp_data):
                             if tmp_data[f]["data"][s][c]["data_type"] == vtype:
                                 checks.append(
                                     ValidationCheck(
-                                        passes=True, filename=f, sheetname=s, cellref=c
+                                        passes=True,
+                                        filename=f,
+                                        sheetname=s,
+                                        cellref=c,
+                                        wanted=vtype,
+                                        got=tmp_data[f]["data"][s][c]["data_type"],
                                     )
                                 )
                             else:
                                 checks.append(
                                     ValidationCheck(
-                                        passes=False, filename=f, sheetname=s, cellref=c
+                                        passes=False,
+                                        filename=f,
+                                        sheetname=s,
+                                        cellref=c,
+                                        wanted=vtype,
+                                        got=tmp_data[f]["data"][s][c]["data_type"],
                                     )
                                 )
     return checks
@@ -104,6 +114,8 @@ class ValidationCheck:
     filename: str
     cellref: str
     sheetname: str
+    wanted: str
+    got: str
 
 
 class ParsePopulatedTemplatesUseCase:
@@ -207,9 +219,6 @@ class ApplyDatamapToExtractionUseCaseWithValidation:
 
         # Validation checks populate module validation_checks
 
-        # TODO(2020-12-20) work out what this is doing and move
-        # the tests.use_cases.test_template_parser_use_cases.validation_checker
-        # in here...?
         self.validation_checks = validation_checker(  # noqa
             self._datamap_data_dict, self._template_data_dict
         )
