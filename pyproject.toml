@@ -10,12 +10,15 @@ repository = "https://github.com/hammerheadlemon/bcompiler-engine"
 license = "MIT"
 readme = "README.md"
 authors = ["Matthew Lemon"]
+packages = [
+    { include = "engine" },
+]
 
 [tool.poetry.urls]
 "Issue Tracker" = "https://github.com/hammerheadlemon/bcompiler-engine/issues"
 
 [tool.poetry.dependencies]
-python = "^3.6.0"
+python = "^3.7.0"
 openpyxl = "^3.0.3"
 appdirs = "^1.4.3"
 
