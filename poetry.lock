@@ -276,7 +276,7 @@ test = ["pytest", "pytest-trio", "pytest-asyncio", "testpath", "trio"]
 
 [[package]]
 name = "keyring"
-version = "21.5.0"
+version = "21.6.0"
 description = "Store and access your passwords safely."
 category = "dev"
 optional = false
@@ -743,7 +743,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.0"
-content-hash = "f9e82dc18741961367580116a0d9b32795016b5241a5f36ece42c8fa1b4111ca"
+content-hash = "6e7a1dbd345bb651f5c4888bd4721968e710052773e729e90ec9e47530026bc4"
 
 [metadata.files]
 appdirs = [
@@ -939,8 +939,8 @@ jeepney = [
     {file = "jeepney-0.6.0.tar.gz", hash = "sha256:7d59b6622675ca9e993a6bd38de845051d315f8b0c72cca3aef733a20b648657"},
 ]
 keyring = [
-    {file = "keyring-21.5.0-py3-none-any.whl", hash = "sha256:12de23258a95f3b13e5b167f7a641a878e91eab8ef16fafc077720a95e6115bb"},
-    {file = "keyring-21.5.0.tar.gz", hash = "sha256:207bd66f2a9881c835dad653da04e196c678bf104f8252141d2d3c4f31051579"},
+    {file = "keyring-21.6.0-py3-none-any.whl", hash = "sha256:4a49585d40024826b8eae024c10fece150d020751a9007f5ab793b8f288968f5"},
+    {file = "keyring-21.6.0.tar.gz", hash = "sha256:1407a89e54782900fb7f50b1e71df3449b248d24454b34e3dfd3fafaba12357a"},
 ]
 mccabe = [
     {file = "mccabe-0.6.1-py2.py3-none-any.whl", hash = "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42"},
