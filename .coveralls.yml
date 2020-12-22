@@ -1,0 +1,5 @@
+# Coverall config file is not working so set COVERALLS_REPO_TOKEN environment variable to key from coveralls web site for this project, then:
+
+  # pip install coveralls
+  # coverage run --source=engine -m pytest tests/
+  # coveralls
