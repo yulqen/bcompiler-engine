@@ -67,7 +67,6 @@ logger = logging.getLogger(__name__)
 SKIP_MISSING_SHEETS = False
 
 
-# TODO - continue refactoring this
 def validation_checker(dm_data, tmp_data):
     checks = []
     files = tmp_data.keys()
@@ -200,24 +199,6 @@ class ApplyDatamapToExtractionUseCaseWithValidation:
         self._datamap_data_dict = json.loads(self._datamap_data_json)
         self._template_data_dict = json.loads(self._template_data_json)
         logger.info("Checking template data.")
-        # TODO - type checking to be done here?
-        #
-        # Creating a type checking report could be done here. Needs a similar
-        # object to engine.utils.extraction.Check dataclass, which uses
-        # engine.utils.extraction.CheckType.
-        #
-        # We should use the engine.domain.datamap.DatamapLineValueType enum
-        # for this.
-        #
-        # Similar to check_datamap_sheets() here, we need a function that
-        # creates a list of value type checks. We can do something with that.
-        #
-        # It should largely be a case of comparing the `data_type` attribute
-        # inside the self._template_data_dict with the required type for that
-        # cell inside self._datamap_data_dict.
-        #
-
-        # Validation checks populate module validation_checks
 
         self.validation_checks = validation_checker(  # noqa
             self._datamap_data_dict, self._template_data_dict
@@ -347,22 +328,7 @@ class ApplyDatamapToExtractionUseCase:
         self._datamap_data_dict = json.loads(self._datamap_data_json)
         self._template_data_dict = json.loads(self._template_data_json)
         logger.info("Checking template data.")
-        # TODO - type checking to be done here?
-        #
-        # Creating a type checking report could be done here. Needs a similar
-        # object to engine.utils.extraction.Check dataclass, which uses
-        # engine.utils.extraction.CheckType.
-        #
-        # We should use the engine.domain.datamap.DatamapLineValueType enum
-        # for this.
-        #
-        # Similar to check_datamap_sheets() here, we need a function that
-        # creates a list of value type checks. We can do something with that.
-        #
-        # It should largely be a case of comparing the `data_type` attribute
-        # inside the self._template_data_dict with the required type for that
-        # cell inside self._datamap_data_dict.
-        #
+
         checks = check_datamap_sheets(self._datamap_data_dict, self._template_data_dict)
         # TODO -reintroduce SKIP_MISSING_SHEETS check here
         # We set a config variable to choose whether we
@@ -413,7 +379,6 @@ class ApplyDatamapToExtractionUseCase:
         self.data_for_master = output
 
 
-# TODO - START HERE
 # We have created a new CreateMasterUseCaseWithValidation class
 # the test is at tests.use_cases.test_template_parser_use_cases.test_create_master_spreadsheet_with_validation
 # Also created is a new ApplyDatamapToExtractionUseCaseWithValidation which
@@ -432,10 +397,18 @@ class ApplyDatamapToExtractionUseCase:
 
 
 class CreateMasterUseCaseWithValidation:
+    """
+    CreateMasterUseCaseWithValidation is used to create a master document
+    from a set of input files, and apply type validation to the result.
+
+
+    """
     def __init__(self, datamap_repo, template_repo, output_repo):
         self.datamap_repo = datamap_repo
         self.template_repo = template_repo
         self.output_repository = output_repo
+        self.initial_validation_checks = []
+        self.final_validation_checks = []
 
     def execute(self, output_file_name):
         uc = ApplyDatamapToExtractionUseCaseWithValidation(
@@ -443,7 +416,12 @@ class CreateMasterUseCaseWithValidation:
         )
         try:
             uc.execute(for_master=True)
-            self.validation_checks = uc.validation_checks
+            self.initial_validation_checks = uc.validation_checks
+            self.final_validation_checks = [
+                x for x in self.initial_validation_checks
+                if x.wanted is not None
+            ]
+            ## TODO - we do something with the checks (log, print, store, etc)
         except DatamapNotCSVException:
             raise
         output_repo = self.output_repository(uc.data_for_master, output_file_name)
