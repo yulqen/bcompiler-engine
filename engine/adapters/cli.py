@@ -14,7 +14,7 @@ from engine.repository.master import MasterOutputRepository
 from engine.repository.templates import (InMemoryPopulatedTemplatesRepository,
                                          MultipleTemplatesWriteRepo)
 from engine.use_cases.output import WriteMasterToTemplates
-from engine.use_cases.parsing import CreateMasterUseCase
+from engine.use_cases.parsing import CreateMasterUseCaseWithValidation
 from engine.utils.extraction import data_validation_report, datamap_reader
 
 logging.basicConfig(
@@ -106,7 +106,7 @@ def import_and_create_master(echo_funcs, datamap=None):
     dm = Path(tmpl_repo.directory_path) / dm_fn
     dm_repo = InMemorySingleDatamapRepository(dm)
     output_repo = MasterOutputRepository
-    uc = CreateMasterUseCase(dm_repo, tmpl_repo, output_repo)
+    uc = CreateMasterUseCaseWithValidation(dm_repo, tmpl_repo, output_repo)
     try:
         uc.execute(master_fn)
     except FileNotFoundError as e:

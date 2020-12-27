@@ -41,18 +41,19 @@ from dataclasses import dataclass
 from typing import Dict, List
 
 from engine.exceptions import (
+    DatamapNotCSVException,
     NoApplicableSheetsInTemplateFiles,
     RemoveFileWithNoSheetRequiredByDatamap,
-    DatamapNotCSVException,
 )
-
-# pylint: disable=R0903,R0913;
+from engine.reports.validation import ValidationReportCSV, ValidationCheck
 from engine.utils.extraction import (
     ALL_IMPORT_DATA,
     check_datamap_sheets,
     remove_failing_files,
     template_reader,
 )
+
+# pylint: disable=R0903,R0913;
 
 warnings.filterwarnings("ignore", ".*Data Validation*.")
 
@@ -67,7 +68,7 @@ logger = logging.getLogger(__name__)
 SKIP_MISSING_SHEETS = False
 
 
-def validation_checker(dm_data, tmp_data):
+def validation_checker(dm_data, tmp_data) -> List["ValidationCheck"]:
     checks = []
     files = tmp_data.keys()
     for d in dm_data:
@@ -87,6 +88,7 @@ def validation_checker(dm_data, tmp_data):
                                     ValidationCheck(
                                         passes=True,
                                         filename=f,
+                                        value=tmp_data[f]["data"][s][c]["value"],
                                         sheetname=s,
                                         cellref=c,
                                         wanted=vtype,
@@ -98,6 +100,7 @@ def validation_checker(dm_data, tmp_data):
                                     ValidationCheck(
                                         passes=False,
                                         filename=f,
+                                        value=tmp_data[f]["data"][s][c]["value"],
                                         sheetname=s,
                                         cellref=c,
                                         wanted=vtype,
@@ -105,16 +108,6 @@ def validation_checker(dm_data, tmp_data):
                                     )
                                 )
     return checks
-
-
-@dataclass
-class ValidationCheck:
-    passes: bool
-    filename: str
-    cellref: str
-    sheetname: str
-    wanted: str
-    got: str
 
 
 class ParsePopulatedTemplatesUseCase:
@@ -200,7 +193,7 @@ class ApplyDatamapToExtractionUseCaseWithValidation:
         self._template_data_dict = json.loads(self._template_data_json)
         logger.info("Checking template data.")
 
-        self.validation_checks = validation_checker(  # noqa
+        self.validation_checks = validation_checker(
             self._datamap_data_dict, self._template_data_dict
         )
 
@@ -403,6 +396,7 @@ class CreateMasterUseCaseWithValidation:
 
 
     """
+
     def __init__(self, datamap_repo, template_repo, output_repo):
         self.datamap_repo = datamap_repo
         self.template_repo = template_repo
@@ -417,11 +411,11 @@ class CreateMasterUseCaseWithValidation:
         try:
             uc.execute(for_master=True)
             self.initial_validation_checks = uc.validation_checks
+            # default is to filter out dmls that do not have type declared in dm
             self.final_validation_checks = [
-                x for x in self.initial_validation_checks
-                if x.wanted is not None
+                x for x in self.initial_validation_checks if x.wanted is not None
             ]
-            ## TODO - we do something with the checks (log, print, store, etc)
+            ValidationReportCSV(self.final_validation_checks).write()
         except DatamapNotCSVException:
             raise
         output_repo = self.output_repository(uc.data_for_master, output_file_name)

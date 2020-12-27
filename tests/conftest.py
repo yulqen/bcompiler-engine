@@ -248,6 +248,7 @@ def mock_config(monkeypatch):
         "DATAMAPS_LIBRARY_CONFIG_FILE",
         Path("/tmp/.config/datamaps-data/config.ini"),
     )
+    monkeypatch.setattr(Config, "FULL_PATH_OUTPUT", Config.PLATFORM_DOCS_DIR / "output")
     yield Config
     try:
         shutil.rmtree(Config.DATAMAPS_LIBRARY_DATA_DIR)

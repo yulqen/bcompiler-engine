@@ -31,7 +31,9 @@ class Config:
 
     # Specifically for Github Actions CI
     USER_NAME = (
-        os.environ["GITHUB_ACTIONS_RUNNER"] if os.environ.get("GITHUB_ACTIONS_RUNNER") else getpass.getuser()
+        os.environ["GITHUB_ACTIONS_RUNNER"]
+        if os.environ.get("GITHUB_ACTIONS_RUNNER")
+        else getpass.getuser()
     )
 
     DATAMAPS_LIBRARY_DATA_DIR = user_data_dir("datamaps-data", USER_NAME)
@@ -104,9 +106,9 @@ def check_for_blank(config: Config) -> Tuple[bool, str]:
     Config should be initialised before passing to this function.
     """
     blank = (
-            config.PLATFORM_DOCS_DIR
-            / "input"
-            / config.config_parser["DEFAULT"]["blank file name"]
+        config.PLATFORM_DOCS_DIR
+        / "input"
+        / config.config_parser["DEFAULT"]["blank file name"]
     )
     if blank.exists():
         return (True, blank.name)
@@ -120,9 +122,9 @@ def check_for_datamap(config: Config) -> Tuple[bool, str]:
     Config should be initialised before passing to this function.
     """
     dm = (
-            config.PLATFORM_DOCS_DIR
-            / "input"
-            / config.config_parser["DEFAULT"]["datamap file name"]
+        config.PLATFORM_DOCS_DIR
+        / "input"
+        / config.config_parser["DEFAULT"]["datamap file name"]
     )
     if dm.exists():
         return (True, dm.name)
