@@ -108,6 +108,12 @@ def template() -> Path:
 
 
 @pytest.fixture
+def template_incorrect_type() -> Path:
+    here = os.path.abspath(os.curdir)
+    return Path(os.path.join(here, "tests/resources/test_template_incorrect_type.xlsx"))
+
+
+@pytest.fixture
 def bad_sheet_template() -> Path:
     here = os.path.abspath(os.curdir)
     return Path(os.path.join(here, "tests/resources/bad_sheet_template.xlsm"))

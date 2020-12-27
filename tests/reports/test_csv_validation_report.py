@@ -145,13 +145,37 @@ def test_validation_results_go_to_csv_file(
     uc = CreateMasterUseCaseWithValidation(dm_repo, tmpl_repo, output_repo)
     uc.execute("master.xlsx")
 
-    # TODO - There is not validation report here yet because we have to write
-    # it in the CreateMasterUseCaseWithValidation class
     with open(mock_config.FULL_PATH_OUTPUT / "validation_report.csv") as csvfile:
         reader = csv.DictReader(csvfile)
         row = next(reader)
         assert row["Filename"] == "test_template.xlsx"
         assert row["Pass Status"] == "PASS"
+        assert row["Key"] == "Date Key"
+        assert row["Sheet Name"] == "Summary"
+        assert row["Expected Type"] == "DATE"
+
+
+def test_validation_csv_report_contains_fail_state(
+    mock_config, datamap_match_test_template, template_incorrect_type
+):
+    mock_config.initialise()
+    shutil.copy2(
+        template_incorrect_type, (Path(mock_config.PLATFORM_DOCS_DIR) / "input")
+    )
+    tmpl_repo = InMemoryPopulatedTemplatesRepository(
+        mock_config.PLATFORM_DOCS_DIR / "input"
+    )
+    dm_repo = InMemorySingleDatamapRepository(datamap_match_test_template)
+    output_repo = MasterOutputRepository
+    uc = CreateMasterUseCaseWithValidation(dm_repo, tmpl_repo, output_repo)
+    uc.execute("master.xlsx")
+
+    with open(mock_config.FULL_PATH_OUTPUT / "validation_report.csv") as csvfile:
+        reader = csv.DictReader(csvfile)
+        breakpoint()
+        row = next(reader)
+        assert row["Filename"] == "test_template_incorrect_type.xlsx"
+        assert row["Pass Status"] == "FAIL"
         assert row["Key"] == "Date Key"
         assert row["Sheet Name"] == "Summary"
         assert row["Expected Type"] == "DATE"
