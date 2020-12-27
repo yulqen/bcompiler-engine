@@ -13,11 +13,15 @@ from engine.config import Config
 class ValidationCheck:
     passes: bool
     filename: str
+    key: str
     value: str
     cellref: str
     sheetname: str
     wanted: str
     got: str
+
+
+pass_str = {"True": "PASS", "False": "FAIL"}
 
 
 class ValidationReportCSV:
@@ -34,9 +38,12 @@ class ValidationReportCSV:
             Config.FULL_PATH_OUTPUT / "validation_report.csv", "w", newline=""
         ) as csvfile:
             fieldnames = [
+                "Pass Status",
                 "Filename",
+                "Key",
                 "Value",
                 "Cell Reference",
+                "Sheet Name",
                 "Expected Type",
                 "Got Type",
             ]
@@ -45,9 +52,12 @@ class ValidationReportCSV:
             for item in self.data:
                 writer.writerow(
                     {
+                        "Pass Status": pass_str[str(item.passes)],
                         "Filename": item.filename,
+                        "Key": item.key,
                         "Value": item.value,
                         "Cell Reference": item.cellref,
+                        "Sheet Name": item.sheetname,
                         "Expected Type": item.wanted,
                         "Got Type": item.got,
                     }

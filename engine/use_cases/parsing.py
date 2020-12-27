@@ -88,6 +88,7 @@ def validation_checker(dm_data, tmp_data) -> List["ValidationCheck"]:
                                     ValidationCheck(
                                         passes=True,
                                         filename=f,
+                                        key=d["key"],
                                         value=tmp_data[f]["data"][s][c]["value"],
                                         sheetname=s,
                                         cellref=c,
@@ -100,6 +101,7 @@ def validation_checker(dm_data, tmp_data) -> List["ValidationCheck"]:
                                     ValidationCheck(
                                         passes=False,
                                         filename=f,
+                                        key=d["key"],
                                         value=tmp_data[f]["data"][s][c]["value"],
                                         sheetname=s,
                                         cellref=c,
@@ -393,8 +395,6 @@ class CreateMasterUseCaseWithValidation:
     """
     CreateMasterUseCaseWithValidation is used to create a master document
     from a set of input files, and apply type validation to the result.
-
-
     """
 
     def __init__(self, datamap_repo, template_repo, output_repo):

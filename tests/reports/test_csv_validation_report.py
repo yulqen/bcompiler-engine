@@ -88,8 +88,9 @@ def test_csv_validation_report_writer(mock_config):
     mock_config.initialise()
     validation_data = [
         ValidationCheck(
-            passes=bool,
+            passes=True,
             filename="toss.xlsx",
+            key="Test Key 1",
             value="Burgers",
             cellref="A1",
             sheetname="Chopper",
@@ -97,8 +98,9 @@ def test_csv_validation_report_writer(mock_config):
             got="TEXT",
         ),
         ValidationCheck(
-            passes=bool,
+            passes=True,
             filename="toss.xlsx",
+            key="Test Key 2",
             value="Burgers & Chips",
             cellref="A2",
             sheetname="Chopper",
@@ -106,8 +108,9 @@ def test_csv_validation_report_writer(mock_config):
             got="NUMBER",
         ),
         ValidationCheck(
-            passes=bool,
+            passes=True,
             filename="toss.xlsx",
+            key="Test Key 3",
             value="Ham and grease",
             cellref="A3",
             sheetname="Chopper",
@@ -119,9 +122,12 @@ def test_csv_validation_report_writer(mock_config):
     with open(mock_config.FULL_PATH_OUTPUT / "validation_report.csv", "r") as csvfile:
         reader = csv.DictReader(csvfile)
         first_row = next(reader)
+        assert first_row["Pass Status"] == "PASS"
         assert first_row["Filename"] == "toss.xlsx"
+        assert first_row["Key"] == "Test Key 1"
         assert first_row["Value"] == "Burgers"
         assert first_row["Cell Reference"] == "A1"
+        assert first_row["Sheet Name"] == "Chopper"
         assert first_row["Expected Type"] == "TEXT"
         assert first_row["Got Type"] == "TEXT"
 
@@ -129,17 +135,6 @@ def test_csv_validation_report_writer(mock_config):
 def test_validation_results_go_to_csv_file(
     mock_config, datamap_match_test_template, template
 ):
-    """
-    Validation results should end up in a csv file of the form:
-
-     How do we want the csv report to look?
-
-     Filename,Key,Cell Reference,Expected Type,Got Type
-     test_template.xlsx,Date Key,Summary,B2,DATE,DATE
-     test_template.xlsx,String Key,Summary,B3,TEXT,TEXT
-     test_template.xlsx,Big Float,Another Sheet,F17,NUMBER,NUMBER
-     test_template.xlsx,Funny Date,Another Sheet,H39,DATE,NUMBER
-    """
     mock_config.initialise()
     shutil.copy2(template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
     tmpl_repo = InMemoryPopulatedTemplatesRepository(
@@ -154,5 +149,9 @@ def test_validation_results_go_to_csv_file(
     # it in the CreateMasterUseCaseWithValidation class
     with open(mock_config.FULL_PATH_OUTPUT / "validation_report.csv") as csvfile:
         reader = csv.DictReader(csvfile)
-        for row in reader:
-            assert row["Filename"] == "test_template.xlsx"
+        row = next(reader)
+        assert row["Filename"] == "test_template.xlsx"
+        assert row["Pass Status"] == "PASS"
+        assert row["Key"] == "Date Key"
+        assert row["Sheet Name"] == "Summary"
+        assert row["Expected Type"] == "DATE"
