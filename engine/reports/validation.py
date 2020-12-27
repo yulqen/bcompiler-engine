@@ -3,6 +3,7 @@
 # Write a validation report to a CSV file.
 
 import csv
+import datetime
 from dataclasses import dataclass
 from typing import List
 
@@ -34,8 +35,16 @@ class ValidationReportCSV:
         self.data = validation_data
 
     def write(self) -> None:
+        timestamp = (
+            datetime.datetime.today()
+            .isoformat(timespec="seconds")
+            .replace(":", "_")
+            .replace("-", "_")
+        )
         with open(
-            Config.FULL_PATH_OUTPUT / "validation_report.csv", "w", newline=""
+            Config.FULL_PATH_OUTPUT / f"validation_report_{timestamp}.csv",
+            "w",
+            newline="",
         ) as csvfile:
             fieldnames = [
                 "Pass Status",

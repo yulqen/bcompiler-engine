@@ -119,7 +119,11 @@ def test_csv_validation_report_writer(mock_config):
         ),
     ]
     report = ValidationReportCSV(validation_data).write()
-    with open(mock_config.FULL_PATH_OUTPUT / "validation_report.csv", "r") as csvfile:
+    pth = mock_config.FULL_PATH_OUTPUT
+    f = list(
+        pth.glob("*.csv")
+    )  # we have to do this because filename includes timestamp
+    with open(f[0]) as csvfile:
         reader = csv.DictReader(csvfile)
         first_row = next(reader)
         assert first_row["Pass Status"] == "PASS"
@@ -145,7 +149,11 @@ def test_validation_results_go_to_csv_file(
     uc = CreateMasterUseCaseWithValidation(dm_repo, tmpl_repo, output_repo)
     uc.execute("master.xlsx")
 
-    with open(mock_config.FULL_PATH_OUTPUT / "validation_report.csv") as csvfile:
+    pth = mock_config.FULL_PATH_OUTPUT
+    f = list(
+        pth.glob("*.csv")
+    )  # we have to do this because filename includes timestamp
+    with open(f[0]) as csvfile:
         reader = csv.DictReader(csvfile)
         row = next(reader)
         assert row["Filename"] == "test_template.xlsx"
@@ -170,9 +178,13 @@ def test_validation_csv_report_contains_fail_state(
     uc = CreateMasterUseCaseWithValidation(dm_repo, tmpl_repo, output_repo)
     uc.execute("master.xlsx")
 
-    with open(mock_config.FULL_PATH_OUTPUT / "validation_report.csv") as csvfile:
+    pth = mock_config.FULL_PATH_OUTPUT
+    f = list(
+        pth.glob("*.csv")
+    )  # we have to do this because filename includes timestamp
+
+    with open(f[0]) as csvfile:
         reader = csv.DictReader(csvfile)
-        breakpoint()
         row = next(reader)
         assert row["Filename"] == "test_template_incorrect_type.xlsx"
         assert row["Pass Status"] == "FAIL"
