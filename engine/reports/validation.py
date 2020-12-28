@@ -56,6 +56,13 @@ class ValidationReportCSV:
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             for item in self.data:
+                # TODO - REPLACE with better cleaning function
+                # This prevented values with ; in them spreading the
+                # text across multiple cells in the CSV output
+                try:
+                    item.value = item.value.replace(";", "")
+                except AttributeError:
+                    pass
                 writer.writerow(
                     {
                         "Pass Status": item.passes,
