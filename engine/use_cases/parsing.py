@@ -100,7 +100,7 @@ def validation_checker(dm_data, tmp_data) -> List["ValidationCheck"]:
                             if tmp_data[f]["data"][s][c]["data_type"] == vtype:
                                 checks.append(
                                     ValidationCheck(
-                                        passes="PASSES",
+                                        passes="PASS",
                                         filename=f,
                                         key=d["key"],
                                         value=tmp_data[f]["data"][s][c]["value"],
@@ -113,7 +113,7 @@ def validation_checker(dm_data, tmp_data) -> List["ValidationCheck"]:
                             else:
                                 checks.append(
                                     ValidationCheck(
-                                        passes="FAILS",
+                                        passes="FAIL",
                                         filename=f,
                                         key=d["key"],
                                         value=tmp_data[f]["data"][s][c]["value"],
