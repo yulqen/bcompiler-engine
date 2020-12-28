@@ -12,7 +12,7 @@ from engine.config import Config
 
 @dataclass
 class ValidationCheck:
-    passes: bool
+    passes: str
     filename: str
     key: str
     value: str
@@ -20,9 +20,6 @@ class ValidationCheck:
     sheetname: str
     wanted: str
     got: str
-
-
-pass_str = {"True": "PASS", "False": "FAIL"}
 
 
 class ValidationReportCSV:
@@ -61,7 +58,7 @@ class ValidationReportCSV:
             for item in self.data:
                 writer.writerow(
                     {
-                        "Pass Status": pass_str[str(item.passes)],
+                        "Pass Status": item.passes,
                         "Filename": item.filename,
                         "Key": item.key,
                         "Value": item.value,

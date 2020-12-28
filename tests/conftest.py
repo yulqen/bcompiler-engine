@@ -158,6 +158,12 @@ def datamap() -> Path:
 
 
 @pytest.fixture
+def datamap_missing_one_type() -> Path:
+    here = os.path.abspath(os.curdir)
+    return Path(os.path.join(here, "tests/resources/datamap_missing_one_type.csv"))
+
+
+@pytest.fixture
 def datamap_reduced() -> Path:
     here = os.path.abspath(os.curdir)
     return Path(os.path.join(here, "tests/resources/datamap_reduced.csv"))

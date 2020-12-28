@@ -83,10 +83,24 @@ def validation_checker(dm_data, tmp_data) -> List["ValidationCheck"]:
                     cellrefs = tmp_data[f]["data"][s].keys()
                     for c in cellrefs:
                         if c == cellref:
+                            if vtype == "":
+                                checks.append(
+                                    ValidationCheck(
+                                        passes="UNTYPED",
+                                        filename=f,
+                                        key=d["key"],
+                                        value=tmp_data[f]["data"][s][c]["value"],
+                                        sheetname=s,
+                                        cellref=c,
+                                        wanted="NA",
+                                        got=tmp_data[f]["data"][s][c]["data_type"],
+                                    )
+                                )
+                                continue
                             if tmp_data[f]["data"][s][c]["data_type"] == vtype:
                                 checks.append(
                                     ValidationCheck(
-                                        passes=True,
+                                        passes="PASSES",
                                         filename=f,
                                         key=d["key"],
                                         value=tmp_data[f]["data"][s][c]["value"],
@@ -99,7 +113,7 @@ def validation_checker(dm_data, tmp_data) -> List["ValidationCheck"]:
                             else:
                                 checks.append(
                                     ValidationCheck(
-                                        passes=False,
+                                        passes="FAILS",
                                         filename=f,
                                         key=d["key"],
                                         value=tmp_data[f]["data"][s][c]["value"],

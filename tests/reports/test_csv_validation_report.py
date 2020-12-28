@@ -59,13 +59,13 @@ def test_compare_datamap_data_with_template_data():
     }
     checks = validation_checker(dm_data, tmp_data)
     assert len(checks) == 2
-    assert checks[0].passes is True
+    assert checks[0].passes == "PASSES"
     assert checks[0].filename == "test_template.xlsx"
     assert checks[0].sheetname == "Summary"
     assert checks[0].cellref == "A1"
     assert checks[0].wanted == "DATE"
     assert checks[0].got == "DATE"
-    assert checks[1].passes is False
+    assert checks[1].passes is "FAILS"
 
 
 def test_create_master_spreadsheet_with_validation(
@@ -81,14 +81,14 @@ def test_create_master_spreadsheet_with_validation(
     uc = CreateMasterUseCaseWithValidation(dm_repo, tmpl_repo, output_repo)
     uc.execute("master.xlsx")
     # FIXME - this is not a good test; no assurance about ordering in a list
-    assert uc.final_validation_checks[0].passes is True
+    assert uc.final_validation_checks[0].passes == "PASSES"
 
 
 def test_csv_validation_report_writer(mock_config):
     mock_config.initialise()
     validation_data = [
         ValidationCheck(
-            passes=True,
+            passes="PASSES",
             filename="toss.xlsx",
             key="Test Key 1",
             value="Burgers",
@@ -98,7 +98,7 @@ def test_csv_validation_report_writer(mock_config):
             got="TEXT",
         ),
         ValidationCheck(
-            passes=True,
+            passes="PASSES",
             filename="toss.xlsx",
             key="Test Key 2",
             value="Burgers & Chips",
@@ -108,7 +108,7 @@ def test_csv_validation_report_writer(mock_config):
             got="NUMBER",
         ),
         ValidationCheck(
-            passes=True,
+            passes="PASSES",
             filename="toss.xlsx",
             key="Test Key 3",
             value="Ham and grease",
@@ -126,7 +126,7 @@ def test_csv_validation_report_writer(mock_config):
     with open(f[0]) as csvfile:
         reader = csv.DictReader(csvfile)
         first_row = next(reader)
-        assert first_row["Pass Status"] == "PASS"
+        assert first_row["Pass Status"] == "PASSES"
         assert first_row["Filename"] == "toss.xlsx"
         assert first_row["Key"] == "Test Key 1"
         assert first_row["Value"] == "Burgers"
@@ -157,7 +157,7 @@ def test_validation_results_go_to_csv_file(
         reader = csv.DictReader(csvfile)
         row = next(reader)
         assert row["Filename"] == "test_template.xlsx"
-        assert row["Pass Status"] == "PASS"
+        assert row["Pass Status"] == "PASSES"
         assert row["Key"] == "Date Key"
         assert row["Sheet Name"] == "Summary"
         assert row["Expected Type"] == "DATE"
@@ -187,7 +187,36 @@ def test_validation_csv_report_contains_fail_state(
         reader = csv.DictReader(csvfile)
         row = next(reader)
         assert row["Filename"] == "test_template_incorrect_type.xlsx"
-        assert row["Pass Status"] == "FAIL"
+        assert row["Pass Status"] == "FAILS"
         assert row["Key"] == "Date Key"
         assert row["Sheet Name"] == "Summary"
         assert row["Expected Type"] == "DATE"
+
+
+def test_validation_csv_report_with_mixture_of_included_types(
+    mock_config, datamap_missing_one_type, template
+):
+    mock_config.initialise()
+    shutil.copy2(template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    tmpl_repo = InMemoryPopulatedTemplatesRepository(
+        mock_config.PLATFORM_DOCS_DIR / "input"
+    )
+    dm_repo = InMemorySingleDatamapRepository(datamap_missing_one_type)
+    output_repo = MasterOutputRepository
+    uc = CreateMasterUseCaseWithValidation(dm_repo, tmpl_repo, output_repo)
+    uc.execute("master.xlsx")
+
+    pth = mock_config.FULL_PATH_OUTPUT
+    f = list(
+        pth.glob("*.csv")
+    )  # we have to do this because filename includes timestamp
+
+    with open(f[0]) as csvfile:
+        reader = csv.DictReader(csvfile)
+        row = next(reader)
+        row = next(reader)  # we need the second row
+        assert row["Filename"] == "test_template.xlsx"
+        assert row["Pass Status"] == "UNTYPED"
+        assert row["Key"] == "String Key"
+        assert row["Sheet Name"] == "Summary"
+        assert row["Expected Type"] == "NA"
