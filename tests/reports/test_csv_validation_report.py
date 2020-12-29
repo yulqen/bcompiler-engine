@@ -65,7 +65,7 @@ def test_compare_datamap_data_with_template_data():
     assert checks[0].cellref == "A1"
     assert checks[0].wanted == "DATE"
     assert checks[0].got == "DATE"
-    assert checks[1].passes is "FAILS"
+    assert checks[1].passes is "FAIL"
 
 
 def test_create_master_spreadsheet_with_validation(
