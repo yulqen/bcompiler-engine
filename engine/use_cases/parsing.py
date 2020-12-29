@@ -37,7 +37,7 @@ import json
 import logging
 import warnings
 from concurrent import futures
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from engine.config import Config
 from engine.exceptions import (
@@ -68,8 +68,9 @@ logger = logging.getLogger(__name__)
 SKIP_MISSING_SHEETS = False
 
 
-def validation_checker(dm_data, tmp_data) -> List["ValidationCheck"]:
+def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCheck"]]:
     checks = []
+    wrong_types = []
     files = tmp_data.keys()
     for d in dm_data:
         sheet = d["sheet"]
@@ -87,6 +88,8 @@ def validation_checker(dm_data, tmp_data) -> List["ValidationCheck"]:
                                 vtype == ""
                                 or vtype not in Config.ACCEPTABLE_VALIDATION_TYPES
                             ):
+                                if vtype != "":
+                                    wrong_types.append(vtype)
                                 checks.append(
                                     ValidationCheck(
                                         passes="UNTYPED",
@@ -126,7 +129,7 @@ def validation_checker(dm_data, tmp_data) -> List["ValidationCheck"]:
                                         got=tmp_data[f]["data"][s][c]["data_type"],
                                     )
                                 )
-    return checks
+    return (wrong_types, checks)
 
 
 class ParsePopulatedTemplatesUseCase:
@@ -211,9 +214,15 @@ class ApplyDatamapToExtractionUseCaseWithValidation:
         self._datamap_data_dict = json.loads(self._datamap_data_json)
         self._template_data_dict = json.loads(self._template_data_json)
 
-        self.validation_checks = validation_checker(
+        bad_types, self.validation_checks = validation_checker(
             self._datamap_data_dict, self._template_data_dict
         )
+
+        if len(bad_types) > 0:
+            for t in bad_types:
+                logger.warning(
+                    f"{t} is not a valid type. Flagged as UNTYPED. Check your datamap."
+                )
 
         checks = check_datamap_sheets(self._datamap_data_dict, self._template_data_dict)
         # TODO -reintroduce SKIP_MISSING_SHEETS check here

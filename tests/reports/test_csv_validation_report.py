@@ -54,7 +54,7 @@ def test_compare_datamap_data_with_template_data():
             },
         },
     }
-    checks = validation_checker(dm_data, tmp_data)
+    _, checks = validation_checker(dm_data, tmp_data)
     assert len(checks) == 2
     assert checks[0].passes == "PASS"
     assert checks[0].filename == "test_template.xlsx"
