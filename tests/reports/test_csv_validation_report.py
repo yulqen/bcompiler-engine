@@ -220,3 +220,23 @@ def test_validation_csv_report_with_mixture_of_included_types(
         assert row["Key"] == "String Key"
         assert row["Sheet Name"] == "Summary"
         assert row["Expected Type"] == "NA"
+
+
+def test_skips_type_validation_report_if_no_type_col_in_dm(
+    mock_config, datamap_no_type_col_matches_test_template, template
+):
+    mock_config.initialise()
+    shutil.copy2(template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    tmpl_repo = InMemoryPopulatedTemplatesRepository(
+        mock_config.PLATFORM_DOCS_DIR / "input"
+    )
+    dm_repo = InMemorySingleDatamapRepository(datamap_no_type_col_matches_test_template)
+    output_repo = MasterOutputRepository
+    uc = CreateMasterUseCaseWithValidation(dm_repo, tmpl_repo, output_repo)
+    uc.execute("master.xlsx")
+
+    pth = mock_config.FULL_PATH_OUTPUT
+    f = list(
+        pth.glob("*.csv")
+    )  # we have to do this because filename includes timestamp
+    assert len(f) == 0

@@ -40,6 +40,8 @@ from concurrent import futures
 from dataclasses import dataclass
 from typing import Dict, List
 
+from engine.config import Config
+
 from engine.exceptions import (
     DatamapNotCSVException,
     NoApplicableSheetsInTemplateFiles,
@@ -429,7 +431,14 @@ class CreateMasterUseCaseWithValidation:
             self.final_validation_checks = [
                 x for x in self.initial_validation_checks if x.wanted is not None
             ]
-            ValidationReportCSV(self.final_validation_checks).write()
+            if Config.ADHOC_CACHE.get("novalidation"):
+                logger.info(
+                    "No type validation column in datamap so not producing report."
+                )
+                del Config.ADHOC_CACHE["novalidation"]
+            else:
+                pth = ValidationReportCSV(self.final_validation_checks).write()
+                logger.info(f"Validation report written to {pth}.")
         except DatamapNotCSVException:
             raise
         output_repo = self.output_repository(uc.data_for_master, output_file_name)

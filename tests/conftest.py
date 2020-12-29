@@ -158,6 +158,16 @@ def datamap() -> Path:
 
 
 @pytest.fixture
+def datamap_no_type_col_matches_test_template() -> Path:
+    here = os.path.abspath(os.curdir)
+    return Path(
+        os.path.join(
+            here, "tests/resources/datamap_no_type_col_matches_test_template.csv"
+        )
+    )
+
+
+@pytest.fixture
 def datamap_missing_one_type() -> Path:
     here = os.path.abspath(os.curdir)
     return Path(os.path.join(here, "tests/resources/datamap_missing_one_type.csv"))

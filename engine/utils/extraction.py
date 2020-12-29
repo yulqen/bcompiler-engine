@@ -17,16 +17,17 @@ from openpyxl import load_workbook
 from openpyxl.worksheet.cell_range import MultiCellRange
 from openpyxl.worksheet.worksheet import Worksheet
 
+from engine.config import Config
 from engine.domain.datamap import DatamapFile, DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
 from engine.exceptions import (
     DatamapFileEncodingError,
+    DatamapNotCSVException,
     MalFormedCSVHeaderException,
     MissingCellKeyError,
     MissingLineError,
     MissingSheetFieldError,
     NoApplicableSheetsInTemplateFiles,
-    DatamapNotCSVException,
 )
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
 
@@ -88,6 +89,8 @@ def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
             _dml_line_check(line, headers)
             try:
                 if headers["type"] is None:
+
+                    Config.ADHOC_CACHE["novalidation"] = True
                     data.append(
                         DatamapLine(
                             key=_clean(line[headers["key"]]),
