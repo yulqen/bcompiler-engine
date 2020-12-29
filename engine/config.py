@@ -5,7 +5,7 @@ import platform
 import textwrap
 from configparser import ConfigParser
 from pathlib import Path
-from typing import Tuple
+from typing import Any, Dict, Tuple
 
 from appdirs import user_config_dir, user_data_dir
 
@@ -44,7 +44,7 @@ class Config:
     PLATFORM_DOCS_DIR = _platform_docs_dir()
     FULL_PATH_INPUT = Path(PLATFORM_DOCS_DIR) / "input"
     FULL_PATH_OUTPUT = Path(PLATFORM_DOCS_DIR) / "output"
-    ADHOC_CACHE = {}
+    ADHOC_CACHE: Dict[str, Any] = {}
     config_parser = ConfigParser()
     base_config = textwrap.dedent(
         """\
@@ -92,12 +92,12 @@ class Config:
         except TypeError:
             raise TypeError("Unable to detect operating system")
         if not input_dir.exists():
-            logger.warning(f"Required input directory does not exist.")
-            logger.info(f"Creating input directory.")
+            logger.warning("Required input directory does not exist.")
+            logger.info("Creating input directory.")
             input_dir.mkdir(parents=True)
         if not output_dir.exists():
-            logger.warning(f"Required output directory does not exist.")
-            logger.info(f"Creating output directory.")
+            logger.warning("Required output directory does not exist.")
+            logger.info("Creating output directory.")
             output_dir.mkdir(parents=True)
 
 
