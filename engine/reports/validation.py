@@ -5,6 +5,7 @@
 import csv
 import datetime
 from dataclasses import dataclass
+from pathlib import Path
 from typing import List
 
 from engine.config import Config
@@ -31,18 +32,15 @@ class ValidationReportCSV:
     def __init__(self, validation_data: List[ValidationCheck]):
         self.data = validation_data
 
-    def write(self) -> None:
+    def write(self) -> Path:
         timestamp = (
             datetime.datetime.today()
             .isoformat(timespec="seconds")
             .replace(":", "_")
             .replace("-", "_")
         )
-        with open(
-            Config.FULL_PATH_OUTPUT / f"validation_report_{timestamp}.csv",
-            "w",
-            newline="",
-        ) as csvfile:
+        out_file = Config.FULL_PATH_OUTPUT / f"validation_report_{timestamp}.csv"
+        with open(out_file, "w", newline="") as csvfile:
             fieldnames = [
                 "Pass Status",
                 "Filename",
@@ -56,11 +54,8 @@ class ValidationReportCSV:
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             for item in self.data:
-                # TODO - REPLACE with better cleaning function
-                # This prevented values with ; in them spreading the
-                # text across multiple cells in the CSV output
                 try:
-                    item.value = item.value.replace(";", "")
+                    item.value = item.value.replace(";", "").replace(",", " ")
                 except AttributeError:
                     pass
                 writer.writerow(
@@ -75,3 +70,4 @@ class ValidationReportCSV:
                         "Got Type": item.got,
                     }
                 )
+        return out_file
