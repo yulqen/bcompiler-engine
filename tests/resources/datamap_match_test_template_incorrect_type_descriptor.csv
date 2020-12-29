@@ -1,0 +1,5 @@
+cell_key,template_sheet,cellreference,type
+Date Key,Summary,B2,DATE
+String Key,Summary,B3,TEXT
+Big Float,Another Sheet,F17,BUTTER
+Funny Date,Another Sheet,H39,DATE

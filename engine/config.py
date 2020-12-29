@@ -45,6 +45,7 @@ class Config:
     FULL_PATH_INPUT = Path(PLATFORM_DOCS_DIR) / "input"
     FULL_PATH_OUTPUT = Path(PLATFORM_DOCS_DIR) / "output"
     ADHOC_CACHE: Dict[str, Any] = {}
+    ACCEPTABLE_VALIDATION_TYPES = ["TEXT", "NUMBER", "DATE"]
     config_parser = ConfigParser()
     base_config = textwrap.dedent(
         """\

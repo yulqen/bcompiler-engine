@@ -37,17 +37,15 @@ import json
 import logging
 import warnings
 from concurrent import futures
-from dataclasses import dataclass
 from typing import Dict, List
 
 from engine.config import Config
-
 from engine.exceptions import (
     DatamapNotCSVException,
     NoApplicableSheetsInTemplateFiles,
     RemoveFileWithNoSheetRequiredByDatamap,
 )
-from engine.reports.validation import ValidationReportCSV, ValidationCheck
+from engine.reports.validation import ValidationCheck, ValidationReportCSV
 from engine.utils.extraction import (
     ALL_IMPORT_DATA,
     check_datamap_sheets,
@@ -85,7 +83,10 @@ def validation_checker(dm_data, tmp_data) -> List["ValidationCheck"]:
                     cellrefs = tmp_data[f]["data"][s].keys()
                     for c in cellrefs:
                         if c == cellref:
-                            if vtype == "":
+                            if (
+                                vtype == ""
+                                or vtype not in Config.ACCEPTABLE_VALIDATION_TYPES
+                            ):
                                 checks.append(
                                     ValidationCheck(
                                         passes="UNTYPED",
@@ -209,7 +210,6 @@ class ApplyDatamapToExtractionUseCaseWithValidation:
                 raise
         self._datamap_data_dict = json.loads(self._datamap_data_json)
         self._template_data_dict = json.loads(self._template_data_json)
-        logger.info("Checking template data.")
 
         self.validation_checks = validation_checker(
             self._datamap_data_dict, self._template_data_dict
@@ -219,6 +219,7 @@ class ApplyDatamapToExtractionUseCaseWithValidation:
         # TODO -reintroduce SKIP_MISSING_SHEETS check here
         # We set a config variable to choose whether we
         # throw out files with a single missing sheet
+        logger.info("Checking template data.")
         try:
             self._template_data_dict = remove_failing_files(
                 checks, self._template_data_dict
