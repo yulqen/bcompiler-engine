@@ -107,6 +107,25 @@ def template() -> Path:
     return Path(os.path.join(here, "tests/resources/test_template.xlsx"))
 
 
+# temporary fixture
+@pytest.fixture
+def eight_gig_template() -> Path:
+    here = os.path.abspath(os.curdir)
+    return Path(
+        os.path.join(
+            here,
+            "/home/lemon/Documents/datamaps/input/Brighton Mainline Upgrade Programme Q3_2021.xlsm",
+        )
+    )
+
+
+# temporary fixture
+@pytest.fixture
+def eight_gig_datamap() -> Path:
+    here = os.path.abspath(os.curdir)
+    return Path(os.path.join(here, "/home/lemon/Documents/datamaps/input/datamap.csv"))
+
+
 @pytest.fixture
 def bad_sheet_template() -> Path:
     here = os.path.abspath(os.curdir)

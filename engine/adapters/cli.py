@@ -11,8 +11,10 @@ from engine.config import Config, check_for_blank, check_for_datamap
 from engine.exceptions import DatamapNotCSVException
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
-from engine.repository.templates import (InMemoryPopulatedTemplatesRepository,
-                                         MultipleTemplatesWriteRepo)
+from engine.repository.templates import (
+    InMemoryPopulatedTemplatesRepository,
+    MultipleTemplatesWriteRepo,
+)
 from engine.use_cases.output import WriteMasterToTemplates
 from engine.use_cases.parsing import CreateMasterUseCase
 from engine.utils.extraction import data_validation_report, datamap_reader
@@ -48,7 +50,9 @@ def check_aux_files(config: Config):
     # if we get this far, there is a datamap file, so we can run this
     dm_name = config.config_parser["DEFAULT"]["datamap file name"]
     if datamap_reader(config.PLATFORM_DOCS_DIR / "input" / dm_name):
-        logger.info("Datamap file passes tests. Check any WARNING messages. Ok to proceed.")
+        logger.info(
+            "Datamap file passes tests. Check any WARNING messages. Ok to proceed."
+        )
     else:
         logger.critical("Datamap tests failed")
 
