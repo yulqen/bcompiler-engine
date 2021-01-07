@@ -3,6 +3,14 @@
 [datamaps](https://github.com/yulqen/datamaps) versions will mirror these
 versions as long as there are significant-enough interface changes.
 
+## Version 1.0.7
+
+* Excel template row-limiting (fix Issue#30)
+
+## Version 1.0.8 (optional)
+
+* Template integrity functionality in `datamaps check`
+
 ## Version 1.1
 
 * Basic type-checking (NUMBER, TEXT, DATE)
@@ -17,3 +25,9 @@ NB: Formats used here are unstable.
   * Numbers must be within a certain range (`NUMBER>10`)
   * Text length must be within a certain range (`TEXT<200`)
   * Text contains/choices (`TEXTCONTAIN Yes|No` or `TEXTNOTCONTAIN Yes|No`)
+
+## Version 1.3
+
+* Import direct to SQLite database
+* Convert master files to SQLite database
+* Removal of master as a storage medium
