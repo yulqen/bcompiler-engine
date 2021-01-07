@@ -465,11 +465,14 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     checksum: str = _hash_single_file(f_path)
     holding = []
     for sheet in workbook.worksheets:
+        print(f"Starting to process sheet {sheet}")
         sheet_data: SHEET_DATA_IN_LST = []
         sheet_dict: Dict[str, Dict[str, Dict[str, str]]] = {}
+        cellcount = 0
         for row in sheet.rows:
             for cell in row:
                 if cell.value is not None:
+                    cellcount = cellcount + 1
                     try:
                         val = cell.value.rstrip().lstrip()
                         c_type = DatamapLineValueType.TEXT
