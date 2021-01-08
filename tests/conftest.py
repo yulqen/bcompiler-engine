@@ -107,6 +107,7 @@ def template() -> Path:
     return Path(os.path.join(here, "tests/resources/test_template.xlsx"))
 
 
+# FIXME: remove when bug fixed
 # temporary fixture
 @pytest.fixture
 def eight_gig_template() -> Path:
@@ -119,6 +120,7 @@ def eight_gig_template() -> Path:
     )
 
 
+# FIXME: remove when bug fixed
 # temporary fixture
 @pytest.fixture
 def eight_gig_datamap() -> Path:

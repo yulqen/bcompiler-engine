@@ -6,7 +6,8 @@ import hashlib
 import json
 import logging
 import os
-from collections import OrderedDict
+import re
+from collections import OrderedDict, defaultdict
 from dataclasses import dataclass
 from itertools import groupby
 from pathlib import Path
@@ -465,14 +466,13 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     checksum: str = _hash_single_file(f_path)
     holding = []
     for sheet in workbook.worksheets:
+        # FIXME - remove this line when merge to master
         print(f"Starting to process sheet {sheet}")
         sheet_data: SHEET_DATA_IN_LST = []
         sheet_dict: Dict[str, Dict[str, Dict[str, str]]] = {}
-        cellcount = 0
         for row in sheet.rows:
             for cell in row:
                 if cell.value is not None:
-                    cellcount = cellcount + 1
                     try:
                         val = cell.value.rstrip().lstrip()
                         c_type = DatamapLineValueType.TEXT
@@ -503,6 +503,25 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     return shell_dict
 
 
-def max_tmpl_row(datamap: Path, sheetname: str) -> int:
+def max_tmpl_row(datamap: Path, sheetname: str) -> Union[int, None]:
+    """
+    Returns the highest row number for
+    sheetname given all the cellrefs in datamap.
+
+    Returns None if sheetname is not recognised.
+    """
+    regex = re.compile(r"(^[A-Z]+)(\d+)$")
+    sheet_maxes = {}
+    cellrefs_by_sheet = defaultdict(list)
     dmls = datamap_reader(datamap)
     sheet_names = {line.sheet for line in dmls}
+    for name in sheet_names:
+        for dml in dmls:
+            if dml.sheet == name:
+                cellrefs_by_sheet[name].append(dml.cellref)
+    for s, cellref in cellrefs_by_sheet.items():
+        rows = []
+        for c in cellref:
+            rows.append(int(regex.search(c).groups()[1]))
+        sheet_maxes[s] = max(rows)
+    return sheet_maxes.get(sheetname)
