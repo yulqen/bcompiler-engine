@@ -3,6 +3,7 @@ import pytest
 from pathlib import Path
 
 from engine.domain.datamap import DatamapLineValueType
+from engine.utils.extraction import max_tmpl_row
 from engine.exceptions import (
     DatamapFileEncodingError,
     MalFormedCSVHeaderException,
@@ -146,18 +147,20 @@ def test_datamap_with_three_headers(datamap_three_headers):
 
 
 def test_datamap_missing_sheet_fields(datamap_missing_fields):
-    """We do not want the datamap read to pass if a line has a missing sheet field.
-    """
+    """We do not want the datamap read to pass if a line has a missing sheet field."""
     with pytest.raises(MissingSheetFieldError):
         data = datamap_reader(datamap_missing_fields)  # noqa
 
 
 def test_datamap_missing_key_fields(datamap_missing_key_fields):
-    """We do not want the datamap read to pass if a line has a missing key field.
-    """
+    """We do not want the datamap read to pass if a line has a missing key field."""
     with pytest.raises(MissingCellKeyError):
         data = datamap_reader(datamap_missing_key_fields)  # noqa
 
 
 def test_get_file_suffix_from_path(datamap):
     assert datamap.suffix == ".csv"
+
+
+def test_max_row_for_sheet_according_to_datamap(datamap):
+    assert max_tmpl_row(datamap, "Introduction") == 35

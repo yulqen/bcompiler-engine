@@ -499,3 +499,8 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     shell_dict = {f_path.name: inner_dict}
     logger.info(f"Compiled data from {f_path.name}")
     return shell_dict
+
+
+def max_tmpl_row(datamap: Path, sheetname: str) -> int:
+    dmls = datamap_reader(datamap)
+    sheet_names = {line.sheet for line in dmls}
