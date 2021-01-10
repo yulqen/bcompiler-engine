@@ -163,7 +163,7 @@ def test_get_file_suffix_from_path(datamap):
 
 
 def test_max_row_for_sheet_according_to_datamap(datamap):
-    assert max_tmpl_row(datamap, "Introduction") == 35
-    assert max_tmpl_row(datamap, "Summary") == 3
-    assert max_tmpl_row(datamap, "Another Sheet") == 39
-    assert max_tmpl_row(datamap, "Non existant sheet") is None
+    assert max_tmpl_row(datamap).get("Introduction") == 35
+    assert max_tmpl_row(datamap).get("Summary") == 3
+    assert max_tmpl_row(datamap).get("Another Sheet") == 39
+    assert max_tmpl_row(datamap).get("Non existant sheet") is None
