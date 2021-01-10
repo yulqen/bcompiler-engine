@@ -503,14 +503,14 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     return shell_dict
 
 
-def max_tmpl_row(datamap: Path, sheetname: str) -> Union[int, None]:
+def max_tmpl_row(datamap: Path) -> Dict[str, int]:
     """
     Returns the highest row number for
     sheetname given all the cellrefs in datamap.
 
     Returns None if sheetname is not recognised.
     """
-    regex = re.compile(r"(^[A-Z]+)(\d+)$")
+    regex = re.compile(r"(^[a-zA-Z]+)(\d+)$")
     sheet_maxes = {}
     cellrefs_by_sheet = defaultdict(list)
     dmls = datamap_reader(datamap)
@@ -522,6 +522,6 @@ def max_tmpl_row(datamap: Path, sheetname: str) -> Union[int, None]:
     for s, cellref in cellrefs_by_sheet.items():
         rows = []
         for c in cellref:
-            rows.append(int(regex.search(c).groups()[1]))
+            rows.append(int(regex.search(c).groups()[1]))  # type: ignore
         sheet_maxes[s] = max(rows)
-    return sheet_maxes.get(sheetname)
+    return sheet_maxes
