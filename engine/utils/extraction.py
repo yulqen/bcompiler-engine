@@ -14,22 +14,21 @@ from pathlib import Path
 from typing import Any, Dict, List, NamedTuple, Union
 from zipfile import BadZipFile
 
-from openpyxl import load_workbook
-from openpyxl.worksheet.cell_range import MultiCellRange
-from openpyxl.worksheet.worksheet import Worksheet
-
 from engine.domain.datamap import DatamapFile, DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
 from engine.exceptions import (
     DatamapFileEncodingError,
+    DatamapNotCSVException,
     MalFormedCSVHeaderException,
     MissingCellKeyError,
     MissingLineError,
     MissingSheetFieldError,
     NoApplicableSheetsInTemplateFiles,
-    DatamapNotCSVException,
 )
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
+from openpyxl import load_workbook
+from openpyxl.worksheet.cell_range import MultiCellRange
+from openpyxl.worksheet.worksheet import Worksheet
 
 FILE_DATA = Dict[str, Union[str, Dict[str, Dict[str, str]]]]
 DAT_DATA = Dict[str, FILE_DATA]
@@ -81,7 +80,7 @@ def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
         raise
     data = []
     logger.info(f"Reading datamap {dm_file}")
-    logger.info(f"Checking that datamap is valid.")
+    logger.info("Checking that datamap is valid.")
     with DatamapFile(dm_file) as datamap_file:
         reader = csv.DictReader(datamap_file)
         for line in reader:
@@ -326,7 +325,7 @@ def _extract_cellrefs(lst_of_tcs: SHEET_DATA_IN_LST):
         result_lst = list(group)
         if len(result_lst) > 1:
             raise RuntimeError(
-                f"Found duplicate sheet/cellref item when extracting keys."
+                "Found duplicate sheet/cellref item when extracting keys."
             )
         result_item = result_lst[0]
         output.update({k: result_item})
@@ -387,8 +386,8 @@ def datamap_check(dm_file):
                 # test for first char being ascii - if not, likely wrong encoding
                 if not top_row[0][0].isascii():
                     raise DatamapFileEncodingError(
-                        f"Incorrect encoding of datamap file. Please ensure "
-                        f"it is saved in Excel using CSV (Comma delimited) type - not CSV UTF-8 (Comma delimited) type."
+                        "Incorrect encoding of datamap file. Please ensure "
+                        "it is saved in Excel using CSV (Comma delimited) type - not CSV UTF-8 (Comma delimited) type."
                     )
                 else:
                     raise MalFormedCSVHeaderException(
@@ -400,8 +399,8 @@ def datamap_check(dm_file):
                 )
             if not top_row[0][0].isascii():
                 raise DatamapFileEncodingError(
-                    f"Incorrect encoding of datamap file. Please ensure "
-                    f"it is saved in Excel using CSV (Comma delimited) type - not CSV UTF-8 (Comma delimited) type."
+                    "Incorrect encoding of datamap file. Please ensure "
+                    "it is saved in Excel using CSV (Comma delimited) type - not CSV UTF-8 (Comma delimited) type."
                 )
             if top_row[-1] not in _good_type:
                 # test if we are using type column here
