@@ -4,6 +4,7 @@ import shutil
 from pathlib import Path
 
 import pytest
+
 from openpyxl import load_workbook
 
 from engine.repository.datamap import InMemorySingleDatamapRepository
