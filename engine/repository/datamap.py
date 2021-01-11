@@ -1,16 +1,18 @@
 import json
 from pathlib import Path
-from typing import List, Union
+from typing import Dict, List, Union
 
-from engine.utils.extraction import datamap_reader
+from engine.utils.extraction import datamap_reader, max_tmpl_row
+
 from ..domain.datamap import DatamapLine
 from ..exceptions import DatamapNotCSVException
 from ..serializers.datamap import DatamapEncoder
 
 
 class InMemorySingleDatamapRepository:
-    def __init__(self, datamap_path: Union[Path, str]):
+    def __init__(self, datamap_path: Union[Path, str]) -> None:
         self.datamap_path = datamap_path
+        self.row_limits: Dict[str, int] = max_tmpl_row(Path(datamap_path))
 
     def list_as_json(self) -> str:
         """Return list of DatamapLine objects parsed from filepath as json."""
