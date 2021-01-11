@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any, Dict, List, NamedTuple, Union
 from zipfile import BadZipFile
 
+from engine.config import Config  # noqa
 from engine.domain.datamap import DatamapFile, DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
 from engine.exceptions import (
@@ -467,7 +468,14 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
         print(f"Starting to process sheet {sheet}")
         sheet_data: SHEET_DATA_IN_LST = []
         sheet_dict: Dict[str, Dict[str, Dict[str, str]]] = {}
-        for row in sheet.rows:
+        # TODO - here for row-limiter code
+        # FIXME - remove this line when merge to master
+        print(Config.ROW_LIMITS)
+        # legal_row_limit = Config.ROW_LIMITS[sheet.title]
+        # FIXME - remove this line when merge to master
+        print(legal_row_limit, sheet.title)
+        legal_rows = list(sheet.rows)[:legal_row_limit]
+        for row in legal_rows:
             for cell in row:
                 if cell.value is not None:
                     try:
@@ -502,10 +510,9 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
 
 def max_tmpl_row(datamap: Path) -> Dict[str, int]:
     """
-    Returns the highest row number for
-    sheetname given all the cellrefs in datamap.
-
-    Returns None if sheetname is not recognised.
+    Returns a dictionary of sheetnames to the number
+    of anticipated rows in that sheet according to the
+    datamap.
     """
     regex = re.compile(r"(^[a-zA-Z]+)(\d+)$")
     sheet_maxes = {}

@@ -4,8 +4,6 @@ import sys
 from pathlib import Path
 from typing import List
 
-from openpyxl import load_workbook
-
 import engine.use_cases.parsing
 from engine.config import Config, check_for_blank, check_for_datamap
 from engine.exceptions import DatamapNotCSVException
@@ -18,6 +16,7 @@ from engine.repository.templates import (
 from engine.use_cases.output import WriteMasterToTemplates
 from engine.use_cases.parsing import CreateMasterUseCase
 from engine.utils.extraction import data_validation_report, datamap_reader
+from openpyxl import load_workbook
 
 logging.basicConfig(
     level=logging.INFO,
@@ -109,6 +108,8 @@ def import_and_create_master(echo_funcs, datamap=None):
         dm_fn = Config.config_parser["DEFAULT"]["datamap file name"]
     dm = Path(tmpl_repo.directory_path) / dm_fn
     dm_repo = InMemorySingleDatamapRepository(dm)
+    breakpoint()
+    Config.ROW_LIMITS = dm_repo.row_limits
     output_repo = MasterOutputRepository
     uc = CreateMasterUseCase(dm_repo, tmpl_repo, output_repo)
     try:
