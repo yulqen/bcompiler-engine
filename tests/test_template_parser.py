@@ -2,12 +2,15 @@ import os
 from pathlib import Path
 
 import pytest
-
 from engine.domain.datamap import DatamapLineValueType
 from engine.domain.template import TemplateCell
 from engine.use_cases.parsing import extract_from_multiple_xlsx_files
-from engine.utils.extraction import template_reader
-from engine.utils.extraction import _extract_cellrefs, _extract_sheets, get_xlsx_files
+from engine.utils.extraction import (
+    _extract_cellrefs,
+    _extract_sheets,
+    get_xlsx_files,
+    template_reader,
+)
 
 
 def test_parse_multiple_templates(resources):
@@ -67,9 +70,9 @@ def test_template_reader(template):
     )
 
 
-#FIXME: remove once bug fixed
+# FIXME: remove once bug fixed
 def test_template_reader_temporary(eight_gig_template, eight_gig_datamap):
-    dataset = template_reader(eight_gig_template)
+    dataset = template_reader(eight_gig_template)  # noqa
     assert True
 
 

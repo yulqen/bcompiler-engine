@@ -3,19 +3,19 @@ import shutil
 from pathlib import Path
 
 import pytest
-from openpyxl import load_workbook
-
-from engine.exceptions import (NoApplicableSheetsInTemplateFiles,
-                               RemoveFileWithNoSheetRequiredByDatamap)
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
-from engine.repository.templates import (FSPopulatedTemplatesRepo,
-                                         InMemoryPopulatedTemplatesRepository)
-from engine.use_cases.parsing import (ApplyDatamapToExtractionUseCase,
-                                      CreateMasterUseCase,
-                                      ParsePopulatedTemplatesUseCase,
-                                      extract_from_multiple_xlsx_files)
-from engine.utils.extraction import _check_file_in_datafile, get_xlsx_files
+from engine.repository.templates import (
+    FSPopulatedTemplatesRepo,
+    InMemoryPopulatedTemplatesRepository,
+)
+from engine.use_cases.parsing import (
+    ApplyDatamapToExtractionUseCase,
+    CreateMasterUseCase,
+    ParsePopulatedTemplatesUseCase,
+)
+from engine.utils.extraction import _check_file_in_datafile
+from openpyxl import load_workbook
 
 
 def test_template_parser_use_case(resources):
@@ -23,50 +23,64 @@ def test_template_parser_use_case(resources):
     parse_populated_templates_use_case = ParsePopulatedTemplatesUseCase(repo)
     result = parse_populated_templates_use_case.execute()
     assert (
-            json.loads(result)["test_template.xlsx"]["data"]["Summary"]["B3"]["value"]
-            == "This is a string"
+        json.loads(result)["test_template.xlsx"]["data"]["Summary"]["B3"]["value"]
+        == "This is a string"
     )
 
 
 def test_query_data_from_data_file(
-        mock_config, dat_file, spreadsheet_same_data_as_dat_file
+    mock_config, dat_file, spreadsheet_same_data_as_dat_file
 ):
     mock_config.initialise()
     shutil.copy2(dat_file, mock_config.DATAMAPS_LIBRARY_DATA_DIR)
-    shutil.copy2(spreadsheet_same_data_as_dat_file, mock_config.PLATFORM_DOCS_DIR / "input")
+    shutil.copy2(
+        spreadsheet_same_data_as_dat_file, mock_config.PLATFORM_DOCS_DIR / "input"
+    )
     repo = FSPopulatedTemplatesRepo(mock_config.PLATFORM_DOCS_DIR)
     parse_populated_templates_use_case = ParsePopulatedTemplatesUseCase(repo)
     result = parse_populated_templates_use_case.execute()
     assert (
-            json.loads(result)["test_dat_file_use_case.xlsx"]["data"]["new sheet"]["A1"][
-                "value"
-            ]
-            == "Project/Programme Name"
+        json.loads(result)["test_dat_file_use_case.xlsx"]["data"]["new sheet"]["A1"][
+            "value"
+        ]
+        == "Project/Programme Name"
     )
 
 
 @pytest.mark.slow
 def test_in_memory_datamap_application_to_extracted_data(
-        mock_config, datamap, template_with_introduction_sheet
+    mock_config, datamap, template_with_introduction_sheet
 ):
     mock_config.initialise()
-    shutil.copy2(template_with_introduction_sheet, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    shutil.copy2(
+        template_with_introduction_sheet,
+        (Path(mock_config.PLATFORM_DOCS_DIR) / "input"),
+    )
     shutil.copy2(datamap, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
     tmpl_repo = InMemoryPopulatedTemplatesRepository(
         mock_config.PLATFORM_DOCS_DIR / "input"
     )
-    dm_repo = InMemorySingleDatamapRepository(Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "datamap.csv")
+    dm_repo = InMemorySingleDatamapRepository(
+        Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "datamap.csv"
+    )
     uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
     uc.execute()
     assert (
-            uc.query_key("test_template_with_introduction_sheet.xlsm", "String Key", "Summary")
-            == "This is a string"
+        uc.query_key(
+            "test_template_with_introduction_sheet.xlsm", "String Key", "Summary"
+        )
+        == "This is a string"
     )
-    assert uc.query_key("test_template_with_introduction_sheet.xlsm", "Big Float", "Another Sheet") == 7.2
+    assert (
+        uc.query_key(
+            "test_template_with_introduction_sheet.xlsm", "Big Float", "Another Sheet"
+        )
+        == 7.2
+    )
 
 
 def test_in_memory_datamap_application_to_extracted_data_raises_exception(
-        mock_config, datamap, template
+    mock_config, datamap, template
 ):
     "Raise exception when the key provided is not in the datamap"
     mock_config.initialise()
@@ -85,7 +99,7 @@ def test_in_memory_datamap_application_to_extracted_data_raises_exception(
 
 
 def test_in_memory_datamap_generator(
-        mock_config, datamap_match_test_template, template
+    mock_config, datamap_match_test_template, template
 ):
     "Doesn't really need a generator because its already in memory, but whatever..."
     mock_config.initialise()
@@ -134,7 +148,7 @@ def ensure_data_and_populate_file(config, dat_file, spreadsheet_file) -> None:
 
 
 def test_file_data_is_in_dat_file(
-        mock_config, dat_file, spreadsheet_same_data_as_dat_file
+    mock_config, dat_file, spreadsheet_same_data_as_dat_file
 ):
     """Before we do any data extraction from files, we need to check out dat file.
     """
@@ -146,7 +160,7 @@ def test_file_data_is_in_dat_file(
 
 
 def test_file_data_is_in_dat_file_works_with_str_params(
-        mock_config, dat_file, spreadsheet_same_data_as_dat_file
+    mock_config, dat_file, spreadsheet_same_data_as_dat_file
 ):
     """Before we do any data extraction from files, we need to check out dat file.
     """
@@ -167,7 +181,7 @@ def test_if_data_file_and_spreadsheet_file_dont_exist():
 
 
 def test_file_data_is_in_data_file__but_spreadsheet_file_doesnt_exist(
-        mock_config, dat_file
+    mock_config, dat_file
 ):
     mock_config.initialise()
     with pytest.raises(FileNotFoundError):
@@ -175,7 +189,7 @@ def test_file_data_is_in_data_file__but_spreadsheet_file_doesnt_exist(
 
 
 def test_file_data_not_in_data_returns_exception(
-        mock_config, dat_file, spreadsheet_one_cell_different_data_than_dat_file
+    mock_config, dat_file, spreadsheet_one_cell_different_data_than_dat_file
 ):
     """Before we do any data extraction from files, we need to check out dat file.
 
@@ -191,6 +205,6 @@ def test_file_data_not_in_data_returns_exception(
         )
     exception_msg = excinfo.value.args[0]
     assert (
-            exception_msg
-            == "Data from test_data_file_use_case_diff_data_from_dat_file.xlsx is not contained in extracted_data.dat"
+        exception_msg
+        == "Data from test_data_file_use_case_diff_data_from_dat_file.xlsx is not contained in extracted_data.dat"
     )
