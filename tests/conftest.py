@@ -107,27 +107,6 @@ def template() -> Path:
     return Path(os.path.join(here, "tests/resources/test_template.xlsx"))
 
 
-# FIXME: remove when bug fixed
-# temporary fixture
-@pytest.fixture
-def eight_gig_template() -> Path:
-    here = os.path.abspath(os.curdir)
-    return Path(
-        os.path.join(
-            here,
-            "/home/lemon/Documents/datamaps/input/Brighton Mainline Upgrade Programme Q3_2021.xlsm",
-        )
-    )
-
-
-# FIXME: remove when bug fixed
-# temporary fixture
-@pytest.fixture
-def eight_gig_datamap() -> Path:
-    here = os.path.abspath(os.curdir)
-    return Path(os.path.join(here, "/home/lemon/Documents/datamaps/input/datamap.csv"))
-
-
 @pytest.fixture
 def template_incorrect_type() -> Path:
     here = os.path.abspath(os.curdir)

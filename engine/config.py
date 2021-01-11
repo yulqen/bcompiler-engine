@@ -1,6 +1,7 @@
 import getpass
 import logging
 import os
+import sys
 import platform
 import textwrap
 from configparser import ConfigParser
@@ -81,10 +82,21 @@ class Config:
         if not Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).exists():
             logger.info(f"Creating config file at {cls.DATAMAPS_LIBRARY_CONFIG_FILE}.")
             Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
-        cls.config_parser.read(cls.DATAMAPS_LIBRARY_CONFIG_FILE)
 
-        Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
         cls.config_parser.read(cls.DATAMAPS_LIBRARY_CONFIG_FILE)
+        cls.TEMPLATE_ROW_LIMIT = cls.config_parser.defaults().get("template_row_limit")
+        if cls.TEMPLATE_ROW_LIMIT is not None:
+            cls.TEMPLATE_ROW_LIMIT = int(cls.TEMPLATE_ROW_LIMIT)
+        if cls.TEMPLATE_ROW_LIMIT == 0 or cls.TEMPLATE_ROW_LIMIT is None:
+            logger.critical(f"Row limit is missing or set to 0. Impossible to import. Check datamaps import templates --help")
+            sys.exit(1)
+        elif cls.TEMPLATE_ROW_LIMIT < 50:
+            logger.warning(f"Row limit is set to {cls.TEMPLATE_ROW_LIMIT} (default is 500). This may be unintentionally low. Check datamaps import templates --help")
+        elif cls.TEMPLATE_ROW_LIMIT == 0 or cls.TEMPLATE_ROW_LIMIT is None:
+            logger.critical(f"Row limit is missing or set to 0. Impossible to import. Check datamaps import templates --help")
+            sys.exit(1)
+        else:
+            logger.info(f"Row limit is set to {cls.TEMPLATE_ROW_LIMIT}.")
 
         # then we need to create the docs directory if it doesn't exist
         try:
