@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any, Dict, List, NamedTuple, Union
 from zipfile import BadZipFile
 
+from engine.config import Config
 from engine.domain.datamap import DatamapFile, DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
 from engine.exceptions import (
@@ -467,7 +468,10 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
         print(f"Starting to process sheet {sheet}")
         sheet_data: SHEET_DATA_IN_LST = []
         sheet_dict: Dict[str, Dict[str, Dict[str, str]]] = {}
+        rowcnt = 0
         for row in sheet.rows:
+            if rowcnt > int(Config.TEMPLATE_ROW_LIMIT):
+                break
             for cell in row:
                 if cell.value is not None:
                     try:
@@ -490,6 +494,7 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
                             template_file, sheet.title, cellref, val, c_type
                         ).to_dict()
                     sheet_data.append(t_cell)
+            rowcnt += 1
         sheet_dict.update({sheet.title: _extract_cellrefs(sheet_data)})
         holding.append(sheet_dict)
     for sd in holding:

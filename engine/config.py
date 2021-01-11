@@ -42,6 +42,7 @@ class Config:
     PLATFORM_DOCS_DIR = _platform_docs_dir()
     FULL_PATH_INPUT = Path(PLATFORM_DOCS_DIR) / "input"
     FULL_PATH_OUTPUT = Path(PLATFORM_DOCS_DIR) / "output"
+    TEMPLATE_ROW_LIMIT = 500
     config_parser = ConfigParser()
     base_config = textwrap.dedent(
         """\
@@ -52,6 +53,8 @@ class Config:
     master file name = master.xlsx
     datamap file name = datamap.csv
     blank file name = blank_template.xlsm
+
+    TEMPLATE_ROW_LIMIT = 500
 
     [PATHS]
     document directory = {0}
