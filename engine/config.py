@@ -46,6 +46,7 @@ class Config:
     FULL_PATH_OUTPUT = Path(PLATFORM_DOCS_DIR) / "output"
     ADHOC_CACHE: Dict[str, Any] = {}
     ACCEPTABLE_VALIDATION_TYPES = ["TEXT", "NUMBER", "DATE"]
+    TEMPLATE_ROW_LIMIT = 500
     config_parser = ConfigParser()
     base_config = textwrap.dedent(
         """\
@@ -56,6 +57,8 @@ class Config:
     master file name = master.xlsx
     datamap file name = datamap.csv
     blank file name = blank_template.xlsm
+
+    TEMPLATE_ROW_LIMIT = 500
 
     [PATHS]
     document directory = {0}

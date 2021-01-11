@@ -71,7 +71,7 @@ def test_template_reader(template):
 
 
 # FIXME: remove once bug fixed
-def test_template_reader_temporary(eight_gig_template, eight_gig_datamap):
+def test_template_reader_temporary(mock_config, eight_gig_template, eight_gig_datamap):
     dataset = template_reader(eight_gig_template)  # noqa
     assert True
 

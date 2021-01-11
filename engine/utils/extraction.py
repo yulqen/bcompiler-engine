@@ -466,18 +466,12 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     checksum: str = _hash_single_file(f_path)
     holding = []
     for sheet in workbook.worksheets:
-        # FIXME - remove this line when merge to master
-        print(f"Starting to process sheet {sheet}")
         sheet_data: SHEET_DATA_IN_LST = []
         sheet_dict: Dict[str, Dict[str, Dict[str, str]]] = {}
-        # TODO - here for row-limiter code
-        # FIXME - remove this line when merge to master
-        print(Config.ROW_LIMITS)
-        # legal_row_limit = Config.ROW_LIMITS[sheet.title]
-        # FIXME - remove this line when merge to master
-        print(legal_row_limit, sheet.title)
-        legal_rows = list(sheet.rows)[:legal_row_limit]
-        for row in legal_rows:
+        rowcnt = 0
+        for row in sheet.rows:
+            if rowcnt > int(Config.TEMPLATE_ROW_LIMIT):
+                break
             for cell in row:
                 if cell.value is not None:
                     try:
@@ -500,6 +494,7 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
                             template_file, sheet.title, cellref, val, c_type
                         ).to_dict()
                     sheet_data.append(t_cell)
+            rowcnt += 1
         sheet_dict.update({sheet.title: _extract_cellrefs(sheet_data)})
         holding.append(sheet_dict)
     for sd in holding:
