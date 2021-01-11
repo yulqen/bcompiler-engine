@@ -464,8 +464,6 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     checksum: str = _hash_single_file(f_path)
     holding = []
     for sheet in workbook.worksheets:
-        # FIXME - remove this line when merge to master
-        print(f"Starting to process sheet {sheet}")
         sheet_data: SHEET_DATA_IN_LST = []
         sheet_dict: Dict[str, Dict[str, Dict[str, str]]] = {}
         rowcnt = 0

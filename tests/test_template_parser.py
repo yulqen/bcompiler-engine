@@ -70,12 +70,6 @@ def test_template_reader(template):
     )
 
 
-# FIXME: remove once bug fixed
-def test_template_reader_temporary(mock_config, eight_gig_template, eight_gig_datamap):
-    dataset = template_reader(eight_gig_template)  # noqa
-    assert True
-
-
 def test_extract_data_from_multiple_files_into_correct_structure(resources):
     xlsx_files = get_xlsx_files(resources)
     dataset = extract_from_multiple_xlsx_files(xlsx_files)
