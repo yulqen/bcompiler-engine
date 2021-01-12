@@ -2,6 +2,7 @@
 requires = ["setuptools", "wheel"]
 
 [tool.poetry]
+# poetry build will not work because this directory is not in project root
 name = "bcompiler-engine"
 version = "1.0.7"
 description = "A new, faster, more efficient, more modular back end for datamap tools and  interfaces."
