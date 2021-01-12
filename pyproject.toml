@@ -21,6 +21,7 @@ packages = [
 python = "^3.7.0"
 openpyxl = "^3.0.3"
 appdirs = "^1.4.3"
+wheel = "^0.36.2"
 
 [tool.poetry.dev-dependencies]
 pdbpp = "^0.10.2"
