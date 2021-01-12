@@ -1,25 +1,33 @@
-# Roadmap / v2.0 Development Notes
+# Roadmap / Development Notes
 
-## Version 2.0
+[datamaps](https://github.com/yulqen/datamaps) versions will mirror these
+versions as long as there are significant-enough interface changes.
 
-Essential features to mirror `bcompiler 1.13` (current - and final - version).
+## Version 1.0.7
 
-* Import data from populated templates
-* Export data from master spreadsheet to blank templates
-* API
+* Excel template row-limiting (fix Issue#30)
 
-## Version 2.1
+## Version 1.0.8 (optional)
 
-Essential reporting features, caching and type-checking. A big release that
-moves `bcompiler` on considerably in terms of functionality.
+* Template integrity functionality in `datamaps check`
 
-* report data validation status of blank template
-* use of cache to improve speed of import
-* type-checking (implementing *Type* field in datamap)
+## Version 1.1.0
 
-## Version 2.2
+* Basic type-checking (NUMBER, TEXT, DATE)
 
-Comparison between historical imports.
+## Version 1.2.0
 
-* compare individual master files (crude comparison, but will work)
-* compare on import (will require addional command line flags)
+NB: Formats used here are unstable.
+
+* Rules-based type-checking
+  * Cell cannot be blank (`NOBLANK`)
+  * Dates must be within a certain range (`DATE>2020-01-10` or `DATE<2010-10-10`)
+  * Numbers must be within a certain range (`NUMBER>10`)
+  * Text length must be within a certain range (`TEXT<200`)
+  * Text contains/choices (`TEXTCONTAIN Yes|No` or `TEXTNOTCONTAIN Yes|No`)
+
+## Version 1.3.0
+
+* Import direct to SQLite database
+* Convert master files to SQLite database
+* Removal of master as a storage medium
