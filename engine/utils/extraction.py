@@ -503,26 +503,3 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     shell_dict = {f_path.name: inner_dict}
     logger.info(f"Compiled data from {f_path.name}")
     return shell_dict
-
-
-def max_tmpl_row(datamap: Path) -> Dict[str, int]:
-    """
-    Returns a dictionary of sheetnames to the number
-    of anticipated rows in that sheet according to the
-    datamap.
-    """
-    regex = re.compile(r"(^[a-zA-Z]+)(\d+)$")
-    sheet_maxes = {}
-    cellrefs_by_sheet = defaultdict(list)
-    dmls = datamap_reader(datamap)
-    sheet_names = {line.sheet for line in dmls}
-    for name in sheet_names:
-        for dml in dmls:
-            if dml.sheet == name:
-                cellrefs_by_sheet[name].append(dml.cellref)
-    for s, cellref in cellrefs_by_sheet.items():
-        rows = []
-        for c in cellref:
-            rows.append(int(regex.search(c).groups()[1]))  # type: ignore
-        sheet_maxes[s] = max(rows)
-    return sheet_maxes
