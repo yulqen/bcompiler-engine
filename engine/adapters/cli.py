@@ -5,7 +5,13 @@ from pathlib import Path
 from typing import List
 
 import engine.use_cases.parsing
-from engine.config import Config, check_for_blank, check_for_datamap
+from engine.config import (
+    Config,
+    check_for_blank,
+    check_for_datamap,
+    delete_config_file,
+    show_config_file,
+)
 from engine.exceptions import DatamapNotCSVException
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
@@ -121,3 +127,16 @@ def import_and_create_master(echo_funcs, datamap=None):
             master_fn, Path(Config.PLATFORM_DOCS_DIR / "output")
         )
     )
+
+
+def delete_config(config) -> None:
+    try:
+        delete_config_file(config)
+    except FileNotFoundError:
+        logger.critical(
+            f"Could not find {config.DATAMAPS_LIBRARY_CONFIG_FILE}. Do datamapas --help to regenerate it."
+        )
+
+
+def show_config(config) -> None:
+    show_config_file(config)

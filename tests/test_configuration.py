@@ -2,7 +2,7 @@ from sys import platform
 import shutil
 from pathlib import Path
 
-from engine.config import check_for_blank, check_for_datamap
+from engine.config import check_for_blank, check_for_datamap, delete_config_file
 
 
 """
@@ -11,6 +11,13 @@ Initialising directories and files for use by the application.
 We need a data directory in which to store binary, temp and
 cache files.
 """
+
+def test_remove_config(mock_config):
+    mock_config.initialise()
+    assert Path(mock_config.DATAMAPS_LIBRARY_CONFIG_FILE).exists()
+    delete_config_file(mock_config)
+    assert not Path(mock_config.DATAMAPS_LIBRARY_CONFIG_FILE).exists()
+
 
 
 def test_basic_config_variables(mock_config):

@@ -3,11 +3,16 @@
 [datamaps](https://github.com/yulqen/datamaps) versions will mirror these
 versions as long as there are significant-enough interface changes.
 
+
 ## Version 1.0.7
 
 * Excel template row-limiting (fix Issue#30)
 
-## Version 1.0.8 (optional)
+## Version 1.0.8
+
+* Provision for `datamaps config` command.
+
+## Version 1.0.9 (optional)
 
 * Template integrity functionality in `datamaps check`
 
