@@ -80,7 +80,7 @@ class Config:
             )
             Path(cls.DATAMAPS_LIBRARY_CONFIG_DIR).mkdir(parents=True)
         if not Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).exists():
-            logger.info(f"Creating config file at {cls.DATAMAPS_LIBRARY_CONFIG_FILE}.")
+            # logger.info(f"Creating config file at {cls.DATAMAPS_LIBRARY_CONFIG_FILE}.")
             Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
 
         cls.config_parser.read(cls.DATAMAPS_LIBRARY_CONFIG_FILE)
@@ -88,13 +88,14 @@ class Config:
         if cls.TEMPLATE_ROW_LIMIT is not None:
             cls.TEMPLATE_ROW_LIMIT = int(cls.TEMPLATE_ROW_LIMIT)
         if cls.TEMPLATE_ROW_LIMIT == 0 or cls.TEMPLATE_ROW_LIMIT is None:
-            logger.critical(f"Row limit is missing or set to 0. Impossible to import. Check datamaps import templates --help")
-            sys.exit(1)
+            logger.warning(
+                f"Row limit is missing or set to 0. Recreating config file and resetting to defaults."
+            )
+            delete_config_file(cls)
         elif cls.TEMPLATE_ROW_LIMIT < 50:
-            logger.warning(f"Row limit is set to {cls.TEMPLATE_ROW_LIMIT} (default is 500). This may be unintentionally low. Check datamaps import templates --help")
-        elif cls.TEMPLATE_ROW_LIMIT == 0 or cls.TEMPLATE_ROW_LIMIT is None:
-            logger.critical(f"Row limit is missing or set to 0. Impossible to import. Check datamaps import templates --help")
-            sys.exit(1)
+            logger.warning(
+                f"Row limit is set to {cls.TEMPLATE_ROW_LIMIT} (default is 500). This may be unintentionally low. Check datamaps import templates --help"
+            )
         else:
             logger.info(f"Row limit is set to {cls.TEMPLATE_ROW_LIMIT}.")
 
@@ -153,8 +154,9 @@ def delete_config_file(config: Config) -> None:
     """Deletes the configuration file - config.ini."""
     try:
         os.remove(config.DATAMAPS_LIBRARY_CONFIG_FILE)
-        logger.info(f"Config file {config.DATAMAPS_LIBRARY_CONFIG_FILE} deleted. "
-                "Run any datamaps command to re-create default config.")
+        logger.info(
+            f"Configuration reset to default. The necessary configuration files will be recreated on next execution of any datamaps command."
+        )
     except FileNotFoundError:
         raise
 
@@ -163,4 +165,4 @@ def show_config_file(config: Config) -> None:
     """
     Shows the path of the configuration file, config.ini.
     """
-    logger.info(config.DATAMAPS_LIBRARY_CONFIG_FILE)
+    logger.info(f"The configuration file is at {config.DATAMAPS_LIBRARY_CONFIG_FILE}")

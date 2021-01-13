@@ -134,7 +134,7 @@ def delete_config(config) -> None:
         delete_config_file(config)
     except FileNotFoundError:
         logger.critical(
-            f"Could not find {config.DATAMAPS_LIBRARY_CONFIG_FILE}. Do datamapas --help to regenerate it."
+            f"Could not find {config.DATAMAPS_LIBRARY_CONFIG_FILE}. Run datamaps config restart to recreate it and reset defaults."
         )
 
 

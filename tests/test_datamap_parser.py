@@ -3,7 +3,6 @@ import pytest
 from pathlib import Path
 
 from engine.domain.datamap import DatamapLineValueType
-from engine.utils.extraction import max_tmpl_row
 from engine.exceptions import (
     DatamapFileEncodingError,
     MalFormedCSVHeaderException,
@@ -157,10 +156,3 @@ def test_datamap_missing_key_fields(datamap_missing_key_fields):
 
 def test_get_file_suffix_from_path(datamap):
     assert datamap.suffix == ".csv"
-
-
-def test_max_row_for_sheet_according_to_datamap(datamap):
-    assert max_tmpl_row(datamap).get("Introduction") == 35
-    assert max_tmpl_row(datamap).get("Summary") == 3
-    assert max_tmpl_row(datamap).get("Another Sheet") == 39
-    assert max_tmpl_row(datamap).get("Non existant sheet") is None
