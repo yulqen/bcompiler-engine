@@ -142,3 +142,20 @@ def check_for_datamap(config: Config) -> Tuple[bool, str]:
         return (True, dm.name)
     else:
         return (False, "")
+
+
+def delete_config_file(config: Config) -> None:
+    """Deletes the configuration file - config.ini."""
+    try:
+        os.remove(config.DATAMAPS_LIBRARY_CONFIG_FILE)
+        logger.info(f"Config file {config.DATAMAPS_LIBRARY_CONFIG_FILE} deleted. "
+                "Run any datamaps command to re-create default config.")
+    except FileNotFoundError:
+        raise
+
+
+def show_config_file(config: Config) -> None:
+    """
+    Shows the path of the configuration file, config.ini.
+    """
+    logger.info(config.DATAMAPS_LIBRARY_CONFIG_FILE)

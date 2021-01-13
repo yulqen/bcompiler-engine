@@ -1,3 +1,8 @@
+# v1.0.8
+
+* Now handles `datamaps config` commands. The `config.ini` can be revealed to
+  the user and deleted.
+
 # v1.0.7
 
 * Added a row limit when importing data to prevent memory leak ([Issue #30](https://github.com/yulqen/bcompiler-engine/issues/30))
