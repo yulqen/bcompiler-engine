@@ -4,18 +4,6 @@
 versions as long as there are significant-enough interface changes.
 
 
-## Version 1.0.7
-
-* Excel template row-limiting (fix Issue#30)
-
-## Version 1.0.8
-
-* Provision for `datamaps config` command.
-
-## Version 1.0.9 (optional)
-
-* Template integrity functionality in `datamaps check`
-
 ## Version 1.1.0
 
 * Basic type-checking (NUMBER, TEXT, DATE)
