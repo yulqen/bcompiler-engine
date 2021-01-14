@@ -11,11 +11,11 @@ versions as long as there are significant-enough interface changes.
 
 * Template integrity functionality in `datamaps check`
 
-## Version 1.1
+## Version 1.1.0
 
 * Basic type-checking (NUMBER, TEXT, DATE)
 
-## Version 1.2
+## Version 1.2.0
 
 NB: Formats used here are unstable.
 
@@ -26,7 +26,7 @@ NB: Formats used here are unstable.
   * Text length must be within a certain range (`TEXT<200`)
   * Text contains/choices (`TEXTCONTAIN Yes|No` or `TEXTNOTCONTAIN Yes|No`)
 
-## Version 1.3
+## Version 1.3.0
 
 * Import direct to SQLite database
 * Convert master files to SQLite database
