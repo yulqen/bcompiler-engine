@@ -268,4 +268,4 @@ def test_incorrect_validation_type_is_na(
         next(reader)
         next(reader)
         row = next(reader)  # we need the third row
-        assert row["Expected Type"] == "**BUTTER**"
+        assert row["Expected Type"] == "BUTTER"

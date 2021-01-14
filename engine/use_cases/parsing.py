@@ -90,6 +90,9 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
                             ):
                                 if vtype != "":
                                     wrong_types.append(vtype)
+                                    wanted_output = vtype
+                                else:
+                                    wanted_output = "NA"
                                 checks.append(
                                     ValidationCheck(
                                         passes="UNTYPED",
@@ -98,7 +101,7 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
                                         value=tmp_data[f]["data"][s][c]["value"],
                                         sheetname=s,
                                         cellref=c,
-                                        wanted=f"**{vtype}**",
+                                        wanted=wanted_output,
                                         got=tmp_data[f]["data"][s][c]["data_type"],
                                     )
                                 )
