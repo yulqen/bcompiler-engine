@@ -242,6 +242,10 @@ def test_skips_type_validation_report_if_no_type_col_in_dm(
 def test_incorrect_validation_type_is_na(
     mock_config, datamap_match_test_template_incorrect_type_descriptor, template
 ):
+    """
+    We want to show incorrect wanted types in the validation report so the 
+    user can fix them.
+    """
     mock_config.initialise()
     shutil.copy2(template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
     tmpl_repo = InMemoryPopulatedTemplatesRepository(
@@ -264,4 +268,4 @@ def test_incorrect_validation_type_is_na(
         next(reader)
         next(reader)
         row = next(reader)  # we need the third row
-        assert row["Expected Type"] == "NA"
+        assert row["Expected Type"] == "**BUTTER**"

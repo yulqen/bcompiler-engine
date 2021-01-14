@@ -98,7 +98,7 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
                                         value=tmp_data[f]["data"][s][c]["value"],
                                         sheetname=s,
                                         cellref=c,
-                                        wanted="NA",
+                                        wanted=f"**{vtype}**",
                                         got=tmp_data[f]["data"][s][c]["data_type"],
                                     )
                                 )
