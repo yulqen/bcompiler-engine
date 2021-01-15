@@ -81,7 +81,13 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
     # from the datamap in dft_all_files_for_million_row_issue30.zip Q3 datamap.
     #
     # That is the result of only doing the vtype stuff below if c == cellref..
+    # In other words, no empty cells from the populated template go into the
+    # validation report. And we probably want that.
+
+    # Need a test!
     for d in dm_data:
+        # TODO SEE NOTE ABOVE
+        breakpoint()
         sheet = d["sheet"]
         vtype = d["data_type"]
         cellref = d["cellref"]
