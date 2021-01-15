@@ -84,9 +84,6 @@ class Config:
             Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
 
         cls.config_parser.read(cls.DATAMAPS_LIBRARY_CONFIG_FILE)
-        cls.TEMPLATE_ROW_LIMIT = cls.config_parser.defaults().get("template_row_limit")
-        if cls.TEMPLATE_ROW_LIMIT is not None:
-            cls.TEMPLATE_ROW_LIMIT = int(cls.TEMPLATE_ROW_LIMIT)
         if cls.TEMPLATE_ROW_LIMIT == 0 or cls.TEMPLATE_ROW_LIMIT is None:
             logger.warning(
                 f"Row limit is missing or set to 0. Recreating config file and resetting to defaults."

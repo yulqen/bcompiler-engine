@@ -87,7 +87,6 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
     # Need a test!
     for d in dm_data:
         # TODO SEE NOTE ABOVE
-        breakpoint()
         sheet = d["sheet"]
         vtype = d["data_type"]
         cellref = d["cellref"]

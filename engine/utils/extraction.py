@@ -89,7 +89,6 @@ def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
             _dml_line_check(line, headers)
             try:
                 if headers["type"] is None:
-
                     Config.ADHOC_CACHE["novalidation"] = True
                     data.append(
                         DatamapLine(
