@@ -72,6 +72,15 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
     checks = []
     wrong_types = []
     files = tmp_data.keys()
+    # TODO
+    #
+    # When importing from a template, if the cell is empty, it passes as an
+    # empty value to the master. Fine.
+    # Currently the validation report does not catch cells that are empty in
+    # the populated template. An example is "Controls Project ID number"
+    # from the datamap in dft_all_files_for_million_row_issue30.zip Q3 datamap.
+    #
+    # That is the result of only doing the vtype stuff below if c == cellref..
     for d in dm_data:
         sheet = d["sheet"]
         vtype = d["data_type"]
