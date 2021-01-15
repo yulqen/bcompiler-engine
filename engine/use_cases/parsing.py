@@ -217,15 +217,16 @@ class ApplyDatamapToExtractionUseCaseWithValidation:
         self._datamap_data_dict = json.loads(self._datamap_data_json)
         self._template_data_dict = json.loads(self._template_data_json)
 
-        bad_types, self.validation_checks = validation_checker(
-            self._datamap_data_dict, self._template_data_dict
-        )
+        if not Config.ADHOC_CACHE.get('novalidation'):
+            bad_types, self.validation_checks = validation_checker(
+                self._datamap_data_dict, self._template_data_dict
+            )
 
-        if len(bad_types) > 0:
-            for t in bad_types:
-                logger.warning(
-                    f"{t} is not a valid type. Flagged as UNTYPED. Check your datamap."
-                )
+            if len(bad_types) > 0:
+                for t in set(bad_types):
+                    logger.warning(
+                        f"{t} is not a valid type. Flagged as UNTYPED. Check your datamap."
+                    )
 
         checks = check_datamap_sheets(self._datamap_data_dict, self._template_data_dict)
         # TODO -reintroduce SKIP_MISSING_SHEETS check here
@@ -439,19 +440,19 @@ class CreateMasterUseCaseWithValidation:
         )
         try:
             uc.execute(for_master=True)
-            self.initial_validation_checks = uc.validation_checks
-            # default is to filter out dmls that do not have type declared in dm
-            self.final_validation_checks = [
-                x for x in self.initial_validation_checks if x.wanted is not None
-            ]
-            if Config.ADHOC_CACHE.get("novalidation"):
+            if not Config.ADHOC_CACHE.get("novalidation"):
+                self.initial_validation_checks = uc.validation_checks
+                # default is to filter out dmls that do not have type declared in dm
+                self.final_validation_checks = [
+                    x for x in self.initial_validation_checks if x.wanted is not None
+                ]
+                pth = ValidationReportCSV(self.final_validation_checks).write()
+                logger.info(f"Validation report written to {pth}.")
+            else:
                 logger.info(
                     "No type validation column in datamap so not producing report."
                 )
                 del Config.ADHOC_CACHE["novalidation"]
-            else:
-                pth = ValidationReportCSV(self.final_validation_checks).write()
-                logger.info(f"Validation report written to {pth}.")
         except DatamapNotCSVException:
             raise
         output_repo = self.output_repository(uc.data_for_master, output_file_name)
