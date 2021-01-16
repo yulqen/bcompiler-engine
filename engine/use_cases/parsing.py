@@ -40,18 +40,12 @@ from concurrent import futures
 from typing import Dict, List, Tuple
 
 from engine.config import Config
-from engine.exceptions import (
-    DatamapNotCSVException,
-    NoApplicableSheetsInTemplateFiles,
-    RemoveFileWithNoSheetRequiredByDatamap,
-)
+from engine.exceptions import (DatamapNotCSVException,
+                               NoApplicableSheetsInTemplateFiles,
+                               RemoveFileWithNoSheetRequiredByDatamap)
 from engine.reports.validation import ValidationCheck, ValidationReportCSV
-from engine.utils.extraction import (
-    ALL_IMPORT_DATA,
-    check_datamap_sheets,
-    remove_failing_files,
-    template_reader,
-)
+from engine.utils.extraction import (ALL_IMPORT_DATA, check_datamap_sheets,
+                                     remove_failing_files, template_reader)
 
 # pylint: disable=R0903,R0913;
 
@@ -72,19 +66,6 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
     checks = []
     wrong_types = []
     files = tmp_data.keys()
-    # TODO
-    #
-    # When importing from a template, if the cell is empty, it passes as an
-    # empty value to the master. Fine.
-    # Currently the validation report does not catch cells that are empty in
-    # the populated template. An example is "Controls Project ID number"
-    # from the datamap in dft_all_files_for_million_row_issue30.zip Q3 datamap.
-    #
-    # That is the result of only doing the vtype stuff below if c == cellref..
-    # In other words, no empty cells from the populated template go into the
-    # validation report. And we probably want that.
-
-    # Need a test!
     for d in dm_data:
         sheet = d["sheet"]
         vtype = d["data_type"]
