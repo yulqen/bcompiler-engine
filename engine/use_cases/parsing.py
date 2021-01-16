@@ -86,7 +86,6 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
 
     # Need a test!
     for d in dm_data:
-        # TODO SEE NOTE ABOVE
         sheet = d["sheet"]
         vtype = d["data_type"]
         cellref = d["cellref"]
@@ -96,6 +95,27 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
             for s in sheets:
                 if s == sheet:
                     cellrefs = tmp_data[f]["data"][s].keys()
+                    if cellref not in cellrefs:
+                        # If the value is missing but datamap
+                        # declares it as untyped (missing vtype)
+                        # we must output "NA", otherwise the report
+                        # gets vtype
+                        if vtype == "":
+                            final_type = "NA"
+                        else:
+                            final_type = vtype
+                        checks.append(
+                            ValidationCheck(
+                                passes="FAIL",
+                                filename=f,
+                                key=d["key"],
+                                value="NO VALUE RETURNED",
+                                sheetname=s,
+                                cellref=cellref,
+                                wanted=final_type,
+                                got="EMPTY",
+                            )
+                        )
                     for c in cellrefs:
                         if c == cellref:
                             if (

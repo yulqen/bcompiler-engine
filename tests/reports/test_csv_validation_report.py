@@ -7,7 +7,8 @@ from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
 from engine.repository.templates import InMemoryPopulatedTemplatesRepository
 from engine.use_cases.parsing import (
-    CreateMasterUseCaseWithValidation, CreateMasterUseCase,
+    CreateMasterUseCase,
+    CreateMasterUseCaseWithValidation,
     validation_checker,
 )
 
@@ -269,3 +270,45 @@ def test_incorrect_validation_type_is_na(
         next(reader)
         row = next(reader)  # we need the third row
         assert row["Expected Type"] == "BUTTER"
+
+
+def test_empty_cells_in_template_expected_by_dm_go_into_val_report(
+    mock_config,
+    datamap_match_test_template_with_missing_val_match_template_equiv,
+    template_with_empty_cells_expected_by_datamap,
+):
+    mock_config.initialise()
+    shutil.copy2(template_with_empty_cells_expected_by_datamap, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    tmpl_repo = InMemoryPopulatedTemplatesRepository(
+        mock_config.PLATFORM_DOCS_DIR / "input"
+    )
+    dm_repo = InMemorySingleDatamapRepository(
+        datamap_match_test_template_with_missing_val_match_template_equiv
+    )
+    output_repo = MasterOutputRepository
+    uc = CreateMasterUseCaseWithValidation(dm_repo, tmpl_repo, output_repo)
+    uc.execute("master.xlsx")
+
+    pth = mock_config.FULL_PATH_OUTPUT
+    f = list(
+        pth.glob("*.csv")
+    )  # we have to do this because filename includes timestamp
+
+    with open(f[0]) as csvfile:
+        reader = csv.DictReader(csvfile)
+        row = next(reader)
+        row = next(reader)
+        row = next(reader)
+        row = next(reader)
+        row = next(reader)  # we want the fifth row
+        assert row["Key"] == "Missing Value"
+        assert row["Value"] == "NO VALUE RETURNED"
+        assert row["Filename"] == "test_template_with_empty_cells_expected_by_datamap.xlsm"
+        assert row["Pass Status"] == "FAIL"
+        assert row["Sheet Name"] == "Summary"
+        assert row["Expected Type"] == "TEXT"
+        assert row["Got Type"] == "EMPTY"
+        row = next(reader)
+        row = next(reader)  # now we want Missing Value 3
+        assert row["Key"] == "Missing Value 3"
+        assert row["Expected Type"] == "NA"

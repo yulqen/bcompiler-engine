@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Generator, List
 
 import pytest
-
 from engine.config import Config
 from engine.domain.datamap import DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
@@ -91,6 +90,28 @@ def doc_directory():
     pth = Path(tempfile.gettempdir()) / "Documents" / "datamaps"
     yield pth
     shutil.rmtree(pth)
+
+
+@pytest.fixture
+def template_with_empty_cells_expected_by_datamap():
+    here = os.path.abspath(os.curdir)
+    return Path(
+        os.path.join(
+            here,
+            "tests/resources/test_template_with_empty_cells_expected_by_datamap.xlsm",
+        )
+    )
+
+
+@pytest.fixture
+def datamap_match_test_template_with_missing_val_match_template_equiv():
+    here = os.path.abspath(os.curdir)
+    return Path(
+        os.path.join(
+            here,
+            "tests/resources/datamap_match_test_template_with_missing_val_match_template_equiv.csv",
+        )
+    )
 
 
 @pytest.fixture

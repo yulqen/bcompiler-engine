@@ -1,0 +1,10 @@
+cell_key,template_sheet,cellreference,type
+Date Key,Summary,B2,DATE
+String Key,Summary,B3,TEXT
+Float Key,Summary,B4,NUMBER
+Int Key,Summary,B5,NUMBER
+Missing Value,Summary,B6,TEXT
+Missing Value 2,Summary,B7,NUMBER
+Missing Value 3,Summary,B8,
+Big Float,Another Sheet,F17,NUMBER
+Funny Date,Another Sheet,H39,DATE
