@@ -90,7 +90,7 @@ def write_master_to_templates(
     uc.execute()
 
 
-def import_and_create_master(echo_funcs, datamap=None):
+def import_and_create_master(echo_funcs, datamap=None, **kwargs):
     """Import all spreadsheet files from input directory and process with datamap.
 
     echo_func - a function sent from the front-end interface allowing for suitable output (stdout, etc)
@@ -105,6 +105,9 @@ def import_and_create_master(echo_funcs, datamap=None):
         engine.use_cases.parsing, "ECHO_FUNC_YELLOW", echo_funcs["click_echo_yellow"]
     )
     setattr(engine.use_cases.parsing, "ECHO_FUNC_WHITE", echo_funcs["click_echo_white"])
+
+    if kwargs.get("rowlimit"):
+        Config.TEMPLATE_ROW_LIMIT = kwargs.get("rowlimit")
 
     if Config.TEMPLATE_ROW_LIMIT == 0 or Config.TEMPLATE_ROW_LIMIT is None:
         logger.warning(
