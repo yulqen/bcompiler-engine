@@ -243,7 +243,7 @@ def test_incorrect_validation_type_is_na(
     mock_config, datamap_match_test_template_incorrect_type_descriptor, template
 ):
     """
-    We want to show incorrect wanted types in the validation report so the 
+    We want to show incorrect wanted types in the validation report so the
     user can fix them.
     """
     mock_config.initialise()

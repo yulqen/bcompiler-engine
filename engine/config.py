@@ -1,12 +1,11 @@
 import getpass
 import logging
 import os
-import sys
 import platform
 import textwrap
 from configparser import ConfigParser
 from pathlib import Path
-from typing import Any, Dict, Tuple
+from typing import Tuple
 
 from appdirs import user_config_dir, user_data_dir
 
@@ -85,7 +84,7 @@ class Config:
         cls.config_parser.read(cls.DATAMAPS_LIBRARY_CONFIG_FILE)
         if cls.TEMPLATE_ROW_LIMIT == 0 or cls.TEMPLATE_ROW_LIMIT is None:
             logger.warning(
-                f"Row limit is missing or set to 0. Recreating config file and resetting to defaults."
+                "Row limit is missing or set to 0. Recreating config file and resetting to defaults."
             )
             delete_config_file(cls)
         elif cls.TEMPLATE_ROW_LIMIT < 50:
@@ -151,7 +150,7 @@ def delete_config_file(config: Config) -> None:
     try:
         os.remove(config.DATAMAPS_LIBRARY_CONFIG_FILE)
         logger.info(
-            f"Configuration reset to default. The necessary configuration files will be recreated on next execution of any datamaps command."
+            "Configuration reset to default. The necessary configuration files will be recreated on next execution of any datamaps command."
         )
     except FileNotFoundError:
         raise
