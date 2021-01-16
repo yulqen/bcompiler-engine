@@ -109,12 +109,7 @@ def import_and_create_master(echo_funcs, datamap=None, **kwargs):
     if kwargs.get("rowlimit"):
         Config.TEMPLATE_ROW_LIMIT = kwargs.get("rowlimit")
 
-    if Config.TEMPLATE_ROW_LIMIT == 0 or Config.TEMPLATE_ROW_LIMIT is None:
-        logger.warning(
-            "Row limit is missing or set to 0. Recreating config file and resetting to defaults."
-        )
-        delete_config_file(Config)
-    elif Config.TEMPLATE_ROW_LIMIT < 50:
+    if Config.TEMPLATE_ROW_LIMIT < 50:
         logger.warning(
             f"Row limit is set to {Config.TEMPLATE_ROW_LIMIT} (default is 500). This may be unintentionally low. Check datamaps import templates --help"
         )
