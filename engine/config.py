@@ -82,17 +82,6 @@ class Config:
             Path(cls.DATAMAPS_LIBRARY_CONFIG_FILE).write_text(cls.base_config)
 
         cls.config_parser.read(cls.DATAMAPS_LIBRARY_CONFIG_FILE)
-        if cls.TEMPLATE_ROW_LIMIT == 0 or cls.TEMPLATE_ROW_LIMIT is None:
-            logger.warning(
-                "Row limit is missing or set to 0. Recreating config file and resetting to defaults."
-            )
-            delete_config_file(cls)
-        elif cls.TEMPLATE_ROW_LIMIT < 50:
-            logger.warning(
-                f"Row limit is set to {cls.TEMPLATE_ROW_LIMIT} (default is 500). This may be unintentionally low. Check datamaps import templates --help"
-            )
-        else:
-            logger.info(f"Row limit is set to {cls.TEMPLATE_ROW_LIMIT}.")
 
         # then we need to create the docs directory if it doesn't exist
         try:

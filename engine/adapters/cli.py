@@ -106,6 +106,18 @@ def import_and_create_master(echo_funcs, datamap=None):
     )
     setattr(engine.use_cases.parsing, "ECHO_FUNC_WHITE", echo_funcs["click_echo_white"])
 
+    if Config.TEMPLATE_ROW_LIMIT == 0 or Config.TEMPLATE_ROW_LIMIT is None:
+        logger.warning(
+            "Row limit is missing or set to 0. Recreating config file and resetting to defaults."
+        )
+        delete_config_file(Config)
+    elif Config.TEMPLATE_ROW_LIMIT < 50:
+        logger.warning(
+            f"Row limit is set to {Config.TEMPLATE_ROW_LIMIT} (default is 500). This may be unintentionally low. Check datamaps import templates --help"
+        )
+    else:
+        logger.info(f"Row limit is set to {Config.TEMPLATE_ROW_LIMIT}.")
+
     tmpl_repo = InMemoryPopulatedTemplatesRepository(Config.PLATFORM_DOCS_DIR / "input")
     master_fn = Config.config_parser["DEFAULT"]["master file name"]
     if datamap:
