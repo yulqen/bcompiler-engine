@@ -45,7 +45,6 @@ class Config:
     PLATFORM_DOCS_DIR = _platform_docs_dir()
     FULL_PATH_INPUT = Path(PLATFORM_DOCS_DIR) / "input"
     FULL_PATH_OUTPUT = Path(PLATFORM_DOCS_DIR) / "output"
-    ADHOC_CACHE: Dict[str, Any] = {}
     ACCEPTABLE_VALIDATION_TYPES = ["TEXT", "NUMBER", "DATE"]
     TEMPLATE_ROW_LIMIT = 500
     config_parser = ConfigParser()

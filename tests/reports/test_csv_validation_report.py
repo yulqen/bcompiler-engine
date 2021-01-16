@@ -7,7 +7,7 @@ from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
 from engine.repository.templates import InMemoryPopulatedTemplatesRepository
 from engine.use_cases.parsing import (
-    CreateMasterUseCaseWithValidation,
+    CreateMasterUseCaseWithValidation, CreateMasterUseCase,
     validation_checker,
 )
 
@@ -229,7 +229,7 @@ def test_skips_type_validation_report_if_no_type_col_in_dm(
     )
     dm_repo = InMemorySingleDatamapRepository(datamap_no_type_col_matches_test_template)
     output_repo = MasterOutputRepository
-    uc = CreateMasterUseCaseWithValidation(dm_repo, tmpl_repo, output_repo)
+    uc = CreateMasterUseCase(dm_repo, tmpl_repo, output_repo)
     uc.execute("master.xlsx")
 
     pth = mock_config.FULL_PATH_OUTPUT
