@@ -20,7 +20,7 @@ from engine.repository.templates import (
     MultipleTemplatesWriteRepo,
 )
 from engine.use_cases.output import WriteMasterToTemplates
-from engine.use_cases.parsing import CreateMasterUseCaseWithValidation
+from engine.use_cases.parsing import CreateMasterUseCaseWithValidation, CreateMasterUseCase
 from engine.utils.extraction import data_validation_report, datamap_reader
 from openpyxl import load_workbook
 
@@ -115,7 +115,10 @@ def import_and_create_master(echo_funcs, datamap=None):
     dm = Path(tmpl_repo.directory_path) / dm_fn
     dm_repo = InMemorySingleDatamapRepository(dm)
     output_repo = MasterOutputRepository
-    uc = CreateMasterUseCaseWithValidation(dm_repo, tmpl_repo, output_repo)
+    if dm_repo.is_typed:
+        uc = CreateMasterUseCaseWithValidation(dm_repo, tmpl_repo, output_repo)
+    else:
+        uc = CreateMasterUseCase(dm_repo, tmpl_repo, output_repo)
     try:
         uc.execute(master_fn)
     except FileNotFoundError as e:
