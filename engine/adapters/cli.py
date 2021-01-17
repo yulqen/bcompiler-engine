@@ -109,6 +109,11 @@ def import_and_create_master(echo_funcs, datamap=None, **kwargs):
     if kwargs.get("rowlimit"):
         Config.TEMPLATE_ROW_LIMIT = kwargs.get("rowlimit")
 
+    if kwargs.get("inputdir"):
+        inputdir = kwargs.get("inputdir")
+    else:
+        inputdir = Config.PLATFORM_DOCS_DIR / "input"
+
     if Config.TEMPLATE_ROW_LIMIT < 50:
         logger.warning(
             f"Row limit is set to {Config.TEMPLATE_ROW_LIMIT} (default is 500). This may be unintentionally low. Check datamaps import templates --help"
@@ -116,7 +121,7 @@ def import_and_create_master(echo_funcs, datamap=None, **kwargs):
     else:
         logger.info(f"Row limit is set to {Config.TEMPLATE_ROW_LIMIT}.")
 
-    tmpl_repo = InMemoryPopulatedTemplatesRepository(Config.PLATFORM_DOCS_DIR / "input")
+    tmpl_repo = InMemoryPopulatedTemplatesRepository(inputdir)
     master_fn = Config.config_parser["DEFAULT"]["master file name"]
     if datamap:
         dm_fn = datamap

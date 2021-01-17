@@ -93,7 +93,7 @@ class Config:
         except TypeError:
             raise TypeError("Unable to detect operating system")
         if not input_dir.exists():
-            logger.warning("Required input directory does not exist.")
+            logger.warning("Default input directory does not exist.")
             logger.info("Creating input directory.")
             input_dir.mkdir(parents=True)
         if not output_dir.exists():
