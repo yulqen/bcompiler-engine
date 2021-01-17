@@ -14,7 +14,7 @@ from engine.config import (
 )
 from engine.exceptions import DatamapNotCSVException
 from engine.repository.datamap import InMemorySingleDatamapRepository
-from engine.repository.master import MasterOutputRepository
+from engine.repository.master import MasterOutputRepository, ValidationOnlyRepository
 from engine.repository.templates import (
     InMemoryPopulatedTemplatesRepository,
     MultipleTemplatesWriteRepo,
@@ -106,6 +106,7 @@ def import_and_create_master(echo_funcs, datamap=None, **kwargs):
     )
     setattr(engine.use_cases.parsing, "ECHO_FUNC_WHITE", echo_funcs["click_echo_white"])
 
+    master_fn = Config.config_parser["DEFAULT"]["master file name"]
     if kwargs.get("rowlimit"):
         Config.TEMPLATE_ROW_LIMIT = kwargs.get("rowlimit")
 
@@ -113,6 +114,11 @@ def import_and_create_master(echo_funcs, datamap=None, **kwargs):
         inputdir = kwargs.get("inputdir")
     else:
         inputdir = Config.PLATFORM_DOCS_DIR / "input"
+    if kwargs.get("validationonly"):
+        output_repo = ValidationOnlyRepository
+        master_fn = ""
+    else:
+        output_repo = MasterOutputRepository
 
     if Config.TEMPLATE_ROW_LIMIT < 50:
         logger.warning(
@@ -122,17 +128,18 @@ def import_and_create_master(echo_funcs, datamap=None, **kwargs):
         logger.info(f"Row limit is set to {Config.TEMPLATE_ROW_LIMIT}.")
 
     tmpl_repo = InMemoryPopulatedTemplatesRepository(inputdir)
-    master_fn = Config.config_parser["DEFAULT"]["master file name"]
     if datamap:
         dm_fn = datamap
     else:
         dm_fn = Config.config_parser["DEFAULT"]["datamap file name"]
     dm = Path(tmpl_repo.directory_path) / dm_fn
     dm_repo = InMemorySingleDatamapRepository(dm)
-    output_repo = MasterOutputRepository
     if dm_repo.is_typed:
         uc = CreateMasterUseCaseWithValidation(dm_repo, tmpl_repo, output_repo)
     else:
+        if output_repo == ValidationOnlyRepository:
+            logger.critical("Cannot validate data. The datamap needs to have a 'type' column.")
+            sys.exit(1)
         uc = CreateMasterUseCase(dm_repo, tmpl_repo, output_repo)
     try:
         uc.execute(master_fn)
@@ -140,11 +147,6 @@ def import_and_create_master(echo_funcs, datamap=None, **kwargs):
         raise FileNotFoundError(e)
     except DatamapNotCSVException:
         raise
-    logger.info(
-        "{} successfully created in {}\n".format(
-            master_fn, Path(Config.PLATFORM_DOCS_DIR / "output")
-        )
-    )
 
 
 def delete_config(config) -> None:

@@ -1,9 +1,25 @@
 # repository/master.py
+import logging
 from pathlib import Path
 
 from openpyxl import Workbook
 
 from engine.config import Config
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s: %(levelname)s - %(message)s",
+    datefmt="%d-%b-%y %H:%M:%S",
+)
+logger = logging.getLogger(__name__)
+
+class ValidationOnlyRepository:
+    def __init__(self, data, output_file_name=None):
+        self.data = data
+
+    # Does nothing
+    def save(self) -> None:
+        logger.info("No output file required.")
 
 
 class MasterOutputRepository:
@@ -33,3 +49,6 @@ class MasterOutputRepository:
             for idx, tup in enumerate(_key_value_lst, start=2):
                 ws.cell(column=counter, row=idx, value=tup[1])
         wb.save(output_path / self.output_filename)
+        logger.info(
+            "{} successfully created in {}\n".format(self.output_filename, output_path)
+        )
