@@ -19,7 +19,7 @@ class ValidationOnlyRepository:
 
     # Does nothing
     def save(self) -> None:
-        logger.info("No output file required.")
+        logger.info("No output file produced as not requested.")
 
 
 class MasterOutputRepository:
