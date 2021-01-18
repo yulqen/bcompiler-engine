@@ -40,12 +40,18 @@ from concurrent import futures
 from typing import Dict, List, Tuple
 
 from engine.config import Config
-from engine.exceptions import (DatamapNotCSVException,
-                               NoApplicableSheetsInTemplateFiles,
-                               RemoveFileWithNoSheetRequiredByDatamap)
+from engine.exceptions import (
+    DatamapNotCSVException,
+    NoApplicableSheetsInTemplateFiles,
+    RemoveFileWithNoSheetRequiredByDatamap,
+)
 from engine.reports.validation import ValidationCheck, ValidationReportCSV
-from engine.utils.extraction import (ALL_IMPORT_DATA, check_datamap_sheets,
-                                     remove_failing_files, template_reader)
+from engine.utils.extraction import (
+    ALL_IMPORT_DATA,
+    check_datamap_sheets,
+    remove_failing_files,
+    template_reader,
+)
 
 # pylint: disable=R0903,R0913;
 
@@ -62,6 +68,18 @@ logger = logging.getLogger(__name__)
 SKIP_MISSING_SHEETS = False
 
 
+def _get_cellrefs(tmp_data, filename: str, sheet: str) -> List[str]:
+    return tmp_data[filename]["data"][sheet].keys()
+
+
+def _get_value(tmp_data, filename: str, sheet: str, cellref: str) -> str:
+    return tmp_data[filename]["data"][sheet][cellref]["value"]
+
+
+def _get_data_type(tmp_data, filename: str, sheet: str, cellref: str) -> str:
+    return tmp_data[filename]["data"][sheet][cellref]["data_type"]
+
+
 def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCheck"]]:
     checks = []
     wrong_types = []
@@ -75,12 +93,8 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
             sheets = data.keys()
             for s in sheets:
                 if s == sheet:
-                    cellrefs = tmp_data[f]["data"][s].keys()
+                    cellrefs = _get_cellrefs(tmp_data, f, s)
                     if cellref not in cellrefs:
-                        # If the value is missing but datamap
-                        # declares it as untyped (missing vtype)
-                        # we must output "NA", otherwise the report
-                        # gets vtype
                         if vtype == "":
                             final_type = "NA"
                         else:
@@ -113,25 +127,25 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
                                         passes="UNTYPED",
                                         filename=f,
                                         key=d["key"],
-                                        value=tmp_data[f]["data"][s][c]["value"],
+                                        value=_get_value(tmp_data, f, s, c),
                                         sheetname=s,
                                         cellref=c,
                                         wanted=wanted_output,
-                                        got=tmp_data[f]["data"][s][c]["data_type"],
+                                        got=_get_data_type(tmp_data, f, s, c)
                                     )
                                 )
                                 continue
-                            if tmp_data[f]["data"][s][c]["data_type"] == vtype:
+                            if _get_data_type(tmp_data, f, s, c) == vtype:
                                 checks.append(
                                     ValidationCheck(
                                         passes="PASS",
                                         filename=f,
                                         key=d["key"],
-                                        value=tmp_data[f]["data"][s][c]["value"],
+                                        value=_get_value(tmp_data, f, s, c),
                                         sheetname=s,
                                         cellref=c,
                                         wanted=vtype,
-                                        got=tmp_data[f]["data"][s][c]["data_type"],
+                                        got=_get_data_type(tmp_data, f, s, c)
                                     )
                                 )
                             else:
@@ -140,11 +154,11 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
                                         passes="FAIL",
                                         filename=f,
                                         key=d["key"],
-                                        value=tmp_data[f]["data"][s][c]["value"],
+                                        value=_get_value(tmp_data, f, s, c),
                                         sheetname=s,
                                         cellref=c,
                                         wanted=vtype,
-                                        got=tmp_data[f]["data"][s][c]["data_type"],
+                                        got=_get_data_type(tmp_data, f, s, c)
                                     )
                                 )
     return (wrong_types, checks)
