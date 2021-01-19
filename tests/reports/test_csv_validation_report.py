@@ -1,6 +1,7 @@
 import csv
 import shutil
 from pathlib import Path
+from typing import Dict
 
 from engine.reports.validation import ValidationCheck, ValidationReportCSV
 from engine.repository.datamap import InMemorySingleDatamapRepository
@@ -278,7 +279,10 @@ def test_empty_cells_in_template_expected_by_dm_go_into_val_report(
     template_with_empty_cells_expected_by_datamap,
 ):
     mock_config.initialise()
-    shutil.copy2(template_with_empty_cells_expected_by_datamap, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    shutil.copy2(
+        template_with_empty_cells_expected_by_datamap,
+        (Path(mock_config.PLATFORM_DOCS_DIR) / "input"),
+    )
     tmpl_repo = InMemoryPopulatedTemplatesRepository(
         mock_config.PLATFORM_DOCS_DIR / "input"
     )
@@ -303,7 +307,9 @@ def test_empty_cells_in_template_expected_by_dm_go_into_val_report(
         row = next(reader)  # we want the fifth row
         assert row["Key"] == "Missing Value"
         assert row["Value"] == "NO VALUE RETURNED"
-        assert row["Filename"] == "test_template_with_empty_cells_expected_by_datamap.xlsm"
+        assert (
+            row["Filename"] == "test_template_with_empty_cells_expected_by_datamap.xlsm"
+        )
         assert row["Pass Status"] == "FAIL"
         assert row["Sheet Name"] == "Summary"
         assert row["Expected Type"] == "TEXT"
@@ -312,3 +318,105 @@ def test_empty_cells_in_template_expected_by_dm_go_into_val_report(
         row = next(reader)  # now we want Missing Value 3
         assert row["Key"] == "Missing Value 3"
         assert row["Expected Type"] == "NA"
+
+
+class ValidationState:
+    def __init__(self):
+        self.new_state(Unvalidated)
+
+    def new_state(self, newstate):
+        self.__class__ = newstate
+
+    def check(self, dm_line: Dict[str, str], sheet_data):
+        raise NotImplementedError()
+
+
+class Unvalidated(ValidationState):
+    def check(self, dm_line, sheet_data):
+        if (
+            dm_line["sheet"] == list(sheet_data.keys())[0]
+            and dm_line["cellref"] in sheet_data[dm_line["sheet"]].keys()
+        ):
+            self.new_state(ValueWanted)
+        else:
+            self.new_state(ValueUnwanted)
+
+class ValueUnwanted(ValidationState):
+    def check(self, dm_line, sheet_data):
+        raise RuntimeError()
+
+
+class ValueWanted(ValidationState):
+    def check(self, dm_line, sheet_data):
+        ...
+
+class ValidationComplete(ValidationState):
+    def check(self, dm_line, sheet_data):
+        print("Validation Complete")
+
+
+class ValidationFailed(ValidationState):
+    def check(self, dm_line, sheet_data):
+        # check the data
+        self.new_state(ValidationPassed)
+
+
+class ValidationPassed(ValidationState):
+    def check(self, dm_line, sheet_data):
+        self.new_state(ValidationComplete)
+
+
+def test_validation_as_a_state_machine():
+    dm_data = [
+        {
+            "cellref": "B2",
+            "data_type": "TEXT",
+            "filename": "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap_match_test_template.csv",
+            "key": "Text Key",
+            "sheet": "Summary",
+        },
+        {
+            "cellref": "B3",
+            "data_type": "TEXT",
+            "filename": "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap_match_test_template.csv",
+            "key": "String Key",
+            "sheet": "Summary",
+        },
+        {
+            "cellref": "F17",
+            "data_type": "NUMBER",
+            "filename": "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap_match_test_template.csv",
+            "key": "Big Float",
+            "sheet": "Summary",
+        },
+    ]
+    tmp_data = {
+        "Summary": {
+            "B2": {
+                "cellref": "B2",
+                "data_type": "TEXT",
+                "file_name": "/tmp/Documents/datamaps/input/test_template.xlsx",
+                "sheet_name": "Summary",
+                "value": "Text Key Value",
+            },
+            "B3": {
+                "cellref": "B3",
+                "data_type": "TEXT",
+                "file_name": "/tmp/Documents/datamaps/input/test_template.xlsx",
+                "sheet_name": "Summary",
+                "value": "String Key Value",
+            },
+            "F17": {
+                "cellref": "F17",
+                "data_type": "NUMBER",
+                "file_name": "/tmp/Documents/datamaps/input/test_template.xlsx",
+                "sheet_name": "Summary",
+                "value": "Big Float Value",
+            },
+        }
+    }
+
+    v = ValidationState()
+    assert v.__class__ == Unvalidated
+    v.check(dm_data[0], tmp_data)
+    assert v.__class__ == ValueWanted
