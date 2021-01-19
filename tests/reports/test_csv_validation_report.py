@@ -353,6 +353,7 @@ class Unvalidated(ValidationState):
             self.dm_line["sheet"] == list(self.sheet_data.keys())[0]
             and self.dm_line["cellref"] in self.sheet_data[self.dm_line["sheet"]].keys()
         ):
+            # the fact there is a dml means we want a value
             self.new_state(ValueWanted)
         else:
             self.new_state(ValueUnwanted)
@@ -360,28 +361,44 @@ class Unvalidated(ValidationState):
 
 class ValueWanted(ValidationState):
     def check(self):
+        if self.dm_line["data_type"] == "":
+            self.new_state(UnTyped)
+        else:
+            self.new_state(Typed)
+
+
+class Typed(ValidationState):
+    def check(self):
         if self.dm_line["data_type"] == self.cell_data["data_type"]:
             self.new_state(TypeMatched)
-            self.validation_check.got = self.cell_data["data_type"]
         else:
             self.new_state(TypeNotMatched)
-            self.validation_check.got = self.cell_data["NA"]
+
+
+class UnTyped(ValidationState):
+    def check(self):
+        self.validation_check.passes = "UNTYPED"
 
 
 class TypeMatched(ValidationState):
     def check(self):
+        # the 'action' here is to update the got field and the passes field
+        self.validation_check.got = self.cell_data["data_type"]
+        self.validation_check.passes = "PASS"
         if self.cell_data["value"] == "":
             self.new_state(EmptyValue)
         else:
-            self.new_state(GivenValue)
+            self.new_state(ValueGiven)
 
 
 class TypeNotMatched(ValidationState):
     def check(self):
+        # the 'action' here is to update the got field
+        self.validation_check.got = self.cell_data["NA"]
         if self.cell_data["value"] == "":
             self.new_state(EmptyValue)
         else:
-            self.new_state(GivenValue)
+            self.new_state(ValueGiven)
 
 
 class EmptyValue(ValidationState):
@@ -389,7 +406,7 @@ class EmptyValue(ValidationState):
         ...
 
 
-class GivenValue(ValidationState):
+class ValueGiven(ValidationState):
     def check(self):
         ...
 
@@ -469,7 +486,10 @@ def test_validation_as_a_state_machine():
     v.check()
     assert v.__class__ == ValueWanted
     v.check()
-    assert v.__class__ == TypeMatched
-    assert v.validation_check.got == dm_data[0]["data_type"]
+    assert v.__class__ == Typed
     v.check()
-    assert v.__class__ == GivenValue
+    assert v.__class__ == TypeMatched
+    v.check()
+    assert v.validation_check.passes == "PASS"
+    assert v.validation_check.got == dm_data[0]["data_type"]
+    assert v.__class__ == ValueGiven
