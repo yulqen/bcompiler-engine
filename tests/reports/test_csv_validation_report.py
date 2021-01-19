@@ -321,48 +321,96 @@ def test_empty_cells_in_template_expected_by_dm_go_into_val_report(
 
 
 class ValidationState:
-    def __init__(self):
+    def __init__(self, dm_line: Dict[str, str], sheet_data):
         self.new_state(Unvalidated)
+        self.sheet_data = sheet_data
+        self.dm_line = dm_line
+        self.cell_data = sheet_data[dm_line["sheet"]][dm_line["cellref"]]
+        self.validation_check = ValidationCheck(
+            passes="",
+            filename=self.cell_data["file_name"],
+            key=self.dm_line["key"],
+            value="",
+            sheetname=self.dm_line["sheet"],
+            cellref=self.dm_line["cellref"],
+            wanted=self.dm_line["data_type"],
+            got="",
+        )
 
     def new_state(self, newstate):
         self.__class__ = newstate
 
-    def check(self, dm_line: Dict[str, str], sheet_data):
+    def check(self):
+        raise NotImplementedError()
+
+    def update_validation_check(self):
         raise NotImplementedError()
 
 
 class Unvalidated(ValidationState):
-    def check(self, dm_line, sheet_data):
+    def check(self):
         if (
-            dm_line["sheet"] == list(sheet_data.keys())[0]
-            and dm_line["cellref"] in sheet_data[dm_line["sheet"]].keys()
+            self.dm_line["sheet"] == list(self.sheet_data.keys())[0]
+            and self.dm_line["cellref"] in self.sheet_data[self.dm_line["sheet"]].keys()
         ):
             self.new_state(ValueWanted)
         else:
             self.new_state(ValueUnwanted)
 
+
+class ValueWanted(ValidationState):
+    def check(self):
+        if self.dm_line["data_type"] == self.cell_data["data_type"]:
+            self.new_state(TypeMatched)
+            self.validation_check.got = self.cell_data["data_type"]
+        else:
+            self.new_state(TypeNotMatched)
+            self.validation_check.got = self.cell_data["NA"]
+
+
+class TypeMatched(ValidationState):
+    def check(self):
+        if self.cell_data["value"] == "":
+            self.new_state(EmptyValue)
+        else:
+            self.new_state(GivenValue)
+
+
+class TypeNotMatched(ValidationState):
+    def check(self):
+        if self.cell_data["value"] == "":
+            self.new_state(EmptyValue)
+        else:
+            self.new_state(GivenValue)
+
+
+class EmptyValue(ValidationState):
+    def check(self):
+        ...
+
+
+class GivenValue(ValidationState):
+    def check(self):
+        ...
+
+
 class ValueUnwanted(ValidationState):
-    def check(self, dm_line, sheet_data):
+    def check(self):
         raise RuntimeError()
 
 
-class ValueWanted(ValidationState):
-    def check(self, dm_line, sheet_data):
-        ...
-
 class ValidationComplete(ValidationState):
-    def check(self, dm_line, sheet_data):
+    def check(self):
         print("Validation Complete")
 
 
 class ValidationFailed(ValidationState):
-    def check(self, dm_line, sheet_data):
-        # check the data
+    def check(self):
         self.new_state(ValidationPassed)
 
 
 class ValidationPassed(ValidationState):
-    def check(self, dm_line, sheet_data):
+    def check(self):
         self.new_state(ValidationComplete)
 
 
@@ -416,7 +464,12 @@ def test_validation_as_a_state_machine():
         }
     }
 
-    v = ValidationState()
+    v = ValidationState(dm_data[0], tmp_data)
     assert v.__class__ == Unvalidated
-    v.check(dm_data[0], tmp_data)
+    v.check()
     assert v.__class__ == ValueWanted
+    v.check()
+    assert v.__class__ == TypeMatched
+    assert v.validation_check.got == dm_data[0]["data_type"]
+    v.check()
+    assert v.__class__ == GivenValue
