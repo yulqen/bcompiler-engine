@@ -403,12 +403,13 @@ class TypeNotMatched(ValidationState):
 
 class EmptyValue(ValidationState):
     def check(self):
-        ...
+        self.validation_check.value = "NO VALUE RETURNED"
 
 
 class ValueGiven(ValidationState):
     def check(self):
-        ...
+        self.validation_check.value = self.cell_data["value"]
+        self.new_state(ValidationComplete)
 
 
 class ValueUnwanted(ValidationState):
@@ -421,67 +422,8 @@ class ValidationComplete(ValidationState):
         print("Validation Complete")
 
 
-class ValidationFailed(ValidationState):
-    def check(self):
-        self.new_state(ValidationPassed)
-
-
-class ValidationPassed(ValidationState):
-    def check(self):
-        self.new_state(ValidationComplete)
-
-
-def test_validation_as_a_state_machine():
-    dm_data = [
-        {
-            "cellref": "B2",
-            "data_type": "TEXT",
-            "filename": "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap_match_test_template.csv",
-            "key": "Text Key",
-            "sheet": "Summary",
-        },
-        {
-            "cellref": "B3",
-            "data_type": "TEXT",
-            "filename": "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap_match_test_template.csv",
-            "key": "String Key",
-            "sheet": "Summary",
-        },
-        {
-            "cellref": "F17",
-            "data_type": "NUMBER",
-            "filename": "/home/lemon/code/python/bcompiler-engine/tests/resources/datamap_match_test_template.csv",
-            "key": "Big Float",
-            "sheet": "Summary",
-        },
-    ]
-    tmp_data = {
-        "Summary": {
-            "B2": {
-                "cellref": "B2",
-                "data_type": "TEXT",
-                "file_name": "/tmp/Documents/datamaps/input/test_template.xlsx",
-                "sheet_name": "Summary",
-                "value": "Text Key Value",
-            },
-            "B3": {
-                "cellref": "B3",
-                "data_type": "TEXT",
-                "file_name": "/tmp/Documents/datamaps/input/test_template.xlsx",
-                "sheet_name": "Summary",
-                "value": "String Key Value",
-            },
-            "F17": {
-                "cellref": "F17",
-                "data_type": "NUMBER",
-                "file_name": "/tmp/Documents/datamaps/input/test_template.xlsx",
-                "sheet_name": "Summary",
-                "value": "Big Float Value",
-            },
-        }
-    }
-
-    v = ValidationState(dm_data[0], tmp_data)
+def test_validation_as_a_state_machine(dm_data, sheet_data):
+    v = ValidationState(dm_data[0], sheet_data)
     assert v.__class__ == Unvalidated
     v.check()
     assert v.__class__ == ValueWanted
@@ -493,3 +435,22 @@ def test_validation_as_a_state_machine():
     assert v.validation_check.passes == "PASS"
     assert v.validation_check.got == dm_data[0]["data_type"]
     assert v.__class__ == ValueGiven
+    v.check()
+    assert v.__class__ == ValidationComplete
+
+    # Now we run it as a loop...
+    v = ValidationState(dm_data[0], sheet_data)
+    while True:
+        v.check()
+        if v.__class__ == ValidationComplete:
+            assert v.validation_check.passes == "PASS"
+            assert v.validation_check.filename == v.cell_data["file_name"]
+            assert v.validation_check.key == dm_data[0]["key"]
+            assert v.validation_check.value == v.cell_data["value"]
+            assert v.validation_check.sheetname == v.cell_data["sheet_name"]
+            assert v.validation_check.cellref == dm_data[0]["cellref"]
+            assert v.validation_check.cellref == v.cell_data["cellref"]
+            assert v.validation_check.value == v.cell_data["value"]
+            assert v.validation_check.wanted == dm_data[0]["data_type"]
+            assert v.validation_check.got == v.cell_data["data_type"]
+            break
