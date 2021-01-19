@@ -93,8 +93,8 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
             sheets = data.keys()
             for s in sheets:
                 if s == sheet:
-                    cellrefs = _get_cellrefs(tmp_data, f, s)
-                    if cellref not in cellrefs:
+                    cellrefs_in_tmp = _get_cellrefs(tmp_data, f, s)
+                    if cellref not in cellrefs_in_tmp:
                         if vtype == "":
                             final_type = "NA"
                         else:
@@ -111,7 +111,7 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
                                 got="EMPTY",
                             )
                         )
-                    for c in cellrefs:
+                    for c in cellrefs_in_tmp:
                         if c == cellref:
                             if (
                                 vtype == ""
