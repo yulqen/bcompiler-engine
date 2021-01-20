@@ -169,7 +169,7 @@ def test_validation_results_go_to_csv_file(
     with open(f[0]) as csvfile:
         reader = csv.DictReader(csvfile)
         row = next(reader)
-        assert row["Filename"] == "test_template.xlsx"
+        assert row["Filename"] == f"{str(mock_config.PLATFORM_DOCS_DIR / 'input')}/test_template.xlsx"
         assert row["Pass Status"] == "PASS"
         assert row["Key"] == "Date Key"
         assert row["Sheet Name"] == "Summary"
@@ -199,7 +199,7 @@ def test_validation_csv_report_contains_fail_state(
     with open(f[0]) as csvfile:
         reader = csv.DictReader(csvfile)
         row = next(reader)
-        assert row["Filename"] == "test_template_incorrect_type.xlsx"
+        assert row["Filename"] == f"{str(mock_config.PLATFORM_DOCS_DIR / 'input')}/test_template_incorrect_type.xlsx"
         assert row["Pass Status"] == "FAIL"
         assert row["Key"] == "Date Key"
         assert row["Sheet Name"] == "Summary"
@@ -228,7 +228,7 @@ def test_validation_csv_report_with_mixture_of_included_types(
         reader = csv.DictReader(csvfile)
         row = next(reader)
         row = next(reader)  # we need the second row
-        assert row["Filename"] == "test_template.xlsx"
+        assert row["Filename"] == f"{str(mock_config.PLATFORM_DOCS_DIR / 'input')}/test_template.xlsx"
         assert row["Pass Status"] == "UNTYPED"
         assert row["Key"] == "String Key"
         assert row["Sheet Name"] == "Summary"

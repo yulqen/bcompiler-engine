@@ -21,7 +21,7 @@ class _ValidationState:
         self.new_state(_Unvalidated)
         self.sheet_data = sheet_data
         self.dm_line = dm_line
-        self.cell_data = sheet_data[dm_line["sheet"]][dm_line["cellref"]]
+        self.cell_data = sheet_data[dm_line["cellref"]]
         self.validation_check = ValidationCheck(
             passes="",
             filename=self.cell_data["file_name"],
@@ -46,8 +46,7 @@ class _ValidationState:
 class _Unvalidated(_ValidationState):
     def check(self):
         if (
-            self.dm_line["sheet"] == list(self.sheet_data.keys())[0]
-            and self.dm_line["cellref"] in self.sheet_data[self.dm_line["sheet"]].keys()
+            self.dm_line["cellref"] in self.sheet_data.keys()
         ):
             # the fact there is a dml means we want a value
             self.new_state(_ValueWanted)
@@ -73,6 +72,7 @@ class _Typed(_ValidationState):
             self.validation_check.passes = "PASS"
             self.new_state(_TypeMatched)
         else:
+            self.validation_check.passes = "FAIL"
             self.new_state(_TypeNotMatched)
 
 
@@ -142,7 +142,7 @@ def validate_line(
     """
     Given a Datamap line and sheet data, validate input.
 
-    Returns a _ValidationState object containing a 
+    Returns a _ValidationState object containing a
     validation_check object containing results.
     """
     v = _ValidationState(dml_data, sheet_data)
@@ -166,72 +166,7 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
             sheets = data.keys()
             for s in sheets:
                 if s == sheet:
-                    cellrefs_in_tmp = _get_cellrefs(tmp_data, f, s)
-                    if cellref not in cellrefs_in_tmp:
-                        if vtype == "":
-                            final_type = "NA"
-                        else:
-                            final_type = vtype
-                        checks.append(
-                            ValidationCheck(
-                                passes="FAIL",
-                                filename=f,
-                                key=d["key"],
-                                value="NO VALUE RETURNED",
-                                sheetname=s,
-                                cellref=cellref,
-                                wanted=final_type,
-                                got="EMPTY",
-                            )
-                        )
-                    for c in cellrefs_in_tmp:
-                        if c == cellref:
-                            if (
-                                vtype == ""
-                                or vtype not in Config.ACCEPTABLE_VALIDATION_TYPES
-                            ):
-                                if vtype != "":
-                                    wrong_types.append(vtype)
-                                    wanted_output = vtype
-                                else:
-                                    wanted_output = "NA"
-                                checks.append(
-                                    ValidationCheck(
-                                        passes="UNTYPED",
-                                        filename=f,
-                                        key=d["key"],
-                                        value=_get_value(tmp_data, f, s, c),
-                                        sheetname=s,
-                                        cellref=c,
-                                        wanted=wanted_output,
-                                        got=_get_data_type(tmp_data, f, s, c),
-                                    )
-                                )
-                                continue
-                            if _get_data_type(tmp_data, f, s, c) == vtype:
-                                checks.append(
-                                    ValidationCheck(
-                                        passes="PASS",
-                                        filename=f,
-                                        key=d["key"],
-                                        value=_get_value(tmp_data, f, s, c),
-                                        sheetname=s,
-                                        cellref=c,
-                                        wanted=vtype,
-                                        got=_get_data_type(tmp_data, f, s, c),
-                                    )
-                                )
-                            else:
-                                checks.append(
-                                    ValidationCheck(
-                                        passes="FAIL",
-                                        filename=f,
-                                        key=d["key"],
-                                        value=_get_value(tmp_data, f, s, c),
-                                        sheetname=s,
-                                        cellref=c,
-                                        wanted=vtype,
-                                        got=_get_data_type(tmp_data, f, s, c),
-                                    )
-                                )
+                    breakpoint()
+                    vout = validate_line(d, data[sheet])
+                    checks.append(vout.validation_check)
     return (wrong_types, checks)

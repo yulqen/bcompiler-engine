@@ -14,29 +14,27 @@ from engine.domain.template import TemplateCell
 @pytest.fixture
 def sheet_data():
     return {
-        "Summary": {
-            "B2": {
-                "cellref": "B2",
-                "data_type": "TEXT",
-                "file_name": "/tmp/Documents/datamaps/input/test_template.xlsx",
-                "sheet_name": "Summary",
-                "value": "Text Key Value",
-            },
-            "B3": {
-                "cellref": "B3",
-                "data_type": "TEXT",
-                "file_name": "/tmp/Documents/datamaps/input/test_template.xlsx",
-                "sheet_name": "Summary",
-                "value": "String Key Value",
-            },
-            "F17": {
-                "cellref": "F17",
-                "data_type": "NUMBER",
-                "file_name": "/tmp/Documents/datamaps/input/test_template.xlsx",
-                "sheet_name": "Summary",
-                "value": "Big Float Value",
-            },
-        }
+        "B2": {
+            "cellref": "B2",
+            "data_type": "TEXT",
+            "file_name": "/tmp/Documents/datamaps/input/test_template.xlsx",
+            "sheet_name": "Summary",
+            "value": "Text Key Value",
+        },
+        "B3": {
+            "cellref": "B3",
+            "data_type": "TEXT",
+            "file_name": "/tmp/Documents/datamaps/input/test_template.xlsx",
+            "sheet_name": "Summary",
+            "value": "String Key Value",
+        },
+        "F17": {
+            "cellref": "F17",
+            "data_type": "NUMBER",
+            "file_name": "/tmp/Documents/datamaps/input/test_template.xlsx",
+            "sheet_name": "Summary",
+            "value": "Big Float Value",
+        },
     }
 
 
