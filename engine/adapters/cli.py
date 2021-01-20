@@ -4,6 +4,8 @@ import sys
 from pathlib import Path
 from typing import List
 
+from openpyxl import load_workbook
+
 import engine.use_cases.parsing
 from engine.config import (
     Config,
@@ -20,9 +22,11 @@ from engine.repository.templates import (
     MultipleTemplatesWriteRepo,
 )
 from engine.use_cases.output import WriteMasterToTemplates
-from engine.use_cases.parsing import CreateMasterUseCaseWithValidation, CreateMasterUseCase
+from engine.use_cases.parsing import (
+    CreateMasterUseCase,
+    CreateMasterUseCaseWithValidation,
+)
 from engine.utils.extraction import data_validation_report, datamap_reader
-from openpyxl import load_workbook
 
 logging.basicConfig(
     level=logging.INFO,
@@ -138,7 +142,9 @@ def import_and_create_master(echo_funcs, datamap=None, **kwargs):
         uc = CreateMasterUseCaseWithValidation(dm_repo, tmpl_repo, output_repo)
     else:
         if output_repo == ValidationOnlyRepository:
-            logger.critical("Cannot validate data. The datamap needs to have a 'type' column.")
+            logger.critical(
+                "Cannot validate data. The datamap needs to have a 'type' column."
+            )
             sys.exit(1)
         uc = CreateMasterUseCase(dm_repo, tmpl_repo, output_repo)
     try:

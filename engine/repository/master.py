@@ -13,6 +13,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 class ValidationOnlyRepository:
     def __init__(self, data, output_file_name=None):
         self.data = data

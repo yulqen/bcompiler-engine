@@ -9,18 +9,7 @@ from pathlib import Path
 from typing import List
 
 from engine.config import Config
-
-
-@dataclass
-class ValidationCheck:
-    passes: str
-    filename: str
-    key: str
-    value: str
-    cellref: str
-    sheetname: str
-    wanted: str
-    got: str
+from engine.utils.validation import ValidationCheck
 
 
 class ValidationReportCSV:

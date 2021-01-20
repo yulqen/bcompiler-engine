@@ -1,7 +1,6 @@
 import pytest
 
-from engine.adapters.cli import (import_and_create_master,
-                                 write_master_to_templates)
+from engine.adapters.cli import import_and_create_master, write_master_to_templates
 from engine.config import Config
 
 

@@ -8,12 +8,12 @@ class TemplateCell:
     "Used for collecting data from a populated spreadsheet."
 
     def __init__(
-            self,
-            file_name: str,
-            sheet_name: str,
-            cellref: str,
-            value: str,
-            data_type: DatamapLineValueType,
+        self,
+        file_name: str,
+        sheet_name: str,
+        cellref: str,
+        value: str,
+        data_type: DatamapLineValueType,
     ) -> None:
         self.file_name = file_name
         self.sheet_name = sheet_name

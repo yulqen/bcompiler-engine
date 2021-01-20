@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Generator, List
 
 import pytest
+
 from engine.config import Config
 from engine.domain.datamap import DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell

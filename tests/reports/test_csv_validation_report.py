@@ -1,17 +1,28 @@
 import csv
-import pytest
 import shutil
 from pathlib import Path
 from typing import Dict
 
-from engine.reports.validation import ValidationCheck, ValidationReportCSV
+import pytest
+
+from engine.reports.validation import ValidationReportCSV
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
 from engine.repository.templates import InMemoryPopulatedTemplatesRepository
-from engine.config import Config
 from engine.use_cases.parsing import (
     CreateMasterUseCase,
     CreateMasterUseCaseWithValidation,
+)
+from engine.utils.validation import (
+    ValidationCheck,
+    _Typed,
+    _TypeMatched,
+    _Unvalidated,
+    _ValidationComplete,
+    _ValidationState,
+    _ValueGiven,
+    _ValueUnwanted,
+    _ValueWanted,
     validation_checker,
 )
 
@@ -322,135 +333,27 @@ def test_empty_cells_in_template_expected_by_dm_go_into_val_report(
         assert row["Expected Type"] == "NA"
 
 
-class ValidationState:
-    def __init__(self, dm_line: Dict[str, str], sheet_data):
-        self.new_state(Unvalidated)
-        self.sheet_data = sheet_data
-        self.dm_line = dm_line
-        self.cell_data = sheet_data[dm_line["sheet"]][dm_line["cellref"]]
-        self.validation_check = ValidationCheck(
-            passes="",
-            filename=self.cell_data["file_name"],
-            key=self.dm_line["key"],
-            value="",
-            sheetname=self.dm_line["sheet"],
-            cellref=self.dm_line["cellref"],
-            wanted=self.dm_line["data_type"],
-            got="",
-        )
-
-    def new_state(self, newstate):
-        self.__class__ = newstate
-
-    def check(self):
-        raise NotImplementedError()
-
-    def update_validation_check(self):
-        raise NotImplementedError()
-
-
-class Unvalidated(ValidationState):
-    def check(self):
-        if (
-            self.dm_line["sheet"] == list(self.sheet_data.keys())[0]
-            and self.dm_line["cellref"] in self.sheet_data[self.dm_line["sheet"]].keys()
-        ):
-            # the fact there is a dml means we want a value
-            self.new_state(ValueWanted)
-        else:
-            self.new_state(ValueUnwanted)
-
-
-class ValueWanted(ValidationState):
-    def check(self):
-        if self.dm_line["data_type"] == "":
-            self.new_state(UnTyped)
-        else:
-            self.new_state(Typed)
-
-
-class Typed(ValidationState):
-    def check(self):
-        # Is the Type acceptable?
-        if self.dm_line["data_type"] not in Config.ACCEPTABLE_VALIDATION_TYPES:
-            self.validation_check.passes = "UNTYPED"
-            self.new_state(TypeNotMatched)
-        elif self.dm_line["data_type"] == self.cell_data["data_type"]:
-            self.validation_check.passes = "PASS"
-            self.new_state(TypeMatched)
-        else:
-            self.new_state(TypeNotMatched)
-
-
-class UnTyped(ValidationState):
-    def check(self):
-        self.validation_check.passes = "UNTYPED"
-        self.new_state(TypeNotMatched)
-
-
-class TypeMatched(ValidationState):
-    def check(self):
-        # the 'action' here is to update the got field and the passes field
-        self.validation_check.got = self.cell_data["data_type"]
-        self.validation_check.passes = "PASS"
-        if self.cell_data["value"] == "":
-            self.new_state(EmptyValue)
-        else:
-            self.new_state(ValueGiven)
-
-
-class TypeNotMatched(ValidationState):
-    def check(self):
-        # the 'action' here is to update the got field
-        self.validation_check.got = self.cell_data["data_type"]
-        if self.cell_data["value"] == "":
-            self.new_state(EmptyValue)
-        else:
-            self.new_state(ValueGiven)
-
-
-class EmptyValue(ValidationState):
-    def check(self):
-        self.validation_check.value = "NO VALUE RETURNED"
-
-
-class ValueGiven(ValidationState):
-    def check(self):
-        self.validation_check.value = self.cell_data["value"]
-        self.new_state(ValidationComplete)
-
-
-class ValueUnwanted(ValidationState):
-    def check(self):
-        raise RuntimeError()
-
-
-class ValidationComplete(ValidationState):
-    def check(self):
-        print("Validation Complete")
-
-
 def test_validation_as_a_state_machine(dm_data, sheet_data):
-    v = ValidationState(dm_data[0], sheet_data)
-    assert v.__class__ == Unvalidated
+    v = _ValidationState(dm_data[0], sheet_data)
+    assert v.__class__ == _Unvalidated
     v.check()
-    assert v.__class__ == ValueWanted
+    assert v.__class__ == _ValueWanted
     v.check()
-    assert v.__class__ == Typed
+    assert v.__class__ == _Typed
     v.check()
-    assert v.__class__ == TypeMatched
+    assert v.__class__ == _TypeMatched
     v.check()
     assert v.validation_check.passes == "PASS"
     assert v.validation_check.got == dm_data[0]["data_type"]
-    assert v.__class__ == ValueGiven
+    assert v.__class__ == _ValueGiven
     v.check()
-    assert v.__class__ == ValidationComplete
+    assert v.__class__ == _ValidationComplete
 
     # Now we run it as a loop...
-    v = ValidationState(dm_data[0], sheet_data)
+    v = _ValidationState(dm_data[0], sheet_data)
     while True:
         v.check()
-        if v.__class__ == ValidationComplete:
+        if v.__class__ == _ValidationComplete:
             assert v.validation_check.passes == "PASS"
             assert v.validation_check.filename == v.cell_data["file_name"]
             assert v.validation_check.key == dm_data[0]["key"]
@@ -470,7 +373,7 @@ def test_validation_as_a_state_machine(dm_data, sheet_data):
         (1, "", "UNTYPED", "String Key Value", "", "TEXT"),
         (1, "TEXT", "PASS", "String Key Value", "TEXT", "TEXT"),
         (1, "ROBIN", "UNTYPED", "String Key Value", "ROBIN", "TEXT"),
-        (2, "NUMBER", "PASS", "Big Float", "NUMBER", "NUMBER"),
+        (2, "NUMBER", "PASS", "Big Float Value", "NUMBER", "NUMBER"),
     ],
 )
 def test_validations(
@@ -478,11 +381,11 @@ def test_validations(
 ):
     # we use the fixture but change it for this test
     dm_data[dm_index]["data_type"] = dm_data_type
-    v = ValidationState(dm_data[dm_index], sheet_data)
-    assert v.__class__ == Unvalidated
+    v = _ValidationState(dm_data[dm_index], sheet_data)
+    assert v.__class__ == _Unvalidated
     while True:
         v.check()
-        if v.__class__ == ValidationComplete:
+        if v.__class__ == _ValidationComplete:
             assert v.validation_check.passes == passes
             assert v.validation_check.value == value
             assert v.validation_check.wanted == wanted

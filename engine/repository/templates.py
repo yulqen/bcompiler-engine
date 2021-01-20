@@ -6,8 +6,7 @@ from typing import List, Tuple
 
 from openpyxl import Workbook, load_workbook
 
-from engine.use_cases.parsing import \
-    extract_from_multiple_xlsx_files as extract
+from engine.use_cases.parsing import extract_from_multiple_xlsx_files as extract
 from engine.use_cases.typing import MASTER_COL_DATA, MASTER_DATA_FOR_FILE
 from engine.utils.extraction import ALL_IMPORT_DATA, get_xlsx_files
 
@@ -37,7 +36,7 @@ class MultipleTemplatesWriteRepo:
         self.unsaved_workbooks: List[Tuple[str, Workbook]] = []
 
     def _populate_workbook(
-            self, workbook: Workbook, file_data: MASTER_COL_DATA
+        self, workbook: Workbook, file_data: MASTER_COL_DATA
     ) -> Workbook:
         _output_tml = "Key: {} missing a 'sheet' value in datamap. Check your datamap. Data MAY not export."
         for cell in file_data:
@@ -50,7 +49,9 @@ class MultipleTemplatesWriteRepo:
                 _sheet[cell.cellref].value = cell.value
             # if the cellref is missing it will be "" and throw IndexError....
             except IndexError:
-                logger.warning(f"No cellref in datamap for key: {cell.key}. Cannot export this cell.")
+                logger.warning(
+                    f"No cellref in datamap for key: {cell.key}. Cannot export this cell."
+                )
                 continue
             except AttributeError:
                 raise AttributeError(
@@ -67,15 +68,19 @@ class MultipleTemplatesWriteRepo:
         file_name: file name to be appended to output path
         """
 
-        logger.info("Preparing to populate blank templates - this can take a few minutes depending on size of master.")
+        logger.info(
+            "Preparing to populate blank templates - this can take a few minutes depending on size of master."
+        )
         for file_data in data:
             try:
                 blank_workbook: Workbook = load_workbook(
                     self.blank_template, read_only=False, keep_vba=True
                 )
             except FileNotFoundError as e:
-                raise FileNotFoundError(f"Cannot find file {e.filename}. Do you have "
-                                        "file set correctly in config file, or is file missing?")
+                raise FileNotFoundError(
+                    f"Cannot find file {e.filename}. Do you have "
+                    "file set correctly in config file, or is file missing?"
+                )
             file_name = file_data[0].file_name
             logger.info("Populating {}".format(file_name))
             _wb = self._populate_workbook(blank_workbook, file_data)
@@ -104,7 +109,7 @@ class FSPopulatedTemplatesRepo:
         """Try to open the data file containing populated data as json."""
         try:
             with open(
-                    os.path.join(Config.DATAMAPS_LIBRARY_DATA_DIR, "extracted_data.dat")
+                os.path.join(Config.DATAMAPS_LIBRARY_DATA_DIR, "extracted_data.dat")
             ) as data_file:
                 return data_file.read()
         except FileNotFoundError:

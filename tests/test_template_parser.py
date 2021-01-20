@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 import pytest
+
 from engine.domain.datamap import DatamapLineValueType
 from engine.domain.template import TemplateCell
 from engine.use_cases.parsing import extract_from_multiple_xlsx_files

@@ -1,9 +1,8 @@
-from sys import platform
 import shutil
 from pathlib import Path
+from sys import platform
 
 from engine.config import check_for_blank, check_for_datamap, delete_config_file
-
 
 """
 Initialising directories and files for use by the application.
@@ -12,12 +11,12 @@ We need a data directory in which to store binary, temp and
 cache files.
 """
 
+
 def test_remove_config(mock_config):
     mock_config.initialise()
     assert Path(mock_config.DATAMAPS_LIBRARY_CONFIG_FILE).exists()
     delete_config_file(mock_config)
     assert not Path(mock_config.DATAMAPS_LIBRARY_CONFIG_FILE).exists()
-
 
 
 def test_basic_config_variables(mock_config):
@@ -51,6 +50,7 @@ def test_required_config_dirs_exist(mock_config):
 
 def test_config_values(mock_config):
     from sys import platform
+
     if platform == "linux":
         mock_config.initialise()
         USER_NAME = mock_config.USER_NAME
@@ -67,15 +67,14 @@ def test_config_values(mock_config):
         mock_config.initialise()
         USER_NAME = mock_config.USER_NAME
         assert mock_config.config_parser["PATHS"][
-                   "input directory"
-               ] == "C:\\Users\\{0}\\Documents\\datamaps\\input".format(USER_NAME)
+            "input directory"
+        ] == "C:\\Users\\{0}\\Documents\\datamaps\\input".format(USER_NAME)
         assert mock_config.config_parser["PATHS"][
-                   "output directory"
-               ] == "C:\\Users\\{0}\\Documents\\datamaps\\output".format(USER_NAME)
+            "output directory"
+        ] == "C:\\Users\\{0}\\Documents\\datamaps\\output".format(USER_NAME)
         assert mock_config.config_parser["PATHS"][
-                   "document directory"
-               ] == "C:\\Users\\{0}\\Documents\\datamaps".format(USER_NAME)
-
+            "document directory"
+        ] == "C:\\Users\\{0}\\Documents\\datamaps".format(USER_NAME)
 
 
 def test_presence_of_aux_files(mock_config, blank_template, datamap):

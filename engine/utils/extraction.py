@@ -14,6 +14,10 @@ from pathlib import Path
 from typing import Any, Dict, List, NamedTuple, Union
 from zipfile import BadZipFile
 
+from openpyxl import load_workbook
+from openpyxl.worksheet.cell_range import MultiCellRange
+from openpyxl.worksheet.worksheet import Worksheet
+
 from engine.config import Config
 from engine.domain.datamap import DatamapFile, DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
@@ -27,9 +31,6 @@ from engine.exceptions import (
     NoApplicableSheetsInTemplateFiles,
 )
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
-from openpyxl import load_workbook
-from openpyxl.worksheet.cell_range import MultiCellRange
-from openpyxl.worksheet.worksheet import Worksheet
 
 FILE_DATA = Dict[str, Union[str, Dict[str, Dict[str, str]]]]
 DAT_DATA = Dict[str, FILE_DATA]

@@ -52,6 +52,7 @@ from engine.utils.extraction import (
     remove_failing_files,
     template_reader,
 )
+from engine.utils.validation import validation_checker
 
 # pylint: disable=R0903,R0913;
 
@@ -66,102 +67,6 @@ logger = logging.getLogger(__name__)
 
 # TODO - move this to config
 SKIP_MISSING_SHEETS = False
-
-
-def _get_cellrefs(tmp_data, filename: str, sheet: str) -> List[str]:
-    return tmp_data[filename]["data"][sheet].keys()
-
-
-def _get_value(tmp_data, filename: str, sheet: str, cellref: str) -> str:
-    return tmp_data[filename]["data"][sheet][cellref]["value"]
-
-
-def _get_data_type(tmp_data, filename: str, sheet: str, cellref: str) -> str:
-    return tmp_data[filename]["data"][sheet][cellref]["data_type"]
-
-
-def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCheck"]]:
-    checks = []
-    wrong_types = []
-    files = tmp_data.keys()
-    for d in dm_data:
-        sheet = d["sheet"]
-        vtype = d["data_type"]
-        cellref = d["cellref"]
-        for f in files:
-            data = tmp_data[f]["data"]
-            sheets = data.keys()
-            for s in sheets:
-                if s == sheet:
-                    cellrefs_in_tmp = _get_cellrefs(tmp_data, f, s)
-                    if cellref not in cellrefs_in_tmp:
-                        if vtype == "":
-                            final_type = "NA"
-                        else:
-                            final_type = vtype
-                        checks.append(
-                            ValidationCheck(
-                                passes="FAIL",
-                                filename=f,
-                                key=d["key"],
-                                value="NO VALUE RETURNED",
-                                sheetname=s,
-                                cellref=cellref,
-                                wanted=final_type,
-                                got="EMPTY",
-                            )
-                        )
-                    for c in cellrefs_in_tmp:
-                        if c == cellref:
-                            if (
-                                vtype == ""
-                                or vtype not in Config.ACCEPTABLE_VALIDATION_TYPES
-                            ):
-                                if vtype != "":
-                                    wrong_types.append(vtype)
-                                    wanted_output = vtype
-                                else:
-                                    wanted_output = "NA"
-                                checks.append(
-                                    ValidationCheck(
-                                        passes="UNTYPED",
-                                        filename=f,
-                                        key=d["key"],
-                                        value=_get_value(tmp_data, f, s, c),
-                                        sheetname=s,
-                                        cellref=c,
-                                        wanted=wanted_output,
-                                        got=_get_data_type(tmp_data, f, s, c)
-                                    )
-                                )
-                                continue
-                            if _get_data_type(tmp_data, f, s, c) == vtype:
-                                checks.append(
-                                    ValidationCheck(
-                                        passes="PASS",
-                                        filename=f,
-                                        key=d["key"],
-                                        value=_get_value(tmp_data, f, s, c),
-                                        sheetname=s,
-                                        cellref=c,
-                                        wanted=vtype,
-                                        got=_get_data_type(tmp_data, f, s, c)
-                                    )
-                                )
-                            else:
-                                checks.append(
-                                    ValidationCheck(
-                                        passes="FAIL",
-                                        filename=f,
-                                        key=d["key"],
-                                        value=_get_value(tmp_data, f, s, c),
-                                        sheetname=s,
-                                        cellref=c,
-                                        wanted=vtype,
-                                        got=_get_data_type(tmp_data, f, s, c)
-                                    )
-                                )
-    return (wrong_types, checks)
 
 
 class ParsePopulatedTemplatesUseCase:

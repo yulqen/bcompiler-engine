@@ -15,7 +15,6 @@ from engine.repository.templates import MultipleTemplatesWriteRepo
 from engine.use_cases.output import WriteMasterToTemplates
 from engine.utils.extraction import ValidationReportItem, data_validation_report
 
-
 # from openpyxl.worksheet.datavalidation import DataValidation
 
 

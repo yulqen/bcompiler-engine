@@ -1,6 +1,6 @@
-import pytest
-
 from pathlib import Path
+
+import pytest
 
 from engine.domain.datamap import DatamapLineValueType
 from engine.exceptions import (
@@ -70,7 +70,10 @@ def test_template_reader(template) -> None:
     assert _get_cell_data(template, data, "Summary", "B3")["data_type"] == "TEXT"
     assert _get_cell_data(template, data, "Summary", "B4")["data_type"] == "NUMBER"
     assert _get_cell_data(template, data, "Summary", "B5")["data_type"] == "NUMBER"
-    assert _get_cell_data(template, data, "Summary", "B2")["value"] == "2019-10-20T00:00:00"
+    assert (
+        _get_cell_data(template, data, "Summary", "B2")["value"]
+        == "2019-10-20T00:00:00"
+    )
     assert (
         _get_cell_data(template, data, "Summary", "B3")["value"] == "This is a string"
     )

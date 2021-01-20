@@ -1,11 +1,7 @@
 # test_error_reporting.py
 
 
-from engine.utils.extraction import (
-    CheckType,
-    check_datamap_sheets,
-)
-
+from engine.utils.extraction import CheckType, check_datamap_sheets
 
 """"
 Tests in here to test ensure that files are checked for integrity before importing

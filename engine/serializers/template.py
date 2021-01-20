@@ -12,4 +12,4 @@ class TemplateCellSerializer(json.JSONEncoder):
             }
             return to_serialize
         except AttributeError:
-            return super().default(o) # type: ignore
+            return super().default(o)  # type: ignore

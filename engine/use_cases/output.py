@@ -11,8 +11,7 @@ from openpyxl import load_workbook
 
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.use_cases.parsing import ParseDatamapUseCase
-from engine.use_cases.typing import (MASTER_DATA_FOR_FILE,
-                                     ColData)
+from engine.use_cases.typing import MASTER_DATA_FOR_FILE, ColData
 
 warnings.filterwarnings("ignore", ".*Conditional Formatting*.")
 warnings.filterwarnings("ignore", ".*Sparkline Group*.")
@@ -86,8 +85,10 @@ class WriteMasterToTemplates:
             try:
                 file_name = col[0].value.split(".")[0]
             except AttributeError:
-                logger.warning("Found values in cells beyond end of expected end column. "
-                               "For most reliable results, use a clean master file.")
+                logger.warning(
+                    "Found values in cells beyond end of expected end column. "
+                    "For most reliable results, use a clean master file."
+                )
                 break
             logger.info(f"Extracting data for {file_name} from {self._master_path}")
             for i, key in enumerate(cola, start=1):
@@ -96,8 +97,10 @@ class WriteMasterToTemplates:
                 else:
                     # TODO - create a log register so this does not have to be repeated for every
                     #   column of data in the master ().
-                    logger.warning(f"Found values in cells beyond end of expected end row. "
-                                   "For most reliable results, use a clean master file.")
+                    logger.warning(
+                        f"Found values in cells beyond end of expected end row. "
+                        "For most reliable results, use a clean master file."
+                    )
                     break
                 try:
                     sheet = [dml[1] for dml in self._dml_line_tup if dml[0] == key][0]

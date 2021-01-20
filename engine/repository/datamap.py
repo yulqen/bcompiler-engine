@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from typing import Dict, List, Union
 
-from engine.utils.extraction import datamap_reader, datamap_check
+from engine.utils.extraction import datamap_check, datamap_reader
 
 from ..domain.datamap import DatamapLine
 from ..exceptions import DatamapNotCSVException
@@ -17,7 +17,6 @@ class InMemorySingleDatamapRepository:
             self.is_typed = True
         else:
             self.is_typed = False
-
 
     def list_as_json(self) -> str:
         """Return list of DatamapLine objects parsed from filepath as json."""

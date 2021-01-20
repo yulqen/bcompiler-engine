@@ -36,10 +36,12 @@ def test_template_reader(mock_config, org_test_files_dir):
             Path.cwd() / "tests" / "resources" / "org_templates" / fl,
             (Path(mock_config.PLATFORM_DOCS_DIR) / "input"),
         )
-    tmpl_file = (Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "dft1_tmp.xlsm")
+    tmpl_file = Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "dft1_tmp.xlsm"
     data = template_reader(tmpl_file)
     assert data["dft1_tmp.xlsm"]["data"]["10 - Benefits"]["X34"]["value"] == 1
-    assert data["dft1_tmp.xlsm"]["data"]["10 - Benefits"]["X34"]["data_type"] == "NUMBER"
+    assert (
+        data["dft1_tmp.xlsm"]["data"]["10 - Benefits"]["X34"]["data_type"] == "NUMBER"
+    )
 
 
 @pytest.mark.slow
@@ -63,5 +65,7 @@ def test_create_master_spreadsheet(mock_config, org_test_files_dir):
     assert ws["A1"].value == "file name"
     assert "dft1_tmp" in ws["B1"].value
     # reintroduce this test once can be locked
+
+
 #   assert ws["B2"].value == "2019-10-20T00:00:00"
 #   assert ws["B3"].value == "This is a string"
