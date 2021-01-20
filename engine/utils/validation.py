@@ -136,6 +136,23 @@ def _get_data_type(tmp_data, filename: str, sheet: str, cellref: str) -> str:
     return tmp_data[filename]["data"][sheet][cellref]["data_type"]
 
 
+def validate_line(
+    dml_data: Dict[str, str], sheet_data: Dict[str, Dict[str, str]]
+) -> _ValidationState:
+    """
+    Given a Datamap line and sheet data, validate input.
+
+    Returns a _ValidationState object containing a 
+    validation_check object containing results.
+    """
+    v = _ValidationState(dml_data, sheet_data)
+    while True:
+        v.check()
+        if v.__class__ == _ValidationComplete:
+            break
+    return v
+
+
 def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCheck"]]:
     checks = []
     wrong_types = []

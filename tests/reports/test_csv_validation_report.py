@@ -24,6 +24,7 @@ from engine.utils.validation import (
     _ValueUnwanted,
     _ValueWanted,
     validation_checker,
+    validate_line,
 )
 
 
@@ -376,18 +377,13 @@ def test_validation_as_a_state_machine(dm_data, sheet_data):
         (2, "NUMBER", "PASS", "Big Float Value", "NUMBER", "NUMBER"),
     ],
 )
-def test_validations(
+def test_validation_line_driver(
     dm_data, sheet_data, dm_index, dm_data_type, passes, value, wanted, got
 ):
     # we use the fixture but change it for this test
     dm_data[dm_index]["data_type"] = dm_data_type
-    v = _ValidationState(dm_data[dm_index], sheet_data)
-    assert v.__class__ == _Unvalidated
-    while True:
-        v.check()
-        if v.__class__ == _ValidationComplete:
-            assert v.validation_check.passes == passes
-            assert v.validation_check.value == value
-            assert v.validation_check.wanted == wanted
-            assert v.validation_check.got == got
-            break
+    v_out = validate_line(dm_data[dm_index], sheet_data)
+    assert v_out.validation_check.passes == passes
+    assert v_out.validation_check.value == value
+    assert v_out.validation_check.wanted == wanted
+    assert v_out.validation_check.got == got
