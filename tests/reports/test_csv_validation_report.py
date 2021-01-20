@@ -378,6 +378,7 @@ class Typed(ValidationState):
 class UnTyped(ValidationState):
     def check(self):
         self.validation_check.passes = "UNTYPED"
+        self.new_state(TypeNotMatched)
 
 
 class TypeMatched(ValidationState):
@@ -394,7 +395,7 @@ class TypeMatched(ValidationState):
 class TypeNotMatched(ValidationState):
     def check(self):
         # the 'action' here is to update the got field
-        self.validation_check.got = self.cell_data["NA"]
+        self.validation_check.got = self.cell_data["data_type"]
         if self.cell_data["value"] == "":
             self.new_state(EmptyValue)
         else:
@@ -446,11 +447,25 @@ def test_validation_as_a_state_machine(dm_data, sheet_data):
             assert v.validation_check.passes == "PASS"
             assert v.validation_check.filename == v.cell_data["file_name"]
             assert v.validation_check.key == dm_data[0]["key"]
-            assert v.validation_check.value == v.cell_data["value"]
             assert v.validation_check.sheetname == v.cell_data["sheet_name"]
             assert v.validation_check.cellref == dm_data[0]["cellref"]
             assert v.validation_check.cellref == v.cell_data["cellref"]
             assert v.validation_check.value == v.cell_data["value"]
             assert v.validation_check.wanted == dm_data[0]["data_type"]
             assert v.validation_check.got == v.cell_data["data_type"]
+            break
+
+
+def test_validation_with_untyped_dml(dm_data, sheet_data):
+    # we use the fixture but change it for this test
+    dm_data[0]["data_type"] = ""
+    v = ValidationState(dm_data[0], sheet_data)
+    assert v.__class__ == Unvalidated
+    while True:
+        v.check()
+        if v.__class__ == ValidationComplete:
+            assert v.validation_check.passes == "UNTYPED"
+            assert v.validation_check.value == "Text Key Value"
+            assert v.validation_check.wanted == ""
+            assert v.validation_check.got == "TEXT"
             break
