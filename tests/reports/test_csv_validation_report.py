@@ -1,4 +1,5 @@
 import csv
+import pytest
 import shutil
 from pathlib import Path
 from typing import Dict
@@ -7,6 +8,7 @@ from engine.reports.validation import ValidationCheck, ValidationReportCSV
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
 from engine.repository.templates import InMemoryPopulatedTemplatesRepository
+from engine.config import Config
 from engine.use_cases.parsing import (
     CreateMasterUseCase,
     CreateMasterUseCaseWithValidation,
@@ -369,7 +371,12 @@ class ValueWanted(ValidationState):
 
 class Typed(ValidationState):
     def check(self):
-        if self.dm_line["data_type"] == self.cell_data["data_type"]:
+        # Is the Type acceptable?
+        if self.dm_line["data_type"] not in Config.ACCEPTABLE_VALIDATION_TYPES:
+            self.validation_check.passes = "UNTYPED"
+            self.new_state(TypeNotMatched)
+        elif self.dm_line["data_type"] == self.cell_data["data_type"]:
+            self.validation_check.passes = "PASS"
             self.new_state(TypeMatched)
         else:
             self.new_state(TypeNotMatched)
@@ -456,16 +463,28 @@ def test_validation_as_a_state_machine(dm_data, sheet_data):
             break
 
 
-def test_validation_with_untyped_dml(dm_data, sheet_data):
+@pytest.mark.parametrize(
+    "dm_index,dm_data_type,passes,value,wanted,got",
+    [
+        (0, "", "UNTYPED", "Text Key Value", "", "TEXT"),
+        (1, "", "UNTYPED", "String Key Value", "", "TEXT"),
+        (1, "TEXT", "PASS", "String Key Value", "TEXT", "TEXT"),
+        (1, "ROBIN", "UNTYPED", "String Key Value", "ROBIN", "TEXT"),
+        (2, "NUMBER", "PASS", "Big Float", "NUMBER", "NUMBER"),
+    ],
+)
+def test_validations(
+    dm_data, sheet_data, dm_index, dm_data_type, passes, value, wanted, got
+):
     # we use the fixture but change it for this test
-    dm_data[0]["data_type"] = ""
-    v = ValidationState(dm_data[0], sheet_data)
+    dm_data[dm_index]["data_type"] = dm_data_type
+    v = ValidationState(dm_data[dm_index], sheet_data)
     assert v.__class__ == Unvalidated
     while True:
         v.check()
         if v.__class__ == ValidationComplete:
-            assert v.validation_check.passes == "UNTYPED"
-            assert v.validation_check.value == "Text Key Value"
-            assert v.validation_check.wanted == ""
-            assert v.validation_check.got == "TEXT"
+            assert v.validation_check.passes == passes
+            assert v.validation_check.value == value
+            assert v.validation_check.wanted == wanted
+            assert v.validation_check.got == got
             break
