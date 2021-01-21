@@ -380,8 +380,8 @@ def test_validation_as_a_state_machine(dm_data, sheet_data):
 @pytest.mark.parametrize(
     "dm_index,dm_data_type,passes,value,wanted,got",
     [
-        (0, "", "UNTYPED", "Text Key Value", "", "TEXT"),
-        (1, "", "UNTYPED", "String Key Value", "", "TEXT"),
+        (0, "", "UNTYPED", "Text Key Value", "NA", "TEXT"),
+        (1, "", "UNTYPED", "String Key Value", "NA", "TEXT"),
         (1, "TEXT", "PASS", "String Key Value", "TEXT", "TEXT"),
         (1, "ROBIN", "UNTYPED", "String Key Value", "ROBIN", "TEXT"),
         (2, "NUMBER", "PASS", "Big Float Value", "NUMBER", "NUMBER"),
