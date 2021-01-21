@@ -79,6 +79,7 @@ class _Typed(_ValidationState):
 class _UnTyped(_ValidationState):
     def check(self):
         self.validation_check.passes = "UNTYPED"
+        self.validation_check.wanted = "NA"
         self.new_state(_TypeNotMatched)
 
 
@@ -166,7 +167,6 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
             sheets = data.keys()
             for s in sheets:
                 if s == sheet:
-                    breakpoint()
                     vout = validate_line(d, data[sheet])
                     checks.append(vout.validation_check)
     return (wrong_types, checks)
