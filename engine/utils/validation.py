@@ -18,20 +18,23 @@ class ValidationCheck:
 
 class _ValidationState:
     def __init__(self, dm_line: Dict[str, str], sheet_data):
+        self.validation_check = ValidationCheck(
+            passes="",
+            filename=sheet_data[list(sheet_data.keys())[0]]["file_name"],
+            key=dm_line["key"],
+            value="",
+            sheetname=dm_line["sheet"],
+            cellref=dm_line["cellref"],
+            wanted=dm_line["data_type"],
+            got="",
+        )
         self.new_state(_Unvalidated)
         self.sheet_data = sheet_data
         self.dm_line = dm_line
-        self.cell_data = sheet_data[dm_line["cellref"]]
-        self.validation_check = ValidationCheck(
-            passes="",
-            filename=self.cell_data["file_name"],
-            key=self.dm_line["key"],
-            value="",
-            sheetname=self.dm_line["sheet"],
-            cellref=self.dm_line["cellref"],
-            wanted=self.dm_line["data_type"],
-            got="",
-        )
+        try:
+            self.cell_data = sheet_data[dm_line["cellref"]]
+        except KeyError:
+            self.cell_data = None
 
     def new_state(self, newstate):
         self.__class__ = newstate
@@ -117,7 +120,17 @@ class _ValueGiven(_ValidationState):
 
 class _ValueUnwanted(_ValidationState):
     def check(self):
-        raise RuntimeError()
+        self.validation_check = ValidationCheck(
+            passes="FAIL",
+            filename=self.sheet_data[list(self.sheet_data.keys())[0]]["file_name"],
+            key=self.dm_line["key"],
+            value="NO VALUE RETURNED",
+            sheetname=self.dm_line["sheet"],
+            cellref=self.dm_line["cellref"],
+            wanted=self.dm_line["data_type"],
+            got="EMPTY",
+        )
+        self.new_state(_ValidationComplete)
 
 
 class _ValidationComplete(_ValidationState):
@@ -167,8 +180,6 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
             sheets = data.keys()
             for s in sheets:
                 if s == sheet:
-                    cellrefs = _get_cellrefs(tmp_data, f, s)
-                    if d["cellref"] in list(cellrefs):
-                        vout = validate_line(d, data[sheet])
-                        checks.append(vout.validation_check)
+                    vout = validate_line(d, data[sheet])
+                    checks.append(vout.validation_check)
     return (wrong_types, checks)
