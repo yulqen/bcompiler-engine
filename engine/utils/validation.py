@@ -167,6 +167,8 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
             sheets = data.keys()
             for s in sheets:
                 if s == sheet:
-                    vout = validate_line(d, data[sheet])
-                    checks.append(vout.validation_check)
+                    cellrefs = _get_cellrefs(tmp_data, f, s)
+                    if d["cellref"] in list(cellrefs):
+                        vout = validate_line(d, data[sheet])
+                        checks.append(vout.validation_check)
     return (wrong_types, checks)
