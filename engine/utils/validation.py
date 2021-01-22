@@ -76,6 +76,7 @@ class _Typed(_ValidationState):
             self.new_state(_TypeMatched)
         else:
             self.validation_check.passes = "FAIL"
+            self.validation_check.got = self.cell_data["data_type"]
             self.new_state(_TypeNotMatched)
 
 
@@ -89,10 +90,11 @@ class _UnTyped(_ValidationState):
 class _TypeMatched(_ValidationState):
     def check(self):
         # the 'action' here is to update the got field and the passes field
+        breakpoint()
         self.validation_check.got = self.cell_data["data_type"]
         self.validation_check.passes = "PASS"
         if self.cell_data["value"] == "":
-            self.new_state(EmptyValue)
+            self.new_state(_EmptyValue)
         else:
             self.new_state(_ValueGiven)
 
@@ -102,7 +104,7 @@ class _TypeNotMatched(_ValidationState):
         # the 'action' here is to update the got field
         self.validation_check.got = self.cell_data["data_type"]
         if self.cell_data["value"] == "":
-            self.new_state(EmptyValue)
+            self.new_state(_EmptyValue)
         else:
             self.new_state(_ValueGiven)
 
@@ -110,6 +112,7 @@ class _TypeNotMatched(_ValidationState):
 class _EmptyValue(_ValidationState):
     def check(self):
         self.validation_check.value = "NO VALUE RETURNED"
+        self.new_state(_ValidationComplete)
 
 
 class _ValueGiven(_ValidationState):
