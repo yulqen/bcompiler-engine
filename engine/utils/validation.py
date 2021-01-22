@@ -124,7 +124,7 @@ class _ValueUnwanted(_ValidationState):
     def check(self):
         self.validation_check.passes = "FAIL"
         self.validation_check.got = "EMPTY"
-        self.validation_check.value == "NO VALUE RETURNED"
+        self.validation_check.value = "NO VALUE RETURNED"
         if self.dm_line["data_type"] != "":
             self.validation_check.wanted = self.dm_line["data_type"]
         else:
