@@ -1,10 +1,8 @@
 import csv
 import shutil
 from pathlib import Path
-from typing import Dict
 
 import pytest
-
 from engine.reports.validation import ValidationReportCSV
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
@@ -21,10 +19,9 @@ from engine.utils.validation import (
     _ValidationComplete,
     _ValidationState,
     _ValueGiven,
-    _ValueUnwanted,
     _ValueWanted,
-    validation_checker,
     validate_line,
+    validation_checker,
 )
 
 
@@ -70,7 +67,7 @@ def test_compare_datamap_data_with_template_data():
             },
         },
     }
-    _, checks = validation_checker(dm_data, tmp_data)
+    checks = validation_checker(dm_data, tmp_data)
     assert len(checks) == 2
     assert checks[0].passes == "PASS"
     assert checks[0].filename == "test_template.xlsx"

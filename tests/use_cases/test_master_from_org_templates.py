@@ -29,6 +29,7 @@ def test_datamap_reader(mock_config, org_test_files_dir):
     assert data[0].filename == str(dm_file)
 
 
+@pytest.mark.slow
 def test_template_reader(mock_config, org_test_files_dir):
     mock_config.initialise()
     for fl in os.listdir(org_test_files_dir):

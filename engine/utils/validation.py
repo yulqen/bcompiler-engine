@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 from engine.config import Config
 
@@ -17,7 +17,7 @@ class ValidationCheck:
 
 
 class _ValidationState:
-    def __init__(self, dm_line: Dict[str, str], sheet_data):
+    def __init__(self, dm_line: Dict[str, str], sheet_data) -> None:
         self.validation_check = ValidationCheck(
             passes="",
             filename=sheet_data[list(sheet_data.keys())[0]]["file_name"],
@@ -48,9 +48,7 @@ class _ValidationState:
 
 class _Unvalidated(_ValidationState):
     def check(self):
-        if (
-            self.dm_line["cellref"] in self.sheet_data.keys()
-        ):
+        if self.dm_line["cellref"] in self.sheet_data.keys():
             # the fact there is a dml means we want a value
             self.new_state(_ValueWanted)
         else:
@@ -137,18 +135,6 @@ class _ValidationComplete(_ValidationState):
         print("Validation Complete")
 
 
-def _get_cellrefs(tmp_data, filename: str, sheet: str) -> List[str]:
-    return tmp_data[filename]["data"][sheet].keys()
-
-
-def _get_value(tmp_data, filename: str, sheet: str, cellref: str) -> str:
-    return tmp_data[filename]["data"][sheet][cellref]["value"]
-
-
-def _get_data_type(tmp_data, filename: str, sheet: str, cellref: str) -> str:
-    return tmp_data[filename]["data"][sheet][cellref]["data_type"]
-
-
 def validate_line(
     dml_data: Dict[str, str], sheet_data: Dict[str, Dict[str, str]]
 ) -> _ValidationState:
@@ -166,14 +152,11 @@ def validate_line(
     return v
 
 
-def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCheck"]]:
+def validation_checker(dm_data, tmp_data) -> List["ValidationCheck"]:
     checks = []
-    wrong_types = []
     files = tmp_data.keys()
     for d in dm_data:
         sheet = d["sheet"]
-        vtype = d["data_type"]
-        cellref = d["cellref"]
         for f in files:
             data = tmp_data[f]["data"]
             sheets = data.keys()
@@ -181,4 +164,4 @@ def validation_checker(dm_data, tmp_data) -> Tuple[List[str], List["ValidationCh
                 if s == sheet:
                     vout = validate_line(d, data[sheet])
                     checks.append(vout.validation_check)
-    return (wrong_types, checks)
+    return checks

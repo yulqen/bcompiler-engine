@@ -151,15 +151,9 @@ class ApplyDatamapToExtractionUseCaseWithValidation:
         self._datamap_data_dict = json.loads(self._datamap_data_json)
         self._template_data_dict = json.loads(self._template_data_json)
 
-        bad_types, self.validation_checks = validation_checker(
+        self.validation_checks = validation_checker(
             self._datamap_data_dict, self._template_data_dict
         )
-
-        if len(bad_types) > 0:
-            for t in set(bad_types):
-                logger.warning(
-                    f"{t} is not a valid type. Flagged as UNTYPED. Check your datamap."
-                )
 
         checks = check_datamap_sheets(self._datamap_data_dict, self._template_data_dict)
         # TODO -reintroduce SKIP_MISSING_SHEETS check here

@@ -18,38 +18,7 @@ from engine.utils.extraction import ValidationReportItem, data_validation_report
 # from openpyxl.worksheet.datavalidation import DataValidation
 
 
-@pytest.mark.skip("Should only be run individually - not part of test suite")
-def test_dv_loss():
-    """This should not be part of the test suite!
-    """
-    datamap = "/home/lemon/Documents/bcompiler/input/datamap.csv"
-    #   blank = "/home/lemon/Documents/bcompiler/templates/DfT_Template_1920_Q1_Unlocked.xlsm"
-    # all 27 validations are present with this file
-    blank = "/home/lemon/code/python/bcompiler-engine/tests/resources/blank_template_password_removed.xlsm"
-    master = "/home/lemon/Documents/bcompiler/output/master.xlsx"
-
-    # let's get the validations in the blank sheet
-    #   wb0 = load_workbook("/home/lemon/Documents/bcompiler/templates/DfT_Template_1920_Q1_Unlocked.xlsm")
-    wb0 = load_workbook(
-        "/home/lemon/code/python/bcompiler-engine/tests/resources/blank_template_password_removed.xlsm"
-    )
-    ws0 = wb0["1 - Project Info"]
-    validations0 = ws0.data_validations.dataValidation
-
-    # let's write to the blank from the master
-    write_master_to_templates(blank, datamap, master)
-    # and checks the validations in that
-    wb = load_workbook(
-        "/home/lemon/Documents/bcompiler/output/A417%20Air%20Balloon_Q1%20Apr%20-%20June%202019_Return.xlsm"
-    )
-    ws = wb["1 - Project Info"]
-    validations = ws.data_validations.dataValidation
-
-    # Both are 4 here. Meaning DfT_Template_1920_Q1_Unlocked.xlsm has only 4 validations on sheet 1 - Project Info
-    # when in reality (opening the file in the application) it has many.
-    assert len(validations0) == len(validations)
-
-
+@pytest.mark.slow
 def test_write_into_dropdown(blank_org_template):
     wb = load_workbook(blank_org_template, read_only=False, keep_vba=True)
     ws = wb["1 - Project Info"]
