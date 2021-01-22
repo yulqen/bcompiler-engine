@@ -90,7 +90,6 @@ class _UnTyped(_ValidationState):
 class _TypeMatched(_ValidationState):
     def check(self):
         # the 'action' here is to update the got field and the passes field
-        breakpoint()
         self.validation_check.got = self.cell_data["data_type"]
         self.validation_check.passes = "PASS"
         if self.cell_data["value"] == "":
@@ -123,16 +122,13 @@ class _ValueGiven(_ValidationState):
 
 class _ValueUnwanted(_ValidationState):
     def check(self):
-        self.validation_check = ValidationCheck(
-            passes="FAIL",
-            filename=self.sheet_data[list(self.sheet_data.keys())[0]]["file_name"],
-            key=self.dm_line["key"],
-            value="NO VALUE RETURNED",
-            sheetname=self.dm_line["sheet"],
-            cellref=self.dm_line["cellref"],
-            wanted=self.dm_line["data_type"],
-            got="EMPTY",
-        )
+        self.validation_check.passes = "FAIL"
+        self.validation_check.got = "EMPTY"
+        self.validation_check.value == "NO VALUE RETURNED"
+        if self.dm_line["data_type"] != "":
+            self.validation_check.wanted = self.dm_line["data_type"]
+        else:
+            self.validation_check.wanted = "NA"
         self.new_state(_ValidationComplete)
 
 

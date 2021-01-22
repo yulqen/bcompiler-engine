@@ -86,7 +86,7 @@ def test_validation_empty_cells_in_template_expected_by_dm():
         "sheet": "Sheet A",
     }
     sheet_data = {
-        "A1": {
+        "NOTEXIST": {  # simulates this line not being present in data sent validation
             "cellref": "A1",
             "data_type": "TEXT",
             "file_name": "chutney.xlsx",
@@ -96,10 +96,10 @@ def test_validation_empty_cells_in_template_expected_by_dm():
         }
     }
     v = validate_line(dm_line, sheet_data)
-    assert v.validation_check.passes == "PASS"
+    assert v.validation_check.passes == "FAIL"
     assert v.validation_check.filename == "chutney.xlsx"
     assert v.validation_check.wanted == "TEXT"
-    assert v.validation_check.got == "TEXT"
+    assert v.validation_check.got == "EMPTY"
 
 
 def test_validation_untyped_and_empty_in_template():
@@ -111,7 +111,7 @@ def test_validation_untyped_and_empty_in_template():
         "sheet": "Sheet A",
     }
     sheet_data = {
-        "A1": {
+        "NOEXIST": {  # simulates this line not being present in data sent validation
             "cellref": "A1",
             "data_type": "",
             "file_name": "chutney.xlsx",
@@ -121,7 +121,7 @@ def test_validation_untyped_and_empty_in_template():
         }
     }
     v = validate_line(dm_line, sheet_data)
-    assert v.validation_check.passes == "UNTYPED"
+    assert v.validation_check.passes == "FAIL"
     assert v.validation_check.filename == "chutney.xlsx"
     assert v.validation_check.wanted == "NA"
-    assert v.validation_check.got == "NO VALUE RETURNED"
+    assert v.validation_check.got == "EMPTY"
