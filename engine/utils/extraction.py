@@ -511,12 +511,11 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
 def extract_zip_file_to_tmpdir(zfile) -> Generator[List[pathlib.Path], None, None]:
     """
     Extracts files inside zfile to a temporary dirctory, and yields
-    a generator of the files as Path objects. The temporary directory is removed.
+    a generator of the files as Path objects.
     """
     tmp_dir = tempfile.mkdtemp()
     with zipfile.ZipFile(zfile, "r") as zf:
         zf.extractall(tmp_dir)
         for p in os.listdir(tmp_dir):
             yield pathlib.Path(tmp_dir) / p
-        shutil.rmtree(tmp_dir)
 
