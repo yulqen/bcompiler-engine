@@ -6,12 +6,16 @@ import hashlib
 import json
 import logging
 import os
+import pathlib
 import re
+import shutil
+import tempfile
+import zipfile
 from collections import OrderedDict, defaultdict
 from dataclasses import dataclass
 from itertools import groupby
 from pathlib import Path
-from typing import Any, Dict, List, NamedTuple, Union
+from typing import Any, Dict, List, NamedTuple, Union, Generator
 from zipfile import BadZipFile
 
 from openpyxl import load_workbook
@@ -502,3 +506,17 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     shell_dict = {f_path.name: inner_dict}
     logger.info(f"Compiled data from {f_path.name}")
     return shell_dict
+
+
+def extract_zip_file_to_tmpdir(zfile) -> Generator[List[pathlib.Path], None, None]:
+    """
+    Extracts files inside zfile to a temporary dirctory, and yields
+    a generator of the files as Path objects. The temporary directory is removed.
+    """
+    tmp_dir = tempfile.mkdtemp()
+    with zipfile.ZipFile(zfile, "r") as zf:
+        zf.extractall(tmp_dir)
+        for p in os.listdir(tmp_dir):
+            yield pathlib.Path(tmp_dir) / p
+        shutil.rmtree(tmp_dir)
+
