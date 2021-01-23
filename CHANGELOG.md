@@ -1,3 +1,7 @@
+# v1.1.2
+
+* Mainly internal refactoring and bugfixes.
+
 # v1.1.0
 
 See the [https://github.com/yulqen/datamaps/blob/master/CHANGELOG.md](datmaps
