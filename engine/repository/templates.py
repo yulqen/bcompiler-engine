@@ -141,7 +141,7 @@ class InMemoryPopulatedTemplatesZip:
 
     def list_as_json(self) -> str:
         """Return data from a zip file of populated templates as json."""
-        excel_files = list(extract_zip_file_to_tmpdir(zip_path))
+        excel_files = list(extract_zip_file_to_tmpdir(self.zip_path))[1:]
         if not self.state:
             self.state = extract(excel_files)
             return json.dumps(self.state)

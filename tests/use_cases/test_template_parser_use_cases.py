@@ -10,6 +10,7 @@ from engine.repository.master import MasterOutputRepository
 from engine.repository.templates import (
     FSPopulatedTemplatesRepo,
     InMemoryPopulatedTemplatesRepository,
+    InMemoryPopulatedTemplatesZip
 )
 from engine.use_cases.parsing import (
     ApplyDatamapToExtractionUseCase,
@@ -46,6 +47,30 @@ def test_query_data_from_data_file(
         ]
         == "Project/Programme Name"
     )
+
+
+def test_extract_data_from_templates_in_zip_file(mock_config, datamap, templates_zipped):
+    mock_config.initialise()
+    shutil.copy2(datamap, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    tmpl_repo = InMemoryPopulatedTemplatesZip(templates_zipped)
+    dm_repo = InMemorySingleDatamapRepository(
+        Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "datamap.csv"
+    )
+    uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
+    uc.execute()
+    assert (
+        uc.query_key(
+            "test_template_with_introduction_sheet.xlsm", "String Key", "Summary"
+        )
+        == "This is a string"
+    )
+    assert (
+        uc.query_key(
+            "test_template_with_introduction_sheet.xlsm", "Big Float", "Another Sheet"
+        )
+        == 7.2
+    )
+
 
 
 @pytest.mark.slow
