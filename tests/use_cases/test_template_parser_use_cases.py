@@ -52,11 +52,11 @@ def test_query_data_from_data_file(
 def test_extract_data_from_templates_in_zip_file(mock_config, datamap, templates_zipped):
     mock_config.initialise()
     shutil.copy2(datamap, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
-    tmpl_repo = InMemoryPopulatedTemplatesZip(templates_zipped)
+    zip_repo = InMemoryPopulatedTemplatesZip(templates_zipped)
     dm_repo = InMemorySingleDatamapRepository(
         Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "datamap.csv"
     )
-    uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
+    uc = ApplyDatamapToExtractionUseCase(dm_repo, zip_repo)
     uc.execute()
     assert (
         uc.query_key(
