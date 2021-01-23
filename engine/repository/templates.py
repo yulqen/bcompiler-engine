@@ -8,7 +8,7 @@ from openpyxl import Workbook, load_workbook
 
 from engine.use_cases.parsing import extract_from_multiple_xlsx_files as extract
 from engine.use_cases.typing import MASTER_COL_DATA, MASTER_DATA_FOR_FILE
-from engine.utils.extraction import ALL_IMPORT_DATA, get_xlsx_files
+from engine.utils.extraction import ALL_IMPORT_DATA, get_xlsx_files, extract_zip_file_to_tmpdir
 
 from ..config import Config
 
@@ -126,9 +126,25 @@ class InMemoryPopulatedTemplatesRepository:
     def list_as_json(self) -> str:
         """Return data from a directory of populated templates as json."""
         excel_files = get_xlsx_files(Path(self.directory_path))
-        breakpoint()
         if not self.state:
             self.state = extract(excel_files)
             return json.dumps(self.state)
         else:
             return json.dumps(self.state)
+
+
+
+class InMemoryPopulatedTemplatesZip:
+    def __init__(self, zip_path: str) -> None:
+        self.zip_path = zip_path
+        self.state: ALL_IMPORT_DATA = {}
+
+    def list_as_json(self) -> str:
+        """Return data from a zip file of populated templates as json."""
+        excel_files = list(extract_zip_file_to_tmpdir(zip_path))
+        if not self.state:
+            self.state = extract(excel_files)
+            return json.dumps(self.state)
+        else:
+            return json.dumps(self.state)
+
