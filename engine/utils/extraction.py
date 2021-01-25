@@ -507,12 +507,15 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     return shell_dict
 
 
-def extract_zip_file_to_tmpdir(zfile) -> Generator[pathlib.Path, None, None]:
+def extract_zip_file_to_tmpdir(
+    zfile,
+) -> Generator[Union[str, pathlib.Path], None, None]:
     """
     Extracts files inside zfile to a temporary dirctory, and yields
     a generator of the files as Path objects.
     """
     tmp_dir = tempfile.mkdtemp()
+    yield tmp_dir
     with zipfile.ZipFile(zfile, "r") as zf:
         zf.extractall(tmp_dir)
         for p in os.listdir(tmp_dir):

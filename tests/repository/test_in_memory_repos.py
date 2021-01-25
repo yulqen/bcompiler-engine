@@ -1,6 +1,7 @@
 # type: ignore
 
 import json
+import pathlib
 
 import pytest
 from engine.exceptions import DatamapNotCSVException
@@ -22,6 +23,8 @@ def test_datamapline_repository_non_existant_file(datamapline_list_objects):
 
 
 def test_template_zip_repo(templates_zipped):
+    # this gives us the tmp dir to remove which we don't need to do in the test
+    d = next(extract_zip_file_to_tmpdir(templates_zipped))
     templates = extract_zip_file_to_tmpdir(templates_zipped)
-    for t in list(templates):
+    for t in [x for x in list(templates) if isinstance(x, pathlib.Path)]:
         assert "test_" in t.name
