@@ -1,3 +1,8 @@
+# v1.1.3
+
+* Enabled zip repository for import command. In datamaps, user can now use `-z`
+    flag and point to zip file containing populated spreadsheets.
+
 # v1.1.2
 
 * Mainly internal refactoring and bugfixes.
