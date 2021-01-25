@@ -2,17 +2,13 @@
 
 import json
 import os
-
 from typing import List
 
 import pytest
-from openpyxl import load_workbook
-
-
-
 from engine.exceptions import DatamapNotCSVException
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.utils.extraction import extract_zip_file_to_tmpdir
+from openpyxl import load_workbook
 
 
 def test_datamapline_repository_single_file_repo(datamap, datamapline_list_objects):
