@@ -15,7 +15,7 @@ from collections import OrderedDict, defaultdict
 from dataclasses import dataclass
 from itertools import groupby
 from pathlib import Path
-from typing import Any, Dict, Generator, List, NamedTuple, Union
+from typing import Any, Dict, Generator, List, NamedTuple, Union, Tuple
 from zipfile import BadZipFile
 
 from engine.config import Config
@@ -511,13 +511,13 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
 
 def extract_zip_file_to_tmpdir(
     zfile,
-) -> Generator[Union[str, pathlib.Path], None, None]:
+) -> Tuple[str, List[pathlib.Path]]:
     """
     Extracts files inside zfile to a temporary dirctory, and yields
     a generator of the files as Path objects.
     """
+    output = []
     tmp_dir = tempfile.mkdtemp()
-    yield tmp_dir
     with zipfile.ZipFile(zfile, "r") as zf:
         zf.extractall(tmp_dir)
         target_files = [
@@ -527,7 +527,8 @@ def extract_zip_file_to_tmpdir(
             for p in os.listdir(tmp_dir):
                 out = pathlib.Path(tmp_dir) / p
                 if out.suffix in [".xlsx", ".xlsm"]:
-                    yield pathlib.Path(tmp_dir) / p
+                    output.append(pathlib.Path(tmp_dir) / p)
+            return tmp_dir, output
         else:
             raise NestedZipError(
                 f"{zfile} contains nested directories and files. Must be flat containing only target files. For UNIX systems, use -j flag with zip."
