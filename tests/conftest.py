@@ -112,7 +112,13 @@ def datamapline_list_objects() -> List[DatamapLine]:
 @pytest.fixture
 def templates_zipped() -> Path:
     here = os.path.abspath(os.curdir)
-    return Path(os.path.join(here, "tests/resources/templates.zip"))
+    yield Path(os.path.join(here, "tests/resources/templates.zip"))
+
+
+@pytest.fixture
+def templates_zipped_deep_structure() -> Path:
+    here = os.path.abspath(os.curdir)
+    return Path(os.path.join(here, "tests/resources/templates_deep_structure.zip"))
 
 
 @pytest.fixture

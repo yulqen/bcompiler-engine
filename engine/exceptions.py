@@ -2,6 +2,10 @@ class DatamapNotCSVException(Exception):
     pass
 
 
+class NestedZipError(Exception):
+    pass
+
+
 class MissingSheetFieldError(Exception):
     pass
 

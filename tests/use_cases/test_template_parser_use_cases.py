@@ -7,10 +7,11 @@ from openpyxl import load_workbook
 
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
+from engine.exceptions import NestedZipError
 from engine.repository.templates import (
     FSPopulatedTemplatesRepo,
     InMemoryPopulatedTemplatesRepository,
-    InMemoryPopulatedTemplatesZip
+    InMemoryPopulatedTemplatesZip,
 )
 from engine.use_cases.parsing import (
     ApplyDatamapToExtractionUseCase,
@@ -49,7 +50,9 @@ def test_query_data_from_data_file(
     )
 
 
-def test_extract_data_from_templates_in_zip_file(mock_config, datamap, templates_zipped):
+def test_extract_data_from_templates_in_zip_file(
+    mock_config, datamap, templates_zipped
+):
     mock_config.initialise()
     shutil.copy2(datamap, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
     zip_repo = InMemoryPopulatedTemplatesZip(templates_zipped)
@@ -70,7 +73,6 @@ def test_extract_data_from_templates_in_zip_file(mock_config, datamap, templates
         )
         == 7.2
     )
-
 
 
 @pytest.mark.slow
@@ -232,3 +234,40 @@ def test_file_data_not_in_data_returns_exception(
         exception_msg
         == "Data from test_data_file_use_case_diff_data_from_dat_file.xlsx is not contained in extracted_data.dat"
     )
+
+
+def test_in_extract_files_from_zipfile(mock_config, datamap, templates_zipped):
+    mock_config.initialise()
+    shutil.copy2(datamap, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    tmpl_repo = InMemoryPopulatedTemplatesZip(templates_zipped)
+    dm_repo = InMemorySingleDatamapRepository(
+        Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "datamap.csv"
+    )
+    uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
+    uc.execute()
+    assert (
+        uc.query_key(
+            "test_template_with_introduction_sheet.xlsm", "String Key", "Summary"
+        )
+        == "This is a string"
+    )
+    assert (
+        uc.query_key(
+            "test_template_with_introduction_sheet.xlsm", "Big Float", "Another Sheet"
+        )
+        == 7.2
+    )
+
+
+def test_in_extract_files_from_zipfile_with_deep_structure_raises_exception(
+    mock_config, datamap, templates_zipped_deep_structure
+):
+    mock_config.initialise()
+    shutil.copy2(datamap, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    tmpl_repo = InMemoryPopulatedTemplatesZip(templates_zipped_deep_structure)
+    dm_repo = InMemorySingleDatamapRepository(
+        Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "datamap.csv"
+    )
+    uc = ApplyDatamapToExtractionUseCase(dm_repo, tmpl_repo)
+    with pytest.raises(NestedZipError):
+        uc.execute()

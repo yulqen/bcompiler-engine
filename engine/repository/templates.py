@@ -146,8 +146,10 @@ class InMemoryPopulatedTemplatesZip:
         """Return data from a zip file of populated templates as json."""
         d = next(extract_zip_file_to_tmpdir(self.directory_path))
         excel_files = list(extract_zip_file_to_tmpdir(self.directory_path))[1:]
+        breakpoint()
         if not self.state:
             self.state = extract(excel_files)
+            print(f"Removing {d}?")
             shutil.rmtree(d)
             return json.dumps(self.state)
         else:

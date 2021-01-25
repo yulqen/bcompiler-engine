@@ -29,6 +29,7 @@ from engine.exceptions import (
     MissingLineError,
     MissingSheetFieldError,
     NoApplicableSheetsInTemplateFiles,
+    NestedZipError,
 )
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
 from openpyxl import load_workbook
@@ -165,6 +166,7 @@ def remove_failing_files(
     elif len(template_data.keys()) < 1:
         msg = "There are no files containing sheets declared in datamap. Quitting."
         logger.critical(msg)
+        breakpoint()
         raise NoApplicableSheetsInTemplateFiles(msg)
     return template_data
 
@@ -518,7 +520,15 @@ def extract_zip_file_to_tmpdir(
     yield tmp_dir
     with zipfile.ZipFile(zfile, "r") as zf:
         zf.extractall(tmp_dir)
-        for p in os.listdir(tmp_dir):
-            out = pathlib.Path(tmp_dir) / p
-            if out.suffix in [".xlsx", ".xlsm"]:
-                yield pathlib.Path(tmp_dir) / p
+        target_files = [
+            x for x in os.listdir(tmp_dir) if re.match(r"(^.+\.xlsx|^.+\.xlsm)", x)
+        ]
+        if target_files:
+            for p in os.listdir(tmp_dir):
+                out = pathlib.Path(tmp_dir) / p
+                if out.suffix in [".xlsx", ".xlsm"]:
+                    yield pathlib.Path(tmp_dir) / p
+        else:
+            raise NestedZipError(
+                f"{zfile} contains nested directories and files. Must be flat containing only target files. For UNIX systems, use -j flag with zip."
+            )
