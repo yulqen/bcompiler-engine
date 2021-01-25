@@ -4,8 +4,6 @@ import sys
 from pathlib import Path
 from typing import List
 
-from openpyxl import load_workbook
-
 import engine.use_cases.parsing
 from engine.config import (
     Config,
@@ -19,6 +17,7 @@ from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository, ValidationOnlyRepository
 from engine.repository.templates import (
     InMemoryPopulatedTemplatesRepository,
+    InMemoryPopulatedTemplatesZip,
     MultipleTemplatesWriteRepo,
 )
 from engine.use_cases.output import WriteMasterToTemplates
@@ -27,6 +26,7 @@ from engine.use_cases.parsing import (
     CreateMasterUseCaseWithValidation,
 )
 from engine.utils.extraction import data_validation_report, datamap_reader
+from openpyxl import load_workbook
 
 logging.basicConfig(
     level=logging.INFO,
@@ -124,6 +124,11 @@ def import_and_create_master(echo_funcs, datamap=None, **kwargs):
     else:
         output_repo = MasterOutputRepository
 
+    if kwargs.get("zipinput"):
+        tmpl_repo = InMemoryPopulatedTemplatesZip(kwargs.get("zipinput"))
+    else:
+        tmpl_repo = InMemoryPopulatedTemplatesRepository(inputdir)
+
     if Config.TEMPLATE_ROW_LIMIT < 50:
         logger.warning(
             f"Row limit is set to {Config.TEMPLATE_ROW_LIMIT} (default is 500). This may be unintentionally low. Check datamaps import templates --help"
@@ -131,7 +136,6 @@ def import_and_create_master(echo_funcs, datamap=None, **kwargs):
     else:
         logger.info(f"Row limit is set to {Config.TEMPLATE_ROW_LIMIT}.")
 
-    tmpl_repo = InMemoryPopulatedTemplatesRepository(inputdir)
     if datamap:
         dm_fn = datamap
     else:

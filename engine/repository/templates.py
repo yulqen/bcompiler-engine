@@ -1,14 +1,18 @@
 import json
 import logging
 import os
+import shutil
 from pathlib import Path
 from typing import List, Tuple
 
-from openpyxl import Workbook, load_workbook
-
 from engine.use_cases.parsing import extract_from_multiple_xlsx_files as extract
 from engine.use_cases.typing import MASTER_COL_DATA, MASTER_DATA_FOR_FILE
-from engine.utils.extraction import ALL_IMPORT_DATA, get_xlsx_files, extract_zip_file_to_tmpdir
+from engine.utils.extraction import (
+    ALL_IMPORT_DATA,
+    extract_zip_file_to_tmpdir,
+    get_xlsx_files,
+)
+from openpyxl import Workbook, load_workbook
 
 from ..config import Config
 
@@ -133,18 +137,19 @@ class InMemoryPopulatedTemplatesRepository:
             return json.dumps(self.state)
 
 
-
 class InMemoryPopulatedTemplatesZip:
     def __init__(self, zip_path: str) -> None:
-        self.zip_path = zip_path
+        self.directory_path = zip_path
         self.state: ALL_IMPORT_DATA = {}
 
     def list_as_json(self) -> str:
         """Return data from a zip file of populated templates as json."""
-        excel_files = list(extract_zip_file_to_tmpdir(self.zip_path))[1:]
+        d = next(extract_zip_file_to_tmpdir(self.directory_path))
+        excel_files = list(extract_zip_file_to_tmpdir(self.directory_path))[1:]
         if not self.state:
             self.state = extract(excel_files)
+            shutil.rmtree(d)
             return json.dumps(self.state)
         else:
+            shutil.rmtree(d)
             return json.dumps(self.state)
-
