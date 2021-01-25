@@ -166,7 +166,6 @@ def remove_failing_files(
     elif len(template_data.keys()) < 1:
         msg = "There are no files containing sheets declared in datamap. Quitting."
         logger.critical(msg)
-        breakpoint()
         raise NoApplicableSheetsInTemplateFiles(msg)
     return template_data
 
