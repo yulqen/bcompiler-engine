@@ -162,6 +162,9 @@ def validation_checker(dm_data, tmp_data) -> List["ValidationCheck"]:
             sheets = data.keys()
             for s in sheets:
                 if s == sheet:
+                    sdata = data[sheet]
+                    if not sdata:
+                        continue
                     vout = validate_line(d, data[sheet])
                     checks.append(vout.validation_check)
     return checks
