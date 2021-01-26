@@ -7,4 +7,4 @@ import nox
 def tests(session):
     session.run("poetry", "install", external=True)
     session.run("poetry", "update", external=True)
-    session.run("pytest")
+    session.run("pytest", "-q")
