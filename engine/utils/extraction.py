@@ -520,12 +520,12 @@ def extract_zip_file_to_tmpdir(
     with zipfile.ZipFile(zfile, "r") as zf:
         zf.extractall(tmp_dir)
         target_files = [
-            x for x in os.listdir(tmp_dir) if re.match(r"(^.+\.xlsx|^.+\.xlsm)", x)
+            x for x in os.listdir(tmp_dir) if re.match(r"(^.+\.xlsx|^.+\.xlsm|^.+\.XLSM|^.+\.XLSX)", x)
         ]
         if target_files:
             for p in os.listdir(tmp_dir):
                 out = pathlib.Path(tmp_dir) / p
-                if out.suffix in [".xlsx", ".xlsm"]:
+                if out.suffix in [".xlsx", ".xlsm", ".XLSX", ".XLSM"]:
                     output.append(pathlib.Path(tmp_dir) / p)
             return tmp_dir, output
         else:
