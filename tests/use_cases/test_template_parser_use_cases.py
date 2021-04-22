@@ -257,6 +257,18 @@ def test_in_extract_files_from_zipfile(mock_config, datamap, templates_zipped):
         )
         == 7.2
     )
+    assert (
+        uc.query_key(
+            "test_template_with_introduction_sheet.XLSM", "Big Float", "Another Sheet"
+        )
+        == 7.2
+    )
+    assert (
+        uc.query_key(
+            "test_template_with_introduction_sheet.XLSX", "Big Float", "Another Sheet"
+        )
+        == 7.2
+    )
 
 
 def test_in_extract_files_from_zipfile_with_deep_structure_raises_exception(

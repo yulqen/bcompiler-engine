@@ -20,7 +20,7 @@ def test_remove_config(mock_config):
 
 
 def test_basic_config_variables(mock_config):
-    if platform == "Linux":
+    if platform in ["Linux", "openbsd6"]:
         assert Path(mock_config.DATAMAPS_LIBRARY_DATA_DIR) == Path("/tmp") / Path(
             ".local/share/datamaps-data"
         )
@@ -51,7 +51,7 @@ def test_required_config_dirs_exist(mock_config):
 def test_config_values(mock_config):
     from sys import platform
 
-    if platform == "linux":
+    if platform in ["linux", "openbsd6"]:
         mock_config.initialise()
         USER_NAME = mock_config.USER_NAME
         assert mock_config.config_parser["PATHS"][
