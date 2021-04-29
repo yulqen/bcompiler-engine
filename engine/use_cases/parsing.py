@@ -37,15 +37,14 @@ import json
 import logging
 import warnings
 from concurrent import futures
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
-from engine.config import Config
 from engine.exceptions import (
     DatamapNotCSVException,
     NoApplicableSheetsInTemplateFiles,
     RemoveFileWithNoSheetRequiredByDatamap,
 )
-from engine.reports.validation import ValidationCheck, ValidationReportCSV
+from engine.reports.validation import ValidationReportCSV
 from engine.utils.extraction import (
     ALL_IMPORT_DATA,
     check_datamap_sheets,
@@ -242,6 +241,7 @@ class ApplyDatamapToExtractionUseCase:
                 "value"
             ]
         except KeyError as e:
+            # Handle the case of the sheet being missing
             if e.args[0] == sheet:
                 logger.critical(
                     "No sheet named {} in {}. Unable to process.".format(
@@ -252,6 +252,11 @@ class ApplyDatamapToExtractionUseCase:
                     "No sheet named {} in {}. Unable to process.".format(
                         sheet, filename
                     )
+                )
+            elif e.args[0][-5:] in [".xlsx", ".xlsm", ".XLSX", ".XLSM"]:
+                # Check to see if the expected file is missing from the zip
+                logger.critical(
+                    f"{filename} is missing. Expected to find this file in the zip but it is not there."
                 )
         return output
 

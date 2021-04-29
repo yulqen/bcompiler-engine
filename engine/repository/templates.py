@@ -2,9 +2,11 @@ import json
 import logging
 import os
 import shutil
+import sys
 from pathlib import Path
 from typing import List, Tuple
 
+from engine.exceptions import NestedZipError
 from engine.use_cases.parsing import extract_from_multiple_xlsx_files as extract
 from engine.use_cases.typing import MASTER_COL_DATA, MASTER_DATA_FOR_FILE
 from engine.utils.extraction import (
@@ -144,7 +146,10 @@ class InMemoryPopulatedTemplatesZip:
 
     def list_as_json(self) -> str:
         """Return data from a zip file of populated templates as json."""
-        d, excel_files = extract_zip_file_to_tmpdir(self.directory_path)
+        try:
+            d, excel_files = extract_zip_file_to_tmpdir(self.directory_path)
+        except NestedZipError as e:
+            raise
         excel_files = excel_files[1:]
         if not self.state:
             self.state = extract(excel_files)

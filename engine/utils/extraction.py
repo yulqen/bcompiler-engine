@@ -15,7 +15,7 @@ from collections import OrderedDict, defaultdict
 from dataclasses import dataclass
 from itertools import groupby
 from pathlib import Path
-from typing import Any, Dict, Generator, List, NamedTuple, Union, Tuple
+from typing import Any, Dict, Generator, List, NamedTuple, Tuple, Union
 from zipfile import BadZipFile
 
 from engine.config import Config
@@ -28,8 +28,8 @@ from engine.exceptions import (
     MissingCellKeyError,
     MissingLineError,
     MissingSheetFieldError,
-    NoApplicableSheetsInTemplateFiles,
     NestedZipError,
+    NoApplicableSheetsInTemplateFiles,
 )
 from engine.utils import ECHO_FUNC_GREEN, ECHO_FUNC_YELLOW
 from openpyxl import load_workbook
@@ -508,9 +508,7 @@ def template_reader(template_file) -> Dict[str, Dict[str, Dict[Any, Any]]]:
     return shell_dict
 
 
-def extract_zip_file_to_tmpdir(
-    zfile,
-) -> Tuple[str, List[pathlib.Path]]:
+def extract_zip_file_to_tmpdir(zfile,) -> Tuple[str, List[pathlib.Path]]:
     """
     Extracts files inside zfile to a temporary dirctory, and yields
     a generator of the files as Path objects.
@@ -519,8 +517,21 @@ def extract_zip_file_to_tmpdir(
     tmp_dir = tempfile.mkdtemp()
     with zipfile.ZipFile(zfile, "r") as zf:
         zf.extractall(tmp_dir)
+        # We have to walk the temp dir to check for presence of directories.
+        # If there are any, we do not want to descend into directories seeking
+        # spreadsheet files and the descent could be massive. Raise error instead
+        # and stop?
+        # Test whether we have directories in the zip
+        fobjs = os.scandir(tmp_dir)
+        for fo in list(fobjs):
+            if os.path.isdir(fo):
+                raise NestedZipError(
+                    f"{zfile} contains nested directory called {fo.name}. Zip must be flat containing only target files. For UNIX systems, use -j flag with zip."
+                )
         target_files = [
-            x for x in os.listdir(tmp_dir) if re.match(r"(^.+\.xlsx|^.+\.xlsm|^.+\.XLSM|^.+\.XLSX)", x)
+            x
+            for x in os.listdir(tmp_dir)
+            if re.match(r"(^.+\.xlsx|^.+\.xlsm|^.+\.XLSM|^.+\.XLSX)", x)
         ]
         if target_files:
             for p in os.listdir(tmp_dir):

@@ -3,11 +3,9 @@ import shutil
 from pathlib import Path
 
 import pytest
-from openpyxl import load_workbook
-
+from engine.exceptions import NestedZipError
 from engine.repository.datamap import InMemorySingleDatamapRepository
 from engine.repository.master import MasterOutputRepository
-from engine.exceptions import NestedZipError
 from engine.repository.templates import (
     FSPopulatedTemplatesRepo,
     InMemoryPopulatedTemplatesRepository,
@@ -19,6 +17,7 @@ from engine.use_cases.parsing import (
     ParsePopulatedTemplatesUseCase,
 )
 from engine.utils.extraction import _check_file_in_datafile
+from openpyxl import load_workbook
 
 
 def test_template_parser_use_case(resources):
@@ -50,6 +49,20 @@ def test_query_data_from_data_file(
     )
 
 
+def test_zip_with_directory_raises_exception(
+    mock_config, datamap, templates_zipped_containing_dir
+):
+    mock_config.initialise()
+    shutil.copy2(datamap, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    zip_repo = InMemoryPopulatedTemplatesZip(templates_zipped_containing_dir)
+    dm_repo = InMemorySingleDatamapRepository(
+        Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "datamap.csv"
+    )
+    uc = ApplyDatamapToExtractionUseCase(dm_repo, zip_repo)
+    with pytest.raises(NestedZipError):
+        uc.execute()
+
+
 def test_extract_data_from_templates_in_zip_file(
     mock_config, datamap, templates_zipped
 ):
@@ -73,6 +86,7 @@ def test_extract_data_from_templates_in_zip_file(
         )
         == 7.2
     )
+    assert uc.query_key("test_template2.xlsm", "Big Float", "Another Sheet") == 7.2
 
 
 @pytest.mark.slow

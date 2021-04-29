@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Generator, List
 
 import pytest
-
 from engine.config import Config
 from engine.domain.datamap import DatamapLine, DatamapLineValueType
 from engine.domain.template import TemplateCell
@@ -107,6 +106,12 @@ def datamapline_list_objects() -> List[DatamapLine]:
         filename="/home/lemon/code/python/bcompiler-engine/tests/resources/datamap.csv",
     )
     return [dml1, dml2, dml3, dml4]
+
+
+@pytest.fixture
+def templates_zipped_containing_dir() -> Path:
+    here = os.path.abspath(os.curdir)
+    yield Path(os.path.join(here, "tests/resources/templates_containing_dir.zip"))
 
 
 @pytest.fixture
