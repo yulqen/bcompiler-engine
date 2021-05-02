@@ -13,3 +13,5 @@ test_stdout:
 test_all:
 	pytest --disable-warnings
 
+test_no_logs:
+	pytest -q -x --show-capture=no -m "not slow" --tb=short
