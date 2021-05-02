@@ -150,7 +150,9 @@ class InMemoryPopulatedTemplatesZip:
             d, excel_files = extract_zip_file_to_tmpdir(self.directory_path)
         except NestedZipError as e:
             raise
-        excel_files = excel_files[1:]
+        # WHY WAS THIS A THING??
+        # TODO: Watch this in future - I was losing the first file in the zip
+        # excel_files = excel_files[1:]
         if not self.state:
             self.state = extract(excel_files)
             logger.info(f"Removing temporary directory {d}.")
