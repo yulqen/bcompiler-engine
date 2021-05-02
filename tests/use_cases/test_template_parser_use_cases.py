@@ -64,13 +64,17 @@ def test_zip_with_directory_raises_exception(
 
 
 def test_extract_data_from_templates_in_zip_file(
-    mock_config, datamap, templates_zipped
+    mock_config, datamap_match_test_template, templates_zipped
 ):
     mock_config.initialise()
-    shutil.copy2(datamap, (Path(mock_config.PLATFORM_DOCS_DIR) / "input"))
+    shutil.copy2(
+        datamap_match_test_template, (Path(mock_config.PLATFORM_DOCS_DIR) / "input")
+    )
     zip_repo = InMemoryPopulatedTemplatesZip(templates_zipped)
     dm_repo = InMemorySingleDatamapRepository(
-        Path(mock_config.PLATFORM_DOCS_DIR) / "input" / "datamap.csv"
+        Path(mock_config.PLATFORM_DOCS_DIR)
+        / "input"
+        / "datamap_match_test_template.csv"
     )
     uc = ApplyDatamapToExtractionUseCase(dm_repo, zip_repo)
     uc.execute()
@@ -86,7 +90,8 @@ def test_extract_data_from_templates_in_zip_file(
         )
         == 7.2
     )
-    assert uc.query_key("test_template2.xlsm", "Big Float", "Another Sheet") == 7.2
+    assert "test_template2.xlsx" in uc._template_data_dict.keys()
+    assert uc.query_key("test_template2.xlsx", "Big Float", "Another Sheet") == 7.2
 
 
 @pytest.mark.slow
