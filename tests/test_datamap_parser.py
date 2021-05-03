@@ -1,12 +1,13 @@
 from pathlib import Path
 
 import pytest
-
 from engine.domain.datamap import DatamapLineValueType
 from engine.exceptions import (
     DatamapFileEncodingError,
+    MalFormedCSVEmptyTailRowsException,
     MalFormedCSVHeaderException,
     MissingCellKeyError,
+    MissingLineError,
     MissingSheetFieldError,
 )
 from engine.utils.extraction import _get_cell_data, datamap_reader, template_reader
@@ -111,6 +112,12 @@ def test_datamap_type_is_optional(datamap_no_type_col):
     assert data[14].sheet == "Introduction"
     assert data[14].cellref == "C35"
     assert data[14].data_type is None
+
+
+def test_datamap_with_seemingly_empty_rows_at_end_exception(datamap_empty_tail_rows):
+    "A datamap file with multple empty rows at the end is possible, and unwelcome..."
+    with pytest.raises(MalFormedCSVEmptyTailRowsException):
+        data = datamap_reader(datamap_empty_tail_rows)  # noqa
 
 
 def test_datamap_with_only_single_header_raises_exception(datamap_single_header):

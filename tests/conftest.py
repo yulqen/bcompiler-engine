@@ -326,6 +326,12 @@ def datamap_single_header():
 
 
 @pytest.fixture
+def datamap_empty_tail_rows():
+    here = os.path.abspath(os.curdir)
+    return os.path.join(here, "tests/resources/datamap_empty_tail_rows.csv")
+
+
+@pytest.fixture
 def datamap_no_type_col():
     here = os.path.abspath(os.curdir)
     return os.path.join(here, "tests/resources/datamap_no_type_col.csv")

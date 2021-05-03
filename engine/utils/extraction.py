@@ -24,6 +24,7 @@ from engine.domain.template import TemplateCell
 from engine.exceptions import (
     DatamapFileEncodingError,
     DatamapNotCSVException,
+    MalFormedCSVEmptyTailRowsException,
     MalFormedCSVHeaderException,
     MissingCellKeyError,
     MissingLineError,
@@ -62,6 +63,7 @@ def _dml_line_check(line: OrderedDict, headers: Dict[str, str]) -> None:
         and headers.get("sheet") in missing_fields
         and headers.get("cellref") in missing_fields
     ):
+        breakpoint()
         raise MissingLineError(
             "Datamap contains a missing line. Please fix datamap before proceeding."
         )
@@ -78,8 +80,37 @@ def _dml_line_check(line: OrderedDict, headers: Dict[str, str]) -> None:
         )
 
 
+def tail_rows_check(dm_file: Union[Path, str]):
+    first_fields = []
+    with DatamapFile(dm_file) as datamap_file:
+        reader = csv.reader(datamap_file)
+        for line in reader:
+            print(line)
+            try:
+                first_fields.append(line[0])
+            except IndexError:
+                break
+    empty_lines = 0
+    for item in first_fields[-5:]:
+        if item == "":
+            empty_lines += 1
+    # Let's say we can tolerate no more than 5 empty lines before baling
+    if empty_lines >= 5:
+        raise MalFormedCSVEmptyTailRowsException(
+            f"Too many empty lines at end of {dm_file}. "
+            r"Check and truncate the file to remove empty rows."
+        )
+    else:
+        return
+
+
 def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
     "Given a datamap csv file, returns a list of DatamapLine objects."
+    # Bail if it looks like there are lots of empty rows at the end
+    try:
+        tail_rows_check(dm_file)
+    except MalFormedCSVEmptyTailRowsException:
+        raise
     try:
         headers = datamap_check(dm_file)
     except DatamapNotCSVException:

@@ -14,6 +14,10 @@ class MalFormedCSVHeaderException(Exception):
     pass
 
 
+class MalFormedCSVEmptyTailRowsException(Exception):
+    pass
+
+
 class NoApplicableSheetsInTemplateFiles(Exception):
     pass
 
