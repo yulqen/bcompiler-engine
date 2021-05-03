@@ -1,3 +1,8 @@
+# v1.1.4
+
+* Fix bug which resulted in one less file in zip being processed with `-z`
+    flag.
+
 # v1.1.3
 
 * Enabled zip repository for import command. In datamaps, user can now use `-z`
