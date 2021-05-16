@@ -63,7 +63,6 @@ def _dml_line_check(line: OrderedDict, headers: Dict[str, str]) -> None:
         and headers.get("sheet") in missing_fields
         and headers.get("cellref") in missing_fields
     ):
-        breakpoint()
         raise MissingLineError(
             "Datamap contains a missing line. Please fix datamap before proceeding."
         )
@@ -83,9 +82,9 @@ def _dml_line_check(line: OrderedDict, headers: Dict[str, str]) -> None:
 def tail_rows_check(dm_file: Union[Path, str]):
     first_fields = []
     with DatamapFile(dm_file) as datamap_file:
+        print(f"Using {datamap_file}")
         reader = csv.reader(datamap_file)
         for line in reader:
-            print(line)
             try:
                 first_fields.append(line[0])
             except IndexError:
@@ -108,12 +107,12 @@ def datamap_reader(dm_file: Union[Path, str]) -> List[DatamapLine]:
     "Given a datamap csv file, returns a list of DatamapLine objects."
     # Bail if it looks like there are lots of empty rows at the end
     try:
-        tail_rows_check(dm_file)
-    except MalFormedCSVEmptyTailRowsException:
-        raise
-    try:
         headers = datamap_check(dm_file)
     except DatamapNotCSVException:
+        raise
+    try:
+        tail_rows_check(dm_file)
+    except MalFormedCSVEmptyTailRowsException:
         raise
     data = []
     logger.info(f"Reading datamap {dm_file}")
