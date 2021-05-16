@@ -1,3 +1,8 @@
+# v1.1.5
+
+* Fix bug resulting in datamap csv with multiple empty rows causing
+  problems.
+
 # v1.1.4
 
 * Fix bug which resulted in one less file in zip being processed with `-z`
