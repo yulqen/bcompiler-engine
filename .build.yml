@@ -1,0 +1,15 @@
+image: archlinux
+sources:
+  - git@git.sr.ht:~yulqen/bcompiler-engine
+packages:
+  - python
+  - python-pip
+secrets:
+  - 590eb309-3589-4444-bcbe-81f7a29024a8
+tasks:
+  - test: |
+      python -m venv /home/build/.venv
+      cd bcompiler-engine
+      /home/build/.venv/bin/pip install -r requirements.txt  
+      /home/build/.venv/bin/pip install -r requirements_dev.txt  
+      /home/build/.venv/bin/pytest -q
