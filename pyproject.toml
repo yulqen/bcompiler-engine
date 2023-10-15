@@ -1,6 +1,30 @@
 [build-system]
 requires = ["setuptools", "wheel"]
 
+[project]
+name = "bcompiler-engine"
+version = "1.1.6"
+authors = [
+    {name = "Matthew Lemon", email = "y@yulqen.org"},
+]
+description = "Library for parsing spreadsheets using datamaps"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+classifiers=[
+    "Programming Language :: Python :: 3",
+    "Environment :: Console",
+    "License :: OSI Approved :: MIT License",
+]
+dependencies = [
+   "openpyxl>=3.1.2",
+   "appdirs>=1.4.4",
+   "wheel>=0.41.2"
+]
+
+[tool.setuptools]
+packages = ["engine"]
+
 [tool.poetry]
 # poetry build will not work because this directory is not in project root
 name = "bcompiler-engine"
