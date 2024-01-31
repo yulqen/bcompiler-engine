@@ -1,3 +1,13 @@
+# v1.1.7
+
+* Updates dependencies
+* Requires python version > 3.10
+* Updated homepage and repository URL
+
+# v1.1.6
+
+* Void
+
 # v1.1.5
 
 * Fix bug resulting in datamap csv with multiple empty rows causing

@@ -13,6 +13,7 @@ class InMemorySingleDatamapRepository:
     def __init__(self, datamap_path: Union[Path, str]) -> None:
         self.datamap_path = datamap_path
         self.headers = datamap_check(datamap_path)
+
         if self.headers["type"] is not None:
             self.is_typed = True
         else:
